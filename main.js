@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-let camera, controls, scene, renderer;
+let camera, scene, renderer;
 let cube;
 
 init();
@@ -19,7 +19,7 @@ function init() {
     1000
   );
 
-  controls = new OrbitControls(camera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
 
   scene = new THREE.Scene();
 
