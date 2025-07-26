@@ -42,9 +42,11 @@ function onWindowResize() {
 }
 
 function animate() {
-  controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
-
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
+
+  // required if controls.enableDamping or controls.autoRotate are set to true
+  controls.update();
+
   renderer.render(scene, camera);
 }
