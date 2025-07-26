@@ -19,6 +19,7 @@ function init() {
     0.1,
     1000
   );
+  camera.position.z = 5;
 
   const controls = new OrbitControls(camera, renderer.domElement);
 
@@ -28,8 +29,6 @@ function init() {
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
   cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
-
-  camera.position.z = 5;
 
   window.addEventListener("resize", onWindowResize);
 }
