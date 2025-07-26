@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
-let camera, controls, scene, renderer;
+let renderer, camera, controls, scene;
 let cube;
 
 init();
 
 function init() {
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animate);
@@ -24,7 +25,16 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  const gui = new GUI();
+
   scene = new THREE.Scene();
+
+  const axesHelper = new THREE.AxesHelper(3);
+  scene.add(axesHelper);
+  {
+    const folder = gui.addFolder("THREE.AxesHelper");
+    folder.add(axesHelper, "visible");
+  }
 
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
