@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-let camera, scene, renderer;
+let camera, controls, scene, renderer;
 let cube;
 
 init();
@@ -21,7 +21,8 @@ function init() {
   );
   camera.position.z = 5;
 
-  const controls = new OrbitControls(camera, renderer.domElement);
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
 
   scene = new THREE.Scene();
 
@@ -41,6 +42,8 @@ function onWindowResize() {
 }
 
 function animate() {
+  controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
   renderer.render(scene, camera);
