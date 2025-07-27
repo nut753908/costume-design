@@ -39,17 +39,19 @@ function init() {
 
   scene = new THREE.Scene();
 
-  const axesHelper = new THREE.AxesHelper(3);
-  scene.add(axesHelper);
   {
+    const helper = new THREE.AxesHelper(3);
+    scene.add(helper);
     const folder = gui.addFolder("THREE.AxesHelper");
-    folder.add(axesHelper, "visible");
+    folder.add(helper, "visible");
   }
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
+  {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+  }
 
   //
 
