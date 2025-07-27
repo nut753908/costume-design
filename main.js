@@ -4,7 +4,9 @@ import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 let renderer, camera, controls, gizmo, scene;
-let lightHelper, cube;
+let light, lightHelper;
+let light2, lightHelper2;
+let cube;
 
 const frustumSize = 8;
 
@@ -46,23 +48,38 @@ function init() {
     folder.add(helper, "visible");
   }
 
-  let light;
   {
     light = new THREE.DirectionalLight(0xffffff, 3);
     light.position.set(-1, 2, 4);
     scene.add(light);
-    const folder = gui.addFolder("THREE.DirectionalLight");
+    const folder = gui.addFolder("THREE.DirectionalLight (front)");
+    folder.add(light, "intensity", 0, 10, 1);
     const posFolder = folder.addFolder("position");
     posFolder.add(light.position, "x", -10, 10, 1);
     posFolder.add(light.position, "y", -10, 10, 1);
     posFolder.add(light.position, "z", -10, 10, 1);
   }
-
   {
     lightHelper = new THREE.DirectionalLightHelper(light, 1);
+    lightHelper.visible = false;
     scene.add(lightHelper);
-    const folder = gui.addFolder("THREE.DirectionalLightHelper");
+    const folder = gui.addFolder("THREE.DirectionalLightHelper (front)");
     folder.add(lightHelper, "visible");
+  }
+
+  {
+    light2 = new THREE.DirectionalLight(0xffffff, 0);
+    light2.position.set(1, -2, -4);
+    scene.add(light2);
+    const folder = gui.addFolder("THREE.DirectionalLight (back)");
+    folder.add(light2, "intensity", 0, 10, 1);
+  }
+  {
+    lightHelper2 = new THREE.DirectionalLightHelper(light2, 1);
+    lightHelper2.visible = false;
+    scene.add(lightHelper2);
+    const folder = gui.addFolder("THREE.DirectionalLightHelper (back)");
+    folder.add(lightHelper2, "visible");
   }
 
   {
@@ -91,7 +108,11 @@ function onWindowResize() {
 }
 
 function animate() {
+  light2.position.x = -light.position.x;
+  light2.position.y = -light.position.y;
+  light2.position.z = -light.position.z;
   lightHelper.update();
+  lightHelper2.update();
 
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
