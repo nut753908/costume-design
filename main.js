@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
-let renderer, camera, controls, scene;
+let renderer, camera, controls, gizmo, scene;
 let cube;
 
 const frustumSize = 8;
@@ -29,6 +30,9 @@ function init() {
 
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
+
+  gizmo = new ViewportGizmo(camera, renderer, { offset: { right: 280 } });
+  gizmo.attachControls(controls);
 
   //
 
@@ -62,6 +66,8 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  gizmo.update();
 }
 
 function animate() {
@@ -72,4 +78,6 @@ function animate() {
   controls.update();
 
   renderer.render(scene, camera);
+
+  gizmo.render();
 }
