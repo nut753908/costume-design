@@ -30,6 +30,8 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  //
+
   const gui = new GUI();
 
   scene = new THREE.Scene();
@@ -45,6 +47,8 @@ function init() {
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
   cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
+
+  //
 
   window.addEventListener("resize", onWindowResize);
 }
