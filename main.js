@@ -29,7 +29,6 @@ function init() {
   camera.position.z = 5;
 
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
 
   gizmo = new ViewportGizmo(camera, renderer, { offset: { right: 280 } });
   gizmo.attachControls(controls);
@@ -73,9 +72,6 @@ function onWindowResize() {
 function animate() {
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
-
-  // required if controls.enableDamping or controls.autoRotate are set to true
-  controls.update();
 
   renderer.render(scene, camera);
 
