@@ -4,7 +4,7 @@ import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 let renderer, camera, controls, gizmo, scene;
-let cube;
+let lightHelper, cube;
 
 const frustumSize = 8;
 
@@ -46,10 +46,23 @@ function init() {
     folder.add(helper, "visible");
   }
 
+  let light;
   {
-    const light = new THREE.DirectionalLight(0xffffff, 3);
+    light = new THREE.DirectionalLight(0xffffff, 3);
     light.position.set(-1, 2, 4);
     scene.add(light);
+    const folder = gui.addFolder("THREE.DirectionalLight");
+    const posFolder = folder.addFolder("position");
+    posFolder.add(light.position, "x", -10, 10, 1);
+    posFolder.add(light.position, "y", -10, 10, 1);
+    posFolder.add(light.position, "z", -10, 10, 1);
+  }
+
+  {
+    lightHelper = new THREE.DirectionalLightHelper(light, 1);
+    scene.add(lightHelper);
+    const folder = gui.addFolder("THREE.DirectionalLightHelper");
+    folder.add(lightHelper, "visible");
   }
 
   {
@@ -78,6 +91,8 @@ function onWindowResize() {
 }
 
 function animate() {
+  lightHelper.update();
+
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
 
