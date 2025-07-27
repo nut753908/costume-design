@@ -4,7 +4,7 @@ import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 let renderer, camera, controls, gizmo, scene;
-let cube;
+let lightHelper, cube;
 
 const frustumSize = 8;
 
@@ -39,17 +39,38 @@ function init() {
 
   scene = new THREE.Scene();
 
-  const axesHelper = new THREE.AxesHelper(3);
-  scene.add(axesHelper);
   {
+    const helper = new THREE.AxesHelper(3);
+    scene.add(helper);
     const folder = gui.addFolder("THREE.AxesHelper");
-    folder.add(axesHelper, "visible");
+    folder.add(helper, "visible");
   }
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
+  let light;
+  {
+    light = new THREE.DirectionalLight(0xffffff, 3);
+    light.position.set(-1, 2, 4);
+    scene.add(light);
+    const folder = gui.addFolder("THREE.DirectionalLight");
+    const posFolder = folder.addFolder("position");
+    posFolder.add(light.position, "x", -10, 10, 1);
+    posFolder.add(light.position, "y", -10, 10, 1);
+    posFolder.add(light.position, "z", -10, 10, 1);
+  }
+
+  {
+    lightHelper = new THREE.DirectionalLightHelper(light, 1);
+    scene.add(lightHelper);
+    const folder = gui.addFolder("THREE.DirectionalLightHelper");
+    folder.add(lightHelper, "visible");
+  }
+
+  {
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshToonMaterial({ color: 0x44aa88 });
+    cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+  }
 
   //
 
@@ -70,6 +91,8 @@ function onWindowResize() {
 }
 
 function animate() {
+  lightHelper.update();
+
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
 
