@@ -85,8 +85,14 @@ function init() {
   {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshToonMaterial({ color: 0x44aa88 });
+    // const material = new THREE.MeshLambertMaterial({ color: 0x44aa88 });
+    // const material = new THREE.MeshNormalMaterial();
     cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
+    {
+      const folder = gui.addFolder("THREE.Material");
+      folder.add(cube.material, "wireframe");
+    }
   }
 
   //
