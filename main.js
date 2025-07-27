@@ -5,6 +5,8 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 let renderer, camera, controls, scene;
 let cube;
 
+const frustumSize = 8;
+
 init();
 
 function init() {
@@ -14,9 +16,12 @@ function init() {
   renderer.setAnimationLoop(animate);
   document.body.appendChild(renderer.domElement);
 
-  camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
+  const aspect = window.innerWidth / window.innerHeight;
+  camera = new THREE.OrthographicCamera(
+    -(frustumSize * aspect) / 2,
+    (frustumSize * aspect) / 2,
+    frustumSize / 2,
+    -frustumSize / 2,
     0.1,
     1000
   );
@@ -45,7 +50,11 @@ function init() {
 }
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  const aspect = window.innerWidth / window.innerHeight;
+  camera.left = -(frustumSize * aspect) / 2;
+  camera.right = (frustumSize * aspect) / 2;
+  camera.top = frustumSize / 2;
+  camera.bottom = -frustumSize / 2;
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
