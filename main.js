@@ -5,7 +5,7 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
-let light, lightHelper;
+let light;
 let baseMesh;
 
 const frustumSize = 2;
@@ -59,13 +59,6 @@ function init() {
     posFolder.add(light.position, "y", -10, 10, 1);
     posFolder.add(light.position, "z", -10, 10, 1);
   }
-  {
-    lightHelper = new THREE.DirectionalLightHelper(light, 1, 0x000000);
-    lightHelper.visible = false;
-    scene.add(lightHelper);
-    const folder = gui.addFolder("THREE.DirectionalLightHelper (front)");
-    folder.add(lightHelper, "visible");
-  }
 
   {
     const loader = new GLTFLoader();
@@ -116,8 +109,6 @@ function onWindowResize() {
 }
 
 function animate() {
-  lightHelper.update();
-
   renderer.render(scene, camera);
 
   gizmo.render();
