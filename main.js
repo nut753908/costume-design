@@ -83,7 +83,7 @@ function init() {
         {
           const folder = gui.addFolder("THREE.Material");
           folder.add(material, "wireframe");
-          if (material.uniforms && material.uniformsNeedUpdate) {
+          if (material.isShaderMaterial) {
             const uniformsFolder = folder.addFolder("uniforms");
             uniformsFolder
               .add(material.uniforms.threshold, "value", 0, 1, 0.1)
