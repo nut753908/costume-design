@@ -52,7 +52,7 @@ function init() {
 
   {
     light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(-1, 2, 4);
+    light.position.set(-3, 3, 3);
     scene.add(light);
     const folder = gui.addFolder("THREE.DirectionalLight (front)");
     folder.add(light, "intensity", 0, 10, 1);
@@ -71,7 +71,7 @@ function init() {
 
   {
     light2 = new THREE.DirectionalLight(0xffffff, 0);
-    light2.position.set(1, -2, -4);
+    light2.position.set(3, -3, -3);
     scene.add(light2);
     const folder = gui.addFolder("THREE.DirectionalLight (back)");
     folder.add(light2, "intensity", 0, 10, 1);
@@ -89,12 +89,16 @@ function init() {
     loader.load(
       "models/base1-22.glb",
       function (gltf) {
-        const material = new THREE.MeshToonMaterial({
-          color: 0xfef3f1,
-          gradientMap: createGradientMap([
-            new THREE.Color(0xeeeeee),
-            new THREE.Color(0xffffff),
-          ]),
+        const uniforms = {
+          lightColor: { value: new THREE.Color(0xfef3f1) },
+          darkColor: { value: new THREE.Color(0xfde2df) },
+          lightDirection: { value: light.position.normalize() },
+          threshold: { value: 0.5 },
+        };
+        const material = new THREE.ShaderMaterial({
+          uniforms,
+          vertexShader: document.getElementById("vertexShader").textContent,
+          fragmentShader: document.getElementById("fragmentShader").textContent,
         });
         // const material = new THREE.MeshNormalMaterial();
         baseMesh = gltf.scene.children[0];
@@ -102,7 +106,6 @@ function init() {
         scene.add(gltf.scene);
         {
           const folder = gui.addFolder("THREE.Material");
-          folder.addColor(baseMesh.material, "color");
           folder.add(baseMesh.material, "wireframe");
         }
       },
@@ -139,24 +142,4 @@ function animate() {
   renderer.render(scene, camera);
 
   gizmo.render();
-}
-
-function createGradientMap(colors) {
-  const size = colors.length;
-  const data = new Uint8Array(4 * size);
-
-  for (let i = 0; i < size; i++) {
-    const stride = i * 4;
-    data[stride] = Math.floor(colors[i].r * 255);
-    data[stride + 1] = Math.floor(colors[i].g * 255);
-    data[stride + 2] = Math.floor(colors[i].b * 255);
-    data[stride + 3] = 255;
-  }
-
-  const texture = new THREE.DataTexture(data, size, 1);
-  texture.needsUpdate = true;
-  texture.minFilter = THREE.NearestFilter;
-  texture.magFilter = THREE.NearestFilter;
-
-  return texture;
 }
