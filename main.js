@@ -66,10 +66,10 @@ function init() {
       "models/base1-22.glb",
       function (gltf) {
         const uniforms = {
-          lightColor: { value: new THREE.Color(0xfef3f1) },
-          darkColor: { value: new THREE.Color(0xfde2df) },
           lightDirection: { value: light.position },
           threshold: { value: 0.5 },
+          lightColor: { value: new THREE.Color(0xfef3f1) },
+          darkColor: { value: new THREE.Color(0xfde2df) },
         };
         const material = new THREE.ShaderMaterial({
           uniforms,
@@ -87,14 +87,14 @@ function init() {
           if (material.uniforms && material.uniformsNeedUpdate) {
             const uniformsFolder = folder.addFolder("uniforms");
             uniformsFolder
+              .add(material.uniforms.threshold, "value", 0, 1, 0.1)
+              .name("threshold");
+            uniformsFolder
               .addColor(material.uniforms.lightColor, "value")
               .name("lightColor");
             uniformsFolder
               .addColor(material.uniforms.darkColor, "value")
               .name("darkColor");
-            uniformsFolder
-              .add(material.uniforms.threshold, "value", 0, 1, 0.1)
-              .name("threshold");
           }
         }
       },
