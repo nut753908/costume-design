@@ -55,7 +55,7 @@ function init() {
       function (gltf) {
         const material = new THREE.ShaderMaterial({
           uniforms: {
-            lightPos: { value: new THREE.Vector3(-3, 3, 3) },
+            lightPos: { value: new THREE.Vector3(-5, 5, 5) },
             threshold: { value: 0.5 },
             baseColor: { value: new THREE.Color(0xfef3f1) },
             shadeColor: { value: new THREE.Color(0xfde2df) },
