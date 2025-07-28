@@ -65,18 +65,17 @@ function init() {
     loader.load(
       "models/base1-22.glb",
       function (gltf) {
-        const uniforms = {
-          lightDirection: { value: light.position },
-          threshold: { value: 0.5 },
-          lightColor: { value: new THREE.Color(0xfef3f1) },
-          darkColor: { value: new THREE.Color(0xfde2df) },
-        };
         const material = new THREE.ShaderMaterial({
-          uniforms,
+          uniforms: {
+            lightDirection: { value: light.position },
+            threshold: { value: 0.5 },
+            lightColor: { value: new THREE.Color(0xfef3f1) },
+            darkColor: { value: new THREE.Color(0xfde2df) },
+          },
+          uniformsNeedUpdate: true,
           vertexShader: document.getElementById("vertexShader").textContent,
           fragmentShader: document.getElementById("fragmentShader").textContent,
         });
-        material.uniformsNeedUpdate = true;
         // const material = new THREE.MeshNormalMaterial();
         baseMesh = gltf.scene.children[0];
         baseMesh.material = material;
