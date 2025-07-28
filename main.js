@@ -6,7 +6,6 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
 let light, lightHelper;
-let light2, lightHelper2;
 let baseMesh;
 
 const frustumSize = 2;
@@ -70,22 +69,6 @@ function init() {
   }
 
   {
-    light2 = new THREE.DirectionalLight(0xffffff, 0);
-    light2.position.copy(light.position);
-    light2.position.negate();
-    scene.add(light2);
-    const folder = gui.addFolder("THREE.DirectionalLight (back)");
-    folder.add(light2, "intensity", 0, 10, 1);
-  }
-  {
-    lightHelper2 = new THREE.DirectionalLightHelper(light2, 1);
-    lightHelper2.visible = false;
-    scene.add(lightHelper2);
-    const folder = gui.addFolder("THREE.DirectionalLightHelper (back)");
-    folder.add(lightHelper2, "visible");
-  }
-
-  {
     const loader = new GLTFLoader();
     loader.load(
       "models/base1-22.glb",
@@ -134,10 +117,7 @@ function onWindowResize() {
 }
 
 function animate() {
-  light2.position.copy(light.position);
-  light2.position.negate();
   lightHelper.update();
-  lightHelper2.update();
 
   renderer.render(scene, camera);
 
