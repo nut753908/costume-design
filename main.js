@@ -76,13 +76,26 @@ function init() {
           vertexShader: document.getElementById("vertexShader").textContent,
           fragmentShader: document.getElementById("fragmentShader").textContent,
         });
+        material.uniformsNeedUpdate = true;
         // const material = new THREE.MeshNormalMaterial();
         baseMesh = gltf.scene.children[0];
         baseMesh.material = material;
         scene.add(gltf.scene);
         {
           const folder = gui.addFolder("THREE.Material");
-          folder.add(baseMesh.material, "wireframe");
+          folder.add(material, "wireframe");
+          if (material.uniforms && material.uniformsNeedUpdate) {
+            const uniformsFolder = folder.addFolder("uniforms");
+            uniformsFolder
+              .addColor(material.uniforms.lightColor, "value")
+              .name("lightColor");
+            uniformsFolder
+              .addColor(material.uniforms.darkColor, "value")
+              .name("darkColor");
+            uniformsFolder
+              .add(material.uniforms.threshold, "value", 0, 1, 0.1)
+              .name("threshold");
+          }
         }
       },
       undefined,
