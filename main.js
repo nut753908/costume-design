@@ -2,13 +2,12 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
-let light, lightHelper;
-let light2, lightHelper2;
-let cube;
+let baseMesh;
 
-const frustumSize = 8;
+const frustumSize = 2;
 
 init();
 
@@ -40,6 +39,7 @@ function init() {
   const gui = new GUI();
 
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xffffff);
 
   {
     const helper = new THREE.AxesHelper(3);
@@ -49,50 +49,47 @@ function init() {
   }
 
   {
-    light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(-1, 2, 4);
-    scene.add(light);
-    const folder = gui.addFolder("THREE.DirectionalLight (front)");
-    folder.add(light, "intensity", 0, 10, 1);
-    const posFolder = folder.addFolder("position");
-    posFolder.add(light.position, "x", -10, 10, 1);
-    posFolder.add(light.position, "y", -10, 10, 1);
-    posFolder.add(light.position, "z", -10, 10, 1);
-  }
-  {
-    lightHelper = new THREE.DirectionalLightHelper(light, 1);
-    lightHelper.visible = false;
-    scene.add(lightHelper);
-    const folder = gui.addFolder("THREE.DirectionalLightHelper (front)");
-    folder.add(lightHelper, "visible");
-  }
-
-  {
-    light2 = new THREE.DirectionalLight(0xffffff, 0);
-    light2.position.set(1, -2, -4);
-    scene.add(light2);
-    const folder = gui.addFolder("THREE.DirectionalLight (back)");
-    folder.add(light2, "intensity", 0, 10, 1);
-  }
-  {
-    lightHelper2 = new THREE.DirectionalLightHelper(light2, 1);
-    lightHelper2.visible = false;
-    scene.add(lightHelper2);
-    const folder = gui.addFolder("THREE.DirectionalLightHelper (back)");
-    folder.add(lightHelper2, "visible");
-  }
-
-  {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshToonMaterial({ color: 0x44aa88 });
-    // const material = new THREE.MeshLambertMaterial({ color: 0x44aa88 });
-    // const material = new THREE.MeshNormalMaterial();
-    cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    {
-      const folder = gui.addFolder("THREE.Material");
-      folder.add(cube.material, "wireframe");
-    }
+    const loader = new GLTFLoader();
+    loader.load(
+      "models/base1-22.glb",
+      function (gltf) {
+        const material = new THREE.ShaderMaterial({
+          uniforms: {
+            lightPos: { value: new THREE.Vector3(-5, 5, 5) },
+            threshold: { value: 0.5 },
+            baseColor: { value: new THREE.Color(0xfef3f1) },
+            shadeColor: { value: new THREE.Color(0xfde2df) },
+          },
+          uniformsNeedUpdate: true,
+          vertexShader: document.getElementById("vertexShader").textContent,
+          fragmentShader: document.getElementById("fragmentShader").textContent,
+        });
+        // const material = new THREE.MeshNormalMaterial();
+        baseMesh = gltf.scene.children[0];
+        baseMesh.material = material;
+        scene.add(gltf.scene);
+        {
+          const folder = gui.addFolder("baseMesh");
+          const mFolder = folder.addFolder("material");
+          mFolder.add(material, "wireframe");
+          if (material.isShaderMaterial) {
+            const uFolder = mFolder.addFolder("uniforms");
+            const lpFolder = uFolder.addFolder("lightPos");
+            const u = material.uniforms;
+            lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
+            lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
+            lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
+            uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
+            uFolder.addColor(u.baseColor, "value").name("baseColor");
+            uFolder.addColor(u.shadeColor, "value").name("shadeColor");
+          }
+        }
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
   }
 
   //
@@ -104,8 +101,6 @@ function onWindowResize() {
   const aspect = window.innerWidth / window.innerHeight;
   camera.left = -(frustumSize * aspect) / 2;
   camera.right = (frustumSize * aspect) / 2;
-  camera.top = frustumSize / 2;
-  camera.bottom = -frustumSize / 2;
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -114,15 +109,6 @@ function onWindowResize() {
 }
 
 function animate() {
-  light2.position.x = -light.position.x;
-  light2.position.y = -light.position.y;
-  light2.position.z = -light.position.z;
-  lightHelper.update();
-  lightHelper2.update();
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
   renderer.render(scene, camera);
 
   gizmo.render();
