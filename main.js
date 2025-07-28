@@ -61,7 +61,7 @@ function init() {
     posFolder.add(light.position, "z", -10, 10, 1);
   }
   {
-    lightHelper = new THREE.DirectionalLightHelper(light, 1);
+    lightHelper = new THREE.DirectionalLightHelper(light, 1, 0x000000);
     lightHelper.visible = false;
     scene.add(lightHelper);
     const folder = gui.addFolder("THREE.DirectionalLightHelper (front)");
