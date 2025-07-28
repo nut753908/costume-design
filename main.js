@@ -57,8 +57,8 @@ function init() {
           uniforms: {
             lightPos: { value: new THREE.Vector3(-3, 3, 3) },
             threshold: { value: 0.5 },
-            lightColor: { value: new THREE.Color(0xfef3f1) },
-            darkColor: { value: new THREE.Color(0xfde2df) },
+            baseColor: { value: new THREE.Color(0xfef3f1) },
+            shadeColor: { value: new THREE.Color(0xfde2df) },
           },
           uniformsNeedUpdate: true,
           vertexShader: document.getElementById("vertexShader").textContent,
@@ -80,8 +80,8 @@ function init() {
             lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
             lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
             uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
-            uFolder.addColor(u.lightColor, "value").name("lightColor");
-            uFolder.addColor(u.darkColor, "value").name("darkColor");
+            uFolder.addColor(u.baseColor, "value").name("baseColor");
+            uFolder.addColor(u.shadeColor, "value").name("shadeColor");
           }
         }
       },
