@@ -5,7 +5,6 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
-let light;
 let baseMesh;
 
 const frustumSize = 2;
@@ -50,24 +49,13 @@ function init() {
   }
 
   {
-    light = new THREE.DirectionalLight(0xffffff, 3);
-    light.position.set(-3, 3, 3);
-    scene.add(light);
-    const folder = gui.addFolder("THREE.DirectionalLight");
-    const posFolder = folder.addFolder("position");
-    posFolder.add(light.position, "x", -10, 10, 1);
-    posFolder.add(light.position, "y", -10, 10, 1);
-    posFolder.add(light.position, "z", -10, 10, 1);
-  }
-
-  {
     const loader = new GLTFLoader();
     loader.load(
       "models/base1-22.glb",
       function (gltf) {
         const material = new THREE.ShaderMaterial({
           uniforms: {
-            lightDirection: { value: light.position },
+            lightPos: { value: new THREE.Vector3(-3, 3, 3) },
             threshold: { value: 0.5 },
             lightColor: { value: new THREE.Color(0xfef3f1) },
             darkColor: { value: new THREE.Color(0xfde2df) },
@@ -84,16 +72,15 @@ function init() {
           const folder = gui.addFolder("THREE.Material");
           folder.add(material, "wireframe");
           if (material.isShaderMaterial) {
-            const uniformsFolder = folder.addFolder("uniforms");
-            uniformsFolder
-              .add(material.uniforms.threshold, "value", 0, 1, 0.1)
-              .name("threshold");
-            uniformsFolder
-              .addColor(material.uniforms.lightColor, "value")
-              .name("lightColor");
-            uniformsFolder
-              .addColor(material.uniforms.darkColor, "value")
-              .name("darkColor");
+            const uFolder = folder.addFolder("uniforms");
+            const lpFolder = uFolder.addFolder("lightPos");
+            const u = material.uniforms;
+            lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
+            lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
+            lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
+            uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
+            uFolder.addColor(u.lightColor, "value").name("lightColor");
+            uFolder.addColor(u.darkColor, "value").name("darkColor");
           }
         }
       },

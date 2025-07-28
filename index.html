@@ -19,7 +19,7 @@
       }
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
-      uniform vec3 lightDirection;
+      uniform vec3 lightPos;
       uniform float threshold;
       uniform vec3 lightColor;
       uniform vec3 darkColor;
@@ -28,7 +28,7 @@
 
       void main() {
         // dotNL will be from -1.0 to 1.0
-        float dotNL = dot( vNormal, normalize( lightDirection ) );
+        float dotNL = dot( vNormal, normalize( lightPos ) );
         float coord = dotNL * 0.5 + 0.5;
         gl_FragColor = vec4( coord > threshold ? lightColor : darkColor, 1.0 );
       }
