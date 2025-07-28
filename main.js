@@ -53,7 +53,7 @@ function init() {
     light = new THREE.DirectionalLight(0xffffff, 3);
     light.position.set(-3, 3, 3);
     scene.add(light);
-    const folder = gui.addFolder("THREE.DirectionalLight (front)");
+    const folder = gui.addFolder("THREE.DirectionalLight");
     const posFolder = folder.addFolder("position");
     posFolder.add(light.position, "x", -10, 10, 1);
     posFolder.add(light.position, "y", -10, 10, 1);
