@@ -69,10 +69,11 @@ function init() {
         baseMesh.material = material;
         scene.add(gltf.scene);
         {
-          const folder = gui.addFolder("THREE.Material");
-          folder.add(material, "wireframe");
+          const folder = gui.addFolder("baseMesh");
+          const mFolder = folder.addFolder("material");
+          mFolder.add(material, "wireframe");
           if (material.isShaderMaterial) {
-            const uFolder = folder.addFolder("uniforms");
+            const uFolder = mFolder.addFolder("uniforms");
             const lpFolder = uFolder.addFolder("lightPos");
             const u = material.uniforms;
             lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
