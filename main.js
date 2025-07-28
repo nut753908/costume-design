@@ -89,7 +89,13 @@ function init() {
     loader.load(
       "models/base1-22.glb",
       function (gltf) {
-        const material = new THREE.MeshToonMaterial({ color: 0xfef3f1 });
+        const material = new THREE.MeshToonMaterial({
+          color: 0xfef3f1,
+          gradientMap: createGradientMap([
+            new THREE.Color(0xeeeeee),
+            new THREE.Color(0xffffff),
+          ]),
+        });
         // const material = new THREE.MeshNormalMaterial();
         baseMesh = gltf.scene.children[0];
         baseMesh.material = material;
@@ -133,4 +139,24 @@ function animate() {
   renderer.render(scene, camera);
 
   gizmo.render();
+}
+
+function createGradientMap(colors) {
+  const size = colors.length;
+  const data = new Uint8Array(4 * size);
+
+  for (let i = 0; i < size; i++) {
+    const stride = i * 4;
+    data[stride] = Math.floor(colors[i].r * 255);
+    data[stride + 1] = Math.floor(colors[i].g * 255);
+    data[stride + 2] = Math.floor(colors[i].b * 255);
+    data[stride + 3] = 255;
+  }
+
+  const texture = new THREE.DataTexture(data, size, 1);
+  texture.needsUpdate = true;
+  texture.minFilter = THREE.NearestFilter;
+  texture.magFilter = THREE.NearestFilter;
+
+  return texture;
 }
