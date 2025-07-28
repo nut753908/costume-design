@@ -2,13 +2,14 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
 let light, lightHelper;
 let light2, lightHelper2;
-let cube;
+let baseMesh;
 
-const frustumSize = 8;
+const frustumSize = 2;
 
 init();
 
@@ -40,6 +41,7 @@ function init() {
   const gui = new GUI();
 
   scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xffffff);
 
   {
     const helper = new THREE.AxesHelper(3);
@@ -83,16 +85,26 @@ function init() {
   }
 
   {
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshToonMaterial({ color: 0x44aa88 });
-    // const material = new THREE.MeshLambertMaterial({ color: 0x44aa88 });
-    // const material = new THREE.MeshNormalMaterial();
-    cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    {
-      const folder = gui.addFolder("THREE.Material");
-      folder.add(cube.material, "wireframe");
-    }
+    const loader = new GLTFLoader();
+    loader.load(
+      "models/base1-22.glb",
+      function (gltf) {
+        const material = new THREE.MeshToonMaterial({ color: 0xfef3f1 });
+        // const material = new THREE.MeshNormalMaterial();
+        baseMesh = gltf.scene.children[0];
+        baseMesh.material = material;
+        scene.add(gltf.scene);
+        {
+          const folder = gui.addFolder("THREE.Material");
+          folder.addColor(baseMesh.material, "color");
+          folder.add(baseMesh.material, "wireframe");
+        }
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
   }
 
   //
@@ -117,9 +129,6 @@ function animate() {
   light2.position.z = -light.position.z;
   lightHelper.update();
   lightHelper2.update();
-
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
 
   renderer.render(scene, camera);
 
