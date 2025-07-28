@@ -76,7 +76,7 @@ function init() {
         const uniforms = {
           lightColor: { value: new THREE.Color(0xfef3f1) },
           darkColor: { value: new THREE.Color(0xfde2df) },
-          lightDirection: { value: light.position.normalize() },
+          lightDirection: { value: light.position },
           threshold: { value: 0.5 },
         };
         const material = new THREE.ShaderMaterial({
