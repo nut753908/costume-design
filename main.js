@@ -71,7 +71,8 @@ function init() {
 
   {
     light2 = new THREE.DirectionalLight(0xffffff, 0);
-    light2.position.set(3, -3, -3);
+    light2.position.copy(light.position);
+    light2.position.negate();
     scene.add(light2);
     const folder = gui.addFolder("THREE.DirectionalLight (back)");
     folder.add(light2, "intensity", 0, 10, 1);
@@ -133,9 +134,8 @@ function onWindowResize() {
 }
 
 function animate() {
-  light2.position.x = -light.position.x;
-  light2.position.y = -light.position.y;
-  light2.position.z = -light.position.z;
+  light2.position.copy(light.position);
+  light2.position.negate();
   lightHelper.update();
   lightHelper2.update();
 
