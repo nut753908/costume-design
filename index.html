@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
     <title>My first three.js app</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
     <style>
       body {
         margin: 0;
@@ -12,25 +16,29 @@
   <body>
     <script id="vertexShader" type="x-shader/x-vertex">
       varying vec3 vNormal;
+      varying vec3 vCameraPosition;
 
       void main() {
         vNormal = normal;
+        vCameraPosition = cameraPosition;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
+      uniform bool checkShape;
       uniform vec3 lightPos;
       uniform float threshold;
       uniform vec3 baseColor;
       uniform vec3 shadeColor;
 
       varying vec3 vNormal;
+      varying vec3 vCameraPosition;
 
       void main() {
-        // dotNL will be from -1.0 to 1.0
-        float dotNL = dot( vNormal, normalize( lightPos ) );
-        float coord = dotNL * 0.5 + 0.5;
-        gl_FragColor = vec4( coord > threshold ? baseColor : shadeColor, 1.0 );
+        vec3 color = checkShape
+          ? ( dot( vNormal, normalize( vCameraPosition ) ) * 0.5 + 0.5 ) * vec3( 1.0 )
+          : dot( vNormal, normalize( lightPos ) ) * 0.5 + 0.5 > threshold ? baseColor : shadeColor;
+        gl_FragColor = vec4( color, 1.0 );
       }
     </script>
     <script type="module" src="/main.js"></script>
