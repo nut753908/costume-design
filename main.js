@@ -16,6 +16,7 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setAnimationLoop(animate);
+  renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
   document.body.appendChild(renderer.domElement);
 
   const aspect = window.innerWidth / window.innerHeight;
@@ -38,8 +39,13 @@ function init() {
 
   const gui = new GUI();
 
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff);
+  {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+    scene.backgroundIntensity = 0;
+    const folder = gui.addFolder("THREE.Scene");
+    folder.addColor(scene, "background");
+  }
 
   {
     const helper = new THREE.AxesHelper(3);
