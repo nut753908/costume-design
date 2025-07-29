@@ -80,9 +80,9 @@ function init() {
           mFolder.add(material, "wireframe");
           if (material.isShaderMaterial) {
             const uFolder = mFolder.addFolder("uniforms");
-            const lpFolder = uFolder.addFolder("lightPos");
             const u = material.uniforms;
             uFolder.add(u.checkShape, "value").name("checkShape");
+            const lpFolder = uFolder.addFolder("lightPos");
             lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
             lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
             lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
