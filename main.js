@@ -55,6 +55,7 @@ function init() {
       function (gltf) {
         const material = new THREE.ShaderMaterial({
           uniforms: {
+            checkShape: { value: false },
             lightPos: { value: new THREE.Vector3(-5, 5, 5) },
             threshold: { value: 0.5 },
             baseColor: { value: new THREE.Color(0xfef3f1) },
@@ -64,7 +65,6 @@ function init() {
           vertexShader: document.getElementById("vertexShader").textContent,
           fragmentShader: document.getElementById("fragmentShader").textContent,
         });
-        // const material = new THREE.MeshNormalMaterial();
         baseMesh = gltf.scene.children[0];
         baseMesh.material = material;
         scene.add(gltf.scene);
@@ -76,6 +76,7 @@ function init() {
             const uFolder = mFolder.addFolder("uniforms");
             const lpFolder = uFolder.addFolder("lightPos");
             const u = material.uniforms;
+            uFolder.add(u.checkShape, "value").name("checkShape");
             lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
             lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
             lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
