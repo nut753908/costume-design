@@ -42,7 +42,6 @@ function init() {
   {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
-    scene.backgroundIntensity = 0;
     const folder = gui.addFolder("THREE.Scene");
     folder.addColor(scene, "background");
   }
