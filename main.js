@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+// import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 let renderer, camera, controls, gizmo, scene;
 let baseMesh;
@@ -53,50 +53,50 @@ function init() {
     folder.add(helper, "visible");
   }
 
-  {
-    const loader = new GLTFLoader();
-    loader.load(
-      "models/base1-22.glb",
-      function (gltf) {
-        const material = new THREE.ShaderMaterial({
-          uniforms: {
-            checkShape: { value: false },
-            lightPos: { value: new THREE.Vector3(-5, 5, 5) },
-            threshold: { value: 0.5 },
-            baseColor: { value: new THREE.Color(0xfef3f1) },
-            shadeColor: { value: new THREE.Color(0xfde2df) },
-          },
-          uniformsNeedUpdate: true,
-          vertexShader: document.getElementById("vertexShader").textContent,
-          fragmentShader: document.getElementById("fragmentShader").textContent,
-        });
-        baseMesh = gltf.scene.children[0];
-        baseMesh.material = material;
-        scene.add(gltf.scene);
-        {
-          const folder = gui.addFolder("baseMesh");
-          const mFolder = folder.addFolder("material");
-          mFolder.add(material, "wireframe");
-          if (material.isShaderMaterial) {
-            const uFolder = mFolder.addFolder("uniforms");
-            const u = material.uniforms;
-            uFolder.add(u.checkShape, "value").name("checkShape");
-            const lpFolder = uFolder.addFolder("lightPos");
-            lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
-            lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
-            lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
-            uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
-            uFolder.addColor(u.baseColor, "value").name("baseColor");
-            uFolder.addColor(u.shadeColor, "value").name("shadeColor");
-          }
-        }
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-  }
+  // {
+  //   const loader = new GLTFLoader();
+  //   loader.load(
+  //     "models/base1-22.glb",
+  //     function (gltf) {
+  //       const material = new THREE.ShaderMaterial({
+  //         uniforms: {
+  //           checkShape: { value: false },
+  //           lightPos: { value: new THREE.Vector3(-5, 5, 5) },
+  //           threshold: { value: 0.5 },
+  //           baseColor: { value: new THREE.Color(0xfef3f1) },
+  //           shadeColor: { value: new THREE.Color(0xfde2df) },
+  //         },
+  //         uniformsNeedUpdate: true,
+  //         vertexShader: document.getElementById("vertexShader").textContent,
+  //         fragmentShader: document.getElementById("fragmentShader").textContent,
+  //       });
+  //       baseMesh = gltf.scene.children[0];
+  //       baseMesh.material = material;
+  //       scene.add(gltf.scene);
+  //       {
+  //         const folder = gui.addFolder("baseMesh");
+  //         const mFolder = folder.addFolder("material");
+  //         mFolder.add(material, "wireframe");
+  //         if (material.isShaderMaterial) {
+  //           const uFolder = mFolder.addFolder("uniforms");
+  //           const u = material.uniforms;
+  //           uFolder.add(u.checkShape, "value").name("checkShape");
+  //           const lpFolder = uFolder.addFolder("lightPos");
+  //           lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
+  //           lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
+  //           lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
+  //           uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
+  //           uFolder.addColor(u.baseColor, "value").name("baseColor");
+  //           uFolder.addColor(u.shadeColor, "value").name("shadeColor");
+  //         }
+  //       }
+  //     },
+  //     undefined,
+  //     function (error) {
+  //       console.error(error);
+  //     }
+  //   );
+  // }
 
   //
 
