@@ -41,7 +41,10 @@ function init() {
 
   {
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff);
+    scene.background = new THREE.Color().setHex(
+      0xffffff,
+      THREE.LinearSRGBColorSpace
+    );
     const folder = gui.addFolder("THREE.Scene");
     folder.addColor(scene, "background");
   }
@@ -63,8 +66,18 @@ function init() {
   //           checkShape: { value: false },
   //           lightPos: { value: new THREE.Vector3(-5, 5, 5) },
   //           threshold: { value: 0.5 },
-  //           baseColor: { value: new THREE.Color(0xfef3f1) },
-  //           shadeColor: { value: new THREE.Color(0xfde2df) },
+  //           baseColor: {
+  //             value: new THREE.Color().setHex(
+  //               0xfef3ef,
+  //               THREE.LinearSRGBColorSpace
+  //             ),
+  //           },
+  //           shadeColor: {
+  //             value: new THREE.Color().setHex(
+  //               0xfde2df,
+  //               THREE.LinearSRGBColorSpace
+  //             ),
+  //           },
   //         },
   //         uniformsNeedUpdate: true,
   //         vertexShader: document.getElementById("vertexShader").textContent,
