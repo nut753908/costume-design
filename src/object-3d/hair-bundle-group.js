@@ -12,7 +12,7 @@ import { createHairBundleGeometry } from "../geometry/hair-bundle.js";
  */
 export function createHairBundleGroup(gui) {
   const group = new THREE.Group();
-  const folder = gui.addFolder("group");
+  const folder = gui.addFolder("hairBundleGroup");
 
   const geometry = createEmptyGeometry();
 
