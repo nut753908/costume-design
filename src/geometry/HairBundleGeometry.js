@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Float32BufferAttribute, Vector3 } from "three/webgpu";
 
 /**
  * A geometry class for representing a hair bundle.
@@ -58,8 +57,8 @@ class HairBundleGeometry extends THREE.BufferGeometry {
     const grid = [];
     const halfHeight = height / 2;
 
-    const normal = new Vector3();
-    const vertex = new Vector3();
+    const normal = new THREE.Vector3();
+    const vertex = new THREE.Vector3();
 
     // generate vertices, normals, and uvs
 
@@ -120,7 +119,7 @@ class HairBundleGeometry extends THREE.BufferGeometry {
       new THREE.Float32BufferAttribute(vertices, 3)
     );
     this.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
-    this.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
+    this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
   }
 
   copy(source) {
