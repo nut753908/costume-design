@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-import { createRenderer, updateRenderer } from "./common/renderer.js";
-import { createCamera, updateCamera } from "./common/camera.js";
-import { createControlsAndGizmo } from "./common/controls.js";
+import { createRenderer, updateRenderer } from "./main/renderer.js";
+import { createCamera, updateCamera } from "./main/camera.js";
+import { createControlsAndGizmo } from "./main/controls.js";
 import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { createColor } from "./common/color.js";
-import { getToonVertex, getToonFragment } from "./common/shader.js";
+import { createColor } from "./sub/color.js";
+import { getToonVertex, getToonFragment } from "./sub/shader.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
 let renderer, camera, gizmo, scene;
