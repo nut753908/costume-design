@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { createLineMaterial } from "../material/line.js";
 import { createToonMaterial } from "../material/toon.js";
 
 /**
@@ -16,14 +17,18 @@ export async function createBaseMesh(gui, scene) {
     .catch((error) => console.error(error));
   if (!gltf) return null;
 
-  const baseMesh = gltf.scene.children[0];
+  const group = new THREE.Group();
   const folder = gui.addFolder("baseMesh");
 
-  const material = createToonMaterial(0xfef3ef, 0xfde2df, folder);
+  const geometry = gltf.scene.children[0].geometry;
 
-  baseMesh.material = material;
+  const lineMaterial = createLineMaterial(folder);
+  const toonMaterial = createToonMaterial(0xfef3ef, 0xfde2df, folder);
 
-  scene.add(baseMesh);
+  group.add(new THREE.LineSegments(geometry, lineMaterial));
+  group.add(new THREE.Mesh(geometry, toonMaterial));
 
-  return baseMesh;
+  scene.add(group);
+
+  return group;
 }
