@@ -32,7 +32,6 @@ export function createToonMaterial(
   });
   {
     const folder = gui.addFolder("toonMaterial");
-    folder.add(toonMaterial, "wireframe");
     {
       const uFolder = folder.addFolder("uniforms");
       const u = toonMaterial.uniforms;
