@@ -14,7 +14,7 @@
     </style>
   </head>
   <body>
-    <script id="vertexShader" type="x-shader/x-vertex">
+    <script id="toonVertex" type="x-shader/x-vertex">
       varying vec3 vNormal;
       varying vec3 vCameraPosition;
 
@@ -24,7 +24,7 @@
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     </script>
-    <script id="fragmentShader" type="x-shader/x-fragment">
+    <script id="toonFragment" type="x-shader/x-fragment">
       uniform bool checkShape;
       uniform vec3 lightPos;
       uniform float threshold;
@@ -41,6 +41,6 @@
         gl_FragColor = vec4( color, 1.0 );
       }
     </script>
-    <script type="module" src="/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -1,5 +1,50 @@
 import * as THREE from "three";
-import { Float32BufferAttribute, Vector3 } from "three/webgpu";
+
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
+/**
+ * @param {THREE.Object3D} mesh
+ * @param {GUI} folder
+ */
+export function createHairBundleGeometry(mesh, folder) {
+  const data = {
+    radius: 0.5,
+    height: 1,
+    radialSegments: 8,
+    heightSegments: 1,
+  };
+  function generateGeometry() {
+    updateGroupGeometry(
+      mesh,
+      new HairBundleGeometry(
+        data.radius,
+        data.height,
+        data.radialSegments,
+        data.heightSegments
+      )
+    );
+  }
+  {
+    const gFolder = folder.addFolder("geometry");
+    gFolder.add(data, "radius", 0, 3, 0.01).onChange(generateGeometry);
+    gFolder.add(data, "height", 0, 5, 0.01).onChange(generateGeometry);
+    gFolder.add(data, "radialSegments", 3, 64, 1).onChange(generateGeometry);
+    gFolder.add(data, "heightSegments", 1, 64, 1).onChange(generateGeometry);
+  }
+  generateGeometry();
+}
+
+/**
+ * @param {THREE.Object3D} mesh
+ * @param {THREE.BufferGeometry} geometry
+ */
+function updateGroupGeometry(mesh, geometry) {
+  mesh.children[0].geometry.dispose();
+  mesh.children[1].geometry.dispose();
+
+  mesh.children[0].geometry = new THREE.WireframeGeometry(geometry);
+  mesh.children[1].geometry = geometry;
+}
 
 /**
  * A geometry class for representing a hair bundle.
@@ -58,8 +103,8 @@ class HairBundleGeometry extends THREE.BufferGeometry {
     const grid = [];
     const halfHeight = height / 2;
 
-    const normal = new Vector3();
-    const vertex = new Vector3();
+    const normal = new THREE.Vector3();
+    const vertex = new THREE.Vector3();
 
     // generate vertices, normals, and uvs
 
@@ -120,7 +165,7 @@ class HairBundleGeometry extends THREE.BufferGeometry {
       new THREE.Float32BufferAttribute(vertices, 3)
     );
     this.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
-    this.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
+    this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
   }
 
   copy(source) {
@@ -147,5 +192,3 @@ class HairBundleGeometry extends THREE.BufferGeometry {
     );
   }
 }
-
-export { HairBundleGeometry };
