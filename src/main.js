@@ -81,7 +81,7 @@ function init() {
     geometry.setAttribute("position", new THREE.Float32BufferAttribute([], 3));
 
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: new THREE.Color().setHex(0xffffff, THREE.LinearSRGBColorSpace),
+      color: createColor(0xffffff),
       transparent: true,
       opacity: 1,
     });
