@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { createColor } from "../sub/color.js";
+import { createColor } from "../main/color.js";
 
 /**
  * @param {GUI} gui
