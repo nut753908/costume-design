@@ -6,6 +6,7 @@ import { createControlsAndGizmo } from "./common/controls.js";
 import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { createColor } from "./common/color.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
 let renderer, camera, gizmo, scene;
@@ -35,18 +36,8 @@ function init() {
             checkShape: { value: false },
             lightPos: { value: new THREE.Vector3(-5, 5, 5) },
             threshold: { value: 0.5 },
-            baseColor: {
-              value: new THREE.Color().setHex(
-                0xfef3ef,
-                THREE.LinearSRGBColorSpace
-              ),
-            },
-            shadeColor: {
-              value: new THREE.Color().setHex(
-                0xfde2df,
-                THREE.LinearSRGBColorSpace
-              ),
-            },
+            baseColor: { value: createColor(0xfef3ef) },
+            shadeColor: { value: createColor(0xfde2df) },
           },
           uniformsNeedUpdate: true,
           vertexShader: document.getElementById("vertexShader").textContent,
@@ -104,12 +95,8 @@ function init() {
         checkShape: { value: false },
         lightPos: { value: new THREE.Vector3(-5, 5, 5) },
         threshold: { value: 0.5 },
-        baseColor: {
-          value: new THREE.Color().setHex(0xfcd7e9, THREE.LinearSRGBColorSpace),
-        },
-        shadeColor: {
-          value: new THREE.Color().setHex(0xf8c1de, THREE.LinearSRGBColorSpace),
-        },
+        baseColor: { value: createColor(0xfcd7e9) },
+        shadeColor: { value: createColor(0xf8c1de) },
       },
       uniformsNeedUpdate: true,
       vertexShader: document.getElementById("vertexShader").textContent,
