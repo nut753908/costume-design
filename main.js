@@ -1,6 +1,10 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { ViewportGizmo } from "three-viewport-gizmo";
+
+import {
+  createRenderer,
+  createCamera,
+  createControlsAndGizmo,
+} from "./first.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
@@ -13,28 +17,9 @@ const frustumSize = 2;
 init();
 
 function init() {
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setAnimationLoop(animate);
-  renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-  document.body.appendChild(renderer.domElement);
-
-  const aspect = window.innerWidth / window.innerHeight;
-  camera = new THREE.OrthographicCamera(
-    -(frustumSize * aspect) / 2,
-    (frustumSize * aspect) / 2,
-    frustumSize / 2,
-    -frustumSize / 2,
-    0.1,
-    1000
-  );
-  camera.position.z = 5;
-
-  controls = new OrbitControls(camera, renderer.domElement);
-
-  gizmo = new ViewportGizmo(camera, renderer, { offset: { right: 280 } });
-  gizmo.attachControls(controls);
+  renderer = createRenderer(animate);
+  camera = createCamera(frustumSize);
+  ({ controls, gizmo } = createControlsAndGizmo(camera, renderer));
 
   //
 
