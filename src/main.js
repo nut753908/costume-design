@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
-import { createRenderer, updateRenderer } from "./src/core/renderer.js";
-import { createCamera, updateCamera } from "./src/core/camera.js";
-import { createControlsAndGizmo } from "./src/core/controls.js";
+import { createRenderer, updateRenderer } from "./core/renderer.js";
+import { createCamera, updateCamera } from "./core/camera.js";
+import { createControlsAndGizmo } from "./core/controls.js";
 import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { HairBundleGeometry } from "./src/geometries/HairBundleGeometry.js";
+import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
 let renderer, camera, gizmo, scene;
 let baseMesh;
