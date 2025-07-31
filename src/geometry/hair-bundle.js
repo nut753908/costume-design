@@ -4,9 +4,9 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 /**
  * @param {THREE.Object3D} mesh
- * @param {GUI} folder
+ * @param {GUI} gui
  */
-export function createHairBundleGeometry(mesh, folder) {
+export function createHairBundleGeometry(mesh, gui) {
   const data = {
     radius: 0.5,
     height: 1,
@@ -25,11 +25,11 @@ export function createHairBundleGeometry(mesh, folder) {
     );
   }
   {
-    const gFolder = folder.addFolder("geometry");
-    gFolder.add(data, "radius", 0, 3, 0.01).onChange(generateGeometry);
-    gFolder.add(data, "height", 0, 5, 0.01).onChange(generateGeometry);
-    gFolder.add(data, "radialSegments", 3, 64, 1).onChange(generateGeometry);
-    gFolder.add(data, "heightSegments", 1, 64, 1).onChange(generateGeometry);
+    const folder = gui.addFolder("geometry");
+    folder.add(data, "radius", 0, 3, 0.01).onChange(generateGeometry);
+    folder.add(data, "height", 0, 5, 0.01).onChange(generateGeometry);
+    folder.add(data, "radialSegments", 3, 64, 1).onChange(generateGeometry);
+    folder.add(data, "heightSegments", 1, 64, 1).onChange(generateGeometry);
   }
   generateGeometry();
 }
