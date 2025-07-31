@@ -9,7 +9,7 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { createColor } from "./sub/color.js";
 import { getToonVertex, getToonFragment } from "./sub/shader.js";
-import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
+import { HairBundleGeometry } from "./geometry/HairBundleGeometry.js";
 
 let renderer, camera, gizmo, scene;
 let baseMesh;
