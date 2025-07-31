@@ -1,9 +1,9 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { loadBaseGeometry } from "../geometry/base.js";
-import { createLineMaterial } from "../material/line.js";
-import { createToonMaterial } from "../material/toon.js";
+import { loadBaseGeometry } from "../../geometry/base.js";
+import { createLineMaterial } from "../../material/line.js";
+import { createToonMaterial } from "../../material/toon.js";
 
 /**
  * @param {GUI} gui

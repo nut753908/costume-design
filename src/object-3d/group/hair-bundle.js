@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { createEmptyGeometry } from "../geometry/empty.js";
-import { createLineMaterial } from "../material/line.js";
-import { createToonMaterial } from "../material/toon.js";
-import { createHairBundleGeometry } from "../geometry/hair-bundle.js";
+import { createEmptyGeometry } from "../../geometry/empty.js";
+import { createLineMaterial } from "../../material/line.js";
+import { createToonMaterial } from "../../material/toon.js";
+import { createHairBundleGeometry } from "../../geometry/hair-bundle.js";
 
 /**
  * @param {GUI} gui
