@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ViewportGizmo } from "three-viewport-gizmo";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-// import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
 let renderer, camera, controls, gizmo, scene;
@@ -46,74 +46,83 @@ function init() {
       0xffffff,
       THREE.LinearSRGBColorSpace
     );
-    const folder = gui.addFolder("THREE.Scene");
-    folder.addColor(scene, "background");
+    {
+      const folder = gui.addFolder("THREE.Scene");
+      folder.addColor(scene, "background");
+    }
   }
 
   {
     const helper = new THREE.AxesHelper(3);
+    {
+      const folder = gui.addFolder("THREE.AxesHelper");
+      folder.add(helper, "visible");
+    }
     scene.add(helper);
-    const folder = gui.addFolder("THREE.AxesHelper");
-    folder.add(helper, "visible");
   }
 
-  // {
-  //   const loader = new GLTFLoader();
-  //   loader.load(
-  //     "models/base1-22.glb",
-  //     function (gltf) {
-  //       const material = new THREE.ShaderMaterial({
-  //         uniforms: {
-  //           checkShape: { value: false },
-  //           lightPos: { value: new THREE.Vector3(-5, 5, 5) },
-  //           threshold: { value: 0.5 },
-  //           baseColor: {
-  //             value: new THREE.Color().setHex(
-  //               0xfef3ef,
-  //               THREE.LinearSRGBColorSpace
-  //             ),
-  //           },
-  //           shadeColor: {
-  //             value: new THREE.Color().setHex(
-  //               0xfde2df,
-  //               THREE.LinearSRGBColorSpace
-  //             ),
-  //           },
-  //         },
-  //         uniformsNeedUpdate: true,
-  //         vertexShader: document.getElementById("vertexShader").textContent,
-  //         fragmentShader: document.getElementById("fragmentShader").textContent,
-  //       });
-  //       baseMesh = gltf.scene.children[0];
-  //       baseMesh.material = material;
-  //       scene.add(gltf.scene);
-  //       {
-  //         const folder = gui.addFolder("baseMesh");
-  //         const mFolder = folder.addFolder("material");
-  //         mFolder.add(material, "wireframe");
-  //         if (material.isShaderMaterial) {
-  //           const uFolder = mFolder.addFolder("uniforms");
-  //           const u = material.uniforms;
-  //           uFolder.add(u.checkShape, "value").name("checkShape");
-  //           const lpFolder = uFolder.addFolder("lightPos");
-  //           lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
-  //           lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
-  //           lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
-  //           uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
-  //           uFolder.addColor(u.baseColor, "value").name("baseColor");
-  //           uFolder.addColor(u.shadeColor, "value").name("shadeColor");
-  //         }
-  //       }
-  //     },
-  //     undefined,
-  //     function (error) {
-  //       console.error(error);
-  //     }
-  //   );
-  // }
+  {
+    const loader = new GLTFLoader();
+    loader.load(
+      "models/base1-22.glb",
+      function (gltf) {
+        baseMesh = gltf.scene.children[0];
+        const folder = gui.addFolder("baseMesh");
+
+        const material = new THREE.ShaderMaterial({
+          uniforms: {
+            checkShape: { value: false },
+            lightPos: { value: new THREE.Vector3(-5, 5, 5) },
+            threshold: { value: 0.5 },
+            baseColor: {
+              value: new THREE.Color().setHex(
+                0xfef3ef,
+                THREE.LinearSRGBColorSpace
+              ),
+            },
+            shadeColor: {
+              value: new THREE.Color().setHex(
+                0xfde2df,
+                THREE.LinearSRGBColorSpace
+              ),
+            },
+          },
+          uniformsNeedUpdate: true,
+          vertexShader: document.getElementById("vertexShader").textContent,
+          fragmentShader: document.getElementById("fragmentShader").textContent,
+        });
+        {
+          const mFolder = folder.addFolder("material");
+          mFolder.add(material, "wireframe");
+          {
+            const uFolder = mFolder.addFolder("uniforms");
+            const u = material.uniforms;
+            uFolder.add(u.checkShape, "value").name("checkShape");
+            {
+              const lpFolder = uFolder.addFolder("lightPos");
+              lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
+              lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
+              lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
+            }
+            uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
+            uFolder.addColor(u.baseColor, "value").name("baseColor");
+            uFolder.addColor(u.shadeColor, "value").name("shadeColor");
+          }
+        }
+
+        baseMesh.material = material;
+        scene.add(gltf.scene);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
+  }
 
   {
     const group = new THREE.Group();
+    const folder = gui.addFolder("group");
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.Float32BufferAttribute([], 3));
@@ -123,6 +132,12 @@ function init() {
       transparent: true,
       opacity: 1,
     });
+    {
+      const lmFolder = folder.addFolder("lineMaterial");
+      lmFolder.addColor(lineMaterial, "color");
+      lmFolder.add(lineMaterial, "opacity", 0, 1, 0.1);
+    }
+
     const meshMaterial = new THREE.ShaderMaterial({
       uniforms: {
         checkShape: { value: false },
@@ -140,6 +155,24 @@ function init() {
       fragmentShader: document.getElementById("fragmentShader").textContent,
       side: THREE.DoubleSide,
     });
+    {
+      const mmFolder = folder.addFolder("meshMaterial");
+      mmFolder.add(meshMaterial, "wireframe");
+      {
+        const uFolder = mmFolder.addFolder("uniforms");
+        const u = meshMaterial.uniforms;
+        uFolder.add(u.checkShape, "value").name("checkShape");
+        {
+          const lpFolder = uFolder.addFolder("lightPos");
+          lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
+          lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
+          lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
+        }
+        uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
+        uFolder.addColor(u.baseColor, "value").name("baseColor");
+        uFolder.addColor(u.shadeColor, "value").name("shadeColor");
+      }
+    }
 
     group.add(new THREE.LineSegments(geometry, lineMaterial));
     group.add(new THREE.Mesh(geometry, meshMaterial));
@@ -154,52 +187,39 @@ function init() {
       mesh.children[1].geometry = geometry;
     }
 
-    const data = {
-      radius: 0.5,
-      height: 1,
-      radialSegments: 8,
-      heightSegments: 1,
-    };
-    function generateGeometry() {
-      updateGroupGeometry(
-        group,
-        new HairBundleGeometry(
-          data.radius,
-          data.height,
-          data.radialSegments,
-          data.heightSegments
-        )
-      );
+    {
+      const data = {
+        radius: 0.5,
+        height: 1,
+        radialSegments: 8,
+        heightSegments: 1,
+      };
+      function generateGeometry() {
+        updateGroupGeometry(
+          group,
+          new HairBundleGeometry(
+            data.radius,
+            data.height,
+            data.radialSegments,
+            data.heightSegments
+          )
+        );
+      }
+      {
+        const gFolder = folder.addFolder("geometry");
+        gFolder.add(data, "radius", 0, 3, 0.01).onChange(generateGeometry);
+        gFolder.add(data, "height", 0, 5, 0.01).onChange(generateGeometry);
+        gFolder
+          .add(data, "radialSegments", 3, 64, 1)
+          .onChange(generateGeometry);
+        gFolder
+          .add(data, "heightSegments", 1, 64, 1)
+          .onChange(generateGeometry);
+      }
+      generateGeometry();
     }
-    generateGeometry();
 
     scene.add(group);
-
-    {
-      const folder = gui.addFolder("group");
-      const gFolder = folder.addFolder("geometry");
-      gFolder.add(data, "radius", 0, 3, 0.01).onChange(generateGeometry);
-      gFolder.add(data, "height", 0, 5, 0.01).onChange(generateGeometry);
-      gFolder.add(data, "radialSegments", 3, 64, 1).onChange(generateGeometry);
-      gFolder.add(data, "heightSegments", 1, 64, 1).onChange(generateGeometry);
-      const lmFolder = folder.addFolder("lineMaterial");
-      lmFolder.addColor(lineMaterial, "color");
-      lmFolder.add(lineMaterial, "opacity", 0, 1, 0.1);
-      const mmFolder = folder.addFolder("meshMaterial");
-      mmFolder.add(meshMaterial, "wireframe");
-      if (meshMaterial.isShaderMaterial) {
-        const uFolder = mmFolder.addFolder("uniforms");
-        const u = meshMaterial.uniforms;
-        uFolder.add(u.checkShape, "value").name("checkShape");
-        const lpFolder = uFolder.addFolder("lightPos");
-        lpFolder.add(u.lightPos.value, "x", -10, 10, 1);
-        lpFolder.add(u.lightPos.value, "y", -10, 10, 1);
-        lpFolder.add(u.lightPos.value, "z", -10, 10, 1);
-        uFolder.add(u.threshold, "value", 0, 1, 0.1).name("threshold");
-        uFolder.addColor(u.baseColor, "value").name("baseColor");
-        uFolder.addColor(u.shadeColor, "value").name("shadeColor");
-      }
-    }
   }
 
   //
