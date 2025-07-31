@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-import { createRenderer, updateRenderer } from "./core/renderer.js";
-import { createCamera, updateCamera } from "./core/camera.js";
-import { createControlsAndGizmo } from "./core/controls.js";
+import { createRenderer, updateRenderer } from "./common/renderer.js";
+import { createCamera, updateCamera } from "./common/camera.js";
+import { createControlsAndGizmo } from "./common/controls.js";
 import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
