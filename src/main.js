@@ -19,8 +19,10 @@ async function init() {
   const gui = new GUI();
   scene = createScene(gui);
   createAxesHelper(gui, scene);
-  await createBaseMesh(gui, scene);
-  createHairBundleGroup(gui, scene);
+  await createBaseMesh(gui, scene).then((baseMesh) => {
+    if (!baseMesh) return;
+    createHairBundleGroup(gui, scene);
+  });
 
   window.addEventListener("resize", onWindowResize);
 }
