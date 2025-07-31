@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { ViewportGizmo } from "three-viewport-gizmo";
 
+const frustumSize = 2;
+
 /**
  * @param {()=>void} animate
  * @return {THREE.WebGLRenderer}
@@ -18,10 +20,9 @@ export function createRenderer(animate) {
 }
 
 /**
- * @param {number} frustumSize
  * @return {THREE.OrthographicCamera}
  */
-export function createCamera(frustumSize) {
+export function createCamera() {
   const aspect = window.innerWidth / window.innerHeight;
   const camera = new THREE.OrthographicCamera(
     -(frustumSize * aspect) / 2,
@@ -47,4 +48,21 @@ export function createControlsAndGizmo(camera, renderer) {
   gizmo.attachControls(controls);
 
   return { controls, gizmo };
+}
+
+/**
+ * @param {THREE.Camera} camera
+ */
+export function updateCamera(camera) {
+  const aspect = window.innerWidth / window.innerHeight;
+  camera.left = -(frustumSize * aspect) / 2;
+  camera.right = (frustumSize * aspect) / 2;
+  camera.updateProjectionMatrix();
+}
+
+/**
+ * @param {THREE.WebGLRenderer} renderer
+ */
+export function updateRenderer(renderer) {
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }

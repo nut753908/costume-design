@@ -4,6 +4,8 @@ import {
   createRenderer,
   createCamera,
   createControlsAndGizmo,
+  updateCamera,
+  updateRenderer,
 } from "./init1.js";
 import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
@@ -193,18 +195,12 @@ function init() {
 }
 
 function onWindowResize() {
-  const aspect = window.innerWidth / window.innerHeight;
-  camera.left = -(frustumSize * aspect) / 2;
-  camera.right = (frustumSize * aspect) / 2;
-  camera.updateProjectionMatrix();
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
+  updateCamera(camera);
+  updateRenderer(renderer);
   gizmo.update();
 }
 
 function animate() {
   renderer.render(scene, camera);
-
   gizmo.render();
 }
