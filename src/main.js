@@ -7,10 +7,8 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { createLineMaterial } from "./material/line.js";
 import { createToonMaterial } from "./material/toon.js";
-import { createEmptyGeometry } from "./geometry/empty.js";
-import { createHairBundleGeometry } from "./geometry/hair-bundle.js";
+import { createHairBundleGroup } from "./object-3d/hair-bundle-group.js";
 
 let renderer, camera, gizmo, scene;
 let baseMesh;
@@ -46,27 +44,7 @@ function init() {
     );
   }
 
-  {
-    const group = new THREE.Group();
-    const folder = gui.addFolder("group");
-
-    const geometry = createEmptyGeometry();
-
-    const lineMaterial = createLineMaterial(folder);
-    const toonMaterial = createToonMaterial(
-      0xfcd7e9,
-      0xf8c1de,
-      folder,
-      THREE.DoubleSide
-    );
-
-    group.add(new THREE.LineSegments(geometry, lineMaterial));
-    group.add(new THREE.Mesh(geometry, toonMaterial));
-
-    createHairBundleGeometry(group, folder);
-
-    scene.add(group);
-  }
+  createHairBundleGroup(gui);
 
   //
 
