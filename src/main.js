@@ -11,7 +11,7 @@ let renderer, camera, gizmo, scene;
 
 init();
 
-function init() {
+async function init() {
   renderer = createRenderer(animate);
   camera = createCamera();
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
@@ -19,7 +19,7 @@ function init() {
   const gui = new GUI();
   scene = createScene(gui);
   createAxesHelper(gui, scene);
-  createBaseMesh(gui, scene);
+  await createBaseMesh(gui, scene);
   createHairBundleGroup(gui, scene);
 
   window.addEventListener("resize", onWindowResize);
