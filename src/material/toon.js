@@ -1,8 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { createColor } from "../sub/color.js";
-import { getToonVertex, getToonFragment } from "../sub/shader.js";
+import { createColor } from "../math/color.js";
 
 /**
  * @param {THREE.Color} baseColorHex
@@ -26,8 +25,8 @@ export function createToonMaterial(
       shadeColor: { value: createColor(shadeColorHex) },
     },
     uniformsNeedUpdate: true,
-    vertexShader: getToonVertex(),
-    fragmentShader: getToonFragment(),
+    vertexShader: document.getElementById("toonVertex").textContent,
+    fragmentShader: document.getElementById("toonFragment").textContent,
     side: side,
   });
   {
