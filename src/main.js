@@ -63,7 +63,7 @@ function init() {
     group.add(new THREE.LineSegments(geometry, lineMaterial));
     group.add(new THREE.Mesh(geometry, meshMaterial));
 
-    createHairBundleGeometry(group);
+    createHairBundleGeometry(group, folder);
 
     scene.add(group);
   }

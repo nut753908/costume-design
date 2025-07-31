@@ -1,9 +1,12 @@
 import * as THREE from "three";
 
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
 /**
  * @param {THREE.Object3D} mesh
+ * @param {GUI} folder
  */
-export function createHairBundleGeometry(mesh) {
+export function createHairBundleGeometry(mesh, folder) {
   const data = {
     radius: 0.5,
     height: 1,
