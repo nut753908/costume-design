@@ -44,7 +44,7 @@ function init() {
     );
   }
 
-  createHairBundleGroup(gui);
+  createHairBundleGroup(gui, scene);
 
   //
 
