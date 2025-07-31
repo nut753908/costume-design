@@ -40,8 +40,8 @@ function init() {
             shadeColor: { value: createColor(0xfde2df) },
           },
           uniformsNeedUpdate: true,
-          vertexShader: document.getElementById("vertexShader").textContent,
-          fragmentShader: document.getElementById("fragmentShader").textContent,
+          vertexShader: document.getElementById("toonVertex").textContent,
+          fragmentShader: document.getElementById("toonFragment").textContent,
         });
         {
           const mFolder = folder.addFolder("material");
@@ -99,8 +99,8 @@ function init() {
         shadeColor: { value: createColor(0xf8c1de) },
       },
       uniformsNeedUpdate: true,
-      vertexShader: document.getElementById("vertexShader").textContent,
-      fragmentShader: document.getElementById("fragmentShader").textContent,
+      vertexShader: document.getElementById("toonVertex").textContent,
+      fragmentShader: document.getElementById("toonFragment").textContent,
       side: THREE.DoubleSide,
     });
     {
