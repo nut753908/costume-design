@@ -5,7 +5,7 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { createHairBundleGroup } from "./object-3d/hair-bundle-group.js";
-import { createBaseMesh } from "./object-3d/base-mesh.js";
+import { createBaseGroup } from "./object-3d/base-group.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -19,8 +19,8 @@ async function init() {
   const gui = new GUI();
   scene = createScene(gui);
   createAxesHelper(gui, scene);
-  await createBaseMesh(gui, scene).then((baseMesh) => {
-    if (!baseMesh) return;
+  await createBaseGroup(gui, scene).then((baseGroup) => {
+    if (!baseGroup) return;
     createHairBundleGroup(gui, scene);
   });
 

@@ -8,9 +8,9 @@ import { createToonMaterial } from "../material/toon.js";
 /**
  * @param {GUI} gui
  * @param {THREE.Scene} scene
- * @return {?THREE.Mesh}
+ * @return {?THREE.Group}
  */
-export async function createBaseMesh(gui, scene) {
+export async function createBaseGroup(gui, scene) {
   const loader = new GLTFLoader();
   const gltf = await loader
     .loadAsync("../../models/base1-22.glb")
@@ -18,7 +18,7 @@ export async function createBaseMesh(gui, scene) {
   if (!gltf) return null;
 
   const group = new THREE.Group();
-  const folder = gui.addFolder("baseMesh");
+  const folder = gui.addFolder("baseGroup");
 
   const geometry = gltf.scene.children[0].geometry;
 
