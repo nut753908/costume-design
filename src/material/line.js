@@ -5,6 +5,7 @@ import { createColor } from "../sub/color.js";
 
 /**
  * @param {GUI} gui
+ * @param {number} opacity
  * @return {THREE.LineBasicMaterial}
  */
 export function createLineMaterial(gui, opacity = 0) {
