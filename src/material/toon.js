@@ -11,7 +11,7 @@ import { getToonVertex, getToonFragment } from "../sub/shader.js";
  * @param {THREE.Side} side
  * @return {THREE.ShaderMaterial}
  */
-export function createMeshMaterial(
+export function createToonMaterial(
   baseColorHex,
   shadeColorHex,
   folder,
@@ -31,10 +31,10 @@ export function createMeshMaterial(
     side: side,
   });
   {
-    const mmFolder = folder.addFolder("meshMaterial");
-    mmFolder.add(meshMaterial, "wireframe");
+    const tmFolder = folder.addFolder("toonMaterial");
+    tmFolder.add(meshMaterial, "wireframe");
     {
-      const uFolder = mmFolder.addFolder("uniforms");
+      const uFolder = tmFolder.addFolder("uniforms");
       const u = meshMaterial.uniforms;
       uFolder.add(u.checkShape, "value").name("checkShape");
       {

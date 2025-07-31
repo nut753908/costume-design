@@ -8,7 +8,7 @@ import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { createLineMaterial } from "./material/line.js";
-import { createMeshMaterial } from "./material/mesh.js";
+import { createToonMaterial } from "./material/toon.js";
 import { createEmptyGeometry } from "./geometry/empty.js";
 import { createHairBundleGeometry } from "./geometry/hair-bundle.js";
 
@@ -34,7 +34,7 @@ function init() {
         baseMesh = gltf.scene.children[0];
         const folder = gui.addFolder("baseMesh");
 
-        const material = createMeshMaterial(0xfef3ef, 0xfde2df, folder);
+        const material = createToonMaterial(0xfef3ef, 0xfde2df, folder);
 
         baseMesh.material = material;
         scene.add(gltf.scene);
@@ -53,7 +53,7 @@ function init() {
     const geometry = createEmptyGeometry();
 
     const lineMaterial = createLineMaterial(folder);
-    const meshMaterial = createMeshMaterial(
+    const toonMaterial = createToonMaterial(
       0xfcd7e9,
       0xf8c1de,
       folder,
@@ -61,7 +61,7 @@ function init() {
     );
 
     group.add(new THREE.LineSegments(geometry, lineMaterial));
-    group.add(new THREE.Mesh(geometry, meshMaterial));
+    group.add(new THREE.Mesh(geometry, toonMaterial));
 
     createHairBundleGeometry(group, folder);
 
