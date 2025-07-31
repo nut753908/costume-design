@@ -17,7 +17,7 @@ export function createToonMaterial(
   gui,
   side = THREE.FrontSide
 ) {
-  const meshMaterial = new THREE.ShaderMaterial({
+  const toonMaterial = new THREE.ShaderMaterial({
     uniforms: {
       checkShape: { value: false },
       lightPos: { value: new THREE.Vector3(-5, 5, 5) },
@@ -32,10 +32,10 @@ export function createToonMaterial(
   });
   {
     const folder = gui.addFolder("toonMaterial");
-    folder.add(meshMaterial, "wireframe");
+    folder.add(toonMaterial, "wireframe");
     {
       const uFolder = folder.addFolder("uniforms");
-      const u = meshMaterial.uniforms;
+      const u = toonMaterial.uniforms;
       uFolder.add(u.checkShape, "value").name("checkShape");
       {
         const lpFolder = uFolder.addFolder("lightPos");
@@ -48,5 +48,5 @@ export function createToonMaterial(
       uFolder.addColor(u.shadeColor, "value").name("shadeColor");
     }
   }
-  return meshMaterial;
+  return toonMaterial;
 }
