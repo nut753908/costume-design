@@ -4,12 +4,13 @@ import {
   createRenderer,
   createCamera,
   createControlsAndGizmo,
-} from "./first.js";
+} from "./init1.js";
+import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
-let renderer, camera, controls, gizmo, scene;
+let renderer, camera, gizmo, scene;
 let baseMesh;
 
 const frustumSize = 2;
@@ -19,32 +20,11 @@ init();
 function init() {
   renderer = createRenderer(animate);
   camera = createCamera(frustumSize);
-  ({ controls, gizmo } = createControlsAndGizmo(camera, renderer));
-
-  //
+  ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
   const gui = new GUI();
-
-  {
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color().setHex(
-      0xffffff,
-      THREE.LinearSRGBColorSpace
-    );
-    {
-      const folder = gui.addFolder("THREE.Scene");
-      folder.addColor(scene, "background");
-    }
-  }
-
-  {
-    const helper = new THREE.AxesHelper(3);
-    {
-      const folder = gui.addFolder("THREE.AxesHelper");
-      folder.add(helper, "visible");
-    }
-    scene.add(helper);
-  }
+  scene = createScene(gui);
+  createAxesHelper(gui, scene);
 
   {
     const loader = new GLTFLoader();
