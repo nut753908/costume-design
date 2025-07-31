@@ -7,6 +7,7 @@ import { createScene, createAxesHelper } from "./init2.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { createColor } from "./common/color.js";
+import { getToonVertex, getToonFragment } from "./common/shader.js";
 import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
 
 let renderer, camera, gizmo, scene;
@@ -40,8 +41,8 @@ function init() {
             shadeColor: { value: createColor(0xfde2df) },
           },
           uniformsNeedUpdate: true,
-          vertexShader: document.getElementById("toonVertex").textContent,
-          fragmentShader: document.getElementById("toonFragment").textContent,
+          vertexShader: getToonVertex(),
+          fragmentShader: getToonFragment(),
         });
         {
           const mFolder = folder.addFolder("material");
@@ -99,8 +100,8 @@ function init() {
         shadeColor: { value: createColor(0xf8c1de) },
       },
       uniformsNeedUpdate: true,
-      vertexShader: document.getElementById("toonVertex").textContent,
-      fragmentShader: document.getElementById("toonFragment").textContent,
+      vertexShader: getToonVertex(),
+      fragmentShader: getToonFragment(),
       side: THREE.DoubleSide,
     });
     {
