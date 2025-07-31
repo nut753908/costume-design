@@ -17,7 +17,7 @@ export function createHairBundleGroup(gui, scene) {
 
   const geometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder);
+  const lineMaterial = createLineMaterial(folder, 1);
   const toonMaterial = createToonMaterial(
     0xfcd7e9,
     0xf8c1de,
