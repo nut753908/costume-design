@@ -1,17 +1,13 @@
-import * as THREE from "three";
-
 import { createRenderer, updateRenderer } from "./main/renderer.js";
 import { createCamera, updateCamera } from "./main/camera.js";
 import { createControlsAndGizmo } from "./main/controls.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { createToonMaterial } from "./material/toon.js";
 import { createHairBundleGroup } from "./object-3d/hair-bundle-group.js";
+import { createBaseMesh } from "./object-3d/base-mesh.js";
 
 let renderer, camera, gizmo, scene;
-let baseMesh;
 
 init();
 
@@ -23,30 +19,8 @@ function init() {
   const gui = new GUI();
   scene = createScene(gui);
   createAxesHelper(gui, scene);
-
-  {
-    const loader = new GLTFLoader();
-    loader.load(
-      "models/base1-22.glb",
-      function (gltf) {
-        baseMesh = gltf.scene.children[0];
-        const folder = gui.addFolder("baseMesh");
-
-        const material = createToonMaterial(0xfef3ef, 0xfde2df, folder);
-
-        baseMesh.material = material;
-        scene.add(gltf.scene);
-      },
-      undefined,
-      function (error) {
-        console.error(error);
-      }
-    );
-  }
-
+  createBaseMesh(gui, scene);
   createHairBundleGroup(gui, scene);
-
-  //
 
   window.addEventListener("resize", onWindowResize);
 }
