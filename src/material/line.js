@@ -8,7 +8,7 @@ import { createColor } from "../sub/color.js";
  * @param {number} opacity
  * @return {THREE.LineBasicMaterial}
  */
-export function createLineMaterial(gui, opacity = 0) {
+export function createLineMaterial(gui, opacity = 1) {
   const lineMaterial = new THREE.LineBasicMaterial({
     color: createColor(0xffffff),
     transparent: true,

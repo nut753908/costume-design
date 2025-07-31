@@ -22,7 +22,7 @@ export async function createBaseGroup(gui, scene) {
 
   const geometry = gltf.scene.children[0].geometry;
 
-  const lineMaterial = createLineMaterial(folder);
+  const lineMaterial = createLineMaterial(folder, 0);
   const toonMaterial = createToonMaterial(0xfef3ef, 0xfde2df, folder);
 
   group.add(new THREE.LineSegments(geometry, lineMaterial));
