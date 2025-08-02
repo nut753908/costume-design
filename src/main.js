@@ -4,8 +4,9 @@ import { createControlsAndGizmo } from "./main/controls.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
-import { createBaseGroup } from "./object-3d/group/base.js";
-import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
+// import { createBaseGroup } from "./object-3d/group/base.js";
+// import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
+import { createControlPointGroup } from "./object-3d/group/control-point.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -26,7 +27,8 @@ async function init() {
   //   if (!baseGroup) return;
   //   createHairBundleGroup(gui, scene);
   // });
-  createHairBundleGroup(gui, scene);
+  // createHairBundleGroup(gui, scene);
+  createControlPointGroup(gui, scene);
 
   window.addEventListener("resize", onWindowResize);
 }
