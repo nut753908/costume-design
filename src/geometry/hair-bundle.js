@@ -50,7 +50,7 @@ function updateGroupGeometry(mesh, geometry) {
  * A geometry class for representing a hair bundle.
  *
  * ```js
- * import { HairBundleGeometry } from "./geometries/HairBundleGeometry.js";
+ * import { HairBundleGeometry } from "./src/geometry/hair-bundle.js";
  * const geometry = new HairBundleGeometry( 1, 1, 8, 1 );
  * const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
  * const hairBundle = new THREE.Mesh( geometry, material );
