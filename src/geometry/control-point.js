@@ -48,7 +48,7 @@ export function createControlPointGeometry(gui) {
     folder.add(cp, "isSync");
     folder
       .add(cp.upV, "x", -1, 1, 0.01)
-      .name("upV.x")
+      .name("up.x")
       .onChange(() => {
         cp.updateFromUpV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -56,7 +56,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.upV, "y", -1, 1, 0.01)
-      .name("upV.y")
+      .name("up.y")
       .onChange(() => {
         cp.updateFromUpV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -64,7 +64,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.upV, "z", -1, 1, 0.01)
-      .name("upV.z")
+      .name("up.z")
       .onChange(() => {
         cp.updateFromUpV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -72,7 +72,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.upS, "radius", 0, 1, 0.01)
-      .name("upS.radius")
+      .name("up.radius")
       .onChange(() => {
         cp.updateFromUpS();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -80,7 +80,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.upS, "phi", 0, Math.PI, 0.01)
-      .name("upS.phi")
+      .name("up.phi")
       .onChange(() => {
         cp.updateFromUpS();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -88,7 +88,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.upS, "theta", -Math.PI, Math.PI, 0.01)
-      .name("upS.theta")
+      .name("up.theta")
       .onChange(() => {
         cp.updateFromUpS();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -96,7 +96,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downV, "x", -1, 1, 0.01)
-      .name("downV.x")
+      .name("down.x")
       .onChange(() => {
         cp.updateFromDownV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -104,7 +104,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downV, "y", -1, 1, 0.01)
-      .name("downV.y")
+      .name("down.y")
       .onChange(() => {
         cp.updateFromDownV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -112,7 +112,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downV, "z", -1, 1, 0.01)
-      .name("downV.z")
+      .name("down.z")
       .onChange(() => {
         cp.updateFromDownV();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -120,7 +120,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downS, "radius", 0, 1, 0.01)
-      .name("downS.radius")
+      .name("down.radius")
       .onChange(() => {
         cp.updateFromDownS();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -128,7 +128,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downS, "phi", 0, Math.PI, 0.01)
-      .name("downS.phi")
+      .name("down.phi")
       .onChange(() => {
         cp.updateFromDownS();
         folder.controllers.forEach((c) => c.updateDisplay());
@@ -136,7 +136,7 @@ export function createControlPointGeometry(gui) {
       });
     folder
       .add(cp.downS, "theta", -Math.PI, Math.PI, 0.01)
-      .name("downS.theta")
+      .name("down.theta")
       .onChange(() => {
         cp.updateFromDownS();
         folder.controllers.forEach((c) => c.updateDisplay());
