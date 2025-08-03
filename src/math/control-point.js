@@ -180,7 +180,7 @@ export class ControlPoint {
    *
    * @returns {THREE.Vector3}
    */
-  getUpPos() {
+  get upPos() {
     return this.offset.clone().add(this.upV);
   }
   /**
@@ -188,7 +188,7 @@ export class ControlPoint {
    *
    * @returns {THREE.Vector3}
    */
-  getDownPos() {
+  get downPos() {
     return this.offset.clone().add(this.downV);
   }
 }

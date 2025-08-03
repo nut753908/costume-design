@@ -11,12 +11,10 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
   const geometry = new THREE.BufferGeometry();
 
   function update() {
-    const upPos = cp.getUpPos();
-    const downPos = cp.getDownPos();
     const vertices = [
-      ...upPos.toArray(),
+      ...cp.upPos.toArray(),
       ...cp.offset.toArray(),
-      ...downPos.toArray(),
+      ...cp.downPos.toArray(),
     ];
     geometry.setAttribute(
       "position",
