@@ -9,8 +9,18 @@ import { ControlPoint3 } from "../math/control-point-3";
  */
 export function createControlPoint3Geometry(gui, cp = new ControlPoint3()) {
   const geometry = new THREE.BufferGeometry();
+  cp.setGUI(gui, getUpdateGeometry(geometry));
+  return geometry;
+}
 
-  function update() {
+/**
+ * @param {THREE.BufferGeometry} geometry
+ */
+function getUpdateGeometry(geometry) {
+  /**
+   * @param {ControlPoint3} cp
+   */
+  return function updateGeometry(cp) {
     const vertices = [
       ...cp.upPos.toArray(),
       ...cp.offset.toArray(),
@@ -20,53 +30,5 @@ export function createControlPoint3Geometry(gui, cp = new ControlPoint3()) {
       "position",
       new THREE.Float32BufferAttribute(vertices, 3)
     );
-  }
-  update();
-
-  {
-    const pi = Math.PI;
-    const folder = gui.addFolder("cp");
-    folder.add(cp.offset, "x", -1, 1).name("offset.x").onChange(update);
-    folder.add(cp.offset, "y", -1, 1).name("offset.y").onChange(update);
-    folder.add(cp.offset, "z", -1, 1).name("offset.z").onChange(update);
-    folder.add(cp, "isSync");
-    folder.add(cp.upV, "x", -1, 1).name("up.x").onChange(uUV);
-    folder.add(cp.upV, "y", -1, 1).name("up.y").onChange(uUV);
-    folder.add(cp.upV, "z", -1, 1).name("up.z").onChange(uUV);
-    folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
-    folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(uUS);
-    folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(uUS);
-    folder.addFolder("---").close(); // separator
-    folder.add(cp.downV, "x", -1, 1).name("down.x").onChange(uDV);
-    folder.add(cp.downV, "y", -1, 1).name("down.y").onChange(uDV);
-    folder.add(cp.downV, "z", -1, 1).name("down.z").onChange(uDV);
-    folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
-    folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
-    folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
-
-    const upDownControllers = folder.controllers.filter(
-      (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
-    );
-    function uUV() /* updateFromUpV */ {
-      updateFrom("upV");
-    }
-    function uUS() /* updateFromUpS */ {
-      updateFrom("upS");
-    }
-    function uDV() /* updateFromDownV */ {
-      updateFrom("downV");
-    }
-    function uDS() /* updateFromDownS */ {
-      updateFrom("downS");
-    }
-    /**
-     * @param {"upV"|"upS"|"downV"|"downS"} key - A key to pass to cp.updateFrom.
-     */
-    function updateFrom(key) {
-      cp.updateFrom[key]();
-      upDownControllers.forEach((c) => c.updateDisplay());
-      update();
-    }
-  }
-  return geometry;
+  };
 }

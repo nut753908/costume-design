@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
 /**
  * A class representing a 3D control point of curve.
  *
@@ -119,6 +121,66 @@ export class ControlPoint3 {
     } else if (down instanceof THREE.Spherical) {
       this.downV.setFromSpherical(down);
       this.downS.copy(down);
+    }
+  }
+
+  /**
+   * Set GUI with updateGeometry.
+   *
+   * @param {GUI} gui
+   * @param {(cp:ControlPoint3)=>void} updateGeometry - A callback that can update the geometry.
+   */
+  setGUI(gui, updateGeometry) {
+    const cp = this;
+
+    updateGeometry(cp); // First, update the geometry.
+
+    const pi = Math.PI;
+    const folder = gui.addFolder("cp");
+    folder.add(cp.offset, "x", -1, 1).name("offset.x").onChange(uO);
+    folder.add(cp.offset, "y", -1, 1).name("offset.y").onChange(uO);
+    folder.add(cp.offset, "z", -1, 1).name("offset.z").onChange(uO);
+    folder.add(cp, "isSync");
+    folder.add(cp.upV, "x", -1, 1).name("up.x").onChange(uUV);
+    folder.add(cp.upV, "y", -1, 1).name("up.y").onChange(uUV);
+    folder.add(cp.upV, "z", -1, 1).name("up.z").onChange(uUV);
+    folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
+    folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(uUS);
+    folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(uUS);
+    folder.addFolder("---").close(); // separator
+    folder.add(cp.downV, "x", -1, 1).name("down.x").onChange(uDV);
+    folder.add(cp.downV, "y", -1, 1).name("down.y").onChange(uDV);
+    folder.add(cp.downV, "z", -1, 1).name("down.z").onChange(uDV);
+    folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
+    folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
+    folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
+
+    const upDownControllers = folder.controllers.filter(
+      (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
+    );
+
+    function uO() /* updateFromOffset */ {
+      updateGeometry(cp);
+    }
+    function uUV() /* updateFromUpV */ {
+      updateFrom("upV");
+    }
+    function uUS() /* updateFromUpS */ {
+      updateFrom("upS");
+    }
+    function uDV() /* updateFromDownV */ {
+      updateFrom("downV");
+    }
+    function uDS() /* updateFromDownS */ {
+      updateFrom("downS");
+    }
+    /**
+     * @param {"upV"|"upS"|"downV"|"downS"} key - A key to pass to this.updateFrom.
+     */
+    function updateFrom(key) {
+      cp.updateFrom[key]();
+      updateGeometry(cp);
+      upDownControllers.forEach((c) => c.updateDisplay());
     }
   }
 
