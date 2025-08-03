@@ -5,9 +5,9 @@ import { ControlPoint } from "../math/control-point";
 
 /**
  * @param {GUI} gui
+ * @param {ControlPoint} cp
  */
-export function createControlPointGeometry(gui) {
-  const cp = new ControlPoint();
+export function createControlPointGeometry(gui, cp = new ControlPoint()) {
   const geometry = new THREE.BufferGeometry();
 
   function updateGeometry() {

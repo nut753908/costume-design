@@ -7,6 +7,7 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 import { createControlPointGroup } from "./object-3d/group/control-point.js";
+import { ControlPoint } from "./math/control-point.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -28,7 +29,8 @@ async function init() {
   //   createHairBundleGroup(gui, scene);
   // });
   // createHairBundleGroup(gui, scene);
-  createControlPointGroup(gui, scene);
+  const cp = new ControlPoint();
+  createControlPointGroup(gui, scene, cp);
 
   window.addEventListener("resize", onWindowResize);
 }
