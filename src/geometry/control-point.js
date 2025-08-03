@@ -47,22 +47,22 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
     );
-    function uUV() /* updateUpV */ {
-      updateUpDown("upV");
+    function uUV() /* updateFromUpV */ {
+      updateFrom("upV");
     }
-    function uUS() /* updateUpS */ {
-      updateUpDown("upS");
+    function uUS() /* updateFromUpS */ {
+      updateFrom("upS");
     }
-    function uDV() /* updateDownV */ {
-      updateUpDown("downV");
+    function uDV() /* updateFromDownV */ {
+      updateFrom("downV");
     }
-    function uDS() /* updateDownS */ {
-      updateUpDown("downS");
+    function uDS() /* updateFromDownS */ {
+      updateFrom("downS");
     }
     /**
      * @param {"upV"|"upS"|"downV"|"downS"} key - A key to pass to cp.updateFrom.
      */
-    function updateUpDown(key) {
+    function updateFrom(key) {
       cp.updateFrom[key]();
       upDownControllers.forEach((c) => c.updateDisplay());
       update();
