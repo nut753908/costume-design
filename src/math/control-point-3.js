@@ -137,19 +137,18 @@ export class ControlPoint3 {
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "downS" from "downV" and synchronize from "down" to "up" only if this.isSync = true.
-   */
-  updateFromDownV() {
-    this.downS.setFromVector3(this.downV);
-    if (this.isSync) this.syncDownToUp();
-  }
-
-  /**
    * Update "upV" from "upS" and synchronize from "up" to "down" only if this.isSync = true.
    */
   updateFromUpS() {
     this.upV.setFromSpherical(this.upS);
     if (this.isSync) this.syncUpToDown();
+  }
+  /**
+   * Update "downS" from "downV" and synchronize from "down" to "up" only if this.isSync = true.
+   */
+  updateFromDownV() {
+    this.downS.setFromVector3(this.downV);
+    if (this.isSync) this.syncDownToUp();
   }
   /**
    * Update "downV" from "downS" and synchronize from "down" to "up" only if this.isSync = true.
