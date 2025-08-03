@@ -85,11 +85,13 @@ export class ControlPoint {
   }
 
   /**
+   * Initialize "up", which splits into "upV" and "upS".
+   *
    * @param {THREE.Vector3|THREE.Spherical}
    */
   initUp(up) {
-    this.upS = new THREE.Spherical();
     this.upV = new THREE.Vector3();
+    this.upS = new THREE.Spherical();
     if (up instanceof THREE.Vector3) {
       this.setUpV(up);
     } else if (up instanceof THREE.Spherical) {
@@ -97,11 +99,13 @@ export class ControlPoint {
     }
   }
   /**
+   * Initialize "down", which splits into "downV" and "downS".
+   *
    * @param {THREE.Vector3|THREE.Spherical}
    */
   initDown(down) {
-    this.downS = new THREE.Spherical();
     this.downV = new THREE.Vector3();
+    this.downS = new THREE.Spherical();
     if (down instanceof THREE.Vector3) {
       this.setDownV(down);
     } else if (down instanceof THREE.Spherical) {
@@ -110,6 +114,8 @@ export class ControlPoint {
   }
 
   /**
+   * Set "upV" to "upV" and "upS".
+   *
    * @param {THREE.Vector3} upV
    */
   setUpV(upV) {
@@ -118,6 +124,8 @@ export class ControlPoint {
     if (this.isSync) this.syncUpToDown();
   }
   /**
+   * Set "downV" to "downV" and "downS".
+   *
    * @param {THREE.Vector3} downV
    */
   setDownV(downV) {
@@ -127,6 +135,8 @@ export class ControlPoint {
   }
 
   /**
+   * Set "upS" to "upV" and "upS".
+   *
    * @param {THREE.Spherical} upS
    */
   setUpS(upS) {
@@ -135,6 +145,8 @@ export class ControlPoint {
     if (this.isSync) this.syncUpToDown();
   }
   /**
+   * Set "downS" to "downV" and "downS".
+   *
    * @param {THREE.Spherical} downS
    */
   setDownS(downS) {
