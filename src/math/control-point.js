@@ -86,7 +86,9 @@ export class ControlPoint {
 
   /**
    * Initialize "up", which splits into "upV" and "upS".
-   * Call it only once in this constructor before initializing this.isSync.
+   * "upV" is "up" and its type is THREE.'V'ector3.
+   * "upS" is "up" and its type is THREE.'S'pherical.
+   * Call it only once in this constructor.
    *
    * @param {THREE.Vector3|THREE.Spherical}
    */
@@ -94,14 +96,18 @@ export class ControlPoint {
     this.upV = new THREE.Vector3();
     this.upS = new THREE.Spherical();
     if (up instanceof THREE.Vector3) {
-      this.setUpV(up);
+      this.upV.copy(up);
+      this.upS.setFromVector3(up);
     } else if (up instanceof THREE.Spherical) {
-      this.setUpS(up);
+      this.upV.setFromSpherical(up);
+      this.upS.copy(up);
     }
   }
   /**
    * Initialize "down", which splits into "downV" and "downS".
-   * Call it only once in this constructor before initializing this.isSync.
+   * "downV" is "down" and its type is THREE.'V'ector3.
+   * "downS" is "down" and its type is THREE.'S'pherical.
+   * Call it only once in this constructor.
    *
    * @param {THREE.Vector3|THREE.Spherical}
    */
@@ -109,55 +115,41 @@ export class ControlPoint {
     this.downV = new THREE.Vector3();
     this.downS = new THREE.Spherical();
     if (down instanceof THREE.Vector3) {
-      this.setDownV(down);
+      this.downV.copy(down);
+      this.downS.setFromVector3(down);
     } else if (down instanceof THREE.Spherical) {
-      this.setDownS(down);
+      this.downV.setFromSpherical(down);
+      this.downS.copy(down);
     }
   }
 
   /**
-   * Set "upV" to "upV" and "upS".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
-   *
-   * @param {THREE.Vector3} upV
+   * Update "upS" from "upV" and synchronize from "up" to "down" only if this.isSync = true.
    */
-  setUpV(upV) {
-    this.upV.copy(upV);
-    this.upS.setFromVector3(upV);
+  updateFromUpV() {
+    this.upS.setFromVector3(this.upV);
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Set "downV" to "downV" and "downS".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
-   *
-   * @param {THREE.Vector3} downV
+   * Update "downS" from "downV" and synchronize from "down" to "up" only if this.isSync = true.
    */
-  setDownV(downV) {
-    this.downV.copy(downV);
-    this.downS.setFromVector3(downV);
+  updateFromDownV() {
+    this.downS.setFromVector3(this.downV);
     if (this.isSync) this.syncDownToUp();
   }
 
   /**
-   * Set "upS" to "upV" and "upS".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
-   *
-   * @param {THREE.Spherical} upS
+   * Update "upV" from "upS" and synchronize from "up" to "down" only if this.isSync = true.
    */
-  setUpS(upS) {
-    this.upV.setFromSpherical(upS);
-    this.upS.copy(upS);
+  updateFromUpS() {
+    this.upV.setFromSpherical(this.upS);
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Set "downS" to "downV" and "downS".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
-   *
-   * @param {THREE.Spherical} downS
+   * Update "downV" from "downS" and synchronize from "down" to "up" only if this.isSync = true.
    */
-  setDownS(downS) {
-    this.downV.setFromSpherical(downS);
-    this.downS.copy(downS);
+  updateFromDownS() {
+    this.downV.setFromSpherical(this.downS);
     if (this.isSync) this.syncDownToUp();
   }
 
