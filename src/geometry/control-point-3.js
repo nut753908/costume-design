@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { ControlPoint } from "../math/control-point";
+import { ControlPoint3 } from "../math/control-point-3";
 
 /**
  * @param {GUI} gui
- * @param {ControlPoint} cp
+ * @param {ControlPoint3} cp
  */
-export function createControlPointGeometry(gui, cp = new ControlPoint()) {
+export function createControlPoint3Geometry(gui, cp = new ControlPoint3()) {
   const geometry = new THREE.BufferGeometry();
 
   function update() {

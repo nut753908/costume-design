@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
 /**
- * A class representing a control point of curve.
+ * A class representing a 3D control point of curve.
  *
  * ```js
- * import { ControlPoint } from "./src/math/control-point.js";
- * const controlPoint = new ControlPoint(
+ * import { ControlPoint3 } from "./src/math/control-point-3.js";
+ * const cp = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(0, 1, 0),
  *   new THREE.Vector3(0, -1, 0),
@@ -13,9 +13,9 @@ import * as THREE from "three";
  * );
  * ```
  */
-export class ControlPoint {
+export class ControlPoint3 {
   /**
-   * Constructs a new ControlPoint.
+   * Constructs a new ControlPoint3.
    *
    * @param {THREE.Vector3} [offset] - An offset position for control points.
    * @param {THREE.Vector3|THREE.Spherical} [up] - A vector from the offset to upside control point.
@@ -59,19 +59,19 @@ export class ControlPoint {
   }
 
   /**
-   * Returns a new ControlPoint with copied values from this instance.
+   * Returns a new ControlPoint3 with copied values from this instance.
    *
-   * @returns {ControlPoint} A clone of this instance.
+   * @returns {ControlPoint3} A clone of this instance.
    */
   clone() {
     return new this.constructor().copy(this);
   }
 
   /**
-   * Copies the values of the given ControlPoint to this instance.
+   * Copies the values of the given ControlPoint3 to this instance.
    *
-   * @param {ControlPoint} other - The ControlPoint to copy.
-   * @returns {ControlPoint} A reference to this ControlPoint.
+   * @param {ControlPoint3} other - The ControlPoint3 to copy.
+   * @returns {ControlPoint3} A reference to this ControlPoint3.
    */
   copy(other) {
     this.offset.copy(other.offset);
