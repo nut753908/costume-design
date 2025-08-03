@@ -47,7 +47,6 @@ export class ControlPoint3 {
      *
      * @type {THREE.Vector3|THREE.Spherical}
      */
-
     this.initDown(down);
 
     /**
