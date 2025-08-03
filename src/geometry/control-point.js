@@ -14,15 +14,9 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     const upPos = cp.getUpPos();
     const downPos = cp.getDownPos();
     const vertices = [
-      upPos.x,
-      upPos.y,
-      upPos.z,
-      cp.offset.x,
-      cp.offset.y,
-      cp.offset.z,
-      downPos.x,
-      downPos.y,
-      downPos.z,
+      ...upPos.toArray(),
+      ...cp.offset.toArray(),
+      ...downPos.toArray(),
     ];
     geometry.setAttribute(
       "position",
