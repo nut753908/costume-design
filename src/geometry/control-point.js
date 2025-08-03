@@ -36,24 +36,12 @@ export function createControlPointGeometry(gui) {
     folder.add(cp.offset, "x", -1, 1, 0.01).name("offset.x").onChange(update);
     folder.add(cp.offset, "y", -1, 1, 0.01).name("offset.y").onChange(update);
     folder.add(cp.offset, "z", -1, 1, 0.01).name("offset.z").onChange(update);
-    folder.add(cp.up, "radius", 0, 1, 0.01).name("up.radius").onChange(update);
-    folder.add(cp.up, "phi", 0, Math.PI, 0.01).name("up.phi").onChange(update);
-    folder
-      .add(cp.up, "theta", 0, 2 * Math.PI, 0.01)
-      .name("up.theta")
-      .onChange(update);
-    folder
-      .add(cp.down, "radius", 0, 1, 0.01)
-      .name("down.radius")
-      .onChange(update);
-    folder
-      .add(cp.down, "phi", 0, Math.PI, 0.01)
-      .name("down.phi")
-      .onChange(update);
-    folder
-      .add(cp.down, "theta", 0, 2 * Math.PI, 0.01)
-      .name("down.theta")
-      .onChange(update);
+    folder.add(cp.up, "x", -1, 1, 0.01).name("up.x").onChange(update);
+    folder.add(cp.up, "y", -1, 1, 0.01).name("up.y").onChange(update);
+    folder.add(cp.up, "z", -1, 1, 0.01).name("up.z").onChange(update);
+    folder.add(cp.down, "x", -1, 1, 0.01).name("down.x").onChange(update);
+    folder.add(cp.down, "y", -1, 1, 0.01).name("down.y").onChange(update);
+    folder.add(cp.down, "z", -1, 1, 0.01).name("down.z").onChange(update);
   }
   return geometry;
 }

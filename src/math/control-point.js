@@ -7,8 +7,8 @@ import * as THREE from "three";
  * import { ControlPoint } from "./src/math/control-point.js";
  * const controlPoint = new ControlPoint(
  *   new THREE.Vector3(0, 0, 0),
- *   new THREE.Spherical(1, 0, 0),
- *   new THREE.Spherical(1, Math.PI, 0)
+ *   new THREE.Vector3(0, 1, 0),
+ *   new THREE.Vector3(0, -1, 0)
  * );
  * ```
  */
@@ -17,13 +17,13 @@ export class ControlPoint {
    * Constructs a new ControlPoint.
    *
    * @param {THREE.Vector3} [offset] - An offset position for control points.
-   * @param {THREE.Spherical} [up] - A spherical vector from the offset to upside control point.
-   * @param {THREE.Spherical} [down] - A spherical vector from the offset to downside control point.
+   * @param {THREE.Vector3} [up] - A vector from the offset to upside control point.
+   * @param {THREE.Vector3} [down] - A vector from the offset to downside control point.
    */
   constructor(
     offset = new THREE.Vector3(0, 0, 0),
-    up = new THREE.Spherical(1, 0, 0),
-    down = new THREE.Spherical(1, Math.PI, 0)
+    up = new THREE.Vector3(0, 1, 0),
+    down = new THREE.Vector3(0, -1, 0)
   ) {
     /**
      * An offset position for control points.
@@ -33,16 +33,16 @@ export class ControlPoint {
     this.offset = offset;
 
     /**
-     * A spherical vector from the offset to upside control point.
+     * A vector from the offset to upside control point.
      *
-     * @type {THREE.Spherical}
+     * @type {THREE.Vector3}
      */
     this.up = up;
 
     /**
-     * A spherical vector from the offset to downside control point.
+     * A vector from the offset to downside control point.
      *
-     * @type {THREE.Spherical}
+     * @type {THREE.Vector3}
      */
     this.down = down;
   }
@@ -76,9 +76,7 @@ export class ControlPoint {
    * @returns {THREE.Vector3}
    */
   getUpPos() {
-    return this.offset
-      .clone()
-      .add(new THREE.Vector3().setFromSpherical(this.up));
+    return this.offset.clone().add(this.up);
   }
 
   /**
@@ -87,9 +85,7 @@ export class ControlPoint {
    * @returns {THREE.Vector3}
    */
   getDownPos() {
-    return this.offset
-      .clone()
-      .add(new THREE.Vector3().setFromSpherical(this.down));
+    return this.offset.clone().add(this.down);
   }
 
   /**
@@ -109,14 +105,10 @@ export class ControlPoint {
   /**
    * Synchronize from "up" or "down" to another with reversing the direction.
    *
-   * @param {THREE.Spherical} from - The synchronization source, either "up" or "down".
-   * @param {THREE.Spherical} to - The synchronization destination, which is set to another.
+   * @param {THREE.Vector3} from - The synchronization source, either "up" or "down".
+   * @param {THREE.Vector3} to - The synchronization destination, which is set to another.
    */
   sync(from, to) {
-    to.set(
-      from.radius,
-      Math.PI - from.phi,
-      from.theta < Math.PI ? from.theta + Math.PI : from.theta - Math.PI
-    );
+    to.set(-from.x, -from.y, -from.z);
   }
 }
