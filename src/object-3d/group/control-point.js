@@ -1,10 +1,9 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { createEmptyGeometry } from "../../geometry/empty.js";
+import { createControlPointGeometry } from "../../geometry/control-point.js";
 import { createLineMaterial } from "../../material/line.js";
 import { createPointsMaterial } from "../../material/points.js";
-import { createControlPointGeometry } from "../../geometry/control-point.js";
 
 /**
  * @param {GUI} gui
