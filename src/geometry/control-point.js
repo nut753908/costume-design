@@ -67,6 +67,9 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     function uDS() /* updateDownS */ {
       updateUpDown("downS");
     }
+    /**
+     * @param {"upV"|"upS"|"downV"|"downS"} key - A key to pass to cp.updateFrom.
+     */
     function updateUpDown(key) {
       cp.updateFrom[key]();
       upDownControllers.forEach((c) => c.updateDisplay());
