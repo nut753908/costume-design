@@ -52,7 +52,7 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
     folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
 
-    const controllers = folder.controllers.filter(
+    const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
     );
     function uUV() /* updateUpV */ {
@@ -69,7 +69,7 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     }
     function updateUpDown(key) {
       cp.updateFrom[key]();
-      controllers.forEach((c) => c.updateDisplay());
+      upDownControllers.forEach((c) => c.updateDisplay());
       update();
     }
   }
