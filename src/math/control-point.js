@@ -123,6 +123,13 @@ export class ControlPoint {
     }
   }
 
+  updateFrom = {
+    upV: () => this.updateFromUpV(),
+    upS: () => this.updateFromUpS(),
+    downV: () => this.updateFromDownV(),
+    downS: () => this.updateFromDownS(),
+  };
+
   /**
    * Update "upS" from "upV" and synchronize from "up" to "down" only if this.isSync = true.
    */
