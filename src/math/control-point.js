@@ -16,9 +16,9 @@ export class ControlPoint {
   /**
    * Constructs a new ControlPoint.
    *
-   * @param {THREE.Vector3} [offset] - The offset position for control points.
-   * @param {THREE.Spherical} [up] - The spherical vector from the offset to upside control point.
-   * @param {THREE.Spherical} [down] - The spherical vector from the offset to downside control point.
+   * @param {THREE.Vector3} [offset] - An offset position for control points.
+   * @param {THREE.Spherical} [up] - A spherical vector from the offset to upside control point.
+   * @param {THREE.Spherical} [down] - A spherical vector from the offset to downside control point.
    */
   constructor(
     offset = new THREE.Vector3(0, 0, 0),
@@ -26,21 +26,21 @@ export class ControlPoint {
     down = new THREE.Spherical(1, Math.PI, 0)
   ) {
     /**
-     * The offset position for control points.
+     * An offset position for control points.
      *
      * @type {THREE.Vector3}
      */
     this.offset = offset;
 
     /**
-     * The spherical vector from the offset to upside control point.
+     * A spherical vector from the offset to upside control point.
      *
      * @type {THREE.Spherical}
      */
     this.up = up;
 
     /**
-     * The spherical vector from the offset to downside control point.
+     * A spherical vector from the offset to downside control point.
      *
      * @type {THREE.Spherical}
      */
