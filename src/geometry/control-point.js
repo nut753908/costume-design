@@ -38,36 +38,36 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     folder.add(cp.offset, "y", -1, 1).name("offset.y").onChange(update);
     folder.add(cp.offset, "z", -1, 1).name("offset.z").onChange(update);
     folder.add(cp, "isSync");
-    folder.add(cp.upV, "x", -1, 1).name("up.x").onChange(uv);
-    folder.add(cp.upV, "y", -1, 1).name("up.y").onChange(uv);
-    folder.add(cp.upV, "z", -1, 1).name("up.z").onChange(uv);
-    folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(us);
-    folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(us);
-    folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(us);
+    folder.add(cp.upV, "x", -1, 1).name("up.x").onChange(uUV);
+    folder.add(cp.upV, "y", -1, 1).name("up.y").onChange(uUV);
+    folder.add(cp.upV, "z", -1, 1).name("up.z").onChange(uUV);
+    folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
+    folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(uUS);
+    folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(uUS);
     folder.addFolder("---").close(); // separator
-    folder.add(cp.downV, "x", -1, 1).name("down.x").onChange(dv);
-    folder.add(cp.downV, "y", -1, 1).name("down.y").onChange(dv);
-    folder.add(cp.downV, "z", -1, 1).name("down.z").onChange(dv);
-    folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(ds);
-    folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(ds);
-    folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(ds);
+    folder.add(cp.downV, "x", -1, 1).name("down.x").onChange(uDV);
+    folder.add(cp.downV, "y", -1, 1).name("down.y").onChange(uDV);
+    folder.add(cp.downV, "z", -1, 1).name("down.z").onChange(uDV);
+    folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
+    folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
+    folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
 
     const controllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
     );
-    function uv() {
-      updateFrom("upV");
+    function uUV() {
+      updateUpDown("upV");
     }
-    function us() {
-      updateFrom("upS");
+    function uUS() {
+      updateUpDown("upS");
     }
-    function dv() {
-      updateFrom("downV");
+    function uDV() {
+      updateUpDown("downV");
     }
-    function ds() {
-      updateFrom("downS");
+    function uDS() {
+      updateUpDown("downS");
     }
-    function updateFrom(key) {
+    function updateUpDown(key) {
       cp.updateFrom[key]();
       controllers.forEach((c) => c.updateDisplay());
       update();
