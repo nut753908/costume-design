@@ -17,7 +17,7 @@ export async function createBaseGroup(gui, scene) {
   const geometry = await loadBaseGeometry();
   if (!geometry) return null;
 
-  const lineMaterial = createLineMaterial(folder, 0);
+  const lineMaterial = createLineMaterial(folder, 0xffffff, 0);
   const toonMaterial = createToonMaterial(0xfef3ef, 0xfde2df, folder);
 
   group.add(new THREE.LineSegments(geometry, lineMaterial));

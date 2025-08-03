@@ -5,12 +5,13 @@ import { createColor } from "../math/color.js";
 
 /**
  * @param {GUI} gui
+ * @param {number} colorHex
  * @param {number} opacity
  * @return {THREE.LineBasicMaterial}
  */
-export function createLineMaterial(gui, opacity = 1) {
+export function createLineMaterial(gui, colorHex = 0xffffff, opacity = 1) {
   const lineMaterial = new THREE.LineBasicMaterial({
-    color: createColor(0xffffff),
+    color: createColor(colorHex),
     transparent: true,
     opacity: opacity,
   });
