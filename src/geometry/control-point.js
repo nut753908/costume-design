@@ -55,16 +55,16 @@ export function createControlPointGeometry(gui, cp = new ControlPoint()) {
     const controllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
     );
-    function uUV() {
+    function uUV() /* updateUpV */ {
       updateUpDown("upV");
     }
-    function uUS() {
+    function uUS() /* updateUpS */ {
       updateUpDown("upS");
     }
-    function uDV() {
+    function uDV() /* updateDownV */ {
       updateUpDown("downV");
     }
-    function uDS() {
+    function uDS() /* updateDownS */ {
       updateUpDown("downS");
     }
     function updateUpDown(key) {
