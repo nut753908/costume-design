@@ -94,6 +94,7 @@ export function createControlPointGeometry(gui) {
         folder.controllers.forEach((c) => c.updateDisplay());
         updateGeometry();
       });
+    folder.addFolder("---").close(); // separator
     folder
       .add(cp.downV, "x", -1, 1, 0.01)
       .name("down.x")
