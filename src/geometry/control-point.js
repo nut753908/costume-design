@@ -10,7 +10,7 @@ export function createControlPointGeometry(gui) {
   const cp = new ControlPoint();
   const geometry = new THREE.BufferGeometry();
 
-  function update() {
+  function updateGeometry() {
     const upPos = cp.getUpPos();
     const downPos = cp.getDownPos();
     const vertices = [
@@ -29,19 +29,119 @@ export function createControlPointGeometry(gui) {
       new THREE.Float32BufferAttribute(vertices, 3)
     );
   }
-  update();
+  updateGeometry();
 
   {
     const folder = gui.addFolder("geometry");
-    folder.add(cp.offset, "x", -1, 1, 0.01).name("offset.x").onChange(update);
-    folder.add(cp.offset, "y", -1, 1, 0.01).name("offset.y").onChange(update);
-    folder.add(cp.offset, "z", -1, 1, 0.01).name("offset.z").onChange(update);
-    folder.add(cp.up, "x", -1, 1, 0.01).name("up.x").onChange(update);
-    folder.add(cp.up, "y", -1, 1, 0.01).name("up.y").onChange(update);
-    folder.add(cp.up, "z", -1, 1, 0.01).name("up.z").onChange(update);
-    folder.add(cp.down, "x", -1, 1, 0.01).name("down.x").onChange(update);
-    folder.add(cp.down, "y", -1, 1, 0.01).name("down.y").onChange(update);
-    folder.add(cp.down, "z", -1, 1, 0.01).name("down.z").onChange(update);
+    folder
+      .add(cp.offset, "x", -1, 1, 0.01)
+      .name("offset.x")
+      .onChange(updateGeometry);
+    folder
+      .add(cp.offset, "y", -1, 1, 0.01)
+      .name("offset.y")
+      .onChange(updateGeometry);
+    folder
+      .add(cp.offset, "z", -1, 1, 0.01)
+      .name("offset.z")
+      .onChange(updateGeometry);
+    folder.add(cp, "isSync");
+    folder
+      .add(cp.upV, "x", -1, 1, 0.01)
+      .name("upV.x")
+      .onChange(() => {
+        cp.updateFromUpV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.upV, "y", -1, 1, 0.01)
+      .name("upV.y")
+      .onChange(() => {
+        cp.updateFromUpV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.upV, "z", -1, 1, 0.01)
+      .name("upV.z")
+      .onChange(() => {
+        cp.updateFromUpV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.upS, "radius", 0, 1, 0.01)
+      .name("upS.radius")
+      .onChange(() => {
+        cp.updateFromUpS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.upS, "phi", 0, Math.PI, 0.01)
+      .name("upS.phi")
+      .onChange(() => {
+        cp.updateFromUpS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.upS, "theta", -Math.PI, Math.PI, 0.01)
+      .name("upS.theta")
+      .onChange(() => {
+        cp.updateFromUpS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downV, "x", -1, 1, 0.01)
+      .name("downV.x")
+      .onChange(() => {
+        cp.updateFromDownV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downV, "y", -1, 1, 0.01)
+      .name("downV.y")
+      .onChange(() => {
+        cp.updateFromDownV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downV, "z", -1, 1, 0.01)
+      .name("downV.z")
+      .onChange(() => {
+        cp.updateFromDownV();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downS, "radius", 0, 1, 0.01)
+      .name("downS.radius")
+      .onChange(() => {
+        cp.updateFromDownS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downS, "phi", 0, Math.PI, 0.01)
+      .name("downS.phi")
+      .onChange(() => {
+        cp.updateFromDownS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
+    folder
+      .add(cp.downS, "theta", -Math.PI, Math.PI, 0.01)
+      .name("downS.theta")
+      .onChange(() => {
+        cp.updateFromDownS();
+        folder.controllers.forEach((c) => c.updateDisplay());
+        updateGeometry();
+      });
   }
   return geometry;
 }
