@@ -86,6 +86,7 @@ export class ControlPoint {
 
   /**
    * Initialize "up", which splits into "upV" and "upS".
+   * Call it only once in this constructor before initializing this.isSync.
    *
    * @param {THREE.Vector3|THREE.Spherical}
    */
@@ -100,6 +101,7 @@ export class ControlPoint {
   }
   /**
    * Initialize "down", which splits into "downV" and "downS".
+   * Call it only once in this constructor before initializing this.isSync.
    *
    * @param {THREE.Vector3|THREE.Spherical}
    */
@@ -115,6 +117,7 @@ export class ControlPoint {
 
   /**
    * Set "upV" to "upV" and "upS".
+   * Then synchronize from "up" to "down" only if this.isSync = true.
    *
    * @param {THREE.Vector3} upV
    */
@@ -125,6 +128,7 @@ export class ControlPoint {
   }
   /**
    * Set "downV" to "downV" and "downS".
+   * Then synchronize from "down" to "up" only if this.isSync = true.
    *
    * @param {THREE.Vector3} downV
    */
@@ -136,6 +140,7 @@ export class ControlPoint {
 
   /**
    * Set "upS" to "upV" and "upS".
+   * Then synchronize from "up" to "down" only if this.isSync = true.
    *
    * @param {THREE.Spherical} upS
    */
@@ -146,6 +151,7 @@ export class ControlPoint {
   }
   /**
    * Set "downS" to "downV" and "downS".
+   * Then synchronize from "down" to "up" only if this.isSync = true.
    *
    * @param {THREE.Spherical} downS
    */
