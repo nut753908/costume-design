@@ -25,7 +25,7 @@ export function createControlPoint3Geometry(gui, cp = new ControlPoint3()) {
 
   {
     const pi = Math.PI;
-    const folder = gui.addFolder("geometry");
+    const folder = gui.addFolder("cp");
     folder.add(cp.offset, "x", -1, 1).name("offset.x").onChange(update);
     folder.add(cp.offset, "y", -1, 1).name("offset.y").onChange(update);
     folder.add(cp.offset, "z", -1, 1).name("offset.z").onChange(update);
