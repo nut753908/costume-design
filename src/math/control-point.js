@@ -144,6 +144,21 @@ export class ControlPoint {
   }
 
   /**
+   * Synchronize from "up" to "down" with reversing the direction.
+   */
+  syncUpToDown() {
+    this.downV.copy(this.upV.clone().negate());
+    this.downS.setFromVector3(this.downV);
+  }
+  /**
+   * Synchronize from "down" to "up" with reversing the direction.
+   */
+  syncDownToUp() {
+    this.upV.copy(this.downV.clone().negate());
+    this.upS.setFromVector3(this.upV);
+  }
+
+  /**
    * Get the position of upside control point.
    *
    * @returns {THREE.Vector3}
@@ -151,7 +166,6 @@ export class ControlPoint {
   getUpPos() {
     return this.offset.clone().add(this.upV);
   }
-
   /**
    * Get the position of downside control point.
    *
@@ -159,21 +173,5 @@ export class ControlPoint {
    */
   getDownPos() {
     return this.offset.clone().add(this.downV);
-  }
-
-  /**
-   * Synchronize from "up" to "down" with reversing the direction.
-   */
-  syncUpToDown() {
-    this.downV.copy(this.upV.clone().negate());
-    this.downS.setFromVector3(this.downV);
-  }
-
-  /**
-   * Synchronize from "down" to "up" with reversing the direction.
-   */
-  syncDownToUp() {
-    this.upV.copy(this.downV.clone().negate());
-    this.upS.setFromVector3(this.upV);
   }
 }
