@@ -8,7 +8,8 @@ import * as THREE from "three";
  * const controlPoint = new ControlPoint(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(0, 1, 0),
- *   new THREE.Vector3(0, -1, 0)
+ *   new THREE.Vector3(0, -1, 0),
+ *   true
  * );
  * ```
  */
@@ -17,13 +18,15 @@ export class ControlPoint {
    * Constructs a new ControlPoint.
    *
    * @param {THREE.Vector3} [offset] - An offset position for control points.
-   * @param {THREE.Vector3} [up] - A vector from the offset to upside control point.
-   * @param {THREE.Vector3} [down] - A vector from the offset to downside control point.
+   * @param {THREE.Vector3|THREE.Spherical} [up] - A vector from the offset to upside control point.
+   * @param {THREE.Vector3|THREE.Spherical} [down] - A vector from the offset to downside control point.
+   * @param {boolean} [isSync=true] - Whether to synchronize "up" and "down".
    */
   constructor(
     offset = new THREE.Vector3(0, 0, 0),
     up = new THREE.Vector3(0, 1, 0),
-    down = new THREE.Vector3(0, -1, 0)
+    down = new THREE.Vector3(0, -1, 0),
+    isSync = true
   ) {
     /**
      * An offset position for control points.
@@ -35,16 +38,24 @@ export class ControlPoint {
     /**
      * A vector from the offset to upside control point.
      *
-     * @type {THREE.Vector3}
+     * @type {THREE.Vector3|THREE.Spherical}
      */
-    this.up = up;
+    this.initUp(up);
 
     /**
      * A vector from the offset to downside control point.
      *
-     * @type {THREE.Vector3}
+     * @type {THREE.Vector3|THREE.Spherical}
      */
-    this.down = down;
+
+    this.initDown(down);
+
+    /**
+     * Whether to synchronize "up" and "down".
+     *
+     * @type {boolean}
+     */
+    this.isSync = isSync;
   }
 
   /**
@@ -64,10 +75,72 @@ export class ControlPoint {
    */
   copy(other) {
     this.offset.copy(other.offset);
-    this.up.copy(other.up);
-    this.down.copy(other.down);
+    this.upV.copy(other.upV);
+    this.upS.copy(other.upS);
+    this.downV.copy(other.downV);
+    this.downS.copy(other.downS);
+    this.isSync = other.isSync;
 
     return this;
+  }
+
+  /**
+   * @param {THREE.Vector3|THREE.Spherical}
+   */
+  initUp(up) {
+    this.upS = new THREE.Spherical();
+    this.upV = new THREE.Vector3();
+    if (up instanceof THREE.Vector3) {
+      this.setUpV(up);
+    } else if (up instanceof THREE.Spherical) {
+      this.setUpS(up);
+    }
+  }
+  /**
+   * @param {THREE.Vector3|THREE.Spherical}
+   */
+  initDown(down) {
+    this.downS = new THREE.Spherical();
+    this.downV = new THREE.Vector3();
+    if (down instanceof THREE.Vector3) {
+      this.setDownV(down);
+    } else if (down instanceof THREE.Spherical) {
+      this.setDownS(down);
+    }
+  }
+
+  /**
+   * @param {THREE.Vector3} upV
+   */
+  setUpV(upV) {
+    this.upV.copy(upV);
+    this.upS.setFromVector3(upV);
+    if (this.isSync) this.syncUpToDown();
+  }
+  /**
+   * @param {THREE.Vector3} downV
+   */
+  setDownV(downV) {
+    this.downV.copy(downV);
+    this.downS.setFromVector3(downV);
+    if (this.isSync) this.syncDownToUp();
+  }
+
+  /**
+   * @param {THREE.Spherical} upS
+   */
+  setUpS(upS) {
+    this.upV.setFromSpherical(upS);
+    this.upS.copy(upS);
+    if (this.isSync) this.syncUpToDown();
+  }
+  /**
+   * @param {THREE.Spherical} downS
+   */
+  setDownS(downS) {
+    this.downV.setFromSpherical(downS);
+    this.downS.copy(downS);
+    if (this.isSync) this.syncDownToUp();
   }
 
   /**
@@ -76,7 +149,7 @@ export class ControlPoint {
    * @returns {THREE.Vector3}
    */
   getUpPos() {
-    return this.offset.clone().add(this.up);
+    return this.offset.clone().add(this.upV);
   }
 
   /**
@@ -85,30 +158,22 @@ export class ControlPoint {
    * @returns {THREE.Vector3}
    */
   getDownPos() {
-    return this.offset.clone().add(this.down);
+    return this.offset.clone().add(this.downV);
   }
 
   /**
    * Synchronize from "up" to "down" with reversing the direction.
    */
   syncUpToDown() {
-    this.sync(this.up, this.down);
+    this.downV.copy(this.upV.clone().negate());
+    this.downS.setFromVector3(this.downV);
   }
 
   /**
    * Synchronize from "down" to "up" with reversing the direction.
    */
   syncDownToUp() {
-    this.sync(this.down, this.up);
-  }
-
-  /**
-   * Synchronize from "up" or "down" to another with reversing the direction.
-   *
-   * @param {THREE.Vector3} from - The synchronization source, either "up" or "down".
-   * @param {THREE.Vector3} to - The synchronization destination, which is set to another.
-   */
-  sync(from, to) {
-    to.set(-from.x, -from.y, -from.z);
+    this.upV.copy(this.downV.clone().negate());
+    this.upS.setFromVector3(this.upV);
   }
 }
