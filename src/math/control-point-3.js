@@ -94,14 +94,12 @@ export class ControlPoint3 {
    * @param {THREE.Vector3|THREE.Spherical}
    */
   initUp(up) {
-    this.upV = new THREE.Vector3();
-    this.upS = new THREE.Spherical();
     if (up instanceof THREE.Vector3) {
-      this.upV.copy(up);
-      this.upS.setFromVector3(up);
+      this.upV = up;
+      this.upS = new THREE.Spherical().setFromVector3(up);
     } else if (up instanceof THREE.Spherical) {
-      this.upV.setFromSpherical(up);
-      this.upS.copy(up);
+      this.upV = new THREE.Vector3().setFromSpherical(up);
+      this.upS = up;
     }
   }
   /**
@@ -113,14 +111,12 @@ export class ControlPoint3 {
    * @param {THREE.Vector3|THREE.Spherical}
    */
   initDown(down) {
-    this.downV = new THREE.Vector3();
-    this.downS = new THREE.Spherical();
     if (down instanceof THREE.Vector3) {
-      this.downV.copy(down);
-      this.downS.setFromVector3(down);
+      this.downV = down;
+      this.downS = new THREE.Spherical().setFromVector3(down);
     } else if (down instanceof THREE.Spherical) {
-      this.downV.setFromSpherical(down);
-      this.downS.copy(down);
+      this.downV = new THREE.Vector3().setFromSpherical(down);
+      this.downS = down;
     }
   }
 
