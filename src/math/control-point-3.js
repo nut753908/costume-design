@@ -19,9 +19,9 @@ export class ControlPoint3 {
   /**
    * Constructs a new ControlPoint3.
    *
-   * @param {THREE.Vector3} [offset] - An offset position for control points.
-   * @param {THREE.Vector3|THREE.Spherical} [up] - A vector from the offset to upside control point.
-   * @param {THREE.Vector3|THREE.Spherical} [down] - A vector from the offset to downside control point.
+   * @param {THREE.Vector3} [offset] - The offset position for control points.
+   * @param {THREE.Vector3|THREE.Spherical} [up] - The vector from the offset to upside control point.
+   * @param {THREE.Vector3|THREE.Spherical} [down] - The vector from the offset to downside control point.
    * @param {boolean} [isSync=true] - Whether to synchronize "up" and "down".
    */
   constructor(
@@ -31,21 +31,21 @@ export class ControlPoint3 {
     isSync = true
   ) {
     /**
-     * An offset position for control points.
+     * The offset position for control points.
      *
      * @type {THREE.Vector3}
      */
     this.offset = offset;
 
     /**
-     * A vector from the offset to upside control point.
+     * The vector from the offset to upside control point.
      *
      * @type {THREE.Vector3|THREE.Spherical}
      */
     this.initUp(up);
 
     /**
-     * A vector from the offset to downside control point.
+     * The vector from the offset to downside control point.
      *
      * @type {THREE.Vector3|THREE.Spherical}
      */
