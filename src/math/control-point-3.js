@@ -231,16 +231,6 @@ export class ControlPoint3 {
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "upS", "upR" and "upPos" from "upV".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
-   */
-  updateFromUpV() {
-    this.upS.setFromVector3(this.upV);
-    this.upR.copy(this.getR(this.upV));
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
-    if (this.isSync) this.syncUpToDown();
-  }
-  /**
    * Update "upV", "upR" and "upPos" from "upS".
    * Then synchronize from "up" to "down" only if this.isSync = true.
    */
@@ -293,16 +283,6 @@ export class ControlPoint3 {
     this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
     this.downR.copy(this.getR(this.downV));
-    if (this.isSync) this.syncDownToUp();
-  }
-  /**
-   * Update "downS", "downR" and "downPos" from "downV".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
-   */
-  updateFromDownV() {
-    this.downS.setFromVector3(this.downV);
-    this.downR.copy(this.getR(this.downV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
     if (this.isSync) this.syncDownToUp();
   }
   /**
