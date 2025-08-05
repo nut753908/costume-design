@@ -93,7 +93,10 @@ export class ControlPoint3 {
    * Initialize "up".
    * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
    * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
-   * "upR" represents each rotation angle of "upV" around the {x,y,z} axis as THREE.Vector3.
+   * "upR" represents each rotation angle of "upV" as THREE.Vector3.
+   *   "upR.x" is the rotation angle around the x axis.
+   *   "upR.y" is the rotation angle around the y axis.
+   *   "upR.z" is the rotation angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} upPos - The position of upside control point.
@@ -108,7 +111,10 @@ export class ControlPoint3 {
    * Initialize "down".
    * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
    * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
-   * "downR" represents each rotation angle of "downV" around the {x,y,z} axis as THREE.Vector3.
+   * "downR" represents each rotation angle of "downV" as THREE.Vector3.
+   *   "downR.x" is the rotation angle around the x axis.
+   *   "downR.y" is the rotation angle around the y axis.
+   *   "downR.z" is the rotation angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} downPos - The position of downside control point.
