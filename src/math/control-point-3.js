@@ -94,7 +94,7 @@ export class ControlPoint3 {
    * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3}
+   * @param {THREE.Vector3} upPos - The position of upside control point.
    */
   initUp(upPos) {
     this.upPos = upPos;
@@ -108,7 +108,7 @@ export class ControlPoint3 {
    * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3}
+   * @param {THREE.Vector3} downPos - The position of downside control point.
    */
   initDown(downPos) {
     this.downPos = downPos;
