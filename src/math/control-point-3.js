@@ -353,8 +353,9 @@ export class ControlPoint3 {
    * Synchronize from "up" to "down" with reversing the direction.
    */
   syncUpToDown() {
-    this.downV.copy(this.middlePos.clone().sub(this.upPos));
+    this.downV.copy(this.upV.clone().negate());
     this.downS.setFromVector3(this.downV);
+    this.downS.radius = this.upS.radius; // Avoid float rounding errors.
     this.downR.copy(this.getR(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
   }
@@ -362,8 +363,9 @@ export class ControlPoint3 {
    * Synchronize from "down" to "up" with reversing the direction.
    */
   syncDownToUp() {
-    this.upV.copy(this.middlePos.clone().sub(this.downPos));
+    this.upV.copy(this.downV.clone().negate());
     this.upS.setFromVector3(this.upV);
+    this.upS.radius = this.downS.radius; // Avoid float rounding errors.
     this.upR.copy(this.getR(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
   }
