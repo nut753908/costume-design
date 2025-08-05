@@ -257,9 +257,9 @@ export class ControlPoint3 {
     const Rx = this.toRadians(this.upR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.upS.phi = this.safeAcos(y / this.upS.radius);
+    this.upS.phi = this.safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAcos(z / r_zx);
+    this.upS.theta = this.safeAcos(z, r_zx);
     this.updateFromUpS();
   }
   /**
@@ -278,9 +278,9 @@ export class ControlPoint3 {
     const Rz = this.toRadians(this.upR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.upS.phi = this.safeAcos(y / this.upS.radius);
+    this.upS.phi = this.safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAsin(x / r_zx);
+    this.upS.theta = this.safeAsin(x, r_zx);
     this.updateFromUpS();
   }
   /**
@@ -322,9 +322,9 @@ export class ControlPoint3 {
     const Rx = this.toRadians(this.downR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.downS.phi = this.safeAcos(y / this.downS.radius);
+    this.downS.phi = this.safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAcos(z / r_zx);
+    this.downS.theta = this.safeAcos(z, r_zx);
     this.updateFromDownS();
   }
   /**
@@ -343,9 +343,9 @@ export class ControlPoint3 {
     const Rz = this.toRadians(this.downR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.downS.phi = this.safeAcos(y / this.downS.radius);
+    this.downS.phi = this.safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAsin(x / r_zx);
+    this.downS.theta = this.safeAsin(x, r_zx);
     this.updateFromDownS();
   }
 
@@ -417,22 +417,26 @@ export class ControlPoint3 {
    * If the input value is greater than 1, returns 1.5707963267948966 (π/2) instead of NaN.
    * If the input value is less than -1, returns -1.5707963267948966 (-π/2) instead of NaN.
    *
-   * @param {number} value
+   * @param {number} opposite
+   * @param {number} hypotenuse
    * @returns {number}
    */
-  safeAsin(value) {
-    return Math.asin(this.clip(value, -1, 1));
+  safeAsin(opposite, hypotenuse) {
+    if (hypotenuse === 0) return 0;
+    return Math.asin(this.clip(opposite / hypotenuse, -1, 1));
   }
   /**
    * Safely calculate Math.acos().
    * If the input value is greater than 1, returns 0 instead of NaN.
    * If the input value is less than -1, returns 3.141592653589793 (π) instead of NaN.
    *
-   * @param {number} value
+   * @param {number} adjacent
+   * @param {number} hypotenuse
    * @returns {number}
    */
-  safeAcos(value) {
-    return Math.acos(this.clip(value, -1, 1));
+  safeAcos(adjacent, hypotenuse) {
+    if (hypotenuse === 0) return 0;
+    return Math.acos(this.clip(adjacent / hypotenuse, -1, 1));
   }
   /**
    * Clip the input value to range [min, max].
