@@ -249,34 +249,37 @@ export class ControlPoint3 {
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "upV" from "upRx" and the previous "upV" and call updateFromUpV().
+   * Update "upS" from "upRx" and the previous "upS" and call updateFromUpS().
    */
   updateFromUpRx() {
-    const r = Math.sqrt(this.upV.y ** 2 + this.upV.z ** 2);
-    const theta = this.toRadians(this.upR.x);
-    this.upV.y = r * Math.cos(theta);
-    this.upV.z = r * Math.sin(theta);
-    this.updateFromUpV();
+    const x = this.upV.x;
+    const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
+    const y = r_yz * Math.cos(this.toRadians(this.upR.x));
+    const z = r_yz * Math.sin(this.toRadians(this.upR.x));
+    this.upS.phi = this.safeAcos(y / this.upS.radius);
+    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
+    this.upS.theta = this.safeAcos(z / r_zx);
+    this.updateFromUpS();
   }
   /**
-   * Update "upV" from "upRy" and the previous "upV" and call updateFromUpV().
+   * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
    */
   updateFromUpRy() {
-    const r = Math.sqrt(this.upV.z ** 2 + this.upV.x ** 2);
-    const theta = this.toRadians(this.upR.y);
-    this.upV.z = r * Math.cos(theta);
-    this.upV.x = r * Math.sin(theta);
-    this.updateFromUpV();
+    this.upS.theta = this.toRadians(this.upR.y);
+    this.updateFromUpS();
   }
   /**
-   * Update "upV" from "upRy" and the previous "upV" and call updateFromUpV().
+   * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
    */
   updateFromUpRz() {
-    const r = Math.sqrt(this.upV.x ** 2 + this.upV.y ** 2);
-    const theta = this.toRadians(this.upR.z);
-    this.upV.x = r * Math.cos(theta);
-    this.upV.y = r * Math.sin(theta);
-    this.updateFromUpV();
+    const z = this.upV.z;
+    const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
+    const x = r_xy * Math.cos(this.toRadians(this.upR.z));
+    const y = r_xy * Math.sin(this.toRadians(this.upR.z));
+    this.upS.phi = this.safeAcos(y / this.upS.radius);
+    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
+    this.upS.theta = this.safeAsin(x / r_zx);
+    this.updateFromUpS();
   }
   /**
    * Update "downV", "downS" and "downR" from "downPos".
@@ -309,34 +312,37 @@ export class ControlPoint3 {
     if (this.isSync) this.syncDownToUp();
   }
   /**
-   * Update "downV" from "downRx" and the previous "downV" and call updateFromDownV().
+   * Update "downS" from "downRx" and the previous "downS" and call updateFromDownS().
    */
   updateFromDownRx() {
-    const r = Math.sqrt(this.downV.y ** 2 + this.downV.z ** 2);
-    const theta = this.toRadians(this.downR.x);
-    this.downV.y = r * Math.cos(theta);
-    this.downV.z = r * Math.sin(theta);
-    this.updateFromDownV();
+    const x = this.downV.x;
+    const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
+    const y = r_yz * Math.cos(this.toRadians(this.downR.x));
+    const z = r_yz * Math.sin(this.toRadians(this.downR.x));
+    this.downS.phi = this.safeAcos(y / this.downS.radius);
+    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
+    this.downS.theta = this.safeAcos(z / r_zx);
+    this.updateFromDownS();
   }
   /**
-   * Update "downV" from "downRy" and the previous "downV" and call updateFromDownV().
+   * Update "downS" from "downRy" and the previous "downS" and call updateFromDownS().
    */
   updateFromDownRy() {
-    const r = Math.sqrt(this.downV.z ** 2 + this.downV.x ** 2);
-    const theta = this.toRadians(this.downR.y);
-    this.downV.z = r * Math.cos(theta);
-    this.downV.x = r * Math.sin(theta);
-    this.updateFromDownV();
+    this.downS.theta = this.toRadians(this.downR.y);
+    this.updateFromDownS();
   }
   /**
-   * Update "downV" from "downRz" and the previous "downV" and call updateFromDownV().
+   * Update "downS" from "downRz" and the previous "downS" and call updateFromDownS().
    */
   updateFromDownRz() {
-    const r = Math.sqrt(this.downV.x ** 2 + this.downV.y ** 2);
-    const theta = this.toRadians(this.downR.z);
-    this.downV.x = r * Math.cos(theta);
-    this.downV.y = r * Math.sin(theta);
-    this.updateFromDownV();
+    const z = this.downV.z;
+    const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
+    const x = r_xy * Math.cos(this.toRadians(this.downR.z));
+    const y = r_xy * Math.sin(this.toRadians(this.downR.z));
+    this.downS.phi = this.safeAcos(y / this.downS.radius);
+    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
+    this.downS.theta = this.safeAsin(x / r_zx);
+    this.updateFromDownS();
   }
 
   /**
@@ -398,5 +404,39 @@ export class ControlPoint3 {
    */
   toRadians(degrees) {
     return (degrees * Math.PI) / 180;
+  }
+
+  /**
+   * Safely calculate Math.asin().
+   * If the input value is greater than 1, returns 1.5707963267948966 (π/2) instead of NaN.
+   * If the input value is less than -1, returns -1.5707963267948966 (-π/2) instead of NaN.
+   *
+   * @param {number} value
+   * @returns {number}
+   */
+  safeAsin(value) {
+    return Math.asin(this.clip(value, -1, 1));
+  }
+  /**
+   * Safely calculate Math.acos().
+   * If the input value is greater than 1, returns 0 instead of NaN.
+   * If the input value is less than -1, returns 3.141592653589793 (π) instead of NaN.
+   *
+   * @param {number} value
+   * @returns {number}
+   */
+  safeAcos(value) {
+    return Math.acos(this.clip(value, -1, 1));
+  }
+  /**
+   * Clip the input value to range [min, max].
+   *
+   * @param {number} value
+   * @param {number} min
+   * @param {number} max
+   * @returns {number}
+   */
+  clip(value, min, max) {
+    return Math.max(Math.min(value, max), min);
   }
 }
