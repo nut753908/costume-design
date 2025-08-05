@@ -147,17 +147,17 @@ export class ControlPoint3 {
     folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
     folder.add(cp.upPos, "z", -1, 1).name("up.z").onChange(uUP);
     folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
-    folder.add(cp.upR, "x", -180, 180).name("up.Rx").onChange(uURx);
-    folder.add(cp.upR, "y", -180, 180).name("up.Ry").onChange(uURy);
-    folder.add(cp.upR, "z", -180, 180).name("up.Rz").onChange(uURz);
+    folder.add(cp.upR, "x", 0, 360).name("up.Rx").onChange(uURx);
+    folder.add(cp.upR, "y", 0, 360).name("up.Ry").onChange(uURy);
+    folder.add(cp.upR, "z", 0, 360).name("up.Rz").onChange(uURz);
     folder.addFolder("---").close(); // separator
     folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
     folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
     folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
     folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
-    folder.add(cp.downR, "x", -180, 180).name("down.Rx").onChange(uDRx);
-    folder.add(cp.downR, "y", -180, 180).name("down.Ry").onChange(uDRy);
-    folder.add(cp.downR, "z", -180, 180).name("down.Rz").onChange(uDRz);
+    folder.add(cp.downR, "x", 0, 360).name("down.Rx").onChange(uDRx);
+    folder.add(cp.downR, "y", 0, 360).name("down.Ry").onChange(uDRy);
+    folder.add(cp.downR, "z", 0, 360).name("down.Rz").onChange(uDRz);
 
     const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
@@ -376,9 +376,9 @@ export class ControlPoint3 {
    */
   getR(v) {
     return new THREE.Vector3(
-      THREE.MathUtils.radToDeg(Math.atan2(v.z, v.y)),
-      THREE.MathUtils.radToDeg(Math.atan2(v.x, v.z)),
-      THREE.MathUtils.radToDeg(Math.atan2(v.y, v.x))
+      THREE.MathUtils.radToDeg(Math.atan2(-v.z, -v.y) + Math.PI),
+      THREE.MathUtils.radToDeg(Math.atan2(-v.x, -v.z) + Math.PI),
+      THREE.MathUtils.radToDeg(Math.atan2(-v.y, -v.x) + Math.PI)
     );
   }
 }
