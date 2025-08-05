@@ -252,7 +252,7 @@ export class ControlPoint3 {
   updateFromUpRx() {
     const x = this.upV.x;
     const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
-    const Rx = this.toRadians(this.upR.x);
+    const Rx = THREE.MathUtils.degToRad(this.upR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
     this.upS.phi = this.safeAcos(y, this.upS.radius);
@@ -264,7 +264,7 @@ export class ControlPoint3 {
    * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
    */
   updateFromUpRy() {
-    this.upS.theta = this.toRadians(this.upR.y);
+    this.upS.theta = THREE.MathUtils.degToRad(this.upR.y);
     this.updateFromUpS();
   }
   /**
@@ -273,7 +273,7 @@ export class ControlPoint3 {
   updateFromUpRz() {
     const z = this.upV.z;
     const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
-    const Rz = this.toRadians(this.upR.z);
+    const Rz = THREE.MathUtils.degToRad(this.upR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
     this.upS.phi = this.safeAcos(y, this.upS.radius);
@@ -307,7 +307,7 @@ export class ControlPoint3 {
   updateFromDownRx() {
     const x = this.downV.x;
     const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
-    const Rx = this.toRadians(this.downR.x);
+    const Rx = THREE.MathUtils.degToRad(this.downR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
     this.downS.phi = this.safeAcos(y, this.downS.radius);
@@ -319,7 +319,7 @@ export class ControlPoint3 {
    * Update "downS" from "downRy" and the previous "downS" and call updateFromDownS().
    */
   updateFromDownRy() {
-    this.downS.theta = this.toRadians(this.downR.y);
+    this.downS.theta = THREE.MathUtils.degToRad(this.downR.y);
     this.updateFromDownS();
   }
   /**
@@ -328,7 +328,7 @@ export class ControlPoint3 {
   updateFromDownRz() {
     const z = this.downV.z;
     const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
-    const Rz = this.toRadians(this.downR.z);
+    const Rz = THREE.MathUtils.degToRad(this.downR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
     this.downS.phi = this.safeAcos(y, this.downS.radius);
@@ -375,29 +375,10 @@ export class ControlPoint3 {
    */
   getR(v) {
     return new THREE.Vector3(
-      this.toDegrees(Math.atan2(v.z, v.y)),
-      this.toDegrees(Math.atan2(v.x, v.z)),
-      this.toDegrees(Math.atan2(v.y, v.x))
+      THREE.MathUtils.radToDeg(Math.atan2(v.z, v.y)),
+      THREE.MathUtils.radToDeg(Math.atan2(v.x, v.z)),
+      THREE.MathUtils.radToDeg(Math.atan2(v.y, v.x))
     );
-  }
-
-  /**
-   * Convert radians to degrees.
-   *
-   * @param {number} radians
-   * @returns {number}
-   */
-  toDegrees(radians) {
-    return (radians * 180) / Math.PI;
-  }
-  /**
-   * Convert degrees to radians.
-   *
-   * @param {number} degrees
-   * @returns {number}
-   */
-  toRadians(degrees) {
-    return (degrees * Math.PI) / 180;
   }
 
   /**
@@ -412,7 +393,7 @@ export class ControlPoint3 {
    */
   safeAsin(opposite, hypotenuse) {
     if (hypotenuse === 0) return 0;
-    return Math.asin(this.clip(opposite / hypotenuse, -1, 1));
+    return Math.asin(THREE.MathUtils.clamp(opposite / hypotenuse, -1, 1));
   }
   /**
    * Safely calculate Math.acos().
@@ -426,17 +407,6 @@ export class ControlPoint3 {
    */
   safeAcos(adjacent, hypotenuse) {
     if (hypotenuse === 0) return 0;
-    return Math.acos(this.clip(adjacent / hypotenuse, -1, 1));
-  }
-  /**
-   * Clip the value to range [min, max].
-   *
-   * @param {number} value
-   * @param {number} min
-   * @param {number} max
-   * @returns {number}
-   */
-  clip(value, min, max) {
-    return Math.max(Math.min(value, max), min);
+    return Math.acos(THREE.MathUtils.clamp(adjacent / hypotenuse, -1, 1));
   }
 }
