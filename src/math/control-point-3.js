@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { safeAsin, safeAcos } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -79,9 +80,11 @@ export class ControlPoint3 {
     this.upPos.copy(other.upPos);
     this.upV.copy(other.upV);
     this.upS.copy(other.upS);
+    this.upR.copy(other.upR);
     this.downPos.copy(other.downPos);
     this.downV.copy(other.downV);
     this.downS.copy(other.downS);
+    this.downR.copy(other.downR);
     this.isSync = other.isSync;
 
     return this;
@@ -91,7 +94,10 @@ export class ControlPoint3 {
    * Initialize "up".
    * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
    * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
-   * "upR" represents each rotation angle of "upV" around the {x,y,z} axis as THREE.Vector3.
+   * "upR" represents each rotation angle of "upV" as THREE.Vector3.
+   *   "upR.x" is the rotation angle around the x axis.
+   *   "upR.y" is the rotation angle around the y axis.
+   *   "upR.z" is the rotation angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} upPos - The position of upside control point.
@@ -106,7 +112,10 @@ export class ControlPoint3 {
    * Initialize "down".
    * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
    * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
-   * "downR" represents each rotation angle of "downV" around the {x,y,z} axis as THREE.Vector3.
+   * "downR" represents each rotation angle of "downV" as THREE.Vector3.
+   *   "downR.x" is the rotation angle around the x axis.
+   *   "downR.y" is the rotation angle around the y axis.
+   *   "downR.z" is the rotation angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} downPos - The position of downside control point.
@@ -229,16 +238,6 @@ export class ControlPoint3 {
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "upS", "upR" and "upPos" from "upV".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
-   */
-  updateFromUpV() {
-    this.upS.setFromVector3(this.upV);
-    this.upR.copy(this.getR(this.upV));
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
-    if (this.isSync) this.syncUpToDown();
-  }
-  /**
    * Update "upV", "upR" and "upPos" from "upS".
    * Then synchronize from "up" to "down" only if this.isSync = true.
    */
@@ -254,19 +253,19 @@ export class ControlPoint3 {
   updateFromUpRx() {
     const x = this.upV.x;
     const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
-    const Rx = this.toRadians(this.upR.x);
+    const Rx = THREE.MathUtils.degToRad(this.upR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.upS.phi = this.safeAcos(y, this.upS.radius);
+    this.upS.phi = safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAcos(z, r_zx);
+    this.upS.theta = safeAcos(z, r_zx);
     this.updateFromUpS();
   }
   /**
    * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
    */
   updateFromUpRy() {
-    this.upS.theta = this.toRadians(this.upR.y);
+    this.upS.theta = THREE.MathUtils.degToRad(this.upR.y);
     this.updateFromUpS();
   }
   /**
@@ -275,12 +274,12 @@ export class ControlPoint3 {
   updateFromUpRz() {
     const z = this.upV.z;
     const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
-    const Rz = this.toRadians(this.upR.z);
+    const Rz = THREE.MathUtils.degToRad(this.upR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.upS.phi = this.safeAcos(y, this.upS.radius);
+    this.upS.phi = safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAsin(x, r_zx);
+    this.upS.theta = safeAsin(x, r_zx);
     this.updateFromUpS();
   }
   /**
@@ -291,16 +290,6 @@ export class ControlPoint3 {
     this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
     this.downR.copy(this.getR(this.downV));
-    if (this.isSync) this.syncDownToUp();
-  }
-  /**
-   * Update "downS", "downR" and "downPos" from "downV".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
-   */
-  updateFromDownV() {
-    this.downS.setFromVector3(this.downV);
-    this.downR.copy(this.getR(this.downV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
     if (this.isSync) this.syncDownToUp();
   }
   /**
@@ -319,19 +308,19 @@ export class ControlPoint3 {
   updateFromDownRx() {
     const x = this.downV.x;
     const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
-    const Rx = this.toRadians(this.downR.x);
+    const Rx = THREE.MathUtils.degToRad(this.downR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.downS.phi = this.safeAcos(y, this.downS.radius);
+    this.downS.phi = safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAcos(z, r_zx);
+    this.downS.theta = safeAcos(z, r_zx);
     this.updateFromDownS();
   }
   /**
    * Update "downS" from "downRy" and the previous "downS" and call updateFromDownS().
    */
   updateFromDownRy() {
-    this.downS.theta = this.toRadians(this.downR.y);
+    this.downS.theta = THREE.MathUtils.degToRad(this.downR.y);
     this.updateFromDownS();
   }
   /**
@@ -340,12 +329,12 @@ export class ControlPoint3 {
   updateFromDownRz() {
     const z = this.downV.z;
     const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
-    const Rz = this.toRadians(this.downR.z);
+    const Rz = THREE.MathUtils.degToRad(this.downR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.downS.phi = this.safeAcos(y, this.downS.radius);
+    this.downS.phi = safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAsin(x, r_zx);
+    this.downS.theta = safeAsin(x, r_zx);
     this.updateFromDownS();
   }
 
@@ -387,66 +376,9 @@ export class ControlPoint3 {
    */
   getR(v) {
     return new THREE.Vector3(
-      this.toDegrees(Math.atan2(v.z, v.y)),
-      this.toDegrees(Math.atan2(v.x, v.z)),
-      this.toDegrees(Math.atan2(v.y, v.x))
+      THREE.MathUtils.radToDeg(Math.atan2(v.z, v.y)),
+      THREE.MathUtils.radToDeg(Math.atan2(v.x, v.z)),
+      THREE.MathUtils.radToDeg(Math.atan2(v.y, v.x))
     );
-  }
-
-  /**
-   * Convert radians to degrees.
-   *
-   * @param {number} radians
-   * @returns {number}
-   */
-  toDegrees(radians) {
-    return (radians * 180) / Math.PI;
-  }
-  /**
-   * Convert degrees to radians.
-   *
-   * @param {number} degrees
-   * @returns {number}
-   */
-  toRadians(degrees) {
-    return (degrees * Math.PI) / 180;
-  }
-
-  /**
-   * Safely calculate Math.asin().
-   * If the input value is greater than 1, returns 1.5707963267948966 (π/2) instead of NaN.
-   * If the input value is less than -1, returns -1.5707963267948966 (-π/2) instead of NaN.
-   *
-   * @param {number} opposite
-   * @param {number} hypotenuse
-   * @returns {number}
-   */
-  safeAsin(opposite, hypotenuse) {
-    if (hypotenuse === 0) return 0;
-    return Math.asin(this.clip(opposite / hypotenuse, -1, 1));
-  }
-  /**
-   * Safely calculate Math.acos().
-   * If the input value is greater than 1, returns 0 instead of NaN.
-   * If the input value is less than -1, returns 3.141592653589793 (π) instead of NaN.
-   *
-   * @param {number} adjacent
-   * @param {number} hypotenuse
-   * @returns {number}
-   */
-  safeAcos(adjacent, hypotenuse) {
-    if (hypotenuse === 0) return 0;
-    return Math.acos(this.clip(adjacent / hypotenuse, -1, 1));
-  }
-  /**
-   * Clip the input value to range [min, max].
-   *
-   * @param {number} value
-   * @param {number} min
-   * @param {number} max
-   * @returns {number}
-   */
-  clip(value, min, max) {
-    return Math.max(Math.min(value, max), min);
   }
 }
