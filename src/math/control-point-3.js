@@ -79,9 +79,11 @@ export class ControlPoint3 {
     this.upPos.copy(other.upPos);
     this.upV.copy(other.upV);
     this.upS.copy(other.upS);
+    this.upR.copy(other.upR);
     this.downPos.copy(other.downPos);
     this.downV.copy(other.downV);
     this.downS.copy(other.downS);
+    this.downR.copy(other.downR);
     this.isSync = other.isSync;
 
     return this;
