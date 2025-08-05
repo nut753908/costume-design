@@ -19,37 +19,37 @@ export class ControlPoint3 {
   /**
    * Constructs a new ControlPoint3.
    *
-   * @param {THREE.Vector3} [offset] - The offset position for control points.
-   * @param {THREE.Vector3|THREE.Spherical} [up] - The vector from the offset to upside control point.
-   * @param {THREE.Vector3|THREE.Spherical} [down] - The vector from the offset to downside control point.
+   * @param {THREE.Vector3} [middlePos] - The position of middle control point.
+   * @param {THREE.Vector3} [upPos] - The position of upside control point.
+   * @param {THREE.Vector3} [downPos] - The position of downside control point.
    * @param {boolean} [isSync=true] - Whether to synchronize "up" and "down".
    */
   constructor(
-    offset = new THREE.Vector3(0, 0, 0),
-    up = new THREE.Vector3(0, 1, 0),
-    down = new THREE.Vector3(0, -1, 0),
+    middlePos = new THREE.Vector3(0, 0, 0),
+    upPos = new THREE.Vector3(0, 1, 0),
+    downPos = new THREE.Vector3(0, -1, 0),
     isSync = true
   ) {
     /**
-     * The offset position for control points.
+     * The position of middle control point.
      *
      * @type {THREE.Vector3}
      */
-    this.offset = offset;
+    this.middlePos = middlePos;
 
     /**
-     * The vector from the offset to upside control point.
+     * The position of upside control point.
      *
-     * @type {THREE.Vector3|THREE.Spherical}
+     * @type {THREE.Vector3}
      */
-    this.initUp(up);
+    this.initUp(upPos);
 
     /**
-     * The vector from the offset to downside control point.
+     * The position of downside control point.
      *
-     * @type {THREE.Vector3|THREE.Spherical}
+     * @type {THREE.Vector3}
      */
-    this.initDown(down);
+    this.initDown(downPos);
 
     /**
      * Whether to synchronize "up" and "down".
@@ -75,9 +75,11 @@ export class ControlPoint3 {
    * @returns {ControlPoint3} A reference to this ControlPoint3.
    */
   copy(other) {
-    this.offset.copy(other.offset);
+    this.middlePos.copy(other.middlePos);
+    this.upPos.copy(other.upPos);
     this.upV.copy(other.upV);
     this.upS.copy(other.upS);
+    this.downPos.copy(other.downPos);
     this.downV.copy(other.downV);
     this.downS.copy(other.downS);
     this.isSync = other.isSync;
@@ -86,38 +88,32 @@ export class ControlPoint3 {
   }
 
   /**
-   * Initialize "up", which splits into "upV" and "upS".
-   * "upV" is "up" and its type is THREE.'V'ector3.
-   * "upS" is "up" and its type is THREE.'S'pherical.
+   * Initialize "up".
+   * "upPos" splits into "upV" and "upS".
+   * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
+   * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3|THREE.Spherical}
+   * @param {THREE.Vector3}
    */
-  initUp(up) {
-    if (up instanceof THREE.Vector3) {
-      this.upV = up;
-      this.upS = new THREE.Spherical().setFromVector3(up);
-    } else if (up instanceof THREE.Spherical) {
-      this.upV = new THREE.Vector3().setFromSpherical(up);
-      this.upS = up;
-    }
+  initUp(upPos) {
+    this.upPos = upPos;
+    this.upV = upPos.clone().sub(this.middlePos);
+    this.upS = new THREE.Spherical().setFromVector3(this.upV);
   }
   /**
-   * Initialize "down", which splits into "downV" and "downS".
-   * "downV" is "down" and its type is THREE.'V'ector3.
-   * "downS" is "down" and its type is THREE.'S'pherical.
+   * Initialize "down".
+   * "downPos" splits into "downV" and "downS".
+   * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
+   * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3|THREE.Spherical}
+   * @param {THREE.Vector3}
    */
-  initDown(down) {
-    if (down instanceof THREE.Vector3) {
-      this.downV = down;
-      this.downS = new THREE.Spherical().setFromVector3(down);
-    } else if (down instanceof THREE.Spherical) {
-      this.downV = new THREE.Vector3().setFromSpherical(down);
-      this.downS = down;
-    }
+  initDown(downPos) {
+    this.downPos = downPos;
+    this.downV = downPos.clone().sub(this.middlePos);
+    this.downS = new THREE.Spherical().setFromVector3(this.downV);
   }
 
   /**
@@ -133,20 +129,20 @@ export class ControlPoint3 {
 
     const pi = Math.PI;
     const folder = gui.addFolder("cp");
-    folder.add(cp.offset, "x", -1, 1).name("offset.x").onChange(uO);
-    folder.add(cp.offset, "y", -1, 1).name("offset.y").onChange(uO);
-    folder.add(cp.offset, "z", -1, 1).name("offset.z").onChange(uO);
+    folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
+    folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
+    folder.add(cp.middlePos, "z", -1, 1).name("middle.z").onChange(uMP);
     folder.add(cp, "isSync");
-    folder.add(cp.upV, "x", -1, 1).name("up.x").onChange(uUV);
-    folder.add(cp.upV, "y", -1, 1).name("up.y").onChange(uUV);
-    folder.add(cp.upV, "z", -1, 1).name("up.z").onChange(uUV);
+    folder.add(cp.upPos, "x", -1, 1).name("up.x").onChange(uUP);
+    folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
+    folder.add(cp.upPos, "z", -1, 1).name("up.z").onChange(uUP);
     folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
     folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(uUS);
     folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(uUS);
     folder.addFolder("---").close(); // separator
-    folder.add(cp.downV, "x", -1, 1).name("down.x").onChange(uDV);
-    folder.add(cp.downV, "y", -1, 1).name("down.y").onChange(uDV);
-    folder.add(cp.downV, "z", -1, 1).name("down.z").onChange(uDV);
+    folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
+    folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
+    folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
     folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
     folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
     folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
@@ -155,23 +151,23 @@ export class ControlPoint3 {
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
     );
 
-    function uO() /* updateFromOffset */ {
-      updateGeometry(cp);
+    function uMP() /* updateFromMiddlePos */ {
+      updateFrom("middlePos");
     }
-    function uUV() /* updateFromUpV */ {
-      updateFrom("upV");
+    function uUP() /* updateFromUpPos */ {
+      updateFrom("upPos");
     }
     function uUS() /* updateFromUpS */ {
       updateFrom("upS");
     }
-    function uDV() /* updateFromDownV */ {
-      updateFrom("downV");
+    function uDP() /* updateFromDownPos */ {
+      updateFrom("downPos");
     }
     function uDS() /* updateFromDownS */ {
       updateFrom("downS");
     }
     /**
-     * @param {"upV"|"upS"|"downV"|"downS"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"upPos"|"upS"|"downPos"|"downS"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
@@ -181,38 +177,51 @@ export class ControlPoint3 {
   }
 
   updateFrom = {
-    upV: () => this.updateFromUpV(),
+    middlePos: () => this.updateFromMiddlePos(),
+    upPos: () => this.updateFromUpPos(),
     upS: () => this.updateFromUpS(),
-    downV: () => this.updateFromDownV(),
+    downPos: () => this.updateFromDownPos(),
     downS: () => this.updateFromDownS(),
   };
 
   /**
-   * Update "upS" from "upV" and synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upPos" and "downPos" from "middlePos".
    */
-  updateFromUpV() {
+  updateFromMiddlePos() {
+    this.upPos.copy(this.middlePos.clone().add(this.upV));
+    this.downPos.copy(this.middlePos.clone().add(this.downV));
+  }
+
+  /**
+   * Update "upV" and "upS" from "upPos" and synchronize from "up" to "down" only if this.isSync = true.
+   */
+  updateFromUpPos() {
+    this.upV.copy(this.upPos.clone().sub(this.middlePos));
     this.upS.setFromVector3(this.upV);
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "upV" from "upS" and synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upV" and "upPos" from "upS" and synchronize from "up" to "down" only if this.isSync = true.
    */
   updateFromUpS() {
     this.upV.setFromSpherical(this.upS);
+    this.upPos.copy(this.middlePos.clone().add(this.upV));
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "downS" from "downV" and synchronize from "down" to "up" only if this.isSync = true.
+   * Update "downV" and "downS" from "downPos" and synchronize from "down" to "up" only if this.isSync = true.
    */
-  updateFromDownV() {
+  updateFromDownPos() {
+    this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
     if (this.isSync) this.syncDownToUp();
   }
   /**
-   * Update "downV" from "downS" and synchronize from "down" to "up" only if this.isSync = true.
+   * Update "downV" and "downPos" from "downS" and synchronize from "down" to "up" only if this.isSync = true.
    */
   updateFromDownS() {
     this.downV.setFromSpherical(this.downS);
+    this.downPos.copy(this.middlePos.clone().add(this.downV));
     if (this.isSync) this.syncDownToUp();
   }
 
@@ -220,31 +229,16 @@ export class ControlPoint3 {
    * Synchronize from "up" to "down" with reversing the direction.
    */
   syncUpToDown() {
-    this.downV.copy(this.upV.clone().negate());
-    this.downS.setFromVector3(this.downV);
+    this.donwV = this.middlePos.clone().sub(this.upPos);
+    this.downPos.copy(this.middlePos.clone().add(this.donwV));
+    this.downS.setFromVector3(this.donwV);
   }
   /**
    * Synchronize from "down" to "up" with reversing the direction.
    */
   syncDownToUp() {
-    this.upV.copy(this.downV.clone().negate());
+    this.upV = this.middlePos.clone().sub(this.downPos);
+    this.upPos.copy(this.middlePos.clone().add(this.upV));
     this.upS.setFromVector3(this.upV);
-  }
-
-  /**
-   * Get the position of upside control point.
-   *
-   * @returns {THREE.Vector3}
-   */
-  get upPos() {
-    return this.offset.clone().add(this.upV);
-  }
-  /**
-   * Get the position of downside control point.
-   *
-   * @returns {THREE.Vector3}
-   */
-  get downPos() {
-    return this.offset.clone().add(this.downV);
   }
 }

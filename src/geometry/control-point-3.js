@@ -23,7 +23,7 @@ function getUpdateGeometry(geometry) {
   return function updateGeometry(cp) {
     const vertices = [
       ...cp.upPos.toArray(),
-      ...cp.offset.toArray(),
+      ...cp.middlePos.toArray(),
       ...cp.downPos.toArray(),
     ];
     geometry.setAttribute(
