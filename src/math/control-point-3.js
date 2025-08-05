@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { safeAsin, safeAcos } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -255,9 +256,9 @@ export class ControlPoint3 {
     const Rx = THREE.MathUtils.degToRad(this.upR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.upS.phi = this.safeAcos(y, this.upS.radius);
+    this.upS.phi = safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAcos(z, r_zx);
+    this.upS.theta = safeAcos(z, r_zx);
     this.updateFromUpS();
   }
   /**
@@ -276,9 +277,9 @@ export class ControlPoint3 {
     const Rz = THREE.MathUtils.degToRad(this.upR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.upS.phi = this.safeAcos(y, this.upS.radius);
+    this.upS.phi = safeAcos(y, this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = this.safeAsin(x, r_zx);
+    this.upS.theta = safeAsin(x, r_zx);
     this.updateFromUpS();
   }
   /**
@@ -310,9 +311,9 @@ export class ControlPoint3 {
     const Rx = THREE.MathUtils.degToRad(this.downR.x);
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
-    this.downS.phi = this.safeAcos(y, this.downS.radius);
+    this.downS.phi = safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAcos(z, r_zx);
+    this.downS.theta = safeAcos(z, r_zx);
     this.updateFromDownS();
   }
   /**
@@ -331,9 +332,9 @@ export class ControlPoint3 {
     const Rz = THREE.MathUtils.degToRad(this.downR.z);
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
-    this.downS.phi = this.safeAcos(y, this.downS.radius);
+    this.downS.phi = safeAcos(y, this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = this.safeAsin(x, r_zx);
+    this.downS.theta = safeAsin(x, r_zx);
     this.updateFromDownS();
   }
 
@@ -379,34 +380,5 @@ export class ControlPoint3 {
       THREE.MathUtils.radToDeg(Math.atan2(v.x, v.z)),
       THREE.MathUtils.radToDeg(Math.atan2(v.y, v.x))
     );
-  }
-
-  /**
-   * Safely calculate Math.asin().
-   * If the hypotenuse is 0, return 0 instead of NaN.
-   * If the result of "opposite / hypotenuse" is greater than 1, return 1.5707963267948966 (π/2) instead of NaN.
-   * If the result of "opposite / hypotenuse" is less than -1, return -1.5707963267948966 (-π/2) instead of NaN.
-   *
-   * @param {number} opposite
-   * @param {number} hypotenuse
-   * @returns {number}
-   */
-  safeAsin(opposite, hypotenuse) {
-    if (hypotenuse === 0) return 0;
-    return Math.asin(THREE.MathUtils.clamp(opposite / hypotenuse, -1, 1));
-  }
-  /**
-   * Safely calculate Math.acos().
-   * If the hypotenuse is 0, return 0 instead of NaN.
-   * If the result of "adjacent / hypotenuse" is greater than 1, return 0 instead of NaN.
-   * If the result of "adjacent / hypotenuse" is less than -1, return 3.141592653589793 (π) instead of NaN.
-   *
-   * @param {number} adjacent
-   * @param {number} hypotenuse
-   * @returns {number}
-   */
-  safeAcos(adjacent, hypotenuse) {
-    if (hypotenuse === 0) return 0;
-    return Math.acos(THREE.MathUtils.clamp(adjacent / hypotenuse, -1, 1));
   }
 }
