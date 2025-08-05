@@ -254,8 +254,9 @@ export class ControlPoint3 {
   updateFromUpRx() {
     const x = this.upV.x;
     const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
-    const y = r_yz * Math.cos(this.toRadians(this.upR.x));
-    const z = r_yz * Math.sin(this.toRadians(this.upR.x));
+    const Rx = this.toRadians(this.upR.x);
+    const y = r_yz * Math.cos(Rx);
+    const z = r_yz * Math.sin(Rx);
     this.upS.phi = this.safeAcos(y / this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
     this.upS.theta = this.safeAcos(z / r_zx);
@@ -274,8 +275,9 @@ export class ControlPoint3 {
   updateFromUpRz() {
     const z = this.upV.z;
     const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
-    const x = r_xy * Math.cos(this.toRadians(this.upR.z));
-    const y = r_xy * Math.sin(this.toRadians(this.upR.z));
+    const Rz = this.toRadians(this.upR.z);
+    const x = r_xy * Math.cos(Rz);
+    const y = r_xy * Math.sin(Rz);
     this.upS.phi = this.safeAcos(y / this.upS.radius);
     const r_zx = this.upS.radius * Math.sin(this.upS.phi);
     this.upS.theta = this.safeAsin(x / r_zx);
@@ -317,8 +319,9 @@ export class ControlPoint3 {
   updateFromDownRx() {
     const x = this.downV.x;
     const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
-    const y = r_yz * Math.cos(this.toRadians(this.downR.x));
-    const z = r_yz * Math.sin(this.toRadians(this.downR.x));
+    const Rx = this.toRadians(this.downR.x);
+    const y = r_yz * Math.cos(Rx);
+    const z = r_yz * Math.sin(Rx);
     this.downS.phi = this.safeAcos(y / this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
     this.downS.theta = this.safeAcos(z / r_zx);
@@ -337,8 +340,9 @@ export class ControlPoint3 {
   updateFromDownRz() {
     const z = this.downV.z;
     const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
-    const x = r_xy * Math.cos(this.toRadians(this.downR.z));
-    const y = r_xy * Math.sin(this.toRadians(this.downR.z));
+    const Rz = this.toRadians(this.downR.z);
+    const x = r_xy * Math.cos(Rz);
+    const y = r_xy * Math.sin(Rz);
     this.downS.phi = this.safeAcos(y / this.downS.radius);
     const r_zx = this.downS.radius * Math.sin(this.downS.phi);
     this.downS.theta = this.safeAsin(x / r_zx);
