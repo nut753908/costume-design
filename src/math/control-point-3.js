@@ -89,9 +89,9 @@ export class ControlPoint3 {
 
   /**
    * Initialize "up".
-   * "upPos" splits into "upV" and "upS".
    * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
    * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
+   * "upR" represents each rotation angle of "upV" around the {x,y,z} axis as THREE.Vector3.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} upPos - The position of upside control point.
@@ -100,12 +100,13 @@ export class ControlPoint3 {
     this.upPos = upPos;
     this.upV = upPos.clone().sub(this.middlePos);
     this.upS = new THREE.Spherical().setFromVector3(this.upV);
+    this.upR = this.getR(this.upV);
   }
   /**
    * Initialize "down".
-   * "downPos" splits into "downV" and "downS".
    * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
    * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
+   * "downR" represents each rotation angle of "downV" around the {x,y,z} axis as THREE.Vector3.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} downPos - The position of downside control point.
@@ -114,6 +115,7 @@ export class ControlPoint3 {
     this.downPos = downPos;
     this.downV = downPos.clone().sub(this.middlePos);
     this.downS = new THREE.Spherical().setFromVector3(this.downV);
+    this.downR = this.getR(this.downV);
   }
 
   /**
@@ -127,7 +129,6 @@ export class ControlPoint3 {
 
     updateGeometry(cp); // First, update the geometry.
 
-    const pi = Math.PI;
     const folder = gui.addFolder("cp");
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
@@ -137,15 +138,17 @@ export class ControlPoint3 {
     folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
     folder.add(cp.upPos, "z", -1, 1).name("up.z").onChange(uUP);
     folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
-    folder.add(cp.upS, "phi", 0, pi).name("up.phi").onChange(uUS);
-    folder.add(cp.upS, "theta", -pi, pi).name("up.theta").onChange(uUS);
+    folder.add(cp.upR, "x", -180, 180).name("up.Rx").onChange(uURx);
+    folder.add(cp.upR, "y", -180, 180).name("up.Ry").onChange(uURy);
+    folder.add(cp.upR, "z", -180, 180).name("up.Rz").onChange(uURz);
     folder.addFolder("---").close(); // separator
     folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
     folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
     folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
     folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
-    folder.add(cp.downS, "phi", 0, pi).name("down.phi").onChange(uDS);
-    folder.add(cp.downS, "theta", -pi, pi).name("down.theta").onChange(uDS);
+    folder.add(cp.downR, "x", -180, 180).name("down.Rx").onChange(uDRx);
+    folder.add(cp.downR, "y", -180, 180).name("down.Ry").onChange(uDRy);
+    folder.add(cp.downR, "z", -180, 180).name("down.Rz").onChange(uDRz);
 
     const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
@@ -160,14 +163,32 @@ export class ControlPoint3 {
     function uUS() /* updateFromUpS */ {
       updateFrom("upS");
     }
+    function uURx() /* updateFromUpRx */ {
+      updateFrom("upRx");
+    }
+    function uURy() /* updateFromUpRy */ {
+      updateFrom("upRy");
+    }
+    function uURz() /* updateFromUpRz */ {
+      updateFrom("upRz");
+    }
     function uDP() /* updateFromDownPos */ {
       updateFrom("downPos");
     }
     function uDS() /* updateFromDownS */ {
       updateFrom("downS");
     }
+    function uDRx() /* updateFromDownRx */ {
+      updateFrom("downRx");
+    }
+    function uDRy() /* updateFromDownRy */ {
+      updateFrom("downRy");
+    }
+    function uDRz() /* updateFromDownRz */ {
+      updateFrom("downRz");
+    }
     /**
-     * @param {"middlePos"|"upPos"|"upS"|"downPos"|"downS"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"upPos"|"upS"|"upRx"|"upRy"|"upRz"|"downPos"|"downS"|"downRx"|"downRy"|"downRz"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
@@ -180,8 +201,14 @@ export class ControlPoint3 {
     middlePos: () => this.updateFromMiddlePos(),
     upPos: () => this.updateFromUpPos(),
     upS: () => this.updateFromUpS(),
+    upRx: () => this.updateFromUpRx(),
+    upRy: () => this.updateFromUpRy(),
+    upRz: () => this.updateFromUpRz(),
     downPos: () => this.updateFromDownPos(),
     downS: () => this.updateFromDownS(),
+    downRx: () => this.updateFromDownRx(),
+    downRy: () => this.updateFromDownRy(),
+    downRz: () => this.updateFromDownRz(),
   };
 
   /**
@@ -191,54 +218,185 @@ export class ControlPoint3 {
     this.upPos.copy(this.middlePos.clone().add(this.upV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
   }
-
   /**
-   * Update "upV" and "upS" from "upPos" and synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upV", "upS" and "upR" from "upPos".
+   * Then synchronize from "up" to "down" only if this.isSync = true.
    */
   updateFromUpPos() {
     this.upV.copy(this.upPos.clone().sub(this.middlePos));
     this.upS.setFromVector3(this.upV);
+    this.upR.copy(this.getR(this.upV));
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "upV" and "upPos" from "upS" and synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upS", "upR" and "upPos" from "upV".
+   * Then synchronize from "up" to "down" only if this.isSync = true.
    */
-  updateFromUpS() {
-    this.upV.setFromSpherical(this.upS);
+  updateFromUpV() {
+    this.upS.setFromVector3(this.upV);
+    this.upR.copy(this.getR(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
     if (this.isSync) this.syncUpToDown();
   }
   /**
-   * Update "downV" and "downS" from "downPos" and synchronize from "down" to "up" only if this.isSync = true.
+   * Update "upV", "upR" and "upPos" from "upS".
+   * Then synchronize from "up" to "down" only if this.isSync = true.
+   */
+  updateFromUpS() {
+    this.upV.setFromSpherical(this.upS);
+    this.upR.copy(this.getR(this.upV));
+    this.upPos.copy(this.middlePos.clone().add(this.upV));
+    if (this.isSync) this.syncUpToDown();
+  }
+  /**
+   * Update "upV" from "upRx" and the previous "upV" and call updateFromUpV().
+   */
+  updateFromUpRx() {
+    const r = Math.sqrt(this.upV.y ** 2 + this.upV.z ** 2);
+    const theta = this.toRadians(this.upR.x);
+    this.upV.y = r * Math.cos(theta);
+    this.upV.z = r * Math.sin(theta);
+    this.updateFromUpV();
+  }
+  /**
+   * Update "upV" from "upRy" and the previous "upV" and call updateFromUpV().
+   */
+  updateFromUpRy() {
+    const r = Math.sqrt(this.upV.z ** 2 + this.upV.x ** 2);
+    const theta = this.toRadians(this.upR.y);
+    this.upV.z = r * Math.cos(theta);
+    this.upV.x = r * Math.sin(theta);
+    this.updateFromUpV();
+  }
+  /**
+   * Update "upV" from "upRy" and the previous "upV" and call updateFromUpV().
+   */
+  updateFromUpRz() {
+    const r = Math.sqrt(this.upV.x ** 2 + this.upV.y ** 2);
+    const theta = this.toRadians(this.upR.z);
+    this.upV.x = r * Math.cos(theta);
+    this.upV.y = r * Math.sin(theta);
+    this.updateFromUpV();
+  }
+  /**
+   * Update "downV", "downS" and "downR" from "downPos".
+   * Then synchronize from "down" to "up" only if this.isSync = true.
    */
   updateFromDownPos() {
     this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
+    this.downR.copy(this.getR(this.downV));
     if (this.isSync) this.syncDownToUp();
   }
   /**
-   * Update "downV" and "downPos" from "downS" and synchronize from "down" to "up" only if this.isSync = true.
+   * Update "downS", "downR" and "downPos" from "downV".
+   * Then synchronize from "down" to "up" only if this.isSync = true.
+   */
+  updateFromDownV() {
+    this.downS.setFromVector3(this.downV);
+    this.downR.copy(this.getR(this.downV));
+    this.downPos.copy(this.middlePos.clone().add(this.downV));
+    if (this.isSync) this.syncDownToUp();
+  }
+  /**
+   * Update "downV", "downR" and "downPos" from "downS".
+   * Then synchronize from "down" to "up" only if this.isSync = true.
    */
   updateFromDownS() {
     this.downV.setFromSpherical(this.downS);
+    this.downR.copy(this.getR(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
     if (this.isSync) this.syncDownToUp();
+  }
+  /**
+   * Update "downV" from "downRx" and the previous "downV" and call updateFromDownV().
+   */
+  updateFromDownRx() {
+    const r = Math.sqrt(this.downV.y ** 2 + this.downV.z ** 2);
+    const theta = this.toRadians(this.downR.x);
+    this.downV.y = r * Math.cos(theta);
+    this.downV.z = r * Math.sin(theta);
+    this.updateFromDownV();
+  }
+  /**
+   * Update "downV" from "downRy" and the previous "downV" and call updateFromDownV().
+   */
+  updateFromDownRy() {
+    const r = Math.sqrt(this.downV.z ** 2 + this.downV.x ** 2);
+    const theta = this.toRadians(this.downR.y);
+    this.downV.z = r * Math.cos(theta);
+    this.downV.x = r * Math.sin(theta);
+    this.updateFromDownV();
+  }
+  /**
+   * Update "downV" from "downRz" and the previous "downV" and call updateFromDownV().
+   */
+  updateFromDownRz() {
+    const r = Math.sqrt(this.downV.x ** 2 + this.downV.y ** 2);
+    const theta = this.toRadians(this.downR.z);
+    this.downV.x = r * Math.cos(theta);
+    this.downV.y = r * Math.sin(theta);
+    this.updateFromDownV();
   }
 
   /**
    * Synchronize from "up" to "down" with reversing the direction.
    */
   syncUpToDown() {
-    this.donwV = this.middlePos.clone().sub(this.upPos);
-    this.downPos.copy(this.middlePos.clone().add(this.donwV));
-    this.downS.setFromVector3(this.donwV);
+    this.downV.copy(this.middlePos.clone().sub(this.upPos));
+    this.downS.setFromVector3(this.downV);
+    this.downR.copy(this.getR(this.downV));
+    this.downPos.copy(this.middlePos.clone().add(this.downV));
   }
   /**
    * Synchronize from "down" to "up" with reversing the direction.
    */
   syncDownToUp() {
-    this.upV = this.middlePos.clone().sub(this.downPos);
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
+    this.upV.copy(this.middlePos.clone().sub(this.downPos));
     this.upS.setFromVector3(this.upV);
+    this.upR.copy(this.getR(this.upV));
+    this.upPos.copy(this.middlePos.clone().add(this.upV));
+  }
+
+  /**
+   * Get each rotation angle as THREE.Vector3.
+   * x:
+   *   The rotation angle of upV around the x (right) axis.
+   *   This angle is right-handed and starts at positive y.
+   * y:
+   *   The rotation angle of upV around the y (up) axis.
+   *   This angle is right-handed and starts at positive z.
+   * z:
+   *   The rotation angle of upV around the z (front) axis.
+   *   This angle is right-handed and starts at positive x.
+   *
+   * @param {THREE.Vector3} v
+   * @returns {THREE.Vector3}
+   */
+  getR(v) {
+    return new THREE.Vector3(
+      this.toDegrees(Math.atan2(v.z, v.y)),
+      this.toDegrees(Math.atan2(v.x, v.z)),
+      this.toDegrees(Math.atan2(v.y, v.x))
+    );
+  }
+
+  /**
+   * Convert radians to degrees.
+   *
+   * @param {number} radians
+   * @returns {number}
+   */
+  toDegrees(radians) {
+    return (radians * 180) / Math.PI;
+  }
+  /**
+   * Convert degrees to radians.
+   *
+   * @param {number} degrees
+   * @returns {number}
+   */
+  toRadians(degrees) {
+    return (degrees * Math.PI) / 180;
   }
 }
