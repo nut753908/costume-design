@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { ControlPoint3 } from "../math/control-point-3";
+import { ControlPoint3 } from "../math/control-point-3.js";
 
 /**
  * @param {GUI} gui
@@ -23,7 +23,7 @@ function getUpdateGeometry(geometry) {
   return function updateGeometry(cp) {
     const vertices = [
       ...cp.upPos.toArray(),
-      ...cp.offset.toArray(),
+      ...cp.middlePos.toArray(),
       ...cp.downPos.toArray(),
     ];
     geometry.setAttribute(
