@@ -414,8 +414,9 @@ export class ControlPoint3 {
 
   /**
    * Safely calculate Math.asin().
-   * If the input value is greater than 1, returns 1.5707963267948966 (π/2) instead of NaN.
-   * If the input value is less than -1, returns -1.5707963267948966 (-π/2) instead of NaN.
+   * If the hypotenuse is 0, return 0 instead of NaN.
+   * If the result of "opposite / hypotenuse" is greater than 1, return 1.5707963267948966 (π/2) instead of NaN.
+   * If the result of "opposite / hypotenuse" is less than -1, return -1.5707963267948966 (-π/2) instead of NaN.
    *
    * @param {number} opposite
    * @param {number} hypotenuse
@@ -427,8 +428,9 @@ export class ControlPoint3 {
   }
   /**
    * Safely calculate Math.acos().
-   * If the input value is greater than 1, returns 0 instead of NaN.
-   * If the input value is less than -1, returns 3.141592653589793 (π) instead of NaN.
+   * If the hypotenuse is 0, return 0 instead of NaN.
+   * If the result of "adjacent / hypotenuse" is greater than 1, return 0 instead of NaN.
+   * If the result of "adjacent / hypotenuse" is less than -1, return 3.141592653589793 (π) instead of NaN.
    *
    * @param {number} adjacent
    * @param {number} hypotenuse
@@ -439,7 +441,7 @@ export class ControlPoint3 {
     return Math.acos(this.clip(adjacent / hypotenuse, -1, 1));
   }
   /**
-   * Clip the input value to range [min, max].
+   * Clip the value to range [min, max].
    *
    * @param {number} value
    * @param {number} min
