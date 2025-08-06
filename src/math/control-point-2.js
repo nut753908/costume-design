@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { Circular } from "./circular.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { rotate180 } from "./utils.js";
 
 /**
  * A class representing a 2D control point of curve.
@@ -12,6 +13,7 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
  *   new THREE.Vector2(0, 0),
  *   new THREE.Vector2(1, 0),
  *   new THREE.Vector2(-1, 0),
+ *   true,
  *   true
  * );
  * ```
@@ -23,13 +25,15 @@ export class ControlPoint2 {
    * @param {THREE.Vector2} [middlePos] - The position of middle control point.
    * @param {THREE.Vector2} [leftPos] - The position of leftside control point.
    * @param {THREE.Vector2} [rightPos] - The position of rightside control point.
-   * @param {boolean} [isSync=true] - Whether to synchronize "left" and "right".
+   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "left" and "right" radius.
+   * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "left" and "right" angle.
    */
   constructor(
     middlePos = new THREE.Vector2(0, 0),
     leftPos = new THREE.Vector2(1, 0),
     rightPos = new THREE.Vector2(-1, 0),
-    isSync = true
+    isSyncRadius = true,
+    isSyncAngle = true
   ) {
     /**
      * The position of middle control point.
@@ -53,11 +57,18 @@ export class ControlPoint2 {
     this.initRight(rightPos);
 
     /**
-     * Whether to synchronize "up" and "down".
+     * Whether to synchronize the "left" and "right" radius.
      *
      * @type {boolean}
      */
-    this.isSync = isSync;
+    this.isSyncRadius = isSyncRadius;
+
+    /**
+     * Whether to synchronize the "left" and "right" angle.
+     *
+     * @type {boolean}
+     */
+    this.isSyncAngle = isSyncAngle;
   }
 
   /**
@@ -83,7 +94,8 @@ export class ControlPoint2 {
     this.rightPos.copy(other.rightPos);
     this.rightV.copy(other.rightV);
     this.rightC.copy(other.rightC);
-    this.isSync = other.isSync;
+    this.isSyncRadius = other.isSyncRadius;
+    this.isSyncAngle = other.isSyncAngle;
 
     return this;
   }
@@ -129,7 +141,8 @@ export class ControlPoint2 {
     const folder = gui.addFolder("cp");
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
-    folder.add(cp, "isSync");
+    folder.add(cp, "isSyncRadius");
+    folder.add(cp, "isSyncAngle");
     folder.add(cp.leftPos, "x", -1, 1).name("left.x").onChange(uLP);
     folder.add(cp.leftPos, "y", -1, 1).name("left.y").onChange(uLP);
     folder.add(cp.leftC, "radius", 0, 1).name("left.radius").onChange(uLS);
@@ -191,7 +204,7 @@ export class ControlPoint2 {
   updateFromLeftPos() {
     this.leftV.copy(this.leftPos.clone().sub(this.middlePos));
     this.leftC.setFromVector2(this.leftV);
-    if (this.isSync) this.syncLeftToRight();
+    this.syncLeftToRight();
   }
   /**
    * Update "leftV" and "leftPos" from "leftC".
@@ -200,7 +213,7 @@ export class ControlPoint2 {
   updateFromLeftC() {
     this.leftV.set(this.leftC.x(), this.leftC.y());
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
-    if (this.isSync) this.syncLeftToRight();
+    this.syncLeftToRight();
   }
   /**
    * Update "rightV" and "rightC" from "rightPos".
@@ -209,7 +222,7 @@ export class ControlPoint2 {
   updateFromRightPos() {
     this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
     this.rightC.setFromVector2(this.rightV);
-    if (this.isSync) this.syncRightToLeft();
+    this.syncRightToLeft();
   }
   /**
    * Update "rightV" and "rightPos" from "rightC".
@@ -218,25 +231,27 @@ export class ControlPoint2 {
   updateFromRightC() {
     this.rightV.set(this.rightC.x(), this.rightC.y());
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
-    if (this.isSync) this.syncRightToLeft();
+    this.syncRightToLeft();
   }
 
   /**
    * Synchronize from "left" to "right" with reversing the direction.
    */
   syncLeftToRight() {
-    this.rightV.copy(this.leftV.clone().negate());
-    this.rightC.setFromVector2(this.rightV);
-    this.rightC.radius = this.leftC.radius; // Avoid float rounding errors.
+    if (!this.isSyncRadius && !this.isSyncAngle) return;
+    if (this.isSyncRadius) this.rightC.radius = this.leftC.radius;
+    if (this.isSyncAngle) this.rightC.angle = rotate180(this.leftC.angle);
+    this.rightV.set(this.rightC.x(), this.rightC.y());
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
    * Synchronize from "right" to "left" with reversing the direction.
    */
   syncRightToLeft() {
-    this.leftV.copy(this.rightV.clone().negate());
-    this.leftC.setFromVector2(this.leftV);
-    this.leftC.radius = this.rightC.radius; // Avoid float rounding errors.
+    if (!this.isSyncRadius && !this.isSyncAngle) return;
+    if (this.isSyncRadius) this.leftC.radius = this.rightC.radius;
+    if (this.isSyncAngle) this.leftC.angle = rotate180(this.rightC.angle);
+    this.leftV.set(this.leftC.x(), this.leftC.y());
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
   }
 }
