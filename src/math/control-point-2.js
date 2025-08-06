@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { Circular } from "./circular.js";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 /**
  * A class representing a 2D control point of curve.
@@ -112,5 +113,130 @@ export class ControlPoint2 {
     this.rightPos = rightPos;
     this.rightV = rightPos.clone().sub(this.middlePos);
     this.rightC = new Circular().setFromVector2(this.rightV);
+  }
+
+  /**
+   * Set GUI with updateGeometry.
+   *
+   * @param {GUI} gui
+   * @param {(cp:ControlPoint2)=>void} updateGeometry - A callback that can update the geometry.
+   */
+  setGUI(gui, updateGeometry) {
+    const cp = this;
+
+    updateGeometry(cp); // First, update the geometry.
+
+    const folder = gui.addFolder("cp");
+    folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
+    folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
+    folder.add(cp, "isSync");
+    folder.add(cp.leftPos, "x", -1, 1).name("left.x").onChange(uLP);
+    folder.add(cp.leftPos, "y", -1, 1).name("left.y").onChange(uLP);
+    folder.add(cp.leftC, "radius", 0, 1).name("left.radius").onChange(uLS);
+    folder.add(cp.leftC, "angle", 0, 360).name("left.angle").onChange(uLS);
+    folder.addFolder("---").close(); // separator
+    folder.add(cp.rightPos, "x", -1, 1).name("right.x").onChange(uRP);
+    folder.add(cp.rightPos, "y", -1, 1).name("right.y").onChange(uRP);
+    folder.add(cp.rightC, "radius", 0, 1).name("right.radius").onChange(uRS);
+    folder.add(cp.rightC, "angle", 0, 360).name("right.angle").onChange(uRS);
+
+    const upDownControllers = folder.controllers.filter(
+      (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
+    );
+
+    function uMP() /* updateFromMiddlePos */ {
+      updateFrom("middlePos");
+    }
+    function uLP() /* updateFromLeftPos */ {
+      updateFrom("leftPos");
+    }
+    function uLS() /* updateFromLeftC */ {
+      updateFrom("leftC");
+    }
+    function uRP() /* updateFromRightPos */ {
+      updateFrom("rightPos");
+    }
+    function uRS() /* updateFromRightC */ {
+      updateFrom("rightC");
+    }
+    /**
+     * @param {"middlePos"|"leftPos"|"leftC"|"leftPos"|"leftC"} key - A key to pass to this.updateFrom.
+     */
+    function updateFrom(key) {
+      cp.updateFrom[key]();
+      updateGeometry(cp);
+      upDownControllers.forEach((c) => c.updateDisplay());
+    }
+  }
+
+  updateFrom = {
+    middlePos: () => this.updateFromMiddlePos(),
+    leftPos: () => this.updateFromLeftPos(),
+    leftC: () => this.updateFromLeftC(),
+    rightPos: () => this.updateFromRightPos(),
+    rightC: () => this.updateFromRightC(),
+  };
+
+  /**
+   * Update "leftPos" and "rightPos" from "middlePos".
+   */
+  updateFromMiddlePos() {
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
+  }
+  /**
+   * Update "leftV" and "leftC" from "leftPos".
+   * Then synchronize from "left" to "right" only if this.isSync = true.
+   */
+  updateFromLeftPos() {
+    this.leftV.copy(this.leftPos.clone().sub(this.middlePos));
+    this.leftC.setFromVector2(this.leftV);
+    if (this.isSync) this.syncLeftToRight();
+  }
+  /**
+   * Update "leftV" and "leftPos" from "leftC".
+   * Then synchronize from "left" to "right" only if this.isSync = true.
+   */
+  updateFromLeftC() {
+    this.leftV.set(this.leftC.x(), this.leftC.y());
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    if (this.isSync) this.syncLeftToRight();
+  }
+  /**
+   * Update "rightV" and "rightC" from "rightPos".
+   * Then synchronize from "right" to "left" only if this.isSync = true.
+   */
+  updateFromRightPos() {
+    this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
+    this.rightC.setFromVector2(this.rightV);
+    if (this.isSync) this.syncRightToLeft();
+  }
+  /**
+   * Update "rightV" and "rightPos" from "rightC".
+   * Then synchronize from "right" to "left" only if this.isSync = true.
+   */
+  updateFromRightC() {
+    this.rightV.set(this.rightC.x(), this.rightC.y());
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
+    if (this.isSync) this.syncRightToLeft();
+  }
+
+  /**
+   * Synchronize from "left" to "right" with reversing the direction.
+   */
+  syncLeftToRight() {
+    this.rightV.copy(this.leftV.clone().negate());
+    this.rightC.setFromVector2(this.rightV);
+    this.rightC.radius = this.leftC.radius; // Avoid float rounding errors.
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
+  }
+  /**
+   * Synchronize from "right" to "left" with reversing the direction.
+   */
+  syncRightToLeft() {
+    this.leftV.copy(this.rightV.clone().negate());
+    this.leftC.setFromVector2(this.leftV);
+    this.leftC.radius = this.rightC.radius; // Avoid float rounding errors.
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
   }
 }

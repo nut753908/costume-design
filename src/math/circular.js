@@ -76,9 +76,12 @@ export class Circular {
    * Set radius and angle from THREE.Vector2 v.
    *
    * @param {THREE.Vector2} v
+   * @returns {Circular}
    */
   setFromVector2(v) {
     this.radius = Math.sqrt(v.x ** 2 + v.y ** 2);
     this.angle = THREE.MathUtils.radToDeg(Math.atan2(-v.y, -v.x) + Math.PI);
+
+    return this;
   }
 }
