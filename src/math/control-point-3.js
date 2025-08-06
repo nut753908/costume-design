@@ -24,14 +24,14 @@ export class ControlPoint3 {
    * @param {THREE.Vector3} [middlePos] - The position of middle control point.
    * @param {THREE.Vector3} [upPos] - The position of upside control point.
    * @param {THREE.Vector3} [downPos] - The position of downside control point.
-   * @param {boolean} [isSync=true] - Whether to synchronize "up" and "down".
+   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "up" and "down" radius.
    * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "up" and "down" angle.
    */
   constructor(
     middlePos = new THREE.Vector3(0, 0, 0),
     upPos = new THREE.Vector3(0, 1, 0),
     downPos = new THREE.Vector3(0, -1, 0),
-    isSync = true,
+    isSyncRadius = true,
     isSyncAngle = true
   ) {
     /**
@@ -56,11 +56,11 @@ export class ControlPoint3 {
     this.initDown(downPos);
 
     /**
-     * Whether to synchronize "up" and "down".
+     * Whether to synchronize the "up" and "down" radius.
      *
      * @type {boolean}
      */
-    this.isSync = isSync;
+    this.isSyncRadius = isSyncRadius;
 
     /**
      * Whether to synchronize the "up" and "down" angle.
@@ -95,7 +95,7 @@ export class ControlPoint3 {
     this.downV.copy(other.downV);
     this.downS.copy(other.downS);
     this.downR.copy(other.downR);
-    this.isSync = other.isSync;
+    this.isSyncRadius = other.isSyncRadius;
     this.isSyncAngle = other.isSyncAngle;
 
     return this;
@@ -153,7 +153,7 @@ export class ControlPoint3 {
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
     folder.add(cp.middlePos, "z", -1, 1).name("middle.z").onChange(uMP);
-    folder.add(cp, "isSync");
+    folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
     folder.add(cp.upPos, "x", -1, 1).name("up.x").onChange(uUP);
     folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
@@ -247,11 +247,7 @@ export class ControlPoint3 {
     this.upV.copy(this.upPos.clone().sub(this.middlePos));
     this.upS.setFromVector3(this.upV);
     this.upR.copy(this.getR(this.upV));
-    if (this.isSync) {
-      this.syncUpToDown();
-    } else if (this.isSyncAngle) {
-      this.syncUpToDownOnAngle();
-    }
+    this.syncUpToDown();
   }
   /**
    * Update "upV", "upR" and "upPos" from "upS".
@@ -261,11 +257,7 @@ export class ControlPoint3 {
     this.upV.setFromSpherical(this.upS);
     this.upR.copy(this.getR(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
-    if (this.isSync) {
-      this.syncUpToDown();
-    } else if (this.isSyncAngle) {
-      this.syncUpToDownOnAngle();
-    }
+    this.syncUpToDown();
   }
   /**
    * Update "upS" from "upRx" and the previous "upS" and call updateFromUpS().
@@ -310,11 +302,7 @@ export class ControlPoint3 {
     this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
     this.downR.copy(this.getR(this.downV));
-    if (this.isSync) {
-      this.syncDownToUp();
-    } else if (this.isSyncAngle) {
-      this.syncDownToUpOnAngle();
-    }
+    this.syncDownToUp();
   }
   /**
    * Update "downV", "downR" and "downPos" from "downS".
@@ -324,11 +312,7 @@ export class ControlPoint3 {
     this.downV.setFromSpherical(this.downS);
     this.downR.copy(this.getR(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
-    if (this.isSync) {
-      this.syncDownToUp();
-    } else if (this.isSyncAngle) {
-      this.syncDownToUpOnAngle();
-    }
+    this.syncDownToUp();
   }
   /**
    * Update "downS" from "downRx" and the previous "downS" and call updateFromDownS().
@@ -370,18 +354,12 @@ export class ControlPoint3 {
    * Synchronize from "up" to "down" with reversing the direction.
    */
   syncUpToDown() {
-    this.downV.copy(this.upV.clone().negate());
-    this.downS.setFromVector3(this.downV);
-    this.downS.radius = this.upS.radius; // Avoid float rounding errors.
-    this.downR.copy(this.getR(this.downV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
-  }
-  /**
-   * Synchronize the angle from "up" to "down" with reversing the direction.
-   */
-  syncUpToDownOnAngle() {
-    this.downS.phi = reversePI(this.upS.phi);
-    this.downS.theta = rotatePI(this.upS.theta);
+    if (!this.isSyncRadius && !this.isSyncAngle) return;
+    if (this.isSyncRadius) this.downS.radius = this.upS.radius;
+    if (this.isSyncAngle) {
+      this.downS.phi = reversePI(this.upS.phi);
+      this.downS.theta = rotatePI(this.upS.theta);
+    }
     this.downV.setFromSpherical(this.downS);
     this.downR.copy(this.getR(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
@@ -390,18 +368,12 @@ export class ControlPoint3 {
    * Synchronize from "down" to "up" with reversing the direction.
    */
   syncDownToUp() {
-    this.upV.copy(this.downV.clone().negate());
-    this.upS.setFromVector3(this.upV);
-    this.upS.radius = this.downS.radius; // Avoid float rounding errors.
-    this.upR.copy(this.getR(this.upV));
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
-  }
-  /**
-   * Synchronize the angle from "down" to "up" with reversing the direction.
-   */
-  syncDownToUpOnAngle() {
-    this.upS.phi = reversePI(this.downS.phi);
-    this.upS.theta = rotatePI(this.downS.theta);
+    if (!this.isSyncRadius && !this.isSyncAngle) return;
+    if (this.isSyncRadius) this.upS.radius = this.downS.radius;
+    if (this.isSyncAngle) {
+      this.upS.phi = reversePI(this.downS.phi);
+      this.upS.theta = rotatePI(this.downS.theta);
+    }
     this.upV.setFromSpherical(this.upS);
     this.upR.copy(this.getR(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
