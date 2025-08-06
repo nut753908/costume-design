@@ -269,9 +269,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    const theta0 = safeAcos(z, r_zx);
-    this.upS.theta = x > 0 ? theta0 : 2 * Math.PI - theta0;
+    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromUpS();
   }
   /**
@@ -291,9 +289,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    const theta0 = safeAcos(z, r_zx);
-    this.upS.theta = x > 0 ? theta0 : 2 * Math.PI - theta0;
+    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromUpS();
   }
   /**
@@ -326,9 +322,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Rx);
     const z = r_yz * Math.sin(Rx);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    const theta0 = safeAcos(z, r_zx);
-    this.downS.theta = x > 0 ? theta0 : 2 * Math.PI - theta0;
+    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromDownS();
   }
   /**
@@ -348,9 +342,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Rz);
     const y = r_xy * Math.sin(Rz);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    const theta0 = safeAcos(z, r_zx);
-    this.downS.theta = x > 0 ? theta0 : 2 * Math.PI - theta0;
+    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromDownS();
   }
 
