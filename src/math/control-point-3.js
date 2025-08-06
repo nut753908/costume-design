@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { safeAsin, safeAcos, reversePI, rotatePI } from "./utils.js";
+import { safeAcos, reversePI, rotatePI } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
