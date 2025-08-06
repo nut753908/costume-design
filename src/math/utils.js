@@ -28,3 +28,33 @@ export function safeAcos(adjacent, hypotenuse) {
   if (hypotenuse === 0) return 0;
   return Math.acos(THREE.MathUtils.clamp(adjacent / hypotenuse, -1, 1));
 }
+
+/**
+ * Get the reversed angle in the range [0,π].
+ *
+ * @param {number} angle - The angle in radians.
+ * @returns {number} The reversed angle in radians.
+ */
+export function reversePI(angle) {
+  return Math.PI - angle;
+}
+
+/**
+ * Get the angle rotated π in the range [0,2π].
+ *
+ * @param {number} angle - The angle in radians.
+ * @returns {number} The rotated angle in radians.
+ */
+export function rotatePI(angle) {
+  return angle < Math.PI ? angle + Math.PI : angle - Math.PI;
+}
+
+/**
+ * Get the angle rotated 180 degrees in tha range [0,360].
+ *
+ * @param {number} angle - The angle in degrees.
+ * @returns {number} - The rotated angle in degrees.
+ */
+export function rotate180(angle) {
+  return angle < 180 ? angle + 180 : angle - 180;
+}
