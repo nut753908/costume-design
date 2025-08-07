@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "./utils.js";
+import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
 
 /**
  * A class representing a 3D control point of curve.
  *
  * ```js
- * import { ControlPoint3 } from "./src/math/control-point-3.js";
+ * import { ControlPoint3 } from "./src/curve/control-point-3.js";
  * const cp = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(0, 1, 0),
