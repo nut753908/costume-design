@@ -11,8 +11,8 @@ import { rotate180 } from "../math/utils.js";
  * import { ControlPoint2 } from "./src/curve/control-point-2.js";
  * const cp = new ControlPoint2(
  *   new THREE.Vector2(0, 0),
- *   new THREE.Vector2(1, 0),
  *   new THREE.Vector2(-1, 0),
+ *   new THREE.Vector2(1, 0),
  *   true,
  *   true
  * );
@@ -30,8 +30,8 @@ export class ControlPoint2 {
    */
   constructor(
     middlePos = new THREE.Vector2(0, 0),
-    leftPos = new THREE.Vector2(1, 0),
-    rightPos = new THREE.Vector2(-1, 0),
+    leftPos = new THREE.Vector2(-1, 0),
+    rightPos = new THREE.Vector2(1, 0),
     isSyncRadius = true,
     isSyncAngle = true
   ) {
