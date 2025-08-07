@@ -153,7 +153,7 @@ export class ControlPoint2 {
     folder.add(cp.rightC, "radius", 0, 1).name("right.radius").onChange(uRS);
     folder.add(cp.rightC, "angle", 0, 360).name("right.angle").onChange(uRS);
 
-    const upDownControllers = folder.controllers.filter(
+    const leftRightControllers = folder.controllers.filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
@@ -178,7 +178,7 @@ export class ControlPoint2 {
     function updateFrom(key) {
       cp.updateFrom[key]();
       updateGeometry(cp);
-      upDownControllers.forEach((c) => c.updateDisplay());
+      leftRightControllers.forEach((c) => c.updateDisplay());
     }
   }
 
