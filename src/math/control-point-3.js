@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { safeAcos, reversePI, rotatePI } from "./utils.js";
+import { safeAcos, atan2_2PI, reversePI, rotatePI } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -267,7 +267,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
+    this.upS.theta = atan2_2PI(x, z);
     this.updateFromUpS();
   }
   /**
@@ -287,7 +287,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
+    this.upS.theta = atan2_2PI(x, z);
     this.updateFromUpS();
   }
   /**
@@ -318,7 +318,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
+    this.downS.theta = atan2_2PI(x, z);
     this.updateFromDownS();
   }
   /**
@@ -338,7 +338,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
+    this.downS.theta = atan2_2PI(x, z);
     this.updateFromDownS();
   }
 
@@ -390,9 +390,9 @@ export class ControlPoint3 {
    */
   getA(v) {
     return new THREE.Vector3(
-      THREE.MathUtils.radToDeg(Math.atan2(-v.z, -v.y) + Math.PI),
-      THREE.MathUtils.radToDeg(Math.atan2(-v.x, -v.z) + Math.PI),
-      THREE.MathUtils.radToDeg(Math.atan2(-v.y, -v.x) + Math.PI)
+      THREE.MathUtils.radToDeg(atan2_2PI(v.z, v.y)),
+      THREE.MathUtils.radToDeg(atan2_2PI(v.x, v.z)),
+      THREE.MathUtils.radToDeg(atan2_2PI(v.y, v.x))
     );
   }
 }

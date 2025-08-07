@@ -30,6 +30,17 @@ export function safeAcos(adjacent, hypotenuse) {
 }
 
 /**
+ * Calculate atan2 with the result in the range [0,2π].
+ *
+ * @param {number} y
+ * @param {number} x
+ * @returns {number}
+ */
+export function atan2_2PI(y, x) {
+  return Math.atan2(-y, -x) + Math.PI;
+}
+
+/**
  * Get the reversed angle in the range [0,π].
  *
  * @param {number} angle - The angle in radians.
