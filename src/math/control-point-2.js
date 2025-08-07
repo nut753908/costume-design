@@ -199,7 +199,6 @@ export class ControlPoint2 {
   }
   /**
    * Update "leftV" and "leftC" from "leftPos".
-   * Then synchronize from "left" to "right" only if this.isSync = true.
    */
   updateFromLeftPos() {
     this.leftV.copy(this.leftPos.clone().sub(this.middlePos));
@@ -208,7 +207,6 @@ export class ControlPoint2 {
   }
   /**
    * Update "leftV" and "leftPos" from "leftC".
-   * Then synchronize from "left" to "right" only if this.isSync = true.
    */
   updateFromLeftC() {
     this.leftV.set(this.leftC.x(), this.leftC.y());
@@ -217,7 +215,6 @@ export class ControlPoint2 {
   }
   /**
    * Update "rightV" and "rightC" from "rightPos".
-   * Then synchronize from "right" to "left" only if this.isSync = true.
    */
   updateFromRightPos() {
     this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
@@ -226,7 +223,6 @@ export class ControlPoint2 {
   }
   /**
    * Update "rightV" and "rightPos" from "rightC".
-   * Then synchronize from "right" to "left" only if this.isSync = true.
    */
   updateFromRightC() {
     this.rightV.set(this.rightC.x(), this.rightC.y());
@@ -235,7 +231,8 @@ export class ControlPoint2 {
   }
 
   /**
-   * Synchronize from "left" to "right" with reversing the direction.
+   * Synchronize from "left" to "right" with reversing the direction
+   * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
   syncLeftToRight() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
@@ -245,7 +242,8 @@ export class ControlPoint2 {
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
-   * Synchronize from "right" to "left" with reversing the direction.
+   * Synchronize from "right" to "left" with reversing the direction
+   * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
   syncRightToLeft() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
