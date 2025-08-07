@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { ControlPoint2 } from "../math/control-point-2.js";
+import { ControlPoint2 } from "../curve/control-point-2.js";
 
 /**
  * @param {GUI} gui

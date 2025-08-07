@@ -7,9 +7,9 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 import { createControlPoint3Group } from "./object-3d/group/control-point-3.js";
-import { ControlPoint3 } from "./math/control-point-3.js";
+import { ControlPoint3 } from "./curve/control-point-3.js";
 // import { createControlPoint2Group } from "./object-3d/group/control-point-2.js";
-// import { ControlPoint2 } from "./math/control-point-2.js";
+// import { ControlPoint2 } from "./curve/control-point-2.js";
 
 let renderer, camera, gizmo, scene;
 

@@ -1,14 +1,14 @@
 import * as THREE from "three";
 
-import { Circular } from "./circular.js";
+import { Circular } from "../math/circular.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { rotate180 } from "./utils.js";
+import { rotate180 } from "../math/utils.js";
 
 /**
  * A class representing a 2D control point of curve.
  *
  * ```js
- * import { ControlPoint2 } from "./src/math/control-point-2.js";
+ * import { ControlPoint2 } from "./src/curve/control-point-2.js";
  * const cp = new ControlPoint2(
  *   new THREE.Vector2(0, 0),
  *   new THREE.Vector2(1, 0),
