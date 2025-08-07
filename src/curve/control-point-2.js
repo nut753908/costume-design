@@ -72,35 +72,6 @@ export class ControlPoint2 {
   }
 
   /**
-   * Returns a new ControlPoint2 with copied values from this instance.
-   *
-   * @returns {ControlPoint2} A clone of this instance.
-   */
-  clone() {
-    return new this.constructor().copy(this);
-  }
-
-  /**
-   * Copies the values of the given ControlPoint2 to this instance.
-   *
-   * @param {ControlPoint2} other - The ControlPoint2 to copy.
-   * @returns {ControlPoint2} A reference to this ControlPoint2.
-   */
-  copy(other) {
-    this.middlePos.copy(other.middlePos);
-    this.leftPos.copy(other.leftPos);
-    this.leftV.copy(other.leftV);
-    this.leftC.copy(other.leftC);
-    this.rightPos.copy(other.rightPos);
-    this.rightV.copy(other.rightV);
-    this.rightC.copy(other.rightC);
-    this.isSyncRadius = other.isSyncRadius;
-    this.isSyncAngle = other.isSyncAngle;
-
-    return this;
-  }
-
-  /**
    * Initialize "left".
    * "leftV" is "leftPos - middlePos" and its type is THREE.'V'ector2.
    * "leftC" is "leftPos - middlePos" and its type is 'C'ircular.
@@ -251,5 +222,75 @@ export class ControlPoint2 {
     if (this.isSyncAngle) this.leftC.angle = rotate180(this.rightC.angle);
     this.leftV.set(this.leftC.x(), this.leftC.y());
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+  }
+
+  /**
+   * Returns a new ControlPoint2 with copied values from this instance.
+   *
+   * @returns {ControlPoint2} A clone of this instance.
+   */
+  clone() {
+    return new this.constructor().copy(this);
+  }
+
+  /**
+   * Copies the values of the given ControlPoint2 to this instance.
+   *
+   * @param {ControlPoint2} source - The ControlPoint2 to copy.
+   * @returns {ControlPoint2} A reference to this ControlPoint2.
+   */
+  copy(source) {
+    this.middlePos.copy(source.middlePos);
+    this.leftPos.copy(source.leftPos);
+    this.leftV.copy(source.leftV);
+    this.leftC.copy(source.leftC);
+    this.rightPos.copy(source.rightPos);
+    this.rightV.copy(source.rightV);
+    this.rightC.copy(source.rightC);
+    this.isSyncRadius = source.isSyncRadius;
+    this.isSyncAngle = source.isSyncAngle;
+
+    return this;
+  }
+
+  /**
+   * Serializes the ControlPoint2 into JSON.
+   *
+   * @return {Object} A JSON object representing the serialized ControlPoint2.
+   */
+  toJSON() {
+    const data = {};
+
+    data.middlePos = this.middlePos.toArray();
+    data.leftPos = this.leftPos.toArray();
+    data.leftV = this.leftV.toArray();
+    data.leftC = this.leftC.toJSON();
+    data.rightPos = this.rightPos.toArray();
+    data.rightV = this.rightV.toArray();
+    data.rightC = this.rightC.toJSON();
+    data.isSyncRadius = this.isSyncRadius;
+    data.isSyncAngle = this.isSyncAngle;
+
+    return data;
+  }
+
+  /**
+   * Deserializes the ControlPoint2 from the given JSON.
+   *
+   * @param {Object} json - The JSON holding the serialized ControlPoint2.
+   * @return {ControlPoint2} A reference to this ControlPoint2.
+   */
+  fromJSON(json) {
+    this.middlePos.fromArray(json.middlePos);
+    this.leftPos.fromArray(json.leftPos);
+    this.leftV.fromArray(json.leftV);
+    this.leftC.fromJSON(json.leftC);
+    this.rightPos.fromArray(json.rightPos);
+    this.rightV.fromArray(json.rightV);
+    this.rightC.fromJSON(json.rightC);
+    this.isSyncRadius = json.isSyncRadius;
+    this.isSyncAngle = json.isSyncAngle;
+
+    return this;
   }
 }

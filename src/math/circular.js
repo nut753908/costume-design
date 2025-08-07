@@ -36,28 +36,6 @@ export class Circular {
   }
 
   /**
-   * Returns a new circular with copied values from this instance.
-   *
-   * @returns {Circular} A clone of this instance.
-   */
-  clone() {
-    return new this.constructor().copy(this);
-  }
-
-  /**
-   * Copies the values of the given circular to this instance.
-   *
-   * @param {Circular} other - The circular to copy.
-   * @returns {Circular} A reference to this circular.
-   */
-  copy(other) {
-    this.radius = other.radius;
-    this.angle = other.angle;
-
-    return this;
-  }
-
-  /**
    * Get the x value as Cartesian coordinate.
    *
    * @returns {number}
@@ -83,6 +61,55 @@ export class Circular {
   setFromVector2(v) {
     this.radius = Math.sqrt(v.x ** 2 + v.y ** 2);
     this.angle = THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x));
+
+    return this;
+  }
+
+  /**
+   * Returns a new circular with copied values from this instance.
+   *
+   * @returns {Circular} A clone of this instance.
+   */
+  clone() {
+    return new this.constructor().copy(this);
+  }
+
+  /**
+   * Copies the values of the given circular to this instance.
+   *
+   * @param {Circular} other - The circular to copy.
+   * @returns {Circular} A reference to this circular.
+   */
+  copy(other) {
+    this.radius = other.radius;
+    this.angle = other.angle;
+
+    return this;
+  }
+
+  /**
+   * Serializes the circular into JSON.
+   *
+   * @return {Object} A JSON object representing the serialized circular.
+   */
+  toJSON() {
+    const data = {};
+
+    data.radius = this.radius;
+    data.angle = this.angle;
+
+    return data;
+  }
+
+  /**
+   * Deserializes the circular from the given JSON.
+   *
+   * @param {Object} json - The JSON holding the serialized circular.
+   * @return {Circular} A reference to this circular.
+   */
+  fromJSON(json) {
+    this.radius = json.radius;
+    this.angle = json.angle;
 
     return this;
   }
