@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { safeAsin, safeAcos, reversePI, rotatePI } from "./utils.js";
+import { safeAcos, reversePI, rotatePI } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -90,11 +90,11 @@ export class ControlPoint3 {
     this.upPos.copy(other.upPos);
     this.upV.copy(other.upV);
     this.upS.copy(other.upS);
-    this.upR.copy(other.upR);
+    this.upA.copy(other.upA);
     this.downPos.copy(other.downPos);
     this.downV.copy(other.downV);
     this.downS.copy(other.downS);
-    this.downR.copy(other.downR);
+    this.downA.copy(other.downA);
     this.isSyncRadius = other.isSyncRadius;
     this.isSyncAngle = other.isSyncAngle;
 
@@ -105,10 +105,10 @@ export class ControlPoint3 {
    * Initialize "up".
    * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
    * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
-   * "upR" represents each rotation angle of "upV" as THREE.Vector3.
-   *   "upR.x" is the rotation angle around the x axis.
-   *   "upR.y" is the rotation angle around the y axis.
-   *   "upR.z" is the rotation angle around the z axis.
+   * "upA" represents each angle of "upV" as THREE.Vector3.
+   *   "upA.x" is the angle around the x axis.
+   *   "upA.y" is the angle around the y axis.
+   *   "upA.z" is the angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} upPos - The position of upside control point.
@@ -117,16 +117,16 @@ export class ControlPoint3 {
     this.upPos = upPos;
     this.upV = upPos.clone().sub(this.middlePos);
     this.upS = new THREE.Spherical().setFromVector3(this.upV);
-    this.upR = this.getR(this.upV);
+    this.upA = this.getA(this.upV);
   }
   /**
    * Initialize "down".
    * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
    * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
-   * "downR" represents each rotation angle of "downV" as THREE.Vector3.
-   *   "downR.x" is the rotation angle around the x axis.
-   *   "downR.y" is the rotation angle around the y axis.
-   *   "downR.z" is the rotation angle around the z axis.
+   * "downA" represents each angle of "downV" as THREE.Vector3.
+   *   "downA.x" is the angle around the x axis.
+   *   "downA.y" is the angle around the y axis.
+   *   "downA.z" is the angle around the z axis.
    * Call it only once in this constructor.
    *
    * @param {THREE.Vector3} downPos - The position of downside control point.
@@ -135,7 +135,7 @@ export class ControlPoint3 {
     this.downPos = downPos;
     this.downV = downPos.clone().sub(this.middlePos);
     this.downS = new THREE.Spherical().setFromVector3(this.downV);
-    this.downR = this.getR(this.downV);
+    this.downA = this.getA(this.downV);
   }
 
   /**
@@ -159,17 +159,17 @@ export class ControlPoint3 {
     folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
     folder.add(cp.upPos, "z", -1, 1).name("up.z").onChange(uUP);
     folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
-    folder.add(cp.upR, "x", 0, 360).name("up.Rx").onChange(uURx);
-    folder.add(cp.upR, "y", 0, 360).name("up.Ry").onChange(uURy);
-    folder.add(cp.upR, "z", 0, 360).name("up.Rz").onChange(uURz);
+    folder.add(cp.upA, "x", 0, 360).name("up.Ax").onChange(uUAx);
+    folder.add(cp.upA, "y", 0, 360).name("up.Ay").onChange(uUAy);
+    folder.add(cp.upA, "z", 0, 360).name("up.Az").onChange(uUAz);
     folder.addFolder("---").close(); // separator
     folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
     folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
     folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
     folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
-    folder.add(cp.downR, "x", 0, 360).name("down.Rx").onChange(uDRx);
-    folder.add(cp.downR, "y", 0, 360).name("down.Ry").onChange(uDRy);
-    folder.add(cp.downR, "z", 0, 360).name("down.Rz").onChange(uDRz);
+    folder.add(cp.downA, "x", 0, 360).name("down.Ax").onChange(uDAx);
+    folder.add(cp.downA, "y", 0, 360).name("down.Ay").onChange(uDAy);
+    folder.add(cp.downA, "z", 0, 360).name("down.Az").onChange(uDAz);
 
     const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
@@ -184,14 +184,14 @@ export class ControlPoint3 {
     function uUS() /* updateFromUpS */ {
       updateFrom("upS");
     }
-    function uURx() /* updateFromUpRx */ {
-      updateFrom("upRx");
+    function uUAx() /* updateFromUpAx */ {
+      updateFrom("upAx");
     }
-    function uURy() /* updateFromUpRy */ {
-      updateFrom("upRy");
+    function uUAy() /* updateFromUpAy */ {
+      updateFrom("upAy");
     }
-    function uURz() /* updateFromUpRz */ {
-      updateFrom("upRz");
+    function uUAz() /* updateFromUpAz */ {
+      updateFrom("upAz");
     }
     function uDP() /* updateFromDownPos */ {
       updateFrom("downPos");
@@ -199,17 +199,17 @@ export class ControlPoint3 {
     function uDS() /* updateFromDownS */ {
       updateFrom("downS");
     }
-    function uDRx() /* updateFromDownRx */ {
-      updateFrom("downRx");
+    function uDAx() /* updateFromDownAx */ {
+      updateFrom("downAx");
     }
-    function uDRy() /* updateFromDownRy */ {
-      updateFrom("downRy");
+    function uDAy() /* updateFromDownAy */ {
+      updateFrom("downAy");
     }
-    function uDRz() /* updateFromDownRz */ {
-      updateFrom("downRz");
+    function uDAz() /* updateFromDownAz */ {
+      updateFrom("downAz");
     }
     /**
-     * @param {"middlePos"|"upPos"|"upS"|"upRx"|"upRy"|"upRz"|"downPos"|"downS"|"downRx"|"downRy"|"downRz"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"upPos"|"upS"|"upAx"|"upAy"|"upAz"|"downPos"|"downS"|"downAx"|"downAy"|"downAz"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
@@ -222,14 +222,14 @@ export class ControlPoint3 {
     middlePos: () => this.updateFromMiddlePos(),
     upPos: () => this.updateFromUpPos(),
     upS: () => this.updateFromUpS(),
-    upRx: () => this.updateFromUpRx(),
-    upRy: () => this.updateFromUpRy(),
-    upRz: () => this.updateFromUpRz(),
+    upAx: () => this.updateFromUpAx(),
+    upAy: () => this.updateFromUpAy(),
+    upAz: () => this.updateFromUpAz(),
     downPos: () => this.updateFromDownPos(),
     downS: () => this.updateFromDownS(),
-    downRx: () => this.updateFromDownRx(),
-    downRy: () => this.updateFromDownRy(),
-    downRz: () => this.updateFromDownRz(),
+    downAx: () => this.updateFromDownAx(),
+    downAy: () => this.updateFromDownAy(),
+    downAz: () => this.updateFromDownAz(),
   };
 
   /**
@@ -240,118 +240,111 @@ export class ControlPoint3 {
     this.downPos.copy(this.middlePos.clone().add(this.downV));
   }
   /**
-   * Update "upV", "upS" and "upR" from "upPos".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upV", "upS" and "upA" from "upPos".
    */
   updateFromUpPos() {
     this.upV.copy(this.upPos.clone().sub(this.middlePos));
     this.upS.setFromVector3(this.upV);
-    this.upR.copy(this.getR(this.upV));
+    this.upA.copy(this.getA(this.upV));
     this.syncUpToDown();
   }
   /**
-   * Update "upV", "upR" and "upPos" from "upS".
-   * Then synchronize from "up" to "down" only if this.isSync = true.
+   * Update "upV", "upA" and "upPos" from "upS".
    */
   updateFromUpS() {
     this.upV.setFromSpherical(this.upS);
-    this.upR.copy(this.getR(this.upV));
+    this.upA.copy(this.getA(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
     this.syncUpToDown();
   }
   /**
-   * Update "upS" from "upRx" and the previous "upS" and call updateFromUpS().
+   * Update "upS" from "upAx" and the previous "upS" and call updateFromUpS().
    */
-  updateFromUpRx() {
+  updateFromUpAx() {
     const x = this.upV.x;
     const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
-    const Rx = THREE.MathUtils.degToRad(this.upR.x);
-    const y = r_yz * Math.cos(Rx);
-    const z = r_yz * Math.sin(Rx);
+    const Ax = THREE.MathUtils.degToRad(this.upA.x);
+    const y = r_yz * Math.cos(Ax);
+    const z = r_yz * Math.sin(Ax);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = safeAcos(z, r_zx);
+    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromUpS();
   }
   /**
-   * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
+   * Update "upS" from "upAy" and the previous "upS" and call updateFromUpS().
    */
-  updateFromUpRy() {
-    this.upS.theta = THREE.MathUtils.degToRad(this.upR.y);
+  updateFromUpAy() {
+    this.upS.theta = THREE.MathUtils.degToRad(this.upA.y);
     this.updateFromUpS();
   }
   /**
-   * Update "upS" from "upRy" and the previous "upS" and call updateFromUpS().
+   * Update "upS" from "upAy" and the previous "upS" and call updateFromUpS().
    */
-  updateFromUpRz() {
+  updateFromUpAz() {
     const z = this.upV.z;
     const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
-    const Rz = THREE.MathUtils.degToRad(this.upR.z);
-    const x = r_xy * Math.cos(Rz);
-    const y = r_xy * Math.sin(Rz);
+    const Az = THREE.MathUtils.degToRad(this.upA.z);
+    const x = r_xy * Math.cos(Az);
+    const y = r_xy * Math.sin(Az);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    const r_zx = this.upS.radius * Math.sin(this.upS.phi);
-    this.upS.theta = safeAsin(x, r_zx);
+    this.upS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromUpS();
   }
   /**
-   * Update "downV", "downS" and "downR" from "downPos".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
+   * Update "downV", "downS" and "downA" from "downPos".
    */
   updateFromDownPos() {
     this.downV.copy(this.downPos.clone().sub(this.middlePos));
     this.downS.setFromVector3(this.downV);
-    this.downR.copy(this.getR(this.downV));
+    this.downA.copy(this.getA(this.downV));
     this.syncDownToUp();
   }
   /**
-   * Update "downV", "downR" and "downPos" from "downS".
-   * Then synchronize from "down" to "up" only if this.isSync = true.
+   * Update "downV", "downA" and "downPos" from "downS".
    */
   updateFromDownS() {
     this.downV.setFromSpherical(this.downS);
-    this.downR.copy(this.getR(this.downV));
+    this.downA.copy(this.getA(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
     this.syncDownToUp();
   }
   /**
-   * Update "downS" from "downRx" and the previous "downS" and call updateFromDownS().
+   * Update "downS" from "downAx" and the previous "downS" and call updateFromDownS().
    */
-  updateFromDownRx() {
+  updateFromDownAx() {
     const x = this.downV.x;
     const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
-    const Rx = THREE.MathUtils.degToRad(this.downR.x);
-    const y = r_yz * Math.cos(Rx);
-    const z = r_yz * Math.sin(Rx);
+    const Ax = THREE.MathUtils.degToRad(this.downA.x);
+    const y = r_yz * Math.cos(Ax);
+    const z = r_yz * Math.sin(Ax);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = safeAcos(z, r_zx);
+    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromDownS();
   }
   /**
-   * Update "downS" from "downRy" and the previous "downS" and call updateFromDownS().
+   * Update "downS" from "downAy" and the previous "downS" and call updateFromDownS().
    */
-  updateFromDownRy() {
-    this.downS.theta = THREE.MathUtils.degToRad(this.downR.y);
+  updateFromDownAy() {
+    this.downS.theta = THREE.MathUtils.degToRad(this.downA.y);
     this.updateFromDownS();
   }
   /**
-   * Update "downS" from "downRz" and the previous "downS" and call updateFromDownS().
+   * Update "downS" from "downAz" and the previous "downS" and call updateFromDownS().
    */
-  updateFromDownRz() {
+  updateFromDownAz() {
     const z = this.downV.z;
     const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
-    const Rz = THREE.MathUtils.degToRad(this.downR.z);
-    const x = r_xy * Math.cos(Rz);
-    const y = r_xy * Math.sin(Rz);
+    const Az = THREE.MathUtils.degToRad(this.downA.z);
+    const x = r_xy * Math.cos(Az);
+    const y = r_xy * Math.sin(Az);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    const r_zx = this.downS.radius * Math.sin(this.downS.phi);
-    this.downS.theta = safeAsin(x, r_zx);
+    this.downS.theta = Math.atan2(-x, -z) + Math.PI;
     this.updateFromDownS();
   }
 
   /**
-   * Synchronize from "up" to "down" with reversing the direction.
+   * Synchronize from "up" to "down" with reversing the direction
+   * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
   syncUpToDown() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
@@ -361,11 +354,12 @@ export class ControlPoint3 {
       this.downS.theta = rotatePI(this.upS.theta);
     }
     this.downV.setFromSpherical(this.downS);
-    this.downR.copy(this.getR(this.downV));
+    this.downA.copy(this.getA(this.downV));
     this.downPos.copy(this.middlePos.clone().add(this.downV));
   }
   /**
-   * Synchronize from "down" to "up" with reversing the direction.
+   * Synchronize from "down" to "up" with reversing the direction
+   * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
   syncDownToUp() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
@@ -375,26 +369,26 @@ export class ControlPoint3 {
       this.upS.theta = rotatePI(this.downS.theta);
     }
     this.upV.setFromSpherical(this.upS);
-    this.upR.copy(this.getR(this.upV));
+    this.upA.copy(this.getA(this.upV));
     this.upPos.copy(this.middlePos.clone().add(this.upV));
   }
 
   /**
-   * Get each rotation angle as THREE.Vector3.
+   * Get each angle as THREE.Vector3.
    * x:
-   *   The rotation angle of upV around the x (right) axis.
+   *   The angle of upV around the x (right) axis.
    *   This angle is right-handed and starts at positive y.
    * y:
-   *   The rotation angle of upV around the y (up) axis.
+   *   The angle of upV around the y (up) axis.
    *   This angle is right-handed and starts at positive z.
    * z:
-   *   The rotation angle of upV around the z (front) axis.
+   *   The angle of upV around the z (front) axis.
    *   This angle is right-handed and starts at positive x.
    *
    * @param {THREE.Vector3} v
    * @returns {THREE.Vector3}
    */
-  getR(v) {
+  getA(v) {
     return new THREE.Vector3(
       THREE.MathUtils.radToDeg(Math.atan2(-v.z, -v.y) + Math.PI),
       THREE.MathUtils.radToDeg(Math.atan2(-v.x, -v.z) + Math.PI),
