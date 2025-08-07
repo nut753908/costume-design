@@ -19,6 +19,8 @@ export class Curve2 extends THREE.CurvePath {
   constructor(cps = []) {
     super();
 
+    this.type = "Curve2";
+
     /**
      * The 2D control points.
      *
