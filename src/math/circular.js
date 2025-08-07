@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { atan2_2PI } from "./utils.js";
+import { atan2In2PI } from "./utils.js";
 
 /**
  * A class representing a circular as 2D Polar coodinate.
@@ -82,7 +82,7 @@ export class Circular {
    */
   setFromVector2(v) {
     this.radius = Math.sqrt(v.x ** 2 + v.y ** 2);
-    this.angle = THREE.MathUtils.radToDeg(atan2_2PI(v.y, v.x));
+    this.angle = THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x));
 
     return this;
   }

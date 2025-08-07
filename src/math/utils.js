@@ -36,7 +36,7 @@ export function safeAcos(adjacent, hypotenuse) {
  * @param {number} x
  * @returns {number}
  */
-export function atan2_2PI(y, x) {
+export function atan2In2PI(y, x) {
   return Math.atan2(-y, -x) + Math.PI;
 }
 
@@ -46,7 +46,7 @@ export function atan2_2PI(y, x) {
  * @param {number} angle - The angle in radians.
  * @returns {number} The reversed angle in radians.
  */
-export function reversePI(angle) {
+export function reverseInPI(angle) {
   return Math.PI - angle;
 }
 

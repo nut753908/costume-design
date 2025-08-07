@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { safeAcos, atan2_2PI, reversePI, rotatePI } from "./utils.js";
+import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "./utils.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -267,7 +267,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = atan2_2PI(x, z);
+    this.upS.theta = atan2In2PI(x, z);
     this.updateFromUpS();
   }
   /**
@@ -287,7 +287,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
     this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = atan2_2PI(x, z);
+    this.upS.theta = atan2In2PI(x, z);
     this.updateFromUpS();
   }
   /**
@@ -318,7 +318,7 @@ export class ControlPoint3 {
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = atan2_2PI(x, z);
+    this.downS.theta = atan2In2PI(x, z);
     this.updateFromDownS();
   }
   /**
@@ -338,7 +338,7 @@ export class ControlPoint3 {
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
     this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = atan2_2PI(x, z);
+    this.downS.theta = atan2In2PI(x, z);
     this.updateFromDownS();
   }
 
@@ -350,7 +350,7 @@ export class ControlPoint3 {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
     if (this.isSyncRadius) this.downS.radius = this.upS.radius;
     if (this.isSyncAngle) {
-      this.downS.phi = reversePI(this.upS.phi);
+      this.downS.phi = reverseInPI(this.upS.phi);
       this.downS.theta = rotatePI(this.upS.theta);
     }
     this.downV.setFromSpherical(this.downS);
@@ -365,7 +365,7 @@ export class ControlPoint3 {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
     if (this.isSyncRadius) this.upS.radius = this.downS.radius;
     if (this.isSyncAngle) {
-      this.upS.phi = reversePI(this.downS.phi);
+      this.upS.phi = reverseInPI(this.downS.phi);
       this.upS.theta = rotatePI(this.downS.theta);
     }
     this.upV.setFromSpherical(this.upS);
@@ -390,9 +390,9 @@ export class ControlPoint3 {
    */
   getA(v) {
     return new THREE.Vector3(
-      THREE.MathUtils.radToDeg(atan2_2PI(v.z, v.y)),
-      THREE.MathUtils.radToDeg(atan2_2PI(v.x, v.z)),
-      THREE.MathUtils.radToDeg(atan2_2PI(v.y, v.x))
+      THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
+      THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
+      THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
     );
   }
 }
