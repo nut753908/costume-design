@@ -82,20 +82,12 @@ export class Curve2 extends THREE.CurvePath {
     const cp1 = this.cps[index - 1];
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
-    const centerPos = new THREE.Vector2(
-      (cp1.rightPos.x + cp3.leftPos.x) / 2,
-      (cp1.rightPos.y + cp3.leftPos.y) / 2
-    );
-    cp1.rightPos.x = (cp1.middlePos.x + cp1.rightPos.x) / 2;
-    cp1.rightPos.y = (cp1.middlePos.y + cp1.rightPos.y) / 2;
-    cp3.leftPos.x = (cp3.leftPos.x + cp3.middlePos.x) / 2;
-    cp3.leftPos.y = (cp3.leftPos.y + cp3.middlePos.y) / 2;
-    cp2.leftPos.x = (cp1.rightPos.x + centerPos.x) / 2;
-    cp2.leftPos.y = (cp1.rightPos.y + centerPos.y) / 2;
-    cp2.rightPos.x = (centerPos.x + cp3.leftPos.x) / 2;
-    cp2.rightPos.y = (centerPos.y + cp3.leftPos.y) / 2;
-    cp2.middlePos.x = (cp2.leftPos.x + cp2.rightPos.x) / 2;
-    cp2.middlePos.y = (cp2.leftPos.y + cp2.rightPos.y) / 2;
+    const centerPos = cp1.rightPos.clone().add(cp3.leftPos).divideScalar(2);
+    cp1.rightPos = cp1.middlePos.clone().add(cp1.rightPos).divideScalar(2);
+    cp3.leftPos = cp3.leftPos.clone().add(cp3.middlePos).divideScalar(2);
+    cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
+    cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
+    cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
   }
 
   /**
