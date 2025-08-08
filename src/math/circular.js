@@ -40,7 +40,7 @@ export class Circular {
    *
    * @returns {number}
    */
-  x() {
+  get x() {
     return this.radius * Math.cos(THREE.MathUtils.degToRad(this.angle));
   }
   /**
@@ -48,7 +48,7 @@ export class Circular {
    *
    * @returns {number}
    */
-  y() {
+  get y() {
     return this.radius * Math.sin(THREE.MathUtils.degToRad(this.angle));
   }
 
