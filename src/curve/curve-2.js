@@ -174,9 +174,10 @@ export class Curve2 extends THREE.CurvePath {
    * Create a 2D Cubic Bezier curve using both this.cps[index] and this.cps[index + 1].
    *
    * @param {number} index - The index of this.cps.
+   * @returns {THREE.CubicBezierCurve?}
    */
   createCurve(index) {
-    if (this.isInvalidIndex(index, this.cps.length - 2)) return;
+    if (this.isInvalidIndex(index, this.cps.length - 2)) return null;
     return new THREE.CubicBezierCurve(
       this.cps[index].middlePos.clone(),
       this.cps[index].rightPos.clone(),
