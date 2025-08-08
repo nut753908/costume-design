@@ -99,15 +99,16 @@ export class ControlPoint2 {
   }
 
   /**
-   * Set GUI with updateGeometry.
+   * Create geometry and set GUI.
    *
    * @param {GUI} gui
-   * @param {(cp:ControlPoint2)=>void} updateGeometry - A callback that can update the geometry.
+   * @returns {THREE.BufferGeometry}
    */
-  setGUI(gui, updateGeometry) {
+  createGeometry(gui) {
     const cp = this;
 
-    updateGeometry(cp); // First, update the geometry.
+    const geometry = new THREE.BufferGeometry();
+    geometry.setFromPoints(cp.getPoints());
 
     const folder = gui.addFolder("cp");
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
@@ -148,9 +149,20 @@ export class ControlPoint2 {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      updateGeometry(cp);
+      geometry.setFromPoints(cp.getPoints());
       leftRightControllers.forEach((c) => c.updateDisplay());
     }
+
+    return geometry;
+  }
+
+  /**
+   * Get points.
+   *
+   * @returns {Array<THREE.Vector2>}
+   */
+  getPoints() {
+    return [this.leftPos, this.middlePos, this.rightPos];
   }
 
   updateFrom = {
@@ -180,7 +192,7 @@ export class ControlPoint2 {
    * Update "leftV" and "leftPos" from "leftC".
    */
   updateFromLeftC() {
-    this.leftV.set(this.leftC.x(), this.leftC.y());
+    this.leftV.set(this.leftC.x, this.leftC.y);
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
     this.syncLeftToRight();
   }
@@ -196,7 +208,7 @@ export class ControlPoint2 {
    * Update "rightV" and "rightPos" from "rightC".
    */
   updateFromRightC() {
-    this.rightV.set(this.rightC.x(), this.rightC.y());
+    this.rightV.set(this.rightC.x, this.rightC.y);
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
     this.syncRightToLeft();
   }
@@ -209,7 +221,7 @@ export class ControlPoint2 {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
     if (this.isSyncRadius) this.rightC.radius = this.leftC.radius;
     if (this.isSyncAngle) this.rightC.angle = rotate180(this.leftC.angle);
-    this.rightV.set(this.rightC.x(), this.rightC.y());
+    this.rightV.set(this.rightC.x, this.rightC.y);
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
@@ -220,7 +232,7 @@ export class ControlPoint2 {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
     if (this.isSyncRadius) this.leftC.radius = this.rightC.radius;
     if (this.isSyncAngle) this.leftC.angle = rotate180(this.rightC.angle);
-    this.leftV.set(this.leftC.x(), this.leftC.y());
+    this.leftV.set(this.leftC.x, this.leftC.y);
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
   }
 

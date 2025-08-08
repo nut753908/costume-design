@@ -109,15 +109,16 @@ export class ControlPoint3 {
   }
 
   /**
-   * Set GUI with updateGeometry.
+   * Create geometry and set GUI.
    *
    * @param {GUI} gui
-   * @param {(cp:ControlPoint3)=>void} updateGeometry - A callback that can update the geometry.
+   * @returns {THREE.BufferGeometry}
    */
-  setGUI(gui, updateGeometry) {
+  createGeometry(gui) {
     const cp = this;
 
-    updateGeometry(cp); // First, update the geometry.
+    const geometry = new THREE.BufferGeometry();
+    geometry.setFromPoints(cp.getPoints());
 
     const folder = gui.addFolder("cp");
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
@@ -183,9 +184,20 @@ export class ControlPoint3 {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      updateGeometry(cp);
+      geometry.setFromPoints(cp.getPoints());
       upDownControllers.forEach((c) => c.updateDisplay());
     }
+
+    return geometry;
+  }
+
+  /**
+   * Get points.
+   *
+   * @returns {Array<THREE.Vector3>}
+   */
+  getPoints() {
+    return [this.upPos, this.middlePos, this.downPos];
   }
 
   updateFrom = {
