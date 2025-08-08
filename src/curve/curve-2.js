@@ -106,7 +106,7 @@ export class Curve2 extends THREE.CurvePath {
    * @returns {Array<number>}
    */
   get indexListI() {
-    return this.indexListR().slice(1);
+    return this.indexListR.slice(1);
   }
 
   /**
