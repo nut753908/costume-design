@@ -1,4 +1,4 @@
-import * as THREE from "three";
+// import * as THREE from "three";
 
 import { createRenderer, updateRenderer } from "./main/renderer.js";
 import { createCamera, updateCamera } from "./main/camera.js";
@@ -10,7 +10,6 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 import { ControlPoint3 } from "./curve/control-point-3.js";
 // import { ControlPoint2 } from "./curve/control-point-2.js";
-// import { Points } from "./math/points.js";
 import { createControlPointGroup } from "./object-3d/group/control-point.js";
 // import { Curve2 } from "./curve/curve-2.js";
 
@@ -36,8 +35,6 @@ async function init() {
   // createHairBundleGroup(gui, scene);
   const cp = new ControlPoint3();
   // const cp = new ControlPoint2();
-  // const cp = new Points();
-  // cp.getPoints();
   createControlPointGroup(gui, scene, cp);
 
   // const cp1 = new ControlPoint2(

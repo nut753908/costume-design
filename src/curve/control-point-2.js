@@ -1,6 +1,5 @@
 import * as THREE from "three";
 
-import { Points } from "../math/points.js";
 import { Circular } from "../math/circular.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { rotate180 } from "../math/utils.js";
@@ -19,7 +18,7 @@ import { rotate180 } from "../math/utils.js";
  * );
  * ```
  */
-export class ControlPoint2 extends Points {
+export class ControlPoint2 {
   /**
    * Constructs a new ControlPoint2.
    *
@@ -36,8 +35,6 @@ export class ControlPoint2 extends Points {
     isSyncRadius = true,
     isSyncAngle = true
   ) {
-    super();
-
     /**
      * The position of middle control point.
      *
@@ -102,15 +99,16 @@ export class ControlPoint2 extends Points {
   }
 
   /**
-   * Set GUI with updateGeometry.
+   * Create geometry and set GUI.
    *
    * @param {GUI} gui
-   * @param {(p:Points)=>void} updateGeometry - A callback that can update the geometry.
+   * @returns {THREE.BufferGeometry}
    */
-  setGUI(gui, updateGeometry) {
+  createGeometry(gui) {
     const cp = this;
 
-    updateGeometry(cp); // First, update the geometry.
+    const geometry = new THREE.BufferGeometry();
+    geometry.setFromPoints(cp.getPoints());
 
     const folder = gui.addFolder("cp");
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
@@ -151,9 +149,11 @@ export class ControlPoint2 extends Points {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      updateGeometry(cp);
+      geometry.setFromPoints(cp.getPoints());
       leftRightControllers.forEach((c) => c.updateDisplay());
     }
+
+    return geometry;
   }
 
   /**
