@@ -31,7 +31,6 @@ export class Curve2 extends THREE.CurvePath {
     this.fillAllCurves();
   }
 
-  // TODO: test
   /**
    * Fill all curves.
    */
@@ -48,7 +47,6 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // TODO: test
   /**
    * Add cp to this.cps[index] and fill curves as needed.
    *
@@ -91,7 +89,6 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // TODO: test
   /**
    * Remove this.cps[index] and fill curves as needed.
    *
@@ -130,7 +127,6 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // TODO: test
   /**
    * Update this.cps[index] and fill curves as needed.
    *
@@ -174,7 +170,6 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // TODO: test
   /**
    * Create a 2D Cubic Bezier curve using both this.cps[index] and this.cps[index + 1].
    *
@@ -182,7 +177,7 @@ export class Curve2 extends THREE.CurvePath {
    */
   createCurve(index) {
     if (this.isInvalidIndex(index, this.cps.length - 2)) return;
-    return new THREE.CubicBezierCurve3(
+    return new THREE.CubicBezierCurve(
       this.cps[index].middlePos.clone(),
       this.cps[index].rightPos.clone(),
       this.cps[index + 1].leftPos.clone(),
@@ -190,17 +185,20 @@ export class Curve2 extends THREE.CurvePath {
     );
   }
 
-  // TODO: test
   /**
-   * Whether the index is invalid.
+   * Whether the index (including the max) is invalid.
    *
    * @param {number} index - The index of this.cps.
    * @param {number} max - The max of the index.
    * @return {boolean}
    */
   isInvalidIndex(index, max) {
-    if (typeof index !== number) {
-      console.error(`the index(${index}) type is not number.`);
+    if (!Number.isInteger(index)) {
+      console.error(`the index(${index}) is not integer.`);
+      return true;
+    }
+    if (!Number.isInteger(max)) {
+      console.error(`the max(${max}) is not integer.`);
       return true;
     }
     if (index < 0 || index > max) {
