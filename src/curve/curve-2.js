@@ -33,7 +33,7 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Update curves.
+   * Update curves using this.cps.
    */
   updateCurves() {
     this.curves = [];
