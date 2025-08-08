@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
-import { sphericalFromJSON, sphericalToJSON } from "../math/spherical.js";
+import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
 
 /**
  * A class representing a 3D control point of curve.
