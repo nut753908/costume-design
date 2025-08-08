@@ -55,7 +55,7 @@ export class Curve2 extends THREE.CurvePath {
    * @param {ControlPoint2} cp
    */
   addCp(index, cp) {
-    if (this.isInvalidIndex(index, this.cps.length)) return;
+    if (this.isInvalidIndex(index, 0, this.cps.length)) return;
     this.cps.splice(index, 0, cp);
   }
 
@@ -65,7 +65,7 @@ export class Curve2 extends THREE.CurvePath {
    * @param {number} index - The index of this.cps.
    */
   removeCp(index) {
-    if (this.isInvalidIndex(index, this.cps.length - 1)) return;
+    if (this.isInvalidIndex(index, 0, this.cps.length - 1)) return;
     this.cps.splice(index, 1);
   }
 
@@ -76,28 +76,33 @@ export class Curve2 extends THREE.CurvePath {
    * @param {ControlPoint2} cp
    */
   updateCp(index, cp) {
-    if (this.isInvalidIndex(index, this.cps.length - 1)) return;
+    if (this.isInvalidIndex(index, 0, this.cps.length - 1)) return;
     this.cps[index].copy(cp);
   }
 
   /**
-   * Whether the index (including the max) is invalid.
+   * Whether the index (including the min and the max) is invalid.
    *
    * @param {number} index - The index of this.cps.
+   * @param {number} min - The min of the index.
    * @param {number} max - The max of the index.
    * @return {boolean}
    */
-  isInvalidIndex(index, max) {
+  isInvalidIndex(index, min, max) {
     if (!Number.isInteger(index)) {
       console.error(`the index(${index}) is not integer.`);
+      return true;
+    }
+    if (!Number.isInteger(min)) {
+      console.error(`the min(${min}) is not integer.`);
       return true;
     }
     if (!Number.isInteger(max)) {
       console.error(`the max(${max}) is not integer.`);
       return true;
     }
-    if (index < 0 || index > max) {
-      console.error(`the index(${index}) is out of range [0,${max}].`);
+    if (index < min || index > max) {
+      console.error(`the index(${index}) is out of range [${min},${max}].`);
       return true;
     }
     return false;
