@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { Points } from "../../math/points.js";
-import { createPointsGeometry } from "../../geometry/points.js";
+import { createGeometryFromPoints } from "../../geometry/points.js";
 import { createLineMaterial } from "../../material/line.js";
 import { createPointsMaterial } from "../../material/points.js";
 
@@ -16,7 +16,7 @@ export function createControlPointGroup(gui, scene, p) {
   const group = new THREE.Group();
   const folder = gui.addFolder("controlPointGroup");
 
-  const geometry = createPointsGeometry(folder, p);
+  const geometry = createGeometryFromPoints(folder, p);
 
   const lineMaterial = createLineMaterial(folder, 0x000000);
   const pointsMaterial = createPointsMaterial(folder, 0x000000);

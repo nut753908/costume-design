@@ -7,7 +7,7 @@ import { Points } from "../math/points.js";
  * @param {GUI} gui
  * @param {Points} p
  */
-export function createPointsGeometry(gui, p) {
+export function createGeometryFromPoints(gui, p) {
   const geometry = new THREE.BufferGeometry();
   p.setGUI(gui, getUpdateGeometry(geometry));
   return geometry;
