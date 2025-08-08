@@ -66,25 +66,25 @@ export class Curve2 extends THREE.CurvePath {
       //   this.cps.length : 2      -> 3(+1)
       //   this.cps        : [0, 1] -> [0(new), 1(+1), 2(+1)]
       //   this.curves     : [0]    -> [0(new), 1(+1)]
-      const curve = this.createCurve(0);
-      this.curves.splice(0, 0, curve);
+      const curve0 = this.createCurve(0);
+      this.curves.splice(0, 0, curve0);
     } else if (index === this.cps.length - 1) {
       // example:
       //   index           : 2      -> 2
       //   this.cps.length : 2      -> 3(+1)
       //   this.cps        : [0, 1] -> [0, 1, 2(new)]
       //   this.curves     : [0]    -> [0, 1(new)]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 0, curve);
+      const curve1 = this.createCurve(index - 1);
+      this.curves.splice(index - 1, 0, curve1);
     } else {
       // example:
       //   index           : 1      -> 1
       //   this.cps.length : 2      -> 3(+1)
       //   this.cps        : [0, 1] -> [0, 1(new), 2(+1)]
       //   this.curves     : [0]    -> [0(new), 1(new)]
-      const curve1 = this.createCurve(index - 1);
-      const curve2 = this.createCurve(index);
-      this.curves.splice(index - 1, 1, curve1, curve2);
+      const curve0 = this.createCurve(index - 1);
+      const curve1 = this.createCurve(index);
+      this.curves.splice(index - 1, 1, curve0, curve1);
     }
     this.updateArcLengths();
   }
@@ -121,8 +121,8 @@ export class Curve2 extends THREE.CurvePath {
       //   this.cps.length : 3         -> 2(-1)
       //   this.cps        : [0, 1, 2] -> [0, 1(-1)]
       //   this.curves     : [0, 1]    -> [0(new)]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 2, curve);
+      const curve0 = this.createCurve(index - 1);
+      this.curves.splice(index - 1, 2, curve0);
     }
     this.updateArcLengths();
   }
@@ -147,25 +147,25 @@ export class Curve2 extends THREE.CurvePath {
       //   this.cps.length   : 3
       //   this.cps          : [0, 1, 2]
       //   this.curves       : [0, 1]
-      const curve = this.createCurve(0);
-      this.curves.splice(0, 1, curve);
+      const curve0 = this.createCurve(0);
+      this.curves.splice(0, 1, curve0);
     } else if (index === this.cps.length - 1) {
       // example:
       //   index             : 2
       //   this.cps.length   : 3
       //   this.cps          : [0, 1, 2]
       //   this.curves       : [0, 1]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 1, curve);
+      const curve1 = this.createCurve(index - 1);
+      this.curves.splice(index - 1, 1, curve1);
     } else {
       // example:
       //   index             : 1
       //   this.cps.length   : 3
       //   this.cps          : [0, 1, 2]
       //   this.curves       : [0, 1]
-      const curve1 = this.createCurve(index - 1);
-      const curve2 = this.createCurve(index);
-      this.curves.splice(index - 1, 2, curve1, curve2);
+      const curve0 = this.createCurve(index - 1);
+      const curve1 = this.createCurve(index);
+      this.curves.splice(index - 1, 2, curve0, curve1);
     }
     this.updateArcLengths();
   }
