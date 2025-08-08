@@ -109,6 +109,24 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
+   * Get the index list for interpolateCp(index).
+   *
+   * @returns {Array<number>}
+   */
+  get indexListI() {
+    return this.indexListR().slice(1);
+  }
+
+  /**
+   * Get the index list for removeCp(index).
+   *
+   * @returns {Array<number>}
+   */
+  get indexListR() {
+    return [...Array(this.cps.length).keys()];
+  }
+
+  /**
    * Returns a new Curve2 with copied values from this instance.
    *
    * @returns {Curve2} A clone of this instance.
