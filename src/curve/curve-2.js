@@ -50,14 +50,52 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Add cp to this.cps[index].
-   *
-   * @param {number} index - The index of this.cps.
-   * @param {ControlPoint2} cp
+   * Add cp to the first this.cps.
    */
-  addCp(index, cp) {
-    if (isInvalidIndex(index, 0, this.cps.length)) return;
-    this.cps.splice(index, 0, cp);
+  addCpToFirst() {
+    if (this.cps.length !== 0) {
+      this.cps.unshift(this.cps[0].clone()); // Copy first cp.
+    } else {
+      this.cps.unshift(new ControlPoint2());
+    }
+  }
+
+  /**
+   * Add cp to the last this.cps.
+   */
+  addCpToLast() {
+    if (this.cps.length !== 0) {
+      this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
+    } else {
+      this.cps.push(new ControlPoint2());
+    }
+  }
+
+  /**
+   * Interpolate cp2 using cp1 and cp3. This method also affects cp1 and cp3.
+   *
+   * @param {number} index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
+   */
+  interpolateCp(index) {
+    if (isInvalidIndex(index, 1, this.cps.length - 1)) return;
+    this.cps.splice(index, 0, this.cps[index].clone());
+    const cp1 = this.cps[index - 1];
+    const cp2 = this.cps[index];
+    const cp3 = this.cps[index + 1];
+    const centerPos = new THREE.Vector2(
+      (cp1.rightPos.x + cp3.leftPos.x) / 2,
+      (cp1.rightPos.y + cp3.leftPos.y) / 2
+    );
+    cp1.rightPos.x = (cp1.middlePos.x + cp1.rightPos.x) / 2;
+    cp1.rightPos.y = (cp1.middlePos.y + cp1.rightPos.y) / 2;
+    cp3.leftPos.x = (cp3.leftPos.x + cp3.middlePos.x) / 2;
+    cp3.leftPos.y = (cp3.leftPos.y + cp3.middlePos.y) / 2;
+    cp2.leftPos.x = (cp1.rightPos.x + centerPos.x) / 2;
+    cp2.leftPos.y = (cp1.rightPos.y + centerPos.y) / 2;
+    cp2.rightPos.x = (centerPos.x + cp3.leftPos.x) / 2;
+    cp2.rightPos.y = (centerPos.y + cp3.leftPos.y) / 2;
+    cp2.middlePos.x = (cp2.leftPos.x + cp2.rightPos.x) / 2;
+    cp2.middlePos.y = (cp2.leftPos.y + cp2.rightPos.y) / 2;
   }
 
   /**
