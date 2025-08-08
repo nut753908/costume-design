@@ -71,17 +71,6 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Update this.cps[index].
-   *
-   * @param {number} index - The index of this.cps.
-   * @param {ControlPoint2} cp
-   */
-  updateCp(index, cp) {
-    if (isInvalidIndex(index, 0, this.cps.length - 1)) return;
-    this.cps[index].copy(cp);
-  }
-
-  /**
    * Returns a new Curve2 with copied values from this instance.
    *
    * @returns {Curve2} A clone of this instance.
