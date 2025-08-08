@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
+import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -68,37 +69,6 @@ export class ControlPoint3 {
      * @type {boolean}
      */
     this.isSyncAngle = isSyncAngle;
-  }
-
-  /**
-   * Returns a new ControlPoint3 with copied values from this instance.
-   *
-   * @returns {ControlPoint3} A clone of this instance.
-   */
-  clone() {
-    return new this.constructor().copy(this);
-  }
-
-  /**
-   * Copies the values of the given ControlPoint3 to this instance.
-   *
-   * @param {ControlPoint3} other - The ControlPoint3 to copy.
-   * @returns {ControlPoint3} A reference to this ControlPoint3.
-   */
-  copy(other) {
-    this.middlePos.copy(other.middlePos);
-    this.upPos.copy(other.upPos);
-    this.upV.copy(other.upV);
-    this.upS.copy(other.upS);
-    this.upA.copy(other.upA);
-    this.downPos.copy(other.downPos);
-    this.downV.copy(other.downV);
-    this.downS.copy(other.downS);
-    this.downA.copy(other.downA);
-    this.isSyncRadius = other.isSyncRadius;
-    this.isSyncAngle = other.isSyncAngle;
-
-    return this;
   }
 
   /**
@@ -394,5 +364,81 @@ export class ControlPoint3 {
       THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
       THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
     );
+  }
+
+  /**
+   * Returns a new ControlPoint3 with copied values from this instance.
+   *
+   * @returns {ControlPoint3} A clone of this instance.
+   */
+  clone() {
+    return new this.constructor().copy(this);
+  }
+
+  /**
+   * Copies the values of the given ControlPoint3 to this instance.
+   *
+   * @param {ControlPoint3} source - The ControlPoint3 to copy.
+   * @returns {ControlPoint3} A reference to this ControlPoint3.
+   */
+  copy(source) {
+    this.middlePos.copy(source.middlePos);
+    this.upPos.copy(source.upPos);
+    this.upV.copy(source.upV);
+    this.upS.copy(source.upS);
+    this.upA.copy(source.upA);
+    this.downPos.copy(source.downPos);
+    this.downV.copy(source.downV);
+    this.downS.copy(source.downS);
+    this.downA.copy(source.downA);
+    this.isSyncRadius = source.isSyncRadius;
+    this.isSyncAngle = source.isSyncAngle;
+
+    return this;
+  }
+
+  /**
+   * Serializes the ControlPoint2 into JSON.
+   *
+   * @return {Object} A JSON object representing the serialized ControlPoint2.
+   */
+  toJSON() {
+    const data = {};
+
+    data.middlePos = this.middlePos.toArray();
+    data.upPos = this.upPos.toArray();
+    data.upV = this.upV.toArray();
+    data.upS = sphericalToJSON(this.upS);
+    data.upA = this.upA.toArray();
+    data.downPos = this.downPos.toArray();
+    data.downV = this.downV.toArray();
+    data.downS = sphericalToJSON(this.downS);
+    data.downA = this.downA.toArray();
+    data.isSyncRadius = this.isSyncRadius;
+    data.isSyncAngle = this.isSyncAngle;
+
+    return data;
+  }
+
+  /**
+   * Deserializes the ControlPoint2 from the given JSON.
+   *
+   * @param {Object} json - The JSON holding the serialized ControlPoint2.
+   * @return {ControlPoint2} A reference to this ControlPoint2.
+   */
+  fromJSON(json) {
+    this.middlePos.fromArray(json.middlePos);
+    this.upPos.fromArray(json.upPos);
+    this.upV.fromArray(json.upV);
+    sphericalFromJSON(this.upS, json.upS);
+    this.upA.fromArray(json.upA);
+    this.downPos.fromArray(json.downPos);
+    this.downV.fromArray(json.downV);
+    sphericalFromJSON(this.downS, json.downS);
+    this.downA.fromArray(json.downA);
+    this.isSyncRadius = json.isSyncRadius;
+    this.isSyncAngle = json.isSyncAngle;
+
+    return this;
   }
 }
