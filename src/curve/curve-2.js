@@ -50,7 +50,7 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Add cp to the first this.cps.
+   * Add cp to the beginning of this.cps.
    */
   addCpToFirst() {
     if (this.cps.length !== 0) {
@@ -61,7 +61,7 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Add cp to the last this.cps.
+   * Add cp to the end of this.cps.
    */
   addCpToLast() {
     if (this.cps.length !== 0) {
