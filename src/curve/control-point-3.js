@@ -1,5 +1,6 @@
 import * as THREE from "three";
 
+import { Points } from "../math/points.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
 import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
@@ -18,7 +19,7 @@ import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
  * );
  * ```
  */
-export class ControlPoint3 {
+export class ControlPoint3 extends Points {
   /**
    * Constructs a new ControlPoint3.
    *
@@ -35,6 +36,8 @@ export class ControlPoint3 {
     isSyncRadius = true,
     isSyncAngle = true
   ) {
+    super();
+
     /**
      * The position of middle control point.
      *
@@ -112,7 +115,7 @@ export class ControlPoint3 {
    * Set GUI with updateGeometry.
    *
    * @param {GUI} gui
-   * @param {(cp:ControlPoint3)=>void} updateGeometry - A callback that can update the geometry.
+   * @param {(p:Points)=>void} updateGeometry - A callback that can update the geometry.
    */
   setGUI(gui, updateGeometry) {
     const cp = this;
@@ -186,6 +189,15 @@ export class ControlPoint3 {
       updateGeometry(cp);
       upDownControllers.forEach((c) => c.updateDisplay());
     }
+  }
+
+  /**
+   * Get points.
+   *
+   * @returns {Array<THREE.Vector3>}
+   */
+  getPoints() {
+    return [this.upPos, this.middlePos, this.downPos];
   }
 
   updateFrom = {
