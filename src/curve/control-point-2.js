@@ -109,19 +109,23 @@ export class ControlPoint2 {
   createGeometry(mesh, gui, name = "cp", updateCallback = () => {}) {
     const cp = this;
 
+    let _tmp;
     const folder = gui.addFolder(name);
-    folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
-    folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
+    folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
+    folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    folder.add(cp.leftPos, "x", -1, 1).name("left.x").onChange(uLP);
-    folder.add(cp.leftPos, "y", -1, 1).name("left.y").onChange(uLP);
-    folder.add(cp.leftC, "radius", 0, 1).name("left.radius").onChange(uLS);
-    folder.add(cp.leftC, "angle", 0, 360).name("left.angle").onChange(uLS);
-    folder.add(cp.rightPos, "x", -1, 1).name("right.x").onChange(uRP);
-    folder.add(cp.rightPos, "y", -1, 1).name("right.y").onChange(uRP);
-    folder.add(cp.rightC, "radius", 0, 1).name("right.radius").onChange(uRS);
-    folder.add(cp.rightC, "angle", 0, 360).name("right.angle").onChange(uRS);
+    folder.add(cp.leftPos, "x").step(0.01).name("left.x").onChange(uLP);
+    folder.add(cp.leftPos, "y").step(0.01).name("left.y").onChange(uLP);
+    _tmp = folder.add(cp.leftC, "radius").min(0).step(0.01);
+    _tmp.name("left.radius").onChange(uLS);
+    folder.add(cp.leftC, "angle", 0, 360, 1).name("left.angle").onChange(uLS);
+    folder.add(cp.rightPos, "x").step(0.01).name("right.x").onChange(uRP);
+    folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uRP);
+    _tmp = folder.add(cp.rightC, "radius").min(0).step(0.01);
+    _tmp.name("right.radius").onChange(uRS);
+    _tmp = folder.add(cp.rightC, "angle", 0, 360, 1);
+    _tmp.name("right.angle").onChange(uRS);
 
     const leftRightControllers = folder.controllers.filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")

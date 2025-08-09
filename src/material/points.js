@@ -25,8 +25,8 @@ export function createPointsMaterial(
   {
     const folder = gui.addFolder("pointsMaterial");
     folder.addColor(pointsMaterial, "color");
-    folder.add(pointsMaterial, "size", 0, 10, 0.1);
-    folder.add(pointsMaterial, "opacity", 0, 1, 0.1);
+    folder.add(pointsMaterial, "size", 0, 10, 0.01);
+    folder.add(pointsMaterial, "opacity", 0, 1, 0.01);
   }
   return pointsMaterial;
 }

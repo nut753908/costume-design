@@ -119,26 +119,29 @@ export class ControlPoint3 {
   createGeometry(mesh, gui, name = "cp", updateCallback = () => {}) {
     const cp = this;
 
+    let _tmp;
     const folder = gui.addFolder(name);
-    folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
-    folder.add(cp.middlePos, "y", -1, 1).name("middle.y").onChange(uMP);
-    folder.add(cp.middlePos, "z", -1, 1).name("middle.z").onChange(uMP);
+    folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
+    folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
+    folder.add(cp.middlePos, "z").step(0.01).name("middle.z").onChange(uMP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    folder.add(cp.upPos, "x", -1, 1).name("up.x").onChange(uUP);
-    folder.add(cp.upPos, "y", -1, 1).name("up.y").onChange(uUP);
-    folder.add(cp.upPos, "z", -1, 1).name("up.z").onChange(uUP);
-    folder.add(cp.upS, "radius", 0, 1).name("up.radius").onChange(uUS);
-    folder.add(cp.upA, "x", 0, 360).name("up.Ax").onChange(uUAx);
-    folder.add(cp.upA, "y", 0, 360).name("up.Ay").onChange(uUAy);
-    folder.add(cp.upA, "z", 0, 360).name("up.Az").onChange(uUAz);
-    folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
-    folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
-    folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
-    folder.add(cp.downS, "radius", 0, 1).name("down.radius").onChange(uDS);
-    folder.add(cp.downA, "x", 0, 360).name("down.Ax").onChange(uDAx);
-    folder.add(cp.downA, "y", 0, 360).name("down.Ay").onChange(uDAy);
-    folder.add(cp.downA, "z", 0, 360).name("down.Az").onChange(uDAz);
+    folder.add(cp.upPos, "x").step(0.01).name("up.x").onChange(uUP);
+    folder.add(cp.upPos, "y").step(0.01).name("up.y").onChange(uUP);
+    folder.add(cp.upPos, "z").step(0.01).name("up.z").onChange(uUP);
+    _tmp = folder.add(cp.upS, "radius").min(0).step(0.01);
+    _tmp.name("up.radius").onChange(uUS);
+    folder.add(cp.upA, "x", 0, 360, 1).name("up.Ax").onChange(uUAx);
+    folder.add(cp.upA, "y", 0, 360, 1).name("up.Ay").onChange(uUAy);
+    folder.add(cp.upA, "z", 0, 360, 1).name("up.Az").onChange(uUAz);
+    folder.add(cp.downPos, "x").step(0.01).name("down.x").onChange(uDP);
+    folder.add(cp.downPos, "y").step(0.01).name("down.y").onChange(uDP);
+    folder.add(cp.downPos, "z").step(0.01).name("down.z").onChange(uDP);
+    _tmp = folder.add(cp.downS, "radius").min(0).step(0.01);
+    _tmp.name("down.radius").onChange(uDS);
+    folder.add(cp.downA, "x", 0, 360, 1).name("down.Ax").onChange(uDAx);
+    folder.add(cp.downA, "y", 0, 360, 1).name("down.Ay").onChange(uDAy);
+    folder.add(cp.downA, "z", 0, 360, 1).name("down.Az").onChange(uDAz);
 
     const upDownControllers = folder.controllers.filter(
       (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
