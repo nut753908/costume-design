@@ -19,6 +19,8 @@ export function createCurveGroup(gui, scene, c) {
   group.add(createCurvesLine(folder, c));
   group.add(createCpsGroup(folder, c));
 
+  c.setGUI(folder);
+
   scene.add(group);
 
   return group;
@@ -38,7 +40,7 @@ function createCurvesLine(gui, c) {
 
   const line = new THREE.Line(geometry, lineMaterial);
 
-  c.createGeometry(line, folder);
+  c.createGeometry(line);
 
   return line;
 }

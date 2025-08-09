@@ -32,6 +32,7 @@ export class Curve2 extends THREE.CurvePath {
 
     /**
      * Secret field.
+     * This is used by setGUI() in ./src/curve/curve-{3,2}.js.
      * This is used by createCpsGroup() in ./src/object-3d/group/curve.js.
      * Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
      *
@@ -69,12 +70,34 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Create geometry and set GUI.
+   * Create geometry.
    *
    * @param {THREE.Object3D} mesh - The mesh of the line.
+   */
+  createGeometry(mesh) {
+    const c = this;
+
+    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+    c._updateCurvesAndGeometry = () => {
+      c.updateCurves();
+      updateGeometry();
+    };
+    function updateGeometry() {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(c.getPoints());
+
+      mesh.geometry.dispose();
+      mesh.geometry = geometry;
+    }
+    updateGeometry();
+  }
+
+  /**
+   * Set GUI.
+   *
    * @param {GUI} gui
    */
-  createGeometry(mesh, gui) {
+  setGUI(gui) {
     const c = this;
 
     const obj = {
@@ -112,14 +135,8 @@ export class Curve2 extends THREE.CurvePath {
       c._updateCpsInCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
-      c.updateCurves();
-      updateGeometry();
+      c._updateCurvesAndGeometry();
     }
-    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-    this._updateCurvesAndGeometry = () => {
-      c.updateCurves();
-      updateGeometry();
-    };
     function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
@@ -128,14 +145,6 @@ export class Curve2 extends THREE.CurvePath {
       cII = cII.options(c.indexListI).onChange(updateEnabled);
       cIR = cIR.options(c.indexListR).onChange(updateEnabled);
     }
-    function updateGeometry() {
-      const geometry = new THREE.BufferGeometry();
-      geometry.setFromPoints(c.getPoints());
-
-      mesh.geometry.dispose();
-      mesh.geometry = geometry;
-    }
-    updateGeometry();
   }
 
   /**
