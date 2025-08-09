@@ -32,9 +32,9 @@ export class Curve2 extends THREE.CurvePath {
 
     /**
      * Secret field.
-     * This is used by setGUI() in ./src/curve/curve-{3,2}.js.
-     * This is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-     * Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+     * This function is used by setGUI() in ./src/curve/curve-2.js.
+     * This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+     * Set it in advance using createGeometry() in ./src/curve/curve-2.js.
      *
      * @type {()=>void}
      */
@@ -42,7 +42,7 @@ export class Curve2 extends THREE.CurvePath {
 
     /**
      * Secret field.
-     * This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
+     * This function is used by setGUI() in ./src/curve/curve-2.js.
      * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
      *
      * @type {()=>void}
@@ -77,6 +77,7 @@ export class Curve2 extends THREE.CurvePath {
   createGeometry(mesh) {
     const c = this;
 
+    // This function is used by setGUI() in ./src/curve/curve-2.js.
     // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
     c._updateCurvesAndGeometry = () => {
       c.updateCurves();
@@ -135,7 +136,7 @@ export class Curve2 extends THREE.CurvePath {
       c._updateCpsInCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
-      c._updateCurvesAndGeometry();
+      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve-2.js.
     }
     function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
