@@ -37,7 +37,7 @@ export class Curve2 extends THREE.CurvePath {
      *
      * @type {()=>void}
      */
-    this._updateCurves = () => {};
+    this._updateCurvesAndGeometry = () => {};
 
     /**
      * Secret field.
@@ -112,7 +112,8 @@ export class Curve2 extends THREE.CurvePath {
       c._updateCpsInCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
-      updateCurves();
+      c.updateCurves();
+      updateGeometry();
     }
     function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
@@ -122,13 +123,6 @@ export class Curve2 extends THREE.CurvePath {
       cII = cII.options(c.indexListI).onChange(updateEnabled);
       cIR = cIR.options(c.indexListR).onChange(updateEnabled);
     }
-    function updateCurves() {
-      c.updateCurves();
-      updateGeometry();
-    }
-    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-    this._updateCurves = updateCurves;
-
     function updateGeometry() {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(c.getPoints());
@@ -137,6 +131,12 @@ export class Curve2 extends THREE.CurvePath {
       mesh.geometry = geometry;
     }
     updateGeometry();
+
+    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+    this._updateCurvesAndGeometry = () => {
+      c.updateCurves();
+      updateGeometry();
+    };
   }
 
   /**

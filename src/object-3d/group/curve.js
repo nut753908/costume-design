@@ -76,7 +76,7 @@ function createCpsGroup(gui, c) {
       _group.add(new THREE.Points(geometry, pointsMaterial));
 
       // c._updateCurves: Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
-      cp.createGeometry(_group, _folder, `${i}`, c._updateCurves);
+      cp.createGeometry(_group, _folder, `${i}`, c._updateCurvesAndGeometry);
 
       group.add(_group);
     });
