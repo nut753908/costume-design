@@ -82,6 +82,7 @@ function createCpsGroup(gui, c) {
     });
   }
   createCps();
+  // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
   c._createCps = createCps;
 
   return group;

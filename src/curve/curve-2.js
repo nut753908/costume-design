@@ -31,12 +31,20 @@ export class Curve2 extends THREE.CurvePath {
     this.cps = cps;
 
     /**
-     * (Secret field used as the updateCallback for createGeometry() of ControlPoint{3,2}.)
+     * Secret field.
+     * This is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+     * Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+     *
+     * @type {()=>void}
      */
     this._updateCurves = () => {};
 
     /**
-     * (Secret field set from createCpsGroup().)
+     * Secret field.
+     * This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
+     * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+     *
+     * @type {()=>void}
      */
     this._createCps = () => {};
 
@@ -118,6 +126,8 @@ export class Curve2 extends THREE.CurvePath {
       c.updateCurves();
       generateGeometry();
     }
+    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+    this._updateCurves = updateCurves;
 
     function generateGeometry() {
       const geometry = new THREE.BufferGeometry();
@@ -127,9 +137,6 @@ export class Curve2 extends THREE.CurvePath {
       mesh.geometry = geometry;
     }
     generateGeometry();
-
-    // (Secret field used as the updateCallback for createGeometry() of ControlPoint{3,2}.)
-    this._updateCurves = updateCurves;
   }
 
   /**
