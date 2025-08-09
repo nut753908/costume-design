@@ -64,7 +64,7 @@ function createCpsGroup(gui, c) {
     _group.add(new THREE.Line(geometry, lineMaterial));
     _group.add(new THREE.Points(geometry, pointsMaterial));
 
-    cp.createGeometry(_group, folder, `cps[${i}]`);
+    cp.createGeometry(_group, folder, `cps[${i}]`, c._update);
 
     group.add(_group);
   });

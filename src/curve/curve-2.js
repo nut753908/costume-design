@@ -30,6 +30,11 @@ export class Curve2 extends THREE.CurvePath {
      */
     this.cps = cps;
 
+    /**
+     * (Secret field used by ControlPoint{3,2}.)
+     */
+    this._update = () => {};
+
     this.updateCurves();
   }
 
@@ -52,7 +57,6 @@ export class Curve2 extends THREE.CurvePath {
 
   // FIXME: Curves graphics does not update correctly when calling curve functions.
   // FIXME: Cps graphics does not update correctly when calling curve functions.
-  // FIXME: Cps graphics does not update correctly when calling individual cp update functions.
   /**
    * Create geometry and set GUI.
    *
@@ -136,6 +140,12 @@ export class Curve2 extends THREE.CurvePath {
       mesh.geometry = geometry;
     }
     generateGeometry();
+
+    // (Secret field used by ControlPoint{3,2}.)
+    this._update = () => {
+      c.updateCurves();
+      generateGeometry();
+    };
   }
 
   /**
