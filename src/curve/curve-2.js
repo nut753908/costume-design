@@ -142,10 +142,7 @@ export class Curve2 extends THREE.CurvePath {
     generateGeometry();
 
     // (Secret field used by ControlPoint{3,2}.)
-    this._update = () => {
-      c.updateCurves();
-      generateGeometry();
-    };
+    this._update = updateCurves;
   }
 
   /**
