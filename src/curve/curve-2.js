@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { ControlPoint2 } from "./control-point-2";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { isInvalidIndex } from "../math/utils";
 
 /**
@@ -49,78 +50,85 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // TODO: refactor this method.
-  // TODO: Add cps GUI.
-  // TODO: Create the geometries for the cps.
+  // FIXME: Curves graphics does not update correctly when calling curve functions.
+  // FIXME: Cps graphics does not update correctly when calling curve functions.
+  // FIXME: Cps graphics does not update correctly when calling individual cp update functions.
+  // FIXME: Cps GUI does not update correctly when calling curve functions.
   /**
    * Create geometry and set GUI.
    *
    * @param {GUI} gui
-   * @returns {THREE.BufferGeometry}
+   * @returns {{curvesGeometry:THREE.BufferGeometry, cpsGeometry:THREE.BufferGeometry}}
    */
   createGeometry(gui) {
     const c = this;
 
-    const geometry = new THREE.BufferGeometry();
-    geometry.setFromPoints(c.getPoints());
+    const curvesGeometry = new THREE.BufferGeometry();
+    curvesGeometry.setFromPoints(c.getPoints());
 
     const obj = {
       addCpToFirst: () => {
         c.addCpToFirst();
-        update();
+        updateIfCpsLengthChanges();
       },
       addCpToLast: () => {
         c.addCpToLast();
-        update();
+        updateIfCpsLengthChanges();
       },
-      indexI: 1,
+      indexI: 1, // The index for interpolateCp(index).
       interpolateCp: () => {
         c.interpolateCp(obj.indexI);
-        update();
+        updateIfCpsLengthChanges();
       },
-      indexR: 1,
+      indexR: 0, // The index for removeCp(index).
       removeCp: () => {
         c.removeCp(obj.indexR);
-        update();
+        updateIfCpsLengthChanges();
       },
     };
 
     const folder = gui.addFolder("c");
+    const cpsFolder = folder.addFolder("cps");
+
+    const cpsGeometry = new THREE.BufferGeometry();
+    updateCpsGeometry();
+
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
-    const ii = folder.add(obj, "indexI").options(c.indexListI);
-    const icp = folder.add(obj, "interpolateCp");
-    const ir = folder.add(obj, "indexR").options(c.indexListR);
-    const rcp = folder.add(obj, "removeCp");
-    if (c.indexListI.indexOf(obj.indexI) !== -1) {
-      icp.enable();
-    } else {
-      icp.disable();
-    }
-    if (c.indexListR.indexOf(obj.indexI) !== -1) {
-      rcp.enable();
-    } else {
-      rcp.disable();
-    }
+    const cICP = folder.add(obj, "interpolateCp");
+    const cRCP = folder.add(obj, "removeCp");
+    let cII = folder.add(obj, "indexI");
+    let cIR = folder.add(obj, "indexR");
+    updateOptions();
 
-    function update() {
-      ii.options(c.indexListI);
-      if (c.indexListI.indexOf(obj.indexI) !== -1) {
-        icp.enable();
-      } else {
-        icp.disable();
+    function updateIfCpsLengthChanges() {
+      updateCpsGeometry();
+      updateOptions();
+      updateCurves();
+    }
+    function updateCpsGeometry() {
+      cpsFolder.children.map((v) => v.destroy());
+      const points = [];
+      cpsGeometry.clearGroups();
+      for (let i = 0, l = c.cps.length; i < l; i++) {
+        c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
+        points.push(...c.cps[i].getPoints());
+        cpsGeometry.addGroup(i * 3, 3, i);
       }
-      ir.options(c.indexListR);
-      if (c.indexListR.indexOf(obj.indexI) !== -1) {
-        rcp.enable();
-      } else {
-        rcp.disable();
-      }
+      cpsGeometry.setFromPoints(points);
+    }
+    function updateOptions() {
+      c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
+      c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
+      cII = cII.options(c.indexListI);
+      cIR = cIR.options(c.indexListR);
+    }
+    function updateCurves() {
       c.updateCurves();
-      geometry.setFromPoints(c.getPoints());
+      curvesGeometry.setFromPoints(c.getPoints());
     }
 
-    return geometry;
+    return { curvesGeometry, cpsGeometry };
   }
 
   /**
