@@ -18,7 +18,7 @@ export function createLineMaterial(gui, colorHex = 0xffffff, opacity = 1) {
   {
     const folder = gui.addFolder("lineMaterial");
     folder.addColor(lineMaterial, "color");
-    folder.add(lineMaterial, "opacity", 0, 1, 0.1);
+    folder.add(lineMaterial, "opacity", 0, 1, 0.01);
   }
   return lineMaterial;
 }

@@ -34,10 +34,10 @@ export function createToonMaterial(
     folder.add(toonMaterial, "wireframe");
     const u = toonMaterial.uniforms;
     folder.add(u.checkShape, "value").name("u.checkShape");
-    folder.add(u.lightPos.value, "x", -10, 10, 1).name("u.light.x");
-    folder.add(u.lightPos.value, "y", -10, 10, 1).name("u.light.y");
-    folder.add(u.lightPos.value, "z", -10, 10, 1).name("u.light.z");
-    folder.add(u.threshold, "value", 0, 1, 0.1).name("u.threshold");
+    folder.add(u.lightPos.value, "x").step(0.1).name("u.light.x");
+    folder.add(u.lightPos.value, "y").step(0.1).name("u.light.y");
+    folder.add(u.lightPos.value, "z").step(0.1).name("u.light.z");
+    folder.add(u.threshold, "value", 0, 1, 0.01).name("u.threshold");
     folder.addColor(u.baseColor, "value").name("u.baseColor");
     folder.addColor(u.shadeColor, "value").name("u.shadeColor");
   }

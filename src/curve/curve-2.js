@@ -161,6 +161,7 @@ export class Curve2 extends THREE.CurvePath {
     }
   }
 
+  // TODO: Check if this is correct.
   /**
    * Interpolate cp2 using cp1 and cp3. This method also affects cp1 and cp3.
    *
