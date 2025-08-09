@@ -151,12 +151,12 @@ export class ControlPoint2 {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      generateGeometry();
+      updateGeometry();
       leftRightControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
 
-    function generateGeometry() {
+    function updateGeometry() {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(cp.getPoints());
 
@@ -165,7 +165,7 @@ export class ControlPoint2 {
         v.geometry = geometry;
       });
     }
-    generateGeometry();
+    updateGeometry();
   }
 
   /**

@@ -124,19 +124,19 @@ export class Curve2 extends THREE.CurvePath {
     }
     function updateCurves() {
       c.updateCurves();
-      generateGeometry();
+      updateGeometry();
     }
     // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
     this._updateCurves = updateCurves;
 
-    function generateGeometry() {
+    function updateGeometry() {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(c.getPoints());
 
       mesh.geometry.dispose();
       mesh.geometry = geometry;
     }
-    generateGeometry();
+    updateGeometry();
   }
 
   /**
