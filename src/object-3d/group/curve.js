@@ -67,10 +67,10 @@ function createCpsGroup(gui, c) {
     Array.from(folder.children)
       .filter((v) => v._title === "cps")
       .forEach((v) => v.destroy());
+    const _folder = folder.addFolder("cps");
 
     c.cps.forEach((cp, i) => {
       const _group = new THREE.Group();
-      const _folder = folder.addFolder("cps");
 
       _group.add(new THREE.Line(geometry, lineMaterial));
       _group.add(new THREE.Points(geometry, pointsMaterial));
