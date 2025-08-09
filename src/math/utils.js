@@ -69,3 +69,31 @@ export function rotatePI(angle) {
 export function rotate180(angle) {
   return angle < 180 ? angle + 180 : angle - 180;
 }
+
+/**
+ * Whether the index (including the min and the max) is invalid.
+ *
+ * @param {number} index - The index of this.cps.
+ * @param {number} min - The min of the index.
+ * @param {number} max - The max of the index.
+ * @return {boolean}
+ */
+export function isInvalidIndex(index, min, max) {
+  if (!Number.isInteger(index)) {
+    console.error(`the index(${index}) is not integer.`);
+    return true;
+  }
+  if (!Number.isInteger(min)) {
+    console.error(`the min(${min}) is not integer.`);
+    return true;
+  }
+  if (!Number.isInteger(max)) {
+    console.error(`the max(${max}) is not integer.`);
+    return true;
+  }
+  if (index < min || index > max) {
+    console.error(`the index(${index}) is out of range [${min},${max}].`);
+    return true;
+  }
+  return false;
+}

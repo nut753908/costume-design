@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { ControlPoint2 } from "./control-point-2";
+import { isInvalidIndex } from "../math/utils";
 
 /**
  * A 2D Cubic Bezier curve path using 2D control points.
@@ -28,185 +29,93 @@ export class Curve2 extends THREE.CurvePath {
      */
     this.cps = cps;
 
-    this.fillAllCurves();
+    this.updateCurves();
   }
 
   /**
-   * Fill all curves.
+   * Update curves using this.cps.
    */
-  fillAllCurves() {
-    // example:
-    //   this.cps.length : 5
-    //   this.cps        : [0, 1, 2, 3, 4]
-    //   this.curves     : [0, 1, 2, 3]
+  updateCurves() {
     this.curves = [];
     for (let i = 0, l = this.cps.length - 1; i < l; i++) {
-      const curve = this.createCurve(i);
+      const curve = new THREE.CubicBezierCurve(
+        this.cps[i].middlePos.clone(),
+        this.cps[i].rightPos.clone(),
+        this.cps[i + 1].leftPos.clone(),
+        this.cps[i + 1].middlePos.clone()
+      );
       this.curves.push(curve);
     }
     this.updateArcLengths();
   }
 
   /**
-   * Add cp to this.cps[index] and fill curves as needed.
-   *
-   * @param {number} index - The index of this.cps.
-   * @param {ControlPoint2} cp
+   * Add cp to the beginning of this.cps.
    */
-  addCp(index, cp) {
-    if (this.isInvalidIndex(index, this.cps.length)) return;
-
-    // Add cp to this.cps[index].
-    this.cps.splice(index, 0, cp);
-
-    // Fill curves as needed.
-    if (index === 0) {
-      // example:
-      //   index           : 0      -> 0
-      //   this.cps.length : 2      -> 3(+1)
-      //   this.cps        : [0, 1] -> [0(new), 1(+1), 2(+1)]
-      //   this.curves     : [0]    -> [0(new), 1(+1)]
-      const curve = this.createCurve(0);
-      this.curves.splice(0, 0, curve);
-    } else if (index === this.cps.length - 1) {
-      // example:
-      //   index           : 2      -> 2
-      //   this.cps.length : 2      -> 3(+1)
-      //   this.cps        : [0, 1] -> [0, 1, 2(new)]
-      //   this.curves     : [0]    -> [0, 1(new)]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 0, curve);
+  addCpToFirst() {
+    if (this.cps.length !== 0) {
+      this.cps.unshift(this.cps[0].clone()); // Copy first cp.
     } else {
-      // example:
-      //   index           : 1      -> 1
-      //   this.cps.length : 2      -> 3(+1)
-      //   this.cps        : [0, 1] -> [0, 1(new), 2(+1)]
-      //   this.curves     : [0]    -> [0(new), 1(new)]
-      const curve1 = this.createCurve(index - 1);
-      const curve2 = this.createCurve(index);
-      this.curves.splice(index - 1, 1, curve1, curve2);
+      this.cps.unshift(new ControlPoint2());
     }
-    this.updateArcLengths();
   }
 
   /**
-   * Remove this.cps[index] and fill curves as needed.
+   * Add cp to the end of this.cps.
+   */
+  addCpToLast() {
+    if (this.cps.length !== 0) {
+      this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
+    } else {
+      this.cps.push(new ControlPoint2());
+    }
+  }
+
+  /**
+   * Interpolate cp2 using cp1 and cp3. This method also affects cp1 and cp3.
+   *
+   * @param {number} index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
+   */
+  interpolateCp(index) {
+    if (isInvalidIndex(index, 1, this.cps.length - 1)) return;
+    this.cps.splice(index, 0, this.cps[index].clone());
+    const cp1 = this.cps[index - 1];
+    const cp2 = this.cps[index];
+    const cp3 = this.cps[index + 1];
+    const centerPos = cp1.rightPos.clone().add(cp3.leftPos).divideScalar(2);
+    cp1.rightPos = cp1.middlePos.clone().add(cp1.rightPos).divideScalar(2);
+    cp3.leftPos = cp3.leftPos.clone().add(cp3.middlePos).divideScalar(2);
+    cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
+    cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
+    cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
+  }
+
+  /**
+   * Remove this.cps[index].
    *
    * @param {number} index - The index of this.cps.
    */
   removeCp(index) {
-    if (this.isInvalidIndex(index, this.cps.length - 1)) return;
-
-    // Remove this.cps[index].
+    if (isInvalidIndex(index, 0, this.cps.length - 1)) return;
     this.cps.splice(index, 1);
-
-    // Fill curves as needed.
-    if (index === 0) {
-      // example:
-      //   index           : 0         -> 0
-      //   this.cps.length : 3         -> 2(-1)
-      //   this.cps        : [0, 1, 2] -> [0(-1), 1(-1)]
-      //   this.curves     : [0, 1]    -> [0(-1)]
-      this.curves.splice(0, 1);
-    } else if (index === this.cps.length) {
-      // example:
-      //   index           : 2         -> 2
-      //   this.cps.length : 3         -> 2(-1)
-      //   this.cps        : [0, 1, 2] -> [0, 1]
-      //   this.curves     : [0, 1]    -> [0]
-      this.curves.splice(index - 1, 1);
-    } else {
-      // example:
-      //   index           : 1         -> 1
-      //   this.cps.length : 3         -> 2(-1)
-      //   this.cps        : [0, 1, 2] -> [0, 1(-1)]
-      //   this.curves     : [0, 1]    -> [0(new)]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 2, curve);
-    }
-    this.updateArcLengths();
   }
 
   /**
-   * Update this.cps[index] and fill curves as needed.
+   * Get the index list for interpolateCp(index).
    *
-   * @param {number} index - The index of this.cps.
-   * @param {ControlPoint2?} cp
+   * @returns {Array<number>}
    */
-  updateCp(index, cp = null) {
-    if (this.isInvalidIndex(index, this.cps.length - 1)) return;
-
-    // Update this.cps[index].
-    // ("this.cps[index]" may already be updated.)
-    if (cp) this.cps[index].copy(cp);
-
-    // Fill curves as needed.
-    if (index === 0) {
-      // example:
-      //   index             : 0
-      //   this.cps.length   : 3
-      //   this.cps          : [0, 1, 2]
-      //   this.curves       : [0, 1]
-      const curve = this.createCurve(0);
-      this.curves.splice(0, 1, curve);
-    } else if (index === this.cps.length - 1) {
-      // example:
-      //   index             : 2
-      //   this.cps.length   : 3
-      //   this.cps          : [0, 1, 2]
-      //   this.curves       : [0, 1]
-      const curve = this.createCurve(index - 1);
-      this.curves.splice(index - 1, 1, curve);
-    } else {
-      // example:
-      //   index             : 1
-      //   this.cps.length   : 3
-      //   this.cps          : [0, 1, 2]
-      //   this.curves       : [0, 1]
-      const curve1 = this.createCurve(index - 1);
-      const curve2 = this.createCurve(index);
-      this.curves.splice(index - 1, 2, curve1, curve2);
-    }
-    this.updateArcLengths();
+  get indexListI() {
+    return this.indexListR.slice(1);
   }
 
   /**
-   * Create a 2D Cubic Bezier curve using both this.cps[index] and this.cps[index + 1].
+   * Get the index list for removeCp(index).
    *
-   * @param {number} index - The index of this.cps.
-   * @returns {THREE.CubicBezierCurve?}
+   * @returns {Array<number>}
    */
-  createCurve(index) {
-    if (this.isInvalidIndex(index, this.cps.length - 2)) return null;
-    return new THREE.CubicBezierCurve(
-      this.cps[index].middlePos.clone(),
-      this.cps[index].rightPos.clone(),
-      this.cps[index + 1].leftPos.clone(),
-      this.cps[index + 1].middlePos.clone()
-    );
-  }
-
-  /**
-   * Whether the index (including the max) is invalid.
-   *
-   * @param {number} index - The index of this.cps.
-   * @param {number} max - The max of the index.
-   * @return {boolean}
-   */
-  isInvalidIndex(index, max) {
-    if (!Number.isInteger(index)) {
-      console.error(`the index(${index}) is not integer.`);
-      return true;
-    }
-    if (!Number.isInteger(max)) {
-      console.error(`the max(${max}) is not integer.`);
-      return true;
-    }
-    if (index < 0 || index > max) {
-      console.error(`the index(${index}) is out of range [0,${max}].`);
-      return true;
-    }
-    return false;
+  get indexListR() {
+    return [...Array(this.cps.length).keys()];
   }
 
   /**
