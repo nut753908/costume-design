@@ -161,7 +161,6 @@ export class Curve2 extends THREE.CurvePath {
     }
   }
 
-  // TODO: Check if this is correct.
   /**
    * Interpolate cp2 using cp1 and cp3. This method also affects cp1 and cp3.
    *
@@ -173,16 +172,31 @@ export class Curve2 extends THREE.CurvePath {
     const cp1 = this.cps[index - 1];
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
+
     const centerPos = cp1.rightPos.clone().add(cp3.leftPos).divideScalar(2);
     cp1.rightPos = cp1.middlePos.clone().add(cp1.rightPos).divideScalar(2);
     cp3.leftPos = cp3.leftPos.clone().add(cp3.middlePos).divideScalar(2);
     cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
     cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
     cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
+
+    let _tmp;
+    _tmp = cp1.isSyncRadius;
+    cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
+    cp1.isSyncRadius = _tmp;
+
+    cp2.isSyncRadius = false;
+    cp2.isSyncAngle = false;
     cp2.updateFromLeftPos();
     cp2.updateFromRightPos();
+    cp2.isSyncRadius = true;
+    cp2.isSyncAngle = true;
+
+    _tmp = cp3.isSyncRadius;
+    cp3.isSyncRadius = false;
     cp3.updateFromLeftPos();
+    cp3.isSyncRadius = _tmp;
   }
 
   /**
