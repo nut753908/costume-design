@@ -118,7 +118,6 @@ export class ControlPoint2 {
     folder.add(cp.leftPos, "y", -1, 1).name("left.y").onChange(uLP);
     folder.add(cp.leftC, "radius", 0, 1).name("left.radius").onChange(uLS);
     folder.add(cp.leftC, "angle", 0, 360).name("left.angle").onChange(uLS);
-    folder.addFolder("---").close(); // separator
     folder.add(cp.rightPos, "x", -1, 1).name("right.x").onChange(uRP);
     folder.add(cp.rightPos, "y", -1, 1).name("right.y").onChange(uRP);
     folder.add(cp.rightC, "radius", 0, 1).name("right.radius").onChange(uRS);

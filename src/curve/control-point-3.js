@@ -132,7 +132,6 @@ export class ControlPoint3 {
     folder.add(cp.upA, "x", 0, 360).name("up.Ax").onChange(uUAx);
     folder.add(cp.upA, "y", 0, 360).name("up.Ay").onChange(uUAy);
     folder.add(cp.upA, "z", 0, 360).name("up.Az").onChange(uUAz);
-    folder.addFolder("---").close(); // separator
     folder.add(cp.downPos, "x", -1, 1).name("down.x").onChange(uDP);
     folder.add(cp.downPos, "y", -1, 1).name("down.y").onChange(uDP);
     folder.add(cp.downPos, "z", -1, 1).name("down.z").onChange(uDP);
