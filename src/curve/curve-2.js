@@ -115,6 +115,11 @@ export class Curve2 extends THREE.CurvePath {
       c.updateCurves();
       updateGeometry();
     }
+    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+    this._updateCurvesAndGeometry = () => {
+      c.updateCurves();
+      updateGeometry();
+    };
     function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
@@ -131,12 +136,6 @@ export class Curve2 extends THREE.CurvePath {
       mesh.geometry = geometry;
     }
     updateGeometry();
-
-    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-    this._updateCurvesAndGeometry = () => {
-      c.updateCurves();
-      updateGeometry();
-    };
   }
 
   /**
