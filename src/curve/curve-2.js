@@ -56,14 +56,11 @@ export class Curve2 extends THREE.CurvePath {
   /**
    * Create geometry and set GUI.
    *
+   * @param {THREE.Object3D} mesh - The mesh of the line.
    * @param {GUI} gui
-   * @returns {{curvesGeometry:THREE.BufferGeometry, cpsGeometry:THREE.BufferGeometry}}
    */
-  createGeometry(gui) {
+  createGeometry(mesh, gui) {
     const c = this;
-
-    const curvesGeometry = new THREE.BufferGeometry();
-    curvesGeometry.setFromPoints(c.getPoints());
 
     const obj = {
       addCpToFirst: () => {
@@ -86,11 +83,11 @@ export class Curve2 extends THREE.CurvePath {
       },
     };
 
-    const folder = gui.addFolder("c");
-    const cpsFolder = folder.addFolder("cps");
+    const folder = gui.addFolder("curve");
+    // const cpsFolder = folder.addFolder("cps");
 
-    const cpsGeometry = new THREE.BufferGeometry();
-    updateCpsGeometry();
+    // const cpsGeometry = new THREE.BufferGeometry();
+    // updateCpsGeometry();
 
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
@@ -101,21 +98,21 @@ export class Curve2 extends THREE.CurvePath {
     updateOptions();
 
     function updateIfCpsLengthChanges() {
-      updateCpsGeometry();
+      // updateCpsGeometry();
       updateOptions();
       updateCurves();
     }
-    function updateCpsGeometry() {
-      Array.from(cpsFolder.children).forEach((v) => v.destroy());
-      const points = [];
-      cpsGeometry.clearGroups();
-      for (let i = 0, l = c.cps.length; i < l; i++) {
-        c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
-        points.push(...c.cps[i].getPoints());
-        cpsGeometry.addGroup(i * 3, 3, i);
-      }
-      cpsGeometry.setFromPoints(points);
-    }
+    // function updateCpsGeometry() {
+    //   Array.from(cpsFolder.children).forEach((v) => v.destroy());
+    //   const points = [];
+    //   cpsGeometry.clearGroups();
+    //   for (let i = 0, l = c.cps.length; i < l; i++) {
+    //     c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
+    //     points.push(...c.cps[i].getPoints());
+    //     cpsGeometry.addGroup(i * 3, 3, i);
+    //   }
+    //   cpsGeometry.setFromPoints(points);
+    // }
     function updateOptions() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
@@ -124,10 +121,17 @@ export class Curve2 extends THREE.CurvePath {
     }
     function updateCurves() {
       c.updateCurves();
-      curvesGeometry.setFromPoints(c.getPoints());
+      generateGeometry();
     }
 
-    return { curvesGeometry, cpsGeometry };
+    function generateGeometry() {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(c.getPoints());
+
+      mesh.geometry.dispose();
+      mesh.geometry = geometry;
+    }
+    generateGeometry();
   }
 
   /**
