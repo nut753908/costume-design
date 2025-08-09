@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { ControlPoint2 } from "./control-point-2";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { isInvalidIndex } from "../math/utils";
 
 /**
@@ -47,6 +48,86 @@ export class Curve2 extends THREE.CurvePath {
       this.curves.push(curve);
     }
     this.updateArcLengths();
+  }
+
+  // FIXME: Curves graphics does not update correctly when calling curve functions.
+  // FIXME: Cps graphics does not update correctly when calling curve functions.
+  // FIXME: Cps graphics does not update correctly when calling individual cp update functions.
+  /**
+   * Create geometry and set GUI.
+   *
+   * @param {GUI} gui
+   * @returns {{curvesGeometry:THREE.BufferGeometry, cpsGeometry:THREE.BufferGeometry}}
+   */
+  createGeometry(gui) {
+    const c = this;
+
+    const curvesGeometry = new THREE.BufferGeometry();
+    curvesGeometry.setFromPoints(c.getPoints());
+
+    const obj = {
+      addCpToFirst: () => {
+        c.addCpToFirst();
+        updateIfCpsLengthChanges();
+      },
+      addCpToLast: () => {
+        c.addCpToLast();
+        updateIfCpsLengthChanges();
+      },
+      indexI: 1, // The index for interpolateCp(index).
+      interpolateCp: () => {
+        c.interpolateCp(obj.indexI);
+        updateIfCpsLengthChanges();
+      },
+      indexR: 0, // The index for removeCp(index).
+      removeCp: () => {
+        c.removeCp(obj.indexR);
+        updateIfCpsLengthChanges();
+      },
+    };
+
+    const folder = gui.addFolder("c");
+    const cpsFolder = folder.addFolder("cps");
+
+    const cpsGeometry = new THREE.BufferGeometry();
+    updateCpsGeometry();
+
+    folder.add(obj, "addCpToFirst");
+    folder.add(obj, "addCpToLast");
+    const cICP = folder.add(obj, "interpolateCp");
+    const cRCP = folder.add(obj, "removeCp");
+    let cII = folder.add(obj, "indexI");
+    let cIR = folder.add(obj, "indexR");
+    updateOptions();
+
+    function updateIfCpsLengthChanges() {
+      updateCpsGeometry();
+      updateOptions();
+      updateCurves();
+    }
+    function updateCpsGeometry() {
+      Array.from(cpsFolder.children).forEach((v) => v.destroy());
+      const points = [];
+      cpsGeometry.clearGroups();
+      for (let i = 0, l = c.cps.length; i < l; i++) {
+        c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
+        points.push(...c.cps[i].getPoints());
+        cpsGeometry.addGroup(i * 3, 3, i);
+      }
+      cpsGeometry.setFromPoints(points);
+    }
+    function updateOptions() {
+      c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
+      c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
+      cII = cII.options(c.indexListI);
+      cIR = cIR.options(c.indexListR);
+    }
+    function updateCurves() {
+      c.updateCurves();
+      curvesGeometry.setFromPoints(c.getPoints());
+    }
+
+    return { curvesGeometry, cpsGeometry };
   }
 
   /**
