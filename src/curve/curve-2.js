@@ -53,7 +53,6 @@ export class Curve2 extends THREE.CurvePath {
   // FIXME: Curves graphics does not update correctly when calling curve functions.
   // FIXME: Cps graphics does not update correctly when calling curve functions.
   // FIXME: Cps graphics does not update correctly when calling individual cp update functions.
-  // FIXME: Cps GUI does not update correctly when calling curve functions.
   /**
    * Create geometry and set GUI.
    *
@@ -107,7 +106,7 @@ export class Curve2 extends THREE.CurvePath {
       updateCurves();
     }
     function updateCpsGeometry() {
-      cpsFolder.children.map((v) => v.destroy());
+      Array.from(cpsFolder.children).forEach((v) => v.destroy());
       const points = [];
       cpsGeometry.clearGroups();
       for (let i = 0, l = c.cps.length; i < l; i++) {
