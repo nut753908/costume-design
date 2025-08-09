@@ -65,9 +65,9 @@ function createCpsGroup(gui, c) {
     group.clear();
 
     Array.from(folder.children)
-      .filter((v) => v._title === "cps")
+      .filter((v) => v._title === "cps[]")
       .forEach((v) => v.destroy());
-    const _folder = folder.addFolder("cps");
+    const _folder = folder.addFolder("cps[]");
 
     c.cps.forEach((cp, i) => {
       const _group = new THREE.Group();
