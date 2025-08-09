@@ -55,19 +55,33 @@ function createCpsGroup(gui, c) {
   const geometry = createEmptyGeometry();
 
   const lineMaterial = createLineMaterial(folder, 0x000000);
-  // const lineMaterials = Array(geometry.groups.length).fill(lineMaterial);
   const pointsMaterial = createPointsMaterial(folder, 0x000000);
 
-  c.cps.forEach((cp, i) => {
-    const _group = new THREE.Group();
+  function createCps() {
+    group.children.forEach((g) =>
+      g.children.forEach((v) => v.geometry.dispose())
+    );
+    group.clear();
 
-    _group.add(new THREE.Line(geometry, lineMaterial));
-    _group.add(new THREE.Points(geometry, pointsMaterial));
+    Array.from(folder.children)
+      .filter((v) => v._title === "cps")
+      .forEach((v) => v.destroy());
 
-    cp.createGeometry(_group, folder, `cps[${i}]`, c._update);
+    c.cps.forEach((cp, i) => {
+      const _group = new THREE.Group();
+      const _folder = folder.addFolder("cps");
 
-    group.add(_group);
-  });
+      _group.add(new THREE.Line(geometry, lineMaterial));
+      _group.add(new THREE.Points(geometry, pointsMaterial));
+
+      // c._updateCurves: Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+      cp.createGeometry(_group, _folder, `${i}`, c._updateCurves);
+
+      group.add(_group);
+    });
+  }
+  createCps();
+  c._createCps = createCps;
 
   return group;
 }

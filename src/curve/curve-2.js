@@ -31,9 +31,14 @@ export class Curve2 extends THREE.CurvePath {
     this.cps = cps;
 
     /**
-     * (Secret field used by ControlPoint{3,2}.)
+     * (Secret field used as the updateCallback for createGeometry() of ControlPoint{3,2}.)
      */
-    this._update = () => {};
+    this._updateCurves = () => {};
+
+    /**
+     * (Secret field set from createCpsGroup().)
+     */
+    this._createCps = () => {};
 
     this.updateCurves();
   }
@@ -55,8 +60,6 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // FIXME: Curves graphics does not update correctly when calling curve functions.
-  // FIXME: Cps graphics does not update correctly when calling curve functions.
   /**
    * Create geometry and set GUI.
    *
@@ -88,11 +91,6 @@ export class Curve2 extends THREE.CurvePath {
     };
 
     const folder = gui.addFolder("curve");
-    // const cpsFolder = folder.addFolder("cps");
-
-    // const cpsGeometry = new THREE.BufferGeometry();
-    // updateCpsGeometry();
-
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
@@ -103,22 +101,11 @@ export class Curve2 extends THREE.CurvePath {
     updateOptions();
 
     function updateIfCpsLengthChanges() {
-      // updateCpsGeometry();
+      c._createCps(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
       updateCurves();
     }
-    // function updateCpsGeometry() {
-    //   Array.from(cpsFolder.children).forEach((v) => v.destroy());
-    //   const points = [];
-    //   cpsGeometry.clearGroups();
-    //   for (let i = 0, l = c.cps.length; i < l; i++) {
-    //     c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
-    //     points.push(...c.cps[i].getPoints());
-    //     cpsGeometry.addGroup(i * 3, 3, i);
-    //   }
-    //   cpsGeometry.setFromPoints(points);
-    // }
     function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
@@ -141,8 +128,8 @@ export class Curve2 extends THREE.CurvePath {
     }
     generateGeometry();
 
-    // (Secret field used by ControlPoint{3,2}.)
-    this._update = updateCurves;
+    // (Secret field used as the updateCallback for createGeometry() of ControlPoint{3,2}.)
+    this._updateCurves = updateCurves;
   }
 
   /**
