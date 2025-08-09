@@ -95,10 +95,12 @@ export class Curve2 extends THREE.CurvePath {
     const cRCP = folder.add(obj, "removeCp");
     let cII = folder.add(obj, "indexI");
     let cIR = folder.add(obj, "indexR");
+    updateEnabled();
     updateOptions();
 
     function updateIfCpsLengthChanges() {
       // updateCpsGeometry();
+      updateEnabled();
       updateOptions();
       updateCurves();
     }
@@ -113,11 +115,13 @@ export class Curve2 extends THREE.CurvePath {
     //   }
     //   cpsGeometry.setFromPoints(points);
     // }
-    function updateOptions() {
+    function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
-      cII = cII.options(c.indexListI);
-      cIR = cIR.options(c.indexListR);
+    }
+    function updateOptions() {
+      cII = cII.options(c.indexListI).onChange(updateEnabled);
+      cIR = cIR.options(c.indexListR).onChange(updateEnabled);
     }
     function updateCurves() {
       c.updateCurves();
