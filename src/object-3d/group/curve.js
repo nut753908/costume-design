@@ -58,9 +58,10 @@ function createCpsGroup(gui, c) {
   const pointsMaterial = createPointsMaterial(folder, 0x000000);
 
   function createCps() {
-    group.children.forEach((g) =>
-      g.children.forEach((v) => v.geometry.dispose())
-    );
+    group.children.forEach((g) => {
+      g.children.forEach((v) => v.geometry.dispose());
+      g.clear();
+    });
     group.clear();
 
     Array.from(folder.children)
