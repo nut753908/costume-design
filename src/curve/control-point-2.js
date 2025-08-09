@@ -101,16 +101,13 @@ export class ControlPoint2 {
   /**
    * Create geometry and set GUI.
    *
+   * @param {THREE.Object3D} mesh - The mesh of the group.
    * @param {GUI} gui
    * @param {string} name - The cp folder name used in the GUI.
    * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
-   * @returns {THREE.BufferGeometry}
    */
-  createGeometry(gui, name = "cp", updateCallback = () => {}) {
+  createGeometry(mesh, gui, name = "cp", updateCallback = () => {}) {
     const cp = this;
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setFromPoints(cp.getPoints());
 
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x", -1, 1).name("middle.x").onChange(uMP);
@@ -121,7 +118,6 @@ export class ControlPoint2 {
     folder.add(cp.leftPos, "y", -1, 1).name("left.y").onChange(uLP);
     folder.add(cp.leftC, "radius", 0, 1).name("left.radius").onChange(uLS);
     folder.add(cp.leftC, "angle", 0, 360).name("left.angle").onChange(uLS);
-    folder.addFolder("---").close(); // separator
     folder.add(cp.rightPos, "x", -1, 1).name("right.x").onChange(uRP);
     folder.add(cp.rightPos, "y", -1, 1).name("right.y").onChange(uRP);
     folder.add(cp.rightC, "radius", 0, 1).name("right.radius").onChange(uRS);
@@ -151,12 +147,21 @@ export class ControlPoint2 {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      geometry.setFromPoints(cp.getPoints());
+      generateGeometry();
       leftRightControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
 
-    return geometry;
+    function generateGeometry() {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(cp.getPoints());
+
+      mesh.children.forEach((v) => {
+        v.geometry.dispose();
+        v.geometry = geometry;
+      });
+    }
+    generateGeometry();
   }
 
   /**

@@ -30,6 +30,24 @@ export class Curve2 extends THREE.CurvePath {
      */
     this.cps = cps;
 
+    /**
+     * Secret field.
+     * This is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+     * Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+     *
+     * @type {()=>void}
+     */
+    this._updateCurves = () => {};
+
+    /**
+     * Secret field.
+     * This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
+     * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+     *
+     * @type {()=>void}
+     */
+    this._createCps = () => {};
+
     this.updateCurves();
   }
 
@@ -50,20 +68,14 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
-  // FIXME: Curves graphics does not update correctly when calling curve functions.
-  // FIXME: Cps graphics does not update correctly when calling curve functions.
-  // FIXME: Cps graphics does not update correctly when calling individual cp update functions.
   /**
    * Create geometry and set GUI.
    *
+   * @param {THREE.Object3D} mesh - The mesh of the line.
    * @param {GUI} gui
-   * @returns {{curvesGeometry:THREE.BufferGeometry, cpsGeometry:THREE.BufferGeometry}}
    */
-  createGeometry(gui) {
+  createGeometry(mesh, gui) {
     const c = this;
-
-    const curvesGeometry = new THREE.BufferGeometry();
-    curvesGeometry.setFromPoints(c.getPoints());
 
     const obj = {
       addCpToFirst: () => {
@@ -86,48 +98,45 @@ export class Curve2 extends THREE.CurvePath {
       },
     };
 
-    const folder = gui.addFolder("c");
-    const cpsFolder = folder.addFolder("cps");
-
-    const cpsGeometry = new THREE.BufferGeometry();
-    updateCpsGeometry();
-
+    const folder = gui.addFolder("curve");
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
     const cRCP = folder.add(obj, "removeCp");
     let cII = folder.add(obj, "indexI");
     let cIR = folder.add(obj, "indexR");
+    updateEnabled();
     updateOptions();
 
     function updateIfCpsLengthChanges() {
-      updateCpsGeometry();
+      c._createCps(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+      updateEnabled();
       updateOptions();
       updateCurves();
     }
-    function updateCpsGeometry() {
-      Array.from(cpsFolder.children).forEach((v) => v.destroy());
-      const points = [];
-      cpsGeometry.clearGroups();
-      for (let i = 0, l = c.cps.length; i < l; i++) {
-        c.cps[i].createGeometry(cpsFolder, `${i}`, updateCurves);
-        points.push(...c.cps[i].getPoints());
-        cpsGeometry.addGroup(i * 3, 3, i);
-      }
-      cpsGeometry.setFromPoints(points);
-    }
-    function updateOptions() {
+    function updateEnabled() {
       c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
       c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
-      cII = cII.options(c.indexListI);
-      cIR = cIR.options(c.indexListR);
+    }
+    function updateOptions() {
+      cII = cII.options(c.indexListI).onChange(updateEnabled);
+      cIR = cIR.options(c.indexListR).onChange(updateEnabled);
     }
     function updateCurves() {
       c.updateCurves();
-      curvesGeometry.setFromPoints(c.getPoints());
+      generateGeometry();
     }
+    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
+    this._updateCurves = updateCurves;
 
-    return { curvesGeometry, cpsGeometry };
+    function generateGeometry() {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(c.getPoints());
+
+      mesh.geometry.dispose();
+      mesh.geometry = geometry;
+    }
+    generateGeometry();
   }
 
   /**
@@ -169,6 +178,10 @@ export class Curve2 extends THREE.CurvePath {
     cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
     cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
     cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
+    cp1.updateFromRightPos();
+    cp2.updateFromLeftPos();
+    cp2.updateFromRightPos();
+    cp3.updateFromLeftPos();
   }
 
   /**
