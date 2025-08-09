@@ -46,7 +46,7 @@ export class Curve2 extends THREE.CurvePath {
      *
      * @type {()=>void}
      */
-    this._createCps = () => {};
+    this._updateCpsInCpsGroup = () => {};
 
     this.updateCurves();
   }
@@ -109,7 +109,7 @@ export class Curve2 extends THREE.CurvePath {
     updateOptions();
 
     function updateIfCpsLengthChanges() {
-      c._createCps(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+      c._updateCpsInCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
       updateCurves();

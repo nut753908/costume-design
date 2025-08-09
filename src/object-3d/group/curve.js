@@ -57,7 +57,7 @@ function createCpsGroup(gui, c) {
   const lineMaterial = createLineMaterial(folder, 0x000000);
   const pointsMaterial = createPointsMaterial(folder, 0x000000);
 
-  function createCps() {
+  function updateCpsInCpsGroup() {
     group.children.forEach((g) => {
       g.children.forEach((v) => v.geometry.dispose());
       g.clear();
@@ -81,9 +81,9 @@ function createCpsGroup(gui, c) {
       group.add(_group);
     });
   }
-  createCps();
+  updateCpsInCpsGroup();
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
-  c._createCps = createCps;
+  c._updateCpsInCpsGroup = updateCpsInCpsGroup;
 
   return group;
 }
