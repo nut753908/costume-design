@@ -49,6 +49,80 @@ export class Curve2 extends THREE.CurvePath {
     this.updateArcLengths();
   }
 
+  // TODO: refactor this method.
+  // TODO: Add cps GUI.
+  // TODO: Create the geometries for the cps.
+  /**
+   * Create geometry and set GUI.
+   *
+   * @param {GUI} gui
+   * @returns {THREE.BufferGeometry}
+   */
+  createGeometry(gui) {
+    const c = this;
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setFromPoints(c.getPoints());
+
+    const obj = {
+      addCpToFirst: () => {
+        c.addCpToFirst();
+        update();
+      },
+      addCpToLast: () => {
+        c.addCpToLast();
+        update();
+      },
+      indexI: 1,
+      interpolateCp: () => {
+        c.interpolateCp(obj.indexI);
+        update();
+      },
+      indexR: 1,
+      removeCp: () => {
+        c.removeCp(obj.indexR);
+        update();
+      },
+    };
+
+    const folder = gui.addFolder("c");
+    folder.add(obj, "addCpToFirst");
+    folder.add(obj, "addCpToLast");
+    const ii = folder.add(obj, "indexI").options(c.indexListI);
+    const icp = folder.add(obj, "interpolateCp");
+    const ir = folder.add(obj, "indexR").options(c.indexListR);
+    const rcp = folder.add(obj, "removeCp");
+    if (c.indexListI.indexOf(obj.indexI) !== -1) {
+      icp.enable();
+    } else {
+      icp.disable();
+    }
+    if (c.indexListR.indexOf(obj.indexI) !== -1) {
+      rcp.enable();
+    } else {
+      rcp.disable();
+    }
+
+    function update() {
+      ii.options(c.indexListI);
+      if (c.indexListI.indexOf(obj.indexI) !== -1) {
+        icp.enable();
+      } else {
+        icp.disable();
+      }
+      ir.options(c.indexListR);
+      if (c.indexListR.indexOf(obj.indexI) !== -1) {
+        rcp.enable();
+      } else {
+        rcp.disable();
+      }
+      c.updateCurves();
+      geometry.setFromPoints(c.getPoints());
+    }
+
+    return geometry;
+  }
+
   /**
    * Add cp to the beginning of this.cps.
    */
