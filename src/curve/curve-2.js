@@ -187,6 +187,10 @@ export class Curve2 extends THREE.CurvePath {
     cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
     cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
     cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
+    cp1.updateFromRightPos();
+    cp2.updateFromLeftPos();
+    cp2.updateFromRightPos();
+    cp3.updateFromLeftPos();
   }
 
   /**
