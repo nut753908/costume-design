@@ -2,7 +2,6 @@ import * as THREE from "three";
 
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
 
-// TODO: Apply the cross-sectional curve.
 // TODO: Add updateGeometry() and setGUI() somewhere.
 /**
  * A geometry class for representing a tube.
@@ -55,13 +54,15 @@ export class TubeGeometry extends THREE.BufferGeometry {
     };
 
     const axisFrames = axis.computeFrenetFrames(axisSegments, false);
-    // const crossFrames = cross.computeFrenetFrames(crossSegments, false);
+    const crossFrames = cross.computeFrenetFrames(crossSegments, false);
 
     // helper variable
 
     const vertex = new THREE.Vector3();
     const normal = new THREE.Vector3();
     const uv = new THREE.Vector2();
+    let AP = new THREE.Vector3();
+    let CP = new THREE.Vector3();
 
     // buffer
 
@@ -98,37 +99,34 @@ export class TubeGeometry extends THREE.BufferGeometry {
       for (let i = 0; i <= axisSegments; i++) {
         // we use getPointAt to sample evenly distributed points from the given path
 
-        const P = axis.getPointAt(i / axisSegments);
+        AP = axis.getPointAt(i / axisSegments, AP);
 
         // retrieve corresponding normal and binormal
 
-        const N = axisFrames.normals[i];
-        const B = axisFrames.binormals[i];
+        const AN = axisFrames.normals[i];
+        const AB = axisFrames.binormals[i];
 
         // generate normals and vertices for the current segment
 
         for (let j = 0; j <= crossSegments; j++) {
-          const v = (j / crossSegments) * Math.PI * 2;
+          CP = cross.getPointAt(j / crossSegments, CP);
 
-          const sin = Math.sin(v);
-          const cos = -Math.cos(v);
+          const CN = crossFrames.normals[j];
 
           // normal
 
-          normal.x = cos * N.x + sin * B.x;
-          normal.y = cos * N.y + sin * B.y;
-          normal.z = cos * N.z + sin * B.z;
+          normal.x = -CN.x * AN.x + CN.y * AB.x;
+          normal.y = -CN.x * AN.y + CN.y * AB.y;
+          normal.z = -CN.x * AN.z + CN.y * AB.z;
           normal.normalize();
 
-          normals.push(normal.x, normal.y, normal.z);
+          normals.push(normal);
 
           // vertex
 
-          const radius = 1;
-
-          vertex.x = P.x + radius * normal.x;
-          vertex.y = P.y + radius * normal.y;
-          vertex.z = P.z + radius * normal.z;
+          vertex.x = AP.x + -CP.x * AN.x + CP.y * AB.x;
+          vertex.y = AP.y + -CP.x * AN.y + CP.y * AB.y;
+          vertex.z = AP.z + -CP.x * AN.z + CP.y * AB.z;
 
           vertices.push(vertex.x, vertex.y, vertex.z);
         }

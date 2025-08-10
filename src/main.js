@@ -38,9 +38,14 @@ async function init() {
   // createCurveGroup(gui, c, scene);
 
   const axis = screwShapedCurve3.clone();
-  const cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5);
+  const cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, Math.PI * (3 / 2));
   const geometry = new TubeGeometry(axis, cross, 12, 8);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    side: THREE.DoubleSide,
+    transparent: true,
+    opacity: 0.2,
+  });
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
