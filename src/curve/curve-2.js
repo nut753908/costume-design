@@ -108,14 +108,14 @@ export class Curve2 extends THREE.CurvePath {
         c.addCpToLast();
         updateIfCpsLengthChanges();
       },
-      indexI: 1, // The index for interpolateCp(index).
+      iIndex: 1,
       interpolateCp: () => {
-        c.interpolateCp(obj.indexI);
+        c.interpolateCp(obj.iIndex);
         updateIfCpsLengthChanges();
       },
-      indexR: 0, // The index for removeCp(index).
+      rIndex: 0,
       removeCp: () => {
-        c.removeCp(obj.indexR);
+        c.removeCp(obj.rIndex);
         updateIfCpsLengthChanges();
       },
     };
@@ -125,8 +125,8 @@ export class Curve2 extends THREE.CurvePath {
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
     const cRCP = folder.add(obj, "removeCp");
-    let cII = folder.add(obj, "indexI");
-    let cIR = folder.add(obj, "indexR");
+    let cII = folder.add(obj, "iIndex").name("interpolateCp index");
+    let cRI = folder.add(obj, "rIndex").name("removeCp index");
     updateEnabled();
     updateOptions();
     updateCpsFolder();
@@ -139,12 +139,12 @@ export class Curve2 extends THREE.CurvePath {
       c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve-2.js.
     }
     function updateEnabled() {
-      c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
-      c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
+      c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
+      c.rIndexList.indexOf(obj.rIndex) !== -1 ? cRCP.enable() : cRCP.disable();
     }
     function updateOptions() {
-      cII = cII.options(c.indexListI).onChange(updateEnabled);
-      cIR = cIR.options(c.indexListR).onChange(updateEnabled);
+      cII = cII.options(c.iIndexList).onChange(updateEnabled);
+      cRI = cRI.options(c.rIndexList).onChange(updateEnabled);
     }
     function updateCpsFolder() {
       Array.from(folder.children)
@@ -224,20 +224,20 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Get the index list for interpolateCp(index).
+   * Get the index list of interpolateCp(index).
    *
    * @returns {Array<number>}
    */
-  get indexListI() {
-    return this.indexListR.slice(1);
+  get iIndexList() {
+    return this.rIndexList.slice(1);
   }
 
   /**
-   * Get the index list for removeCp(index).
+   * Get the index list of removeCp(index).
    *
    * @returns {Array<number>}
    */
-  get indexListR() {
+  get rIndexList() {
     return [...Array(this.cps.length).keys()];
   }
 
