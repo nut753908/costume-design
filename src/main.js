@@ -55,7 +55,7 @@ async function init() {
   );
   const cps = [cp1, cp2, cp3];
   const c = new Curve2(cps);
-  createCurveGroup(gui, scene, c);
+  createCurveGroup(gui, c, scene);
 
   window.addEventListener("resize", onWindowResize);
 }
