@@ -386,13 +386,13 @@ export class ControlPoint3 {
   /**
    * Get each angle as THREE.Vector3.
    * x:
-   *   The angle of leftV around the x (right) axis.
+   *   The angle of v around the x (right) axis.
    *   This angle is right-handed and starts at positive y.
    * y:
-   *   The angle of leftV around the y (up) axis.
+   *   The angle of v around the y (up) axis.
    *   This angle is right-handed and starts at positive z.
    * z:
-   *   The angle of leftV around the z (front) axis.
+   *   The angle of v around the z (front) axis.
    *   This angle is right-handed and starts at positive x.
    *
    * @param {THREE.Vector3} v
