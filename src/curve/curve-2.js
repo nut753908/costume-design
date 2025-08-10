@@ -33,7 +33,6 @@ export class Curve2 extends THREE.CurvePath {
     /**
      * Secret field.
      * This function is used by setGUI() in ./src/curve/curve-2.js.
-     * This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
      * Set it in advance using createGeometry() in ./src/curve/curve-2.js.
      *
      * @type {()=>void}
@@ -47,7 +46,7 @@ export class Curve2 extends THREE.CurvePath {
      *
      * @type {()=>void}
      */
-    this._updateCpsInCpsGroup = () => {};
+    this._updateCpsGroup = () => {};
 
     this.updateCurves();
   }
@@ -78,7 +77,6 @@ export class Curve2 extends THREE.CurvePath {
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve-2.js.
-    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
     c._updateCurvesAndGeometry = () => {
       c.updateCurves();
       updateGeometry();
@@ -131,11 +129,13 @@ export class Curve2 extends THREE.CurvePath {
     let cIR = folder.add(obj, "indexR");
     updateEnabled();
     updateOptions();
+    updateCpsFolder();
 
     function updateIfCpsLengthChanges() {
-      c._updateCpsInCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
+      updateCpsFolder();
       c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve-2.js.
     }
     function updateEnabled() {
@@ -145,6 +145,16 @@ export class Curve2 extends THREE.CurvePath {
     function updateOptions() {
       cII = cII.options(c.indexListI).onChange(updateEnabled);
       cIR = cIR.options(c.indexListR).onChange(updateEnabled);
+    }
+    function updateCpsFolder() {
+      Array.from(folder.children)
+        .filter((v) => v._title === "cps[]")
+        .forEach((v) => v.destroy());
+      const cpsFolder = folder.addFolder("cps[]");
+      c.cps.forEach((cp, i) => {
+        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+        cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
+      });
     }
   }
 
