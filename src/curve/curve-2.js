@@ -28,7 +28,7 @@ export class Curve2 extends Curve {
   /**
    * Get the class of this.curves[*].
    *
-   * @returns {object}
+   * @returns {Function}
    */
   get curveClass() {
     return THREE.CubicBezierCurve;
@@ -37,7 +37,7 @@ export class Curve2 extends Curve {
   /**
    * Get the class of this.cps[*].
    *
-   * @returns {object}
+   * @returns {Function}
    */
   get cpClass() {
     return ControlPoint2;

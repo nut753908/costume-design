@@ -53,7 +53,7 @@ export class Curve extends THREE.CurvePath {
   /**
    * Get the class of this.curves[*].
    *
-   * @returns {object} - Either CubicBezierCurve3 or CubicBezierCurve.
+   * @returns {Function} - Either CubicBezierCurve3 or CubicBezierCurve.
    */
   get curveClass() {
     console.warn("Curve: .curveClass not implemented.");
@@ -62,7 +62,7 @@ export class Curve extends THREE.CurvePath {
   /**
    * Get the class of this.cps[*].
    *
-   * @returns {object} - Either ControlPoint3 or ControlPoint2.
+   * @returns {Function} - Either ControlPoint3 or ControlPoint2.
    */
   get cpClass() {
     console.warn("Curve: .cpClass not implemented.");
