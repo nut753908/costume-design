@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import { Curve } from "./curve";
-import { ControlPoint2 } from "./control-point-2";
+import { Curve } from "./curve.js";
+import { ControlPoint2 } from "./control-point-2.js";
 
 /**
  * A 2D Cubic Bezier curve path using 2D control points.
