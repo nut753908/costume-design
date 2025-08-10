@@ -152,7 +152,7 @@ export class Curve2 extends THREE.CurvePath {
         .forEach((v) => v.destroy());
       const cpsFolder = folder.addFolder("cps");
       c.cps.forEach((cp, i) => {
-        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-2.js.
         cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
       });
     }
