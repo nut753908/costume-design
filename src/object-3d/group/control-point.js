@@ -9,11 +9,11 @@ import { createPointsMaterial } from "../../material/points.js";
 
 /**
  * @param {GUI} gui
- * @param {THREE.Scene} scene
  * @param {ControlPoint3|ControlPoint2} cp
+ * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */
-export function createControlPointGroup(gui, scene, cp) {
+export function createControlPointGroup(gui, cp, scene) {
   const group = new THREE.Group();
   const folder = gui.addFolder("controlPointGroup");
 
@@ -25,7 +25,8 @@ export function createControlPointGroup(gui, scene, cp) {
   group.add(new THREE.Line(geometry, lineMaterial));
   group.add(new THREE.Points(geometry, pointsMaterial));
 
-  cp.createGeometry(group, folder);
+  cp.createGeometry(group);
+  cp.setGUI(folder);
 
   scene.add(group);
 

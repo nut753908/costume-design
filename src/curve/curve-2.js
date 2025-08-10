@@ -32,21 +32,21 @@ export class Curve2 extends THREE.CurvePath {
 
     /**
      * Secret field.
-     * This is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-     * Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
+     * This function is used by setGUI() in ./src/curve/curve-2.js.
+     * Set it in advance using createGeometry() in ./src/curve/curve-2.js.
      *
      * @type {()=>void}
      */
-    this._updateCurves = () => {};
+    this._updateCurvesAndGeometry = () => {};
 
     /**
      * Secret field.
-     * This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
+     * This function is used by setGUI() in ./src/curve/curve-2.js.
      * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
      *
      * @type {()=>void}
      */
-    this._createCps = () => {};
+    this._updateCpsGroup = () => {};
 
     this.updateCurves();
   }
@@ -69,12 +69,34 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Create geometry and set GUI.
+   * Create geometry.
    *
-   * @param {THREE.Object3D} mesh - The mesh of the line.
+   * @param {THREE.Line} line
+   */
+  createGeometry(line) {
+    const c = this;
+
+    // This function is used by setGUI() in ./src/curve/curve-2.js.
+    c._updateCurvesAndGeometry = () => {
+      c.updateCurves();
+      updateGeometry();
+    };
+    function updateGeometry() {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(c.getPoints());
+
+      line.geometry.dispose();
+      line.geometry = geometry;
+    }
+    updateGeometry();
+  }
+
+  /**
+   * Set GUI.
+   *
    * @param {GUI} gui
    */
-  createGeometry(mesh, gui) {
+  setGUI(gui) {
     const c = this;
 
     const obj = {
@@ -86,57 +108,54 @@ export class Curve2 extends THREE.CurvePath {
         c.addCpToLast();
         updateIfCpsLengthChanges();
       },
-      indexI: 1, // The index for interpolateCp(index).
+      iIndex: 1,
       interpolateCp: () => {
-        c.interpolateCp(obj.indexI);
+        c.interpolateCp(obj.iIndex);
         updateIfCpsLengthChanges();
       },
-      indexR: 0, // The index for removeCp(index).
+      rIndex: 0,
       removeCp: () => {
-        c.removeCp(obj.indexR);
+        c.removeCp(obj.rIndex);
         updateIfCpsLengthChanges();
       },
     };
 
-    const folder = gui.addFolder("curve");
+    const folder = gui.addFolder("curve2");
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
     const cRCP = folder.add(obj, "removeCp");
-    let cII = folder.add(obj, "indexI");
-    let cIR = folder.add(obj, "indexR");
+    let cII = folder.add(obj, "iIndex").name("interpolateCp index");
+    let cRI = folder.add(obj, "rIndex").name("removeCp index");
     updateEnabled();
     updateOptions();
+    updateCpsFolder();
 
     function updateIfCpsLengthChanges() {
-      c._createCps(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
       updateEnabled();
       updateOptions();
-      updateCurves();
+      updateCpsFolder();
+      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve-2.js.
     }
     function updateEnabled() {
-      c.indexListI.indexOf(obj.indexI) !== -1 ? cICP.enable() : cICP.disable();
-      c.indexListR.indexOf(obj.indexR) !== -1 ? cRCP.enable() : cRCP.disable();
+      c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
+      c.rIndexList.indexOf(obj.rIndex) !== -1 ? cRCP.enable() : cRCP.disable();
     }
     function updateOptions() {
-      cII = cII.options(c.indexListI).onChange(updateEnabled);
-      cIR = cIR.options(c.indexListR).onChange(updateEnabled);
+      cII = cII.options(c.iIndexList).onChange(updateEnabled);
+      cRI = cRI.options(c.rIndexList).onChange(updateEnabled);
     }
-    function updateCurves() {
-      c.updateCurves();
-      generateGeometry();
+    function updateCpsFolder() {
+      Array.from(folder.children)
+        .filter((v) => v._title === "cps")
+        .forEach((v) => v.destroy());
+      const cpsFolder = folder.addFolder("cps");
+      c.cps.forEach((cp, i) => {
+        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-2.js.
+        cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
+      });
     }
-    // This function is used by createCpsGroup() in ./src/object-3d/group/curve.js.
-    this._updateCurves = updateCurves;
-
-    function generateGeometry() {
-      const geometry = new THREE.BufferGeometry();
-      geometry.setFromPoints(c.getPoints());
-
-      mesh.geometry.dispose();
-      mesh.geometry = geometry;
-    }
-    generateGeometry();
   }
 
   /**
@@ -180,11 +199,8 @@ export class Curve2 extends THREE.CurvePath {
     cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
     cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
 
-    let _tmp;
-    _tmp = cp1.isSyncRadius;
     cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
-    cp1.isSyncRadius = _tmp;
 
     cp2.isSyncRadius = false;
     cp2.isSyncAngle = false;
@@ -193,10 +209,8 @@ export class Curve2 extends THREE.CurvePath {
     cp2.isSyncRadius = true;
     cp2.isSyncAngle = true;
 
-    _tmp = cp3.isSyncRadius;
     cp3.isSyncRadius = false;
     cp3.updateFromLeftPos();
-    cp3.isSyncRadius = _tmp;
   }
 
   /**
@@ -210,20 +224,20 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Get the index list for interpolateCp(index).
+   * Get the index list of interpolateCp(index).
    *
    * @returns {Array<number>}
    */
-  get indexListI() {
-    return this.indexListR.slice(1);
+  get iIndexList() {
+    return this.rIndexList.slice(1);
   }
 
   /**
-   * Get the index list for removeCp(index).
+   * Get the index list of removeCp(index).
    *
    * @returns {Array<number>}
    */
-  get indexListR() {
+  get rIndexList() {
     return [...Array(this.cps.length).keys()];
   }
 

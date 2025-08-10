@@ -69,6 +69,15 @@ export class ControlPoint3 {
      * @type {boolean}
      */
     this.isSyncAngle = isSyncAngle;
+
+    /**
+     * Secret field.
+     * This function is used by setGUI() in ./src/curve/control-point-3.js.
+     * Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
+     *
+     * @type {()=>void}
+     */
+    this._updateGeometry = () => {};
   }
 
   /**
@@ -109,14 +118,33 @@ export class ControlPoint3 {
   }
 
   /**
-   * Create geometry and set GUI.
+   * Create geometry.
    *
-   * @param {THREE.Object3D} mesh - The mesh of the group.
+   * @param {THREE.Group} group
+   */
+  createGeometry(group) {
+    const cp = this;
+
+    // This function is used by setGUI() in ./src/curve/control-point-3.js.
+    (cp._updateGeometry = () => {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(cp.getPoints());
+
+      group.children.forEach((v) => {
+        v.geometry.dispose();
+        v.geometry = geometry;
+      });
+    })();
+  }
+
+  /**
+   * Set GUI.
+   *
    * @param {GUI} gui
    * @param {string} name - The cp folder name used in the GUI.
    * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
    */
-  createGeometry(mesh, gui, name = "cp", updateCallback = () => {}) {
+  setGUI(gui, name = "cp3", updateCallback = () => {}) {
     const cp = this;
 
     let _tmp;
@@ -185,21 +213,10 @@ export class ControlPoint3 {
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
-      generateGeometry();
+      cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
       upDownControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
-
-    function generateGeometry() {
-      const geometry = new THREE.BufferGeometry();
-      geometry.setFromPoints(cp.getPoints());
-
-      mesh.children.forEach((v) => {
-        v.geometry.dispose();
-        v.geometry = geometry;
-      });
-    }
-    generateGeometry();
   }
 
   /**
