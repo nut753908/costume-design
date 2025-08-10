@@ -25,7 +25,8 @@ export function createControlPointGroup(gui, scene, cp) {
   group.add(new THREE.Line(geometry, lineMaterial));
   group.add(new THREE.Points(geometry, pointsMaterial));
 
-  cp.createGeometry(group, folder);
+  cp.createGeometry(group);
+  cp.setGUI(folder);
 
   scene.add(group);
 
