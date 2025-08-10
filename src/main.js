@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 import { createRenderer, updateRenderer } from "./main/renderer.js";
 import { createCamera, updateCamera } from "./main/camera.js";
 import { createControlsAndGizmo } from "./main/controls.js";
@@ -8,7 +10,8 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 // import { semicircleCurve2 } from "./curve/samples/curve-2.js";
-import { createCurveGroup } from "./object-3d/group/curve.js";
+// import { createCurveGroup } from "./object-3d/group/curve.js";
+import { TubeGeometry } from "./geometry/tube.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -30,9 +33,16 @@ async function init() {
   //   createHairBundleGroup(gui, scene);
   // });
 
-  const c = screwShapedCurve3.clone();
+  // const c = screwShapedCurve3.clone();
   // const c = semicircleCurve2.clone();
-  createCurveGroup(gui, c, scene);
+  // createCurveGroup(gui, c, scene);
+
+  const axis = screwShapedCurve3.clone();
+  const cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5);
+  const geometry = new TubeGeometry(axis, cross, 12, 8);
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
 
   window.addEventListener("resize", onWindowResize);
 }
