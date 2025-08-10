@@ -17,7 +17,7 @@ import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
  * scene.add( mesh );
  * ```
  *
- * @augments BufferGeometry
+ * @augments THREE.BufferGeometry
  */
 export class TubeGeometry extends THREE.BufferGeometry {
   /**
