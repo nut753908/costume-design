@@ -144,7 +144,7 @@ export class ControlPoint3 {
    * @param {string} name - The cp folder name used in the GUI.
    * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
    */
-  setGUI(gui, name = "cp", updateCallback = () => {}) {
+  setGUI(gui, name = "cp3", updateCallback = () => {}) {
     const cp = this;
 
     let _tmp;

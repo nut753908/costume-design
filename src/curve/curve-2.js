@@ -120,7 +120,7 @@ export class Curve2 extends THREE.CurvePath {
       },
     };
 
-    const folder = gui.addFolder("curve");
+    const folder = gui.addFolder("curve2");
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
