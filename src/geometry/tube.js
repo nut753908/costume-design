@@ -2,6 +2,8 @@ import * as THREE from "three";
 
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
 
+// TODO: Apply the cross-sectional curve.
+// TODO: Add updateGeometry() and setGUI() somewhere.
 /**
  * A geometry class for representing a tube.
  *
