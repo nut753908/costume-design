@@ -49,21 +49,21 @@ export class Curve extends THREE.CurvePath {
   }
 
   /**
-   * Get the type of this.curves[*].
+   * Get the class of this.curves[*].
    *
    * @returns {object} - Either CubicBezierCurve3 or CubicBezierCurve.
    */
-  get curveType() {
-    console.warn("Curve: .curveType not implemented.");
+  get curveClass() {
+    console.warn("Curve: .curveClass not implemented.");
   }
 
   /**
-   * Get the type of this.cps[*].
+   * Get the class of this.cps[*].
    *
    * @returns {object} - Either ControlPoint3 or ControlPoint2.
    */
-  get cpType() {
-    console.warn("Curve: .cpType not implemented.");
+  get cpClass() {
+    console.warn("Curve: .cpClass not implemented.");
   }
 
   /**
@@ -81,7 +81,7 @@ export class Curve extends THREE.CurvePath {
   updateCurves() {
     this.curves = [];
     for (let i = 0, l = this.cps.length - 1; i < l; i++) {
-      const curve = new this.curveType(
+      const curve = new this.curveClass(
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
         this.cps[i + 1].leftPos.clone(),
@@ -189,7 +189,7 @@ export class Curve extends THREE.CurvePath {
     if (this.cps.length !== 0) {
       this.cps.unshift(this.cps[0].clone()); // Copy first cp.
     } else {
-      this.cps.unshift(new this.cpType());
+      this.cps.unshift(new this.cpClass());
     }
   }
 
@@ -200,7 +200,7 @@ export class Curve extends THREE.CurvePath {
     if (this.cps.length !== 0) {
       this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
     } else {
-      this.cps.push(new this.cpType());
+      this.cps.push(new this.cpClass());
     }
   }
 
@@ -324,7 +324,7 @@ export class Curve extends THREE.CurvePath {
 
     for (let i = 0, l = json.cps.length; i < l; i++) {
       const cp = json.cps[i];
-      this.cps.push(new this.cpType().fromJSON(cp));
+      this.cps.push(new this.cpClass().fromJSON(cp));
     }
 
     return this;

@@ -24,20 +24,20 @@ export class Curve2 extends Curve {
   }
 
   /**
-   * Get the type of this.curves[*].
+   * Get the class of this.curves[*].
    *
    * @returns {object}
    */
-  get curveType() {
+  get curveClass() {
     return THREE.CubicBezierCurve;
   }
 
   /**
-   * Get the type of this.cps[*].
+   * Get the class of this.cps[*].
    *
    * @returns {object}
    */
-  get cpType() {
+  get cpClass() {
     return ControlPoint2;
   }
 
