@@ -148,9 +148,9 @@ export class Curve2 extends THREE.CurvePath {
     }
     function updateCpsFolder() {
       Array.from(folder.children)
-        .filter((v) => v._title === "cps[]")
+        .filter((v) => v._title === "cps")
         .forEach((v) => v.destroy());
-      const cpsFolder = folder.addFolder("cps[]");
+      const cpsFolder = folder.addFolder("cps");
       c.cps.forEach((cp, i) => {
         // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-{3,2}.js.
         cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
