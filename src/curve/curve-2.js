@@ -199,11 +199,8 @@ export class Curve2 extends THREE.CurvePath {
     cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
     cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
 
-    let _tmp;
-    _tmp = cp1.isSyncRadius;
     cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
-    cp1.isSyncRadius = _tmp;
 
     cp2.isSyncRadius = false;
     cp2.isSyncAngle = false;
@@ -212,10 +209,8 @@ export class Curve2 extends THREE.CurvePath {
     cp2.isSyncRadius = true;
     cp2.isSyncAngle = true;
 
-    _tmp = cp3.isSyncRadius;
     cp3.isSyncRadius = false;
     cp3.updateFromLeftPos();
-    cp3.isSyncRadius = _tmp;
   }
 
   /**
