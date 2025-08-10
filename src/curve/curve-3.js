@@ -10,6 +10,8 @@ import { ControlPoint3 } from "./control-point-3";
  * import { Curve3 } from "./src/curve/curve-3.js";
  * const c = new Curve3();
  * ```
+ *
+ * @augments Curve
  */
 export class Curve3 extends Curve {
   /**

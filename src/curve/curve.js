@@ -8,6 +8,8 @@ import { isInvalidIndex } from "../math/utils";
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
  * This is an abstract class for Curve3/Curve2.
+ *
+ * @augments THREE.CurvePath
  */
 export class Curve extends THREE.CurvePath {
   /**
