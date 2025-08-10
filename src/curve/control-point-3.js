@@ -438,9 +438,9 @@ export class ControlPoint3 {
   }
 
   /**
-   * Serializes the ControlPoint2 into JSON.
+   * Serializes the ControlPoint3 into JSON.
    *
-   * @return {Object} A JSON object representing the serialized ControlPoint2.
+   * @return {Object} A JSON object representing the serialized ControlPoint3.
    */
   toJSON() {
     const data = {};
@@ -461,10 +461,10 @@ export class ControlPoint3 {
   }
 
   /**
-   * Deserializes the ControlPoint2 from the given JSON.
+   * Deserializes the ControlPoint3 from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized ControlPoint2.
-   * @return {ControlPoint2} A reference to this ControlPoint2.
+   * @param {Object} json - The JSON holding the serialized ControlPoint3.
+   * @return {ControlPoint3} A reference to this ControlPoint3.
    */
   fromJSON(json) {
     this.middlePos.fromArray(json.middlePos);
