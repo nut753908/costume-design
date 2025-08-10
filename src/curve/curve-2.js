@@ -71,9 +71,9 @@ export class Curve2 extends THREE.CurvePath {
   /**
    * Create geometry.
    *
-   * @param {THREE.Object3D} mesh - The mesh of the line.
+   * @param {THREE.Line} line
    */
-  createGeometry(mesh) {
+  createGeometry(line) {
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve-2.js.
@@ -85,8 +85,8 @@ export class Curve2 extends THREE.CurvePath {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(c.getPoints());
 
-      mesh.geometry.dispose();
-      mesh.geometry = geometry;
+      line.geometry.dispose();
+      line.geometry = geometry;
     }
     updateGeometry();
   }

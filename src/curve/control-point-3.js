@@ -120,9 +120,9 @@ export class ControlPoint3 {
   /**
    * Create geometry.
    *
-   * @param {THREE.Object3D} mesh - The mesh of the group.
+   * @param {THREE.Group} group
    */
-  createGeometry(mesh) {
+  createGeometry(group) {
     const cp = this;
 
     // This function is used by setGUI() in ./src/curve/control-point-3.js.
@@ -130,7 +130,7 @@ export class ControlPoint3 {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(cp.getPoints());
 
-      mesh.children.forEach((v) => {
+      group.children.forEach((v) => {
         v.geometry.dispose();
         v.geometry = geometry;
       });
