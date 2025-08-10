@@ -11,8 +11,8 @@ import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
  * import { ControlPoint3 } from "./src/curve/control-point-3.js";
  * const cp = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
- *   new THREE.Vector3(0, 1, 0),
- *   new THREE.Vector3(0, -1, 0),
+ *   new THREE.Vector3(-1, 0, 0),
+ *   new THREE.Vector3(1, 0, 0),
  *   true,
  *   true
  * );
@@ -23,15 +23,15 @@ export class ControlPoint3 {
    * Constructs a new ControlPoint3.
    *
    * @param {THREE.Vector3} [middlePos] - The position of middle control point.
-   * @param {THREE.Vector3} [upPos] - The position of upside control point.
-   * @param {THREE.Vector3} [downPos] - The position of downside control point.
-   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "up" and "down" radius.
-   * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "up" and "down" angle.
+   * @param {THREE.Vector3} [leftPos] - The position of leftside control point.
+   * @param {THREE.Vector3} [rightPos] - The position of rightside control point.
+   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "left" and "right" radius.
+   * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "left" and "right" angle.
    */
   constructor(
     middlePos = new THREE.Vector3(0, 0, 0),
-    upPos = new THREE.Vector3(0, 1, 0),
-    downPos = new THREE.Vector3(0, -1, 0),
+    leftPos = new THREE.Vector3(-1, 0, 0),
+    rightPos = new THREE.Vector3(1, 0, 0),
     isSyncRadius = true,
     isSyncAngle = true
   ) {
@@ -43,28 +43,28 @@ export class ControlPoint3 {
     this.middlePos = middlePos;
 
     /**
-     * The position of upside control point.
+     * The position of leftside control point.
      *
      * @type {THREE.Vector3}
      */
-    this.initUp(upPos);
+    this.initLeft(leftPos);
 
     /**
-     * The position of downside control point.
+     * The position of rightside control point.
      *
      * @type {THREE.Vector3}
      */
-    this.initDown(downPos);
+    this.initRight(rightPos);
 
     /**
-     * Whether to synchronize the "up" and "down" radius.
+     * Whether to synchronize the "left" and "right" radius.
      *
      * @type {boolean}
      */
     this.isSyncRadius = isSyncRadius;
 
     /**
-     * Whether to synchronize the "up" and "down" angle.
+     * Whether to synchronize the "left" and "right" angle.
      *
      * @type {boolean}
      */
@@ -81,40 +81,40 @@ export class ControlPoint3 {
   }
 
   /**
-   * Initialize "up".
-   * "upV" is "upPos - middlePos" and its type is THREE.'V'ector3.
-   * "upS" is "upPos - middlePos" and its type is THREE.'S'pherical.
-   * "upA" represents each angle of "upV" as THREE.Vector3.
-   *   "upA.x" is the angle around the x axis.
-   *   "upA.y" is the angle around the y axis.
-   *   "upA.z" is the angle around the z axis.
+   * Initialize "left".
+   * "leftV" is "leftPos - middlePos" and its type is THREE.'V'ector3.
+   * "leftS" is "leftPos - middlePos" and its type is THREE.'S'pherical.
+   * "leftA" represents each angle of "leftV" as THREE.Vector3.
+   *   "leftA.x" is the angle around the x axis.
+   *   "leftA.y" is the angle around the y axis.
+   *   "leftA.z" is the angle around the z axis.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3} upPos - The position of upside control point.
+   * @param {THREE.Vector3} leftPos - The position of leftside control point.
    */
-  initUp(upPos) {
-    this.upPos = upPos;
-    this.upV = upPos.clone().sub(this.middlePos);
-    this.upS = new THREE.Spherical().setFromVector3(this.upV);
-    this.upA = this.getA(this.upV);
+  initLeft(leftPos) {
+    this.leftPos = leftPos;
+    this.leftV = leftPos.clone().sub(this.middlePos);
+    this.leftS = new THREE.Spherical().setFromVector3(this.leftV);
+    this.leftA = this.getA(this.leftV);
   }
   /**
-   * Initialize "down".
-   * "downV" is "downPos - middlePos" and its type is THREE.'V'ector3.
-   * "downS" is "downPos - middlePos" and its type is THREE.'S'pherical.
-   * "downA" represents each angle of "downV" as THREE.Vector3.
-   *   "downA.x" is the angle around the x axis.
-   *   "downA.y" is the angle around the y axis.
-   *   "downA.z" is the angle around the z axis.
+   * Initialize "right".
+   * "rightV" is "rightPos - middlePos" and its type is THREE.'V'ector3.
+   * "rightS" is "rightPos - middlePos" and its type is THREE.'S'pherical.
+   * "rightA" represents each angle of "rightV" as THREE.Vector3.
+   *   "rightA.x" is the angle around the x axis.
+   *   "rightA.y" is the angle around the y axis.
+   *   "rightA.z" is the angle around the z axis.
    * Call it only once in this constructor.
    *
-   * @param {THREE.Vector3} downPos - The position of downside control point.
+   * @param {THREE.Vector3} rightPos - The position of rightside control point.
    */
-  initDown(downPos) {
-    this.downPos = downPos;
-    this.downV = downPos.clone().sub(this.middlePos);
-    this.downS = new THREE.Spherical().setFromVector3(this.downV);
-    this.downA = this.getA(this.downV);
+  initRight(rightPos) {
+    this.rightPos = rightPos;
+    this.rightV = rightPos.clone().sub(this.middlePos);
+    this.rightS = new THREE.Spherical().setFromVector3(this.rightV);
+    this.rightA = this.getA(this.rightV);
   }
 
   /**
@@ -154,67 +154,67 @@ export class ControlPoint3 {
     folder.add(cp.middlePos, "z").step(0.01).name("middle.z").onChange(uMP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    folder.add(cp.upPos, "x").step(0.01).name("up.x").onChange(uUP);
-    folder.add(cp.upPos, "y").step(0.01).name("up.y").onChange(uUP);
-    folder.add(cp.upPos, "z").step(0.01).name("up.z").onChange(uUP);
-    _tmp = folder.add(cp.upS, "radius").min(0).step(0.01);
-    _tmp.name("up.radius").onChange(uUS);
-    folder.add(cp.upA, "x", 0, 360, 1).name("up.Ax").onChange(uUAx);
-    folder.add(cp.upA, "y", 0, 360, 1).name("up.Ay").onChange(uUAy);
-    folder.add(cp.upA, "z", 0, 360, 1).name("up.Az").onChange(uUAz);
-    folder.add(cp.downPos, "x").step(0.01).name("down.x").onChange(uDP);
-    folder.add(cp.downPos, "y").step(0.01).name("down.y").onChange(uDP);
-    folder.add(cp.downPos, "z").step(0.01).name("down.z").onChange(uDP);
-    _tmp = folder.add(cp.downS, "radius").min(0).step(0.01);
-    _tmp.name("down.radius").onChange(uDS);
-    folder.add(cp.downA, "x", 0, 360, 1).name("down.Ax").onChange(uDAx);
-    folder.add(cp.downA, "y", 0, 360, 1).name("down.Ay").onChange(uDAy);
-    folder.add(cp.downA, "z", 0, 360, 1).name("down.Az").onChange(uDAz);
+    folder.add(cp.leftPos, "x").step(0.01).name("left.x").onChange(uUP);
+    folder.add(cp.leftPos, "y").step(0.01).name("left.y").onChange(uUP);
+    folder.add(cp.leftPos, "z").step(0.01).name("left.z").onChange(uUP);
+    _tmp = folder.add(cp.leftS, "radius").min(0).step(0.01);
+    _tmp.name("left.radius").onChange(uUS);
+    folder.add(cp.leftA, "x", 0, 360, 1).name("left.Ax").onChange(uUAx);
+    folder.add(cp.leftA, "y", 0, 360, 1).name("left.Ay").onChange(uUAy);
+    folder.add(cp.leftA, "z", 0, 360, 1).name("left.Az").onChange(uUAz);
+    folder.add(cp.rightPos, "x").step(0.01).name("right.x").onChange(uDP);
+    folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uDP);
+    folder.add(cp.rightPos, "z").step(0.01).name("right.z").onChange(uDP);
+    _tmp = folder.add(cp.rightS, "radius").min(0).step(0.01);
+    _tmp.name("right.radius").onChange(uDS);
+    folder.add(cp.rightA, "x", 0, 360, 1).name("right.Ax").onChange(uDAx);
+    folder.add(cp.rightA, "y", 0, 360, 1).name("right.Ay").onChange(uDAy);
+    folder.add(cp.rightA, "z", 0, 360, 1).name("right.Az").onChange(uDAz);
 
-    const upDownControllers = folder.controllers.filter(
-      (c) => c._name.startsWith("up.") || c._name.startsWith("down.")
+    const leftRightControllers = folder.controllers.filter(
+      (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
     function uMP() /* updateFromMiddlePos */ {
       updateFrom("middlePos");
     }
-    function uUP() /* updateFromUpPos */ {
-      updateFrom("upPos");
+    function uUP() /* updateFromLeftPos */ {
+      updateFrom("leftPos");
     }
-    function uUS() /* updateFromUpS */ {
-      updateFrom("upS");
+    function uUS() /* updateFromLeftS */ {
+      updateFrom("leftS");
     }
-    function uUAx() /* updateFromUpAx */ {
-      updateFrom("upAx");
+    function uUAx() /* updateFromLeftAx */ {
+      updateFrom("leftAx");
     }
-    function uUAy() /* updateFromUpAy */ {
-      updateFrom("upAy");
+    function uUAy() /* updateFromLeftAy */ {
+      updateFrom("leftAy");
     }
-    function uUAz() /* updateFromUpAz */ {
-      updateFrom("upAz");
+    function uUAz() /* updateFromLeftAz */ {
+      updateFrom("leftAz");
     }
-    function uDP() /* updateFromDownPos */ {
-      updateFrom("downPos");
+    function uDP() /* updateFromRightPos */ {
+      updateFrom("rightPos");
     }
-    function uDS() /* updateFromDownS */ {
-      updateFrom("downS");
+    function uDS() /* updateFromRightS */ {
+      updateFrom("rightS");
     }
-    function uDAx() /* updateFromDownAx */ {
-      updateFrom("downAx");
+    function uDAx() /* updateFromRightAx */ {
+      updateFrom("rightAx");
     }
-    function uDAy() /* updateFromDownAy */ {
-      updateFrom("downAy");
+    function uDAy() /* updateFromRightAy */ {
+      updateFrom("rightAy");
     }
-    function uDAz() /* updateFromDownAz */ {
-      updateFrom("downAz");
+    function uDAz() /* updateFromRightAz */ {
+      updateFrom("rightAz");
     }
     /**
-     * @param {"middlePos"|"upPos"|"upS"|"upAx"|"upAy"|"upAz"|"downPos"|"downS"|"downAx"|"downAy"|"downAz"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"leftPos"|"leftS"|"leftAx"|"leftAy"|"leftAz"|"rightPos"|"rightS"|"rightAx"|"rightAy"|"rightAz"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
-      upDownControllers.forEach((c) => c.updateDisplay());
+      leftRightControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
   }
@@ -225,174 +225,174 @@ export class ControlPoint3 {
    * @returns {Array<THREE.Vector3>}
    */
   getPoints() {
-    return [this.upPos, this.middlePos, this.downPos];
+    return [this.leftPos, this.middlePos, this.rightPos];
   }
 
   updateFrom = {
     middlePos: () => this.updateFromMiddlePos(),
-    upPos: () => this.updateFromUpPos(),
-    upS: () => this.updateFromUpS(),
-    upAx: () => this.updateFromUpAx(),
-    upAy: () => this.updateFromUpAy(),
-    upAz: () => this.updateFromUpAz(),
-    downPos: () => this.updateFromDownPos(),
-    downS: () => this.updateFromDownS(),
-    downAx: () => this.updateFromDownAx(),
-    downAy: () => this.updateFromDownAy(),
-    downAz: () => this.updateFromDownAz(),
+    leftPos: () => this.updateFromLeftPos(),
+    leftS: () => this.updateFromLeftS(),
+    leftAx: () => this.updateFromLeftAx(),
+    leftAy: () => this.updateFromLeftAy(),
+    leftAz: () => this.updateFromLeftAz(),
+    rightPos: () => this.updateFromRightPos(),
+    rightS: () => this.updateFromRightS(),
+    rightAx: () => this.updateFromRightAx(),
+    rightAy: () => this.updateFromRightAy(),
+    rightAz: () => this.updateFromRightAz(),
   };
 
   /**
-   * Update "upPos" and "downPos" from "middlePos".
+   * Update "leftPos" and "rightPos" from "middlePos".
    */
   updateFromMiddlePos() {
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
-   * Update "upV", "upS" and "upA" from "upPos".
+   * Update "leftV", "leftS" and "leftA" from "leftPos".
    */
-  updateFromUpPos() {
-    this.upV.copy(this.upPos.clone().sub(this.middlePos));
-    this.upS.setFromVector3(this.upV);
-    this.upA.copy(this.getA(this.upV));
-    this.syncUpToDown();
+  updateFromLeftPos() {
+    this.leftV.copy(this.leftPos.clone().sub(this.middlePos));
+    this.leftS.setFromVector3(this.leftV);
+    this.leftA.copy(this.getA(this.leftV));
+    this.syncLeftToRight();
   }
   /**
-   * Update "upV", "upA" and "upPos" from "upS".
+   * Update "leftV", "leftA" and "leftPos" from "leftS".
    */
-  updateFromUpS() {
-    this.upV.setFromSpherical(this.upS);
-    this.upA.copy(this.getA(this.upV));
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
-    this.syncUpToDown();
+  updateFromLeftS() {
+    this.leftV.setFromSpherical(this.leftS);
+    this.leftA.copy(this.getA(this.leftV));
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    this.syncLeftToRight();
   }
   /**
-   * Update "upS" from "upAx" and the previous "upS" and call updateFromUpS().
+   * Update "leftS" from "leftAx" and the previous "leftS" and call updateFromLeftS().
    */
-  updateFromUpAx() {
-    const x = this.upV.x;
-    const r_yz = Math.sqrt(this.upS.radius ** 2 - x ** 2);
-    const Ax = THREE.MathUtils.degToRad(this.upA.x);
+  updateFromLeftAx() {
+    const x = this.leftV.x;
+    const r_yz = Math.sqrt(this.leftS.radius ** 2 - x ** 2);
+    const Ax = THREE.MathUtils.degToRad(this.leftA.x);
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
-    this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = atan2In2PI(x, z);
-    this.updateFromUpS();
+    this.leftS.phi = safeAcos(y, this.leftS.radius);
+    this.leftS.theta = atan2In2PI(x, z);
+    this.updateFromLeftS();
   }
   /**
-   * Update "upS" from "upAy" and the previous "upS" and call updateFromUpS().
+   * Update "leftS" from "leftAy" and the previous "leftS" and call leftdateFromLeftS().
    */
-  updateFromUpAy() {
-    this.upS.theta = THREE.MathUtils.degToRad(this.upA.y);
-    this.updateFromUpS();
+  updateFromLeftAy() {
+    this.leftS.theta = THREE.MathUtils.degToRad(this.leftA.y);
+    this.updateFromLeftS();
   }
   /**
-   * Update "upS" from "upAy" and the previous "upS" and call updateFromUpS().
+   * Update "leftS" from "leftAy" and the previous "leftS" and call updateFromLeftS().
    */
-  updateFromUpAz() {
-    const z = this.upV.z;
-    const r_xy = Math.sqrt(this.upS.radius ** 2 - z ** 2);
-    const Az = THREE.MathUtils.degToRad(this.upA.z);
+  updateFromLeftAz() {
+    const z = this.leftV.z;
+    const r_xy = Math.sqrt(this.leftS.radius ** 2 - z ** 2);
+    const Az = THREE.MathUtils.degToRad(this.leftA.z);
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
-    this.upS.phi = safeAcos(y, this.upS.radius);
-    this.upS.theta = atan2In2PI(x, z);
-    this.updateFromUpS();
+    this.leftS.phi = safeAcos(y, this.leftS.radius);
+    this.leftS.theta = atan2In2PI(x, z);
+    this.updateFromLeftS();
   }
   /**
-   * Update "downV", "downS" and "downA" from "downPos".
+   * Update "rightV", "rightS" and "rightA" from "rightPos".
    */
-  updateFromDownPos() {
-    this.downV.copy(this.downPos.clone().sub(this.middlePos));
-    this.downS.setFromVector3(this.downV);
-    this.downA.copy(this.getA(this.downV));
-    this.syncDownToUp();
+  updateFromRightPos() {
+    this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
+    this.rightS.setFromVector3(this.rightV);
+    this.rightA.copy(this.getA(this.rightV));
+    this.syncRightToLeft();
   }
   /**
-   * Update "downV", "downA" and "downPos" from "downS".
+   * Update "rightV", "rightA" and "rightPos" from "rightS".
    */
-  updateFromDownS() {
-    this.downV.setFromSpherical(this.downS);
-    this.downA.copy(this.getA(this.downV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
-    this.syncDownToUp();
+  updateFromRightS() {
+    this.rightV.setFromSpherical(this.rightS);
+    this.rightA.copy(this.getA(this.rightV));
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
+    this.syncRightToLeft();
   }
   /**
-   * Update "downS" from "downAx" and the previous "downS" and call updateFromDownS().
+   * Update "rightS" from "rightAx" and the previous "rightS" and call updateFromRightS().
    */
-  updateFromDownAx() {
-    const x = this.downV.x;
-    const r_yz = Math.sqrt(this.downS.radius ** 2 - x ** 2);
-    const Ax = THREE.MathUtils.degToRad(this.downA.x);
+  updateFromRightAx() {
+    const x = this.rightV.x;
+    const r_yz = Math.sqrt(this.rightS.radius ** 2 - x ** 2);
+    const Ax = THREE.MathUtils.degToRad(this.rightA.x);
     const y = r_yz * Math.cos(Ax);
     const z = r_yz * Math.sin(Ax);
-    this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = atan2In2PI(x, z);
-    this.updateFromDownS();
+    this.rightS.phi = safeAcos(y, this.rightS.radius);
+    this.rightS.theta = atan2In2PI(x, z);
+    this.updateFromRightS();
   }
   /**
-   * Update "downS" from "downAy" and the previous "downS" and call updateFromDownS().
+   * Update "rightS" from "rightAy" and the previous "rightS" and call updateFromRightS().
    */
-  updateFromDownAy() {
-    this.downS.theta = THREE.MathUtils.degToRad(this.downA.y);
-    this.updateFromDownS();
+  updateFromRightAy() {
+    this.rightS.theta = THREE.MathUtils.degToRad(this.rightA.y);
+    this.updateFromRightS();
   }
   /**
-   * Update "downS" from "downAz" and the previous "downS" and call updateFromDownS().
+   * Update "rightS" from "rightAz" and the previous "rightS" and call updateFromRightS().
    */
-  updateFromDownAz() {
-    const z = this.downV.z;
-    const r_xy = Math.sqrt(this.downS.radius ** 2 - z ** 2);
-    const Az = THREE.MathUtils.degToRad(this.downA.z);
+  updateFromRightAz() {
+    const z = this.rightV.z;
+    const r_xy = Math.sqrt(this.rightS.radius ** 2 - z ** 2);
+    const Az = THREE.MathUtils.degToRad(this.rightA.z);
     const x = r_xy * Math.cos(Az);
     const y = r_xy * Math.sin(Az);
-    this.downS.phi = safeAcos(y, this.downS.radius);
-    this.downS.theta = atan2In2PI(x, z);
-    this.updateFromDownS();
+    this.rightS.phi = safeAcos(y, this.rightS.radius);
+    this.rightS.theta = atan2In2PI(x, z);
+    this.updateFromRightS();
   }
 
   /**
-   * Synchronize from "up" to "down" with reversing the direction
+   * Synchronize from "left" to "right" with reversing the direction
    * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
-  syncUpToDown() {
+  syncLeftToRight() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
-    if (this.isSyncRadius) this.downS.radius = this.upS.radius;
+    if (this.isSyncRadius) this.rightS.radius = this.leftS.radius;
     if (this.isSyncAngle) {
-      this.downS.phi = reverseInPI(this.upS.phi);
-      this.downS.theta = rotatePI(this.upS.theta);
+      this.rightS.phi = reverseInPI(this.leftS.phi);
+      this.rightS.theta = rotatePI(this.leftS.theta);
     }
-    this.downV.setFromSpherical(this.downS);
-    this.downA.copy(this.getA(this.downV));
-    this.downPos.copy(this.middlePos.clone().add(this.downV));
+    this.rightV.setFromSpherical(this.rightS);
+    this.rightA.copy(this.getA(this.rightV));
+    this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
-   * Synchronize from "down" to "up" with reversing the direction
+   * Synchronize from "right" to "left" with reversing the direction
    * only if this.isSyncRadius = true or this.isSyncAngle = true.
    */
-  syncDownToUp() {
+  syncRightToLeft() {
     if (!this.isSyncRadius && !this.isSyncAngle) return;
-    if (this.isSyncRadius) this.upS.radius = this.downS.radius;
+    if (this.isSyncRadius) this.leftS.radius = this.rightS.radius;
     if (this.isSyncAngle) {
-      this.upS.phi = reverseInPI(this.downS.phi);
-      this.upS.theta = rotatePI(this.downS.theta);
+      this.leftS.phi = reverseInPI(this.rightS.phi);
+      this.leftS.theta = rotatePI(this.rightS.theta);
     }
-    this.upV.setFromSpherical(this.upS);
-    this.upA.copy(this.getA(this.upV));
-    this.upPos.copy(this.middlePos.clone().add(this.upV));
+    this.leftV.setFromSpherical(this.leftS);
+    this.leftA.copy(this.getA(this.leftV));
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
   }
 
   /**
    * Get each angle as THREE.Vector3.
    * x:
-   *   The angle of upV around the x (right) axis.
+   *   The angle of v around the x (right) axis.
    *   This angle is right-handed and starts at positive y.
    * y:
-   *   The angle of upV around the y (up) axis.
+   *   The angle of v around the y (up) axis.
    *   This angle is right-handed and starts at positive z.
    * z:
-   *   The angle of upV around the z (front) axis.
+   *   The angle of v around the z (front) axis.
    *   This angle is right-handed and starts at positive x.
    *
    * @param {THREE.Vector3} v
@@ -423,14 +423,14 @@ export class ControlPoint3 {
    */
   copy(source) {
     this.middlePos.copy(source.middlePos);
-    this.upPos.copy(source.upPos);
-    this.upV.copy(source.upV);
-    this.upS.copy(source.upS);
-    this.upA.copy(source.upA);
-    this.downPos.copy(source.downPos);
-    this.downV.copy(source.downV);
-    this.downS.copy(source.downS);
-    this.downA.copy(source.downA);
+    this.leftPos.copy(source.leftPos);
+    this.leftV.copy(source.leftV);
+    this.leftS.copy(source.leftS);
+    this.leftA.copy(source.leftA);
+    this.rightPos.copy(source.rightPos);
+    this.rightV.copy(source.rightV);
+    this.rightS.copy(source.rightS);
+    this.rightA.copy(source.rightA);
     this.isSyncRadius = source.isSyncRadius;
     this.isSyncAngle = source.isSyncAngle;
 
@@ -438,22 +438,22 @@ export class ControlPoint3 {
   }
 
   /**
-   * Serializes the ControlPoint2 into JSON.
+   * Serializes the ControlPoint3 into JSON.
    *
-   * @return {Object} A JSON object representing the serialized ControlPoint2.
+   * @return {Object} A JSON object representing the serialized ControlPoint3.
    */
   toJSON() {
     const data = {};
 
     data.middlePos = this.middlePos.toArray();
-    data.upPos = this.upPos.toArray();
-    data.upV = this.upV.toArray();
-    data.upS = sphericalToJSON(this.upS);
-    data.upA = this.upA.toArray();
-    data.downPos = this.downPos.toArray();
-    data.downV = this.downV.toArray();
-    data.downS = sphericalToJSON(this.downS);
-    data.downA = this.downA.toArray();
+    data.leftPos = this.leftPos.toArray();
+    data.leftV = this.leftV.toArray();
+    data.leftS = sphericalToJSON(this.leftS);
+    data.leftA = this.leftA.toArray();
+    data.rightPos = this.rightPos.toArray();
+    data.rightV = this.rightV.toArray();
+    data.rightS = sphericalToJSON(this.rightS);
+    data.rightA = this.rightA.toArray();
     data.isSyncRadius = this.isSyncRadius;
     data.isSyncAngle = this.isSyncAngle;
 
@@ -461,21 +461,21 @@ export class ControlPoint3 {
   }
 
   /**
-   * Deserializes the ControlPoint2 from the given JSON.
+   * Deserializes the ControlPoint3 from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized ControlPoint2.
-   * @return {ControlPoint2} A reference to this ControlPoint2.
+   * @param {Object} json - The JSON holding the serialized ControlPoint3.
+   * @return {ControlPoint3} A reference to this ControlPoint3.
    */
   fromJSON(json) {
     this.middlePos.fromArray(json.middlePos);
-    this.upPos.fromArray(json.upPos);
-    this.upV.fromArray(json.upV);
-    sphericalFromJSON(this.upS, json.upS);
-    this.upA.fromArray(json.upA);
-    this.downPos.fromArray(json.downPos);
-    this.downV.fromArray(json.downV);
-    sphericalFromJSON(this.downS, json.downS);
-    this.downA.fromArray(json.downA);
+    this.leftPos.fromArray(json.leftPos);
+    this.leftV.fromArray(json.leftV);
+    sphericalFromJSON(this.leftS, json.leftS);
+    this.leftA.fromArray(json.leftA);
+    this.rightPos.fromArray(json.rightPos);
+    this.rightV.fromArray(json.rightV);
+    sphericalFromJSON(this.rightS, json.rightS);
+    this.rightA.fromArray(json.rightA);
     this.isSyncRadius = json.isSyncRadius;
     this.isSyncAngle = json.isSyncAngle;
 
