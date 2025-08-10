@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { Curve3 } from "../../curve/curve-3.js";
 import { Curve2 } from "../../curve/curve-2.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
 import { createLineMaterial } from "../../material/line.js";
@@ -8,7 +9,7 @@ import { createPointsMaterial } from "../../material/points.js";
 
 /**
  * @param {GUI} gui
- * @param {Curve2} c
+ * @param {Curve3|Curve2} c
  * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */

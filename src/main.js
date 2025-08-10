@@ -8,10 +8,11 @@ import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
-// import { ControlPoint3 } from "./curve/control-point-3.js";
-import { ControlPoint2 } from "./curve/control-point-2.js";
+import { ControlPoint3 } from "./curve/control-point-3.js";
+// import { ControlPoint2 } from "./curve/control-point-2.js";
 // import { createControlPointGroup } from "./object-3d/group/control-point.js";
-import { Curve2 } from "./curve/curve-2.js";
+import { Curve3 } from "./curve/curve-3.js";
+// import { Curve2 } from "./curve/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 
 let renderer, camera, gizmo, scene;
@@ -38,24 +39,43 @@ async function init() {
   // const cp = new ControlPoint2();
   // createControlPointGroup(gui, cp, scene);
 
-  const cp1 = new ControlPoint2(
-    new THREE.Vector2(0, 0),
-    new THREE.Vector2(-1, 0),
-    new THREE.Vector2(1, 0)
+  const cp1 = new ControlPoint3(
+    new THREE.Vector3(0, 0, 0),
+    new THREE.Vector3(-1, 0, 0),
+    new THREE.Vector3(1, 0, 0)
   );
-  const cp2 = new ControlPoint2(
-    new THREE.Vector2(2, 2),
-    new THREE.Vector2(2, 1),
-    new THREE.Vector2(2, 3)
+  const cp2 = new ControlPoint3(
+    new THREE.Vector3(2, 0, 2),
+    new THREE.Vector3(2, 0, 1),
+    new THREE.Vector3(2, 0, 3)
   );
-  const cp3 = new ControlPoint2(
-    new THREE.Vector2(0, 4),
-    new THREE.Vector2(1, 4),
-    new THREE.Vector2(-1, 4)
+  const cp3 = new ControlPoint3(
+    new THREE.Vector3(2, 2, 4),
+    new THREE.Vector3(2, 1, 4),
+    new THREE.Vector3(2, 3, 4)
   );
   const cps = [cp1, cp2, cp3];
-  const c = new Curve2(cps);
+  const c = new Curve3(cps);
   createCurveGroup(gui, c, scene);
+
+  // const cp1 = new ControlPoint2(
+  //   new THREE.Vector2(0, 0),
+  //   new THREE.Vector2(-1, 0),
+  //   new THREE.Vector2(1, 0)
+  // );
+  // const cp2 = new ControlPoint2(
+  //   new THREE.Vector2(2, 2),
+  //   new THREE.Vector2(2, 1),
+  //   new THREE.Vector2(2, 3)
+  // );
+  // const cp3 = new ControlPoint2(
+  //   new THREE.Vector2(0, 4),
+  //   new THREE.Vector2(1, 4),
+  //   new THREE.Vector2(-1, 4)
+  // );
+  // const cps = [cp1, cp2, cp3];
+  // const c = new Curve2(cps);
+  // createCurveGroup(gui, c, scene);
 
   window.addEventListener("resize", onWindowResize);
 }
