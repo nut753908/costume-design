@@ -36,7 +36,7 @@ async function init() {
   // createHairBundleGroup(gui, scene);
   // const cp = new ControlPoint3();
   // const cp = new ControlPoint2();
-  // createControlPointGroup(gui, scene, cp);
+  // createControlPointGroup(gui, cp, scene);
 
   const cp1 = new ControlPoint2(
     new THREE.Vector2(0, 0),
