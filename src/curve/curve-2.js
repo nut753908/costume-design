@@ -1,39 +1,36 @@
 import * as THREE from "three";
 
+import { ControlPoint3 } from "./control-point-3";
 import { ControlPoint2 } from "./control-point-2";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { isInvalidIndex } from "../math/utils";
 
 /**
- * A 2D Cubic Bezier curve path using 2D control points.
- *
- * ```js
- * import { Curve2 } from "./src/curve/curve-2.js";
- * const c = new Curve2();
- * ```
+ * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
+ * This is an abstract class for Curve3/Curve2.
  */
-export class Curve2 extends THREE.CurvePath {
+export class Curve extends THREE.CurvePath {
   /**
-   * Constructs a new Curve2.
+   * Constructs a new Curve.
    *
-   * @param {Array<ControlPoint2>} [cps=[]] - The 2D control points.
+   * @param {Array<ControlPoint3>|Array<ControlPoint2>} [cps=[]] - The 3D/2D control points.
    */
   constructor(cps = []) {
     super();
 
-    this.type = "Curve2";
+    this.type = "Curve";
 
     /**
-     * The 2D control points.
+     * The 3D/2D control points.
      *
-     * @type {Array<ControlPoint2>}
+     * @type {Array<ControlPoint3>|Array<ControlPoint2>}
      */
     this.cps = cps;
 
     /**
      * Secret field.
-     * This function is used by setGUI() in ./src/curve/curve-2.js.
-     * Set it in advance using createGeometry() in ./src/curve/curve-2.js.
+     * This function is used by setGUI() in ./src/curve/curve.js.
+     * Set it in advance using createGeometry() in ./src/curve/curve.js.
      *
      * @type {()=>void}
      */
@@ -41,7 +38,7 @@ export class Curve2 extends THREE.CurvePath {
 
     /**
      * Secret field.
-     * This function is used by setGUI() in ./src/curve/curve-2.js.
+     * This function is used by setGUI() in ./src/curve/curve.js.
      * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
      *
      * @type {()=>void}
@@ -52,12 +49,30 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
+   * Get the type of this.cps[*].
+   *
+   * @returns {ControlPoint3|ControlPoint2}
+   */
+  get cpType() {
+    console.warn("Curve: .cpType not implemented.");
+  }
+
+  /**
+   * Get the folder name used in setGUI().
+   *
+   * @return {string}
+   */
+  get name() {
+    console.warn("Curve: .name not implemented.");
+  }
+
+  /**
    * Update curves using this.cps.
    */
   updateCurves() {
     this.curves = [];
     for (let i = 0, l = this.cps.length - 1; i < l; i++) {
-      const curve = new THREE.CubicBezierCurve(
+      const curve = new this.cpType(
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
         this.cps[i + 1].leftPos.clone(),
@@ -76,7 +91,7 @@ export class Curve2 extends THREE.CurvePath {
   createGeometry(line) {
     const c = this;
 
-    // This function is used by setGUI() in ./src/curve/curve-2.js.
+    // This function is used by setGUI() in ./src/curve/curve.js.
     c._updateCurvesAndGeometry = () => {
       c.updateCurves();
       updateGeometry();
@@ -120,7 +135,7 @@ export class Curve2 extends THREE.CurvePath {
       },
     };
 
-    const folder = gui.addFolder("curve2");
+    const folder = gui.addFolder(c.name);
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
@@ -136,7 +151,7 @@ export class Curve2 extends THREE.CurvePath {
       updateEnabled();
       updateOptions();
       updateCpsFolder();
-      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve-2.js.
+      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
     }
     function updateEnabled() {
       c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
@@ -152,7 +167,7 @@ export class Curve2 extends THREE.CurvePath {
         .forEach((v) => v.destroy());
       const cpsFolder = folder.addFolder("cps");
       c.cps.forEach((cp, i) => {
-        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve-2.js.
+        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve.js.
         cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
       });
     }
@@ -165,7 +180,7 @@ export class Curve2 extends THREE.CurvePath {
     if (this.cps.length !== 0) {
       this.cps.unshift(this.cps[0].clone()); // Copy first cp.
     } else {
-      this.cps.unshift(new ControlPoint2());
+      this.cps.unshift(new this.cpType());
     }
   }
 
@@ -176,7 +191,7 @@ export class Curve2 extends THREE.CurvePath {
     if (this.cps.length !== 0) {
       this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
     } else {
-      this.cps.push(new ControlPoint2());
+      this.cps.push(new this.cpType());
     }
   }
 
@@ -242,19 +257,19 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Returns a new Curve2 with copied values from this instance.
+   * Returns a new Curve with copied values from this instance.
    *
-   * @returns {Curve2} A clone of this instance.
+   * @returns {Curve} A clone of this instance.
    */
   clone() {
     return new this.constructor().copy(this);
   }
 
   /**
-   * Copies the values of the given Curve2 to this instance.
+   * Copies the values of the given Curve to this instance.
    *
-   * @param {Curve2} source - The Curve2 to copy.
-   * @returns {Curve2} A reference to this Curve2.
+   * @param {Curve} source - The Curve to copy.
+   * @returns {Curve} A reference to this Curve.
    */
   copy(source) {
     super.copy(source);
@@ -270,9 +285,9 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Serializes the Curve2 into JSON.
+   * Serializes the Curve into JSON.
    *
-   * @return {Object} A JSON object representing the serialized Curve2.
+   * @return {Object} A JSON object representing the serialized Curve.
    */
   toJSON() {
     const data = super.toJSON();
@@ -288,10 +303,10 @@ export class Curve2 extends THREE.CurvePath {
   }
 
   /**
-   * Deserializes the Curve2 from the given JSON.
+   * Deserializes the Curve from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized Curve2.
-   * @return {Curve2} A reference to this Curve2.
+   * @param {Object} json - The JSON holding the serialized Curve.
+   * @return {Curve} A reference to this Curve.
    */
   fromJSON(json) {
     super.fromJSON(json);
@@ -300,7 +315,7 @@ export class Curve2 extends THREE.CurvePath {
 
     for (let i = 0, l = json.cps.length; i < l; i++) {
       const cp = json.cps[i];
-      this.cps.push(new ControlPoint2().fromJSON(cp));
+      this.cps.push(new this.cpType().fromJSON(cp));
     }
 
     return this;
