@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
+import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
 // TODO: Add updateGeometry() and setGUI() somewhere.
 /**
@@ -8,10 +9,11 @@ import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
  *
  * ```js
  * import { screwShapedCurve3 } from "./src/curve/sample/curve-3.js";
+ * import { smallCircleCurve2 } from "./src/curve/samples/curve-2.js";
  * import { TubeGeometry } from "./src/geometry/tube.js";
  *
  * const axis = screwShapedCurve3.clone();
- * const cross = new THREE.EllipseCurve( 0, 0, 0.5, 0.5 );
+ * const cross = smallCircleCurve2.clone();
  * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1, 0 );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
@@ -26,16 +28,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
    *
    * @param {THREE.Curve<THREE.Vector3>} [axis] - A 3D axial curve that passes through the center of the tube.
    * @param {THREE.Curve<THREE.Vector2>} [cross] - A 2D cross-sectional curve perpendicular to the axis.
-   * @param {number} [axisSegments=12] - The number of faces along the axis (per curve, not the entire curve path).
+   * @param {number} [axisSegments=12] - The number of faces along the axis.
    * @param {number} [crossSegments=8] - The number of faces on the cross section.
    * @param {number|THREE.Curve<THREE.Vector2>} [scale=1] - The cross section scale ratio. For curve, only the y component is used for the scale.
    * @param {number|THREE.Curve<THREE.Vector2>} [xScale=1] - The cross section scale ratio in the x direction. For curve, only the y component is used for the scale.
    * @param {number|THREE.Curve<THREE.Vector2>} [yScale=1] - The cross section scale ratio in the y direction. For curve, only the y component is used for the scale.
-   * @param {number|THREE.Curve<THREE.Vector2>} [tilt=0] - The circumferential inclination angle of the cross section (in radians).
+   * @param {number|THREE.Curve<THREE.Vector2>} [tilt=0] - The circumferential inclination angle of the cross section (in radians). For curve, only the y component is used for the angle.
    */
   constructor(
     axis = screwShapedCurve3.clone(),
-    cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5),
+    cross = smallCircleCurve2.clone(),
     axisSegments = 12,
     crossSegments = 8,
     scale = 1,
@@ -202,6 +204,12 @@ export class TubeGeometry extends THREE.BufferGeometry {
     }
   }
 
+  /**
+   * Copies the values of the given tube geometry to this instance.
+   *
+   * @param {TubeGeometry} source - The tube geometry to copy.
+   * @returns {TubeGeometry} A reference to this tube geometry.
+   */
   copy(source) {
     super.copy(source);
 
