@@ -11,7 +11,7 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
-import { TubeGeometry } from "./geometry/tube.js";
+import { LimitedTubeGeometry } from "./geometry/limited-tube.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -39,7 +39,7 @@ async function init() {
 
   const axis = screwShapedCurve3.clone();
   const cross = smallCircleCurve2.clone();
-  const geometry = new TubeGeometry(axis, cross, 12, 8, 1, 1, 1, 0);
+  const geometry = new LimitedTubeGeometry(axis, cross, 12, 8, 1, 1, 1, 0);
   const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     side: THREE.DoubleSide,

@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
-// TODO: Add updateGeometry() and setGUI() somewhere.
 /**
  * A geometry class for representing a tube.
  *
@@ -213,7 +212,17 @@ export class TubeGeometry extends THREE.BufferGeometry {
   copy(source) {
     super.copy(source);
 
-    this.parameters = Object.assign({}, source.parameters);
+    this.parameters.axis.copy(source.parameters.axis);
+    this.parameters.cross.copy(source.parameters.cross);
+    this.parameters.axisSegments = source.parameters.axisSegments;
+    this.parameters.crossSegments = source.parameters.crossSegments;
+    function multiTypeCopy(thisP, sourceP) {
+      typeof sourceP === "number" ? (thisP = sourceP) : thisP.copy(sourceP);
+    }
+    multiTypeCopy(this.parameters.scale, source.parameters.scale);
+    multiTypeCopy(this.parameters.xScale, source.parameters.xScale);
+    multiTypeCopy(this.parameters.yScale, source.parameters.yScale);
+    multiTypeCopy(this.parameters.tilt, source.parameters.tilt);
 
     return this;
   }
