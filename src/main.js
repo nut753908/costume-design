@@ -9,9 +9,8 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
-// import { semicircleCurve2 } from "./curve/samples/curve-2.js";
-// import { createCurveGroup } from "./object-3d/group/curve.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
+// import { createCurveGroup } from "./object-3d/group/curve.js";
 import { TubeGeometry } from "./geometry/tube.js";
 import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 
@@ -36,7 +35,7 @@ async function init() {
   // });
 
   // const c = screwShapedCurve3.clone();
-  // const c = semicircleCurve2.clone();
+  // const c = smallCircleCurve2.clone();
   // createCurveGroup(gui, c, scene);
 
   const axis = screwShapedCurve3.clone();

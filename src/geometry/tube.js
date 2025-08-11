@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
+import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
 // TODO: Add updateGeometry() and setGUI() somewhere.
 /**
@@ -8,10 +9,11 @@ import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
  *
  * ```js
  * import { screwShapedCurve3 } from "./src/curve/sample/curve-3.js";
+ * import { smallCircleCurve2 } from "./src/curve/samples/curve-2.js";
  * import { TubeGeometry } from "./src/geometry/tube.js";
  *
  * const axis = screwShapedCurve3.clone();
- * const cross = new THREE.EllipseCurve( 0, 0, 0.5, 0.5 );
+ * const cross = smallCircleCurve2.clone();
  * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1, 0 );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
@@ -35,7 +37,7 @@ export class TubeGeometry extends THREE.BufferGeometry {
    */
   constructor(
     axis = screwShapedCurve3.clone(),
-    cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5),
+    cross = smallCircleCurve2.clone(),
     axisSegments = 12,
     crossSegments = 8,
     scale = 1,
