@@ -12,7 +12,6 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
 import { TubeGeometry } from "./geometry/tube.js";
-import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -49,9 +48,6 @@ async function init() {
   });
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
-
-  const normalshelper = new VertexNormalsHelper(mesh, 0.05, 0xff0000);
-  scene.add(normalshelper);
 
   window.addEventListener("resize", onWindowResize);
 }
