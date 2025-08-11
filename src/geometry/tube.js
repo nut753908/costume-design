@@ -12,7 +12,7 @@ import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
  *
  * const axis = screwShapedCurve3.clone();
  * const cross = new THREE.EllipseCurve( 0, 0, 0.5, 0.5 );
- * const geometry = new TubeGeometry( axis, cross, 12, 8 );
+ * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1 );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
  * scene.add( mesh );
@@ -28,12 +28,18 @@ export class TubeGeometry extends THREE.BufferGeometry {
    * @param {THREE.Curve} [cross] - A 2D cross-sectional curve perpendicular to the axis.
    * @param {number} [axisSegments=12] - The number of faces along the axis (per curve, not the entire curve path).
    * @param {number} [crossSegments=8] - The number of faces on the cross section.
+   * @param {number|THREE.Curve} [scale=1] - The cross section scale ratio. For curve, only the y component is used for the scale.
+   * @param {number|THREE.Curve} [xScale=1] - The cross section scale ratio in the x direction. For curve, only the y component is used for the scale.
+   * @param {number|THREE.Curve} [yScale=1] - The cross section scale ratio in the y direction. For curve, only the y component is used for the scale.
    */
   constructor(
     axis = screwShapedCurve3.clone(),
     cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5),
     axisSegments = 12,
-    crossSegments = 8
+    crossSegments = 8,
+    scale = 1,
+    xScale = 1,
+    yScale = 1
   ) {
     super();
 
@@ -51,8 +57,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
       cross: cross,
       axisSegments: axisSegments,
       crossSegments: crossSegments,
+      scale: scale,
+      xScale: xScale,
+      yScale: yScale,
     };
 
+    cross.getTangentAt = function (u, optionalTarget) {
+      const t = this.getUtoTmapping(u);
+      const point = this.getTangent(t, optionalTarget);
+      return new THREE.Vector3(point.x, point.y, 0); // Change from Vector2 to Vector3 before computeFrenetFrames().
+    };
     const axisFrames = axis.computeFrenetFrames(axisSegments, false);
     const crossFrames = cross.computeFrenetFrames(crossSegments, false);
 
@@ -62,7 +76,10 @@ export class TubeGeometry extends THREE.BufferGeometry {
     const normal = new THREE.Vector3();
     const uv = new THREE.Vector2();
     let AP = new THREE.Vector3();
-    let CP = new THREE.Vector3();
+    let SP = new THREE.Vector2();
+    let XSP = new THREE.Vector2();
+    let YSP = new THREE.Vector2();
+    let CP = new THREE.Vector2();
 
     // buffer
 
@@ -100,6 +117,12 @@ export class TubeGeometry extends THREE.BufferGeometry {
         // we use getPointAt to sample evenly distributed points from the given path
 
         AP = axis.getPointAt(i / axisSegments, AP);
+        if (typeof scale !== "number")
+          SP = scale.getPointAt(i / axisSegments, SP);
+        if (typeof xScale !== "number")
+          XSP = xScale.getPointAt(i / axisSegments, XSP);
+        if (typeof yScale !== "number")
+          YSP = yScale.getPointAt(i / axisSegments, YSP);
 
         // retrieve corresponding normal and binormal
 
@@ -110,17 +133,22 @@ export class TubeGeometry extends THREE.BufferGeometry {
 
         for (let j = 0; j <= crossSegments; j++) {
           CP = cross.getPointAt(j / crossSegments, CP);
+          CP.multiplyScalar(typeof scale !== "number" ? SP.y : scale);
+          CP.x *= typeof xScale !== "number" ? XSP.y : xScale;
+          CP.y *= typeof yScale !== "number" ? YSP.y : yScale;
 
-          const CN = crossFrames.normals[j];
+          const CB = crossFrames.binormals[j].clone();
+          CB.x *= typeof yScale !== "number" ? YSP.y : yScale;
+          CB.y *= typeof xScale !== "number" ? XSP.y : xScale;
 
           // normal
 
-          normal.x = -CN.x * AN.x + CN.y * AB.x;
-          normal.y = -CN.x * AN.y + CN.y * AB.y;
-          normal.z = -CN.x * AN.z + CN.y * AB.z;
+          normal.x = CB.x * AN.x + -CB.y * AB.x;
+          normal.y = CB.x * AN.y + -CB.y * AB.y;
+          normal.z = CB.x * AN.z + -CB.y * AB.z;
           normal.normalize();
 
-          normals.push(normal);
+          normals.push(normal.x, normal.y, normal.z);
 
           // vertex
 
