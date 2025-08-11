@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
-// TODO: Add updateGeometry() and setGUI() somewhere.
 /**
  * A geometry class for representing a tube.
  *

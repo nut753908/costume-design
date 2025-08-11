@@ -4,6 +4,7 @@ import { Curve2 } from "../curve/curve-2.js";
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
+// TODO: Add updateGeometry() and setGUI().
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *
