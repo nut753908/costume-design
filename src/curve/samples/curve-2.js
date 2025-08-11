@@ -48,22 +48,22 @@ export const smallCircleCurve2 = createCircleCurve2(0.5);
  *
  * @param {number} yStart - The starting y value.
  * @param {number} yEnd - The ending y value.
- * @param {number} aspect - The aspect ratio = (x height) / (y height).
+ * @param {number} aspect - The aspect ratio = (x length) / (y length).
  * @returns {Curve2}
  */
 function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3) {
-  const hL = Math.abs(yStart - yEnd); // The handle length.
-  const xL = aspect * hL; // The x length.
+  const yL = Math.abs(yStart - yEnd); // The y length.
+  const xL = aspect * yL; // The x length.
   return new Curve2([
     new ControlPoint2(
       new THREE.Vector2(0, yStart),
-      new THREE.Vector2(-hL, yStart),
-      new THREE.Vector2(hL, yStart)
+      new THREE.Vector2(-yL, yStart),
+      new THREE.Vector2(yL, yStart)
     ),
     new ControlPoint2(
       new THREE.Vector2(xL, yEnd),
-      new THREE.Vector2(-hL + xL, yEnd),
-      new THREE.Vector2(hL + xL, yEnd)
+      new THREE.Vector2(-yL + xL, yEnd),
+      new THREE.Vector2(yL + xL, yEnd)
     ),
   ]);
 }
