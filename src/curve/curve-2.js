@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import { Curve } from "./curve";
-import { ControlPoint2 } from "./control-point-2";
+import { Curve } from "./curve.js";
+import { ControlPoint2 } from "./control-point-2.js";
 
 /**
  * A 2D Cubic Bezier curve path using 2D control points.
@@ -10,6 +10,8 @@ import { ControlPoint2 } from "./control-point-2";
  * import { Curve2 } from "./src/curve/curve-2.js";
  * const c = new Curve2();
  * ```
+ *
+ * @augments Curve
  */
 export class Curve2 extends Curve {
   /**
@@ -26,7 +28,7 @@ export class Curve2 extends Curve {
   /**
    * Get the class of this.curves[*].
    *
-   * @returns {object}
+   * @returns {Function}
    */
   get curveClass() {
     return THREE.CubicBezierCurve;
@@ -35,7 +37,7 @@ export class Curve2 extends Curve {
   /**
    * Get the class of this.cps[*].
    *
-   * @returns {object}
+   * @returns {Function}
    */
   get cpClass() {
     return ControlPoint2;
