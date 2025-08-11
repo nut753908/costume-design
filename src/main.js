@@ -11,7 +11,14 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 // import { semicircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
+// import {
+//   gentlyRisingCurve2,
+//   gentlyDescendingCurve2,
+//   gentlyRisingCurve2InRadian,
+//   gentlyDescendingCurve2InRadian,
+// } from "./curve/samples/curve-2.js";
 import { TubeGeometry } from "./geometry/tube.js";
+import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -39,7 +46,7 @@ async function init() {
 
   const axis = screwShapedCurve3.clone();
   const cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, Math.PI * (3 / 2));
-  const geometry = new TubeGeometry(axis, cross, 12, 8);
+  const geometry = new TubeGeometry(axis, cross, 12, 8, 1, 1, 1, 0);
   const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     side: THREE.DoubleSide,
@@ -48,6 +55,9 @@ async function init() {
   });
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
+
+  const normalshelper = new VertexNormalsHelper(mesh, 0.05, 0xff0000);
+  scene.add(normalshelper);
 
   window.addEventListener("resize", onWindowResize);
 }
