@@ -27,11 +27,8 @@ export class LimitedTubeGeometry extends TubeGeometry {
   /**
    * Constructs a new limited tube geometry.
    *
-   * This class has the same parameters as TubeGeometry, so please refer to that.
+   * This class has the same parameters as TubeGeometry.
    * The parameter changes from this class to TubeGeometry are:
-   *
-   * - Explanations
-   *      (all): exists -> nothing
    *
    * - Types
    *       axis: THREE.Curve<THREE.Vector3> -> Curve3
@@ -41,14 +38,14 @@ export class LimitedTubeGeometry extends TubeGeometry {
    *     yScale: THREE.Curve<THREE.Vector2> -> Curve2
    *       tilt: THREE.Curve<THREE.Vector2> -> Curve2
    *
-   * @param {Curve3} [axis]
-   * @param {Curve2} [cross]
-   * @param {number} [axisSegments=12]
-   * @param {number} [crossSegments=8]
-   * @param {number|Curve2} [scale=1]
-   * @param {number|Curve2} [xScale=1]
-   * @param {number|Curve2} [yScale=1]
-   * @param {number|Curve2} [tilt=0]
+   * @param {Curve3} [axis] - A 3D axial curve that passes through the center of the tube.
+   * @param {Curve2} [cross] - A 2D cross-sectional curve perpendicular to the axis.
+   * @param {number} [axisSegments=12] - The number of faces along the axis.
+   * @param {number} [crossSegments=8] - The number of faces on the cross section.
+   * @param {number|Curve2} [scale=1] - The cross section scale ratio. For curve, only the y component is used for the scale.
+   * @param {number|Curve2} [xScale=1] - The cross section scale ratio in the x direction. For curve, only the y component is used for the scale.
+   * @param {number|Curve2} [yScale=1] - The cross section scale ratio in the y direction. For curve, only the y component is used for the scale.
+   * @param {number|Curve2} [tilt=0] - The circumferential inclination angle of the cross section (in radians). For curve, only the y component is used for the angle.
    */
   constructor(
     axis = screwShapedCurve3.clone(),
