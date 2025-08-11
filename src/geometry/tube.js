@@ -12,7 +12,7 @@ import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
  *
  * const axis = screwShapedCurve3.clone();
  * const cross = new THREE.EllipseCurve( 0, 0, 0.5, 0.5 );
- * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1 );
+ * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1, 0 );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
  * scene.add( mesh );
@@ -31,6 +31,7 @@ export class TubeGeometry extends THREE.BufferGeometry {
    * @param {number|THREE.Curve} [scale=1] - The cross section scale ratio. For curve, only the y component is used for the scale.
    * @param {number|THREE.Curve} [xScale=1] - The cross section scale ratio in the x direction. For curve, only the y component is used for the scale.
    * @param {number|THREE.Curve} [yScale=1] - The cross section scale ratio in the y direction. For curve, only the y component is used for the scale.
+   * @param {number|THREE.Curve} [tilt=0] - The circumferential inclination angle of the cross section (in radians).
    */
   constructor(
     axis = screwShapedCurve3.clone(),
@@ -39,7 +40,8 @@ export class TubeGeometry extends THREE.BufferGeometry {
     crossSegments = 8,
     scale = 1,
     xScale = 1,
-    yScale = 1
+    yScale = 1,
+    tilt = 0
   ) {
     super();
 
@@ -60,6 +62,7 @@ export class TubeGeometry extends THREE.BufferGeometry {
       scale: scale,
       xScale: xScale,
       yScale: yScale,
+      tilt: tilt,
     };
 
     cross.getTangentAt = function (u, optionalTarget) {
@@ -79,7 +82,10 @@ export class TubeGeometry extends THREE.BufferGeometry {
     let SP = new THREE.Vector2();
     let XSP = new THREE.Vector2();
     let YSP = new THREE.Vector2();
+    let TP = new THREE.Vector2();
     let CP = new THREE.Vector2();
+    let CB = new THREE.Vector2();
+    const center = new THREE.Vector2(0, 0);
 
     // buffer
 
@@ -123,6 +129,8 @@ export class TubeGeometry extends THREE.BufferGeometry {
           XSP = xScale.getPointAt(i / axisSegments, XSP);
         if (typeof yScale !== "number")
           YSP = yScale.getPointAt(i / axisSegments, YSP);
+        if (typeof tilt !== "number")
+          TP = tilt.getPointAt(i / axisSegments, TP);
 
         // retrieve corresponding normal and binormal
 
@@ -136,10 +144,12 @@ export class TubeGeometry extends THREE.BufferGeometry {
           CP.multiplyScalar(typeof scale !== "number" ? SP.y : scale);
           CP.x *= typeof xScale !== "number" ? XSP.y : xScale;
           CP.y *= typeof yScale !== "number" ? YSP.y : yScale;
+          CP.rotateAround(center, typeof tilt !== "number" ? TP.y : tilt);
 
-          const CB = crossFrames.binormals[j].clone();
+          CB.copy(crossFrames.binormals[j].x, crossFrames.binormals[j].y);
           CB.x *= typeof yScale !== "number" ? YSP.y : yScale;
           CB.y *= typeof xScale !== "number" ? XSP.y : xScale;
+          CB.rotateAround(center, typeof tilt !== "number" ? TP.y : tilt);
 
           // normal
 

@@ -14,6 +14,8 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 // import {
 //   gentlyRisingCurve2,
 //   gentlyDescendingCurve2,
+//   gentlyRisingCurve2InRadian,
+//   gentlyDescendingCurve2InRadian,
 // } from "./curve/samples/curve-2.js";
 import { TubeGeometry } from "./geometry/tube.js";
 import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
@@ -44,7 +46,7 @@ async function init() {
 
   const axis = screwShapedCurve3.clone();
   const cross = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, Math.PI * (3 / 2));
-  const geometry = new TubeGeometry(axis, cross, 12, 8, 1, 1, 1);
+  const geometry = new TubeGeometry(axis, cross, 12, 8, 1, 1, 1, 0);
   const material = new THREE.MeshBasicMaterial({
     color: 0x00ff00,
     side: THREE.DoubleSide,

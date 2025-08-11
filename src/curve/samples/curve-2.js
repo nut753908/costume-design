@@ -46,3 +46,29 @@ export const gentlyDescendingCurve2 = new Curve2([
     new THREE.Vector2(4, 1)
   ),
 ]);
+
+export const gentlyRisingCurve2InRadian = new Curve2([
+  new ControlPoint2(
+    new THREE.Vector2(0, 0),
+    new THREE.Vector2(-1, 0),
+    new THREE.Vector2(1, 0)
+  ),
+  new ControlPoint2(
+    new THREE.Vector2(3, Math.PI),
+    new THREE.Vector2(2, Math.PI),
+    new THREE.Vector2(4, Math.PI)
+  ),
+]);
+
+export const gentlyDescendingCurve2InRadian = new Curve2([
+  new ControlPoint2(
+    new THREE.Vector2(0, Math.PI),
+    new THREE.Vector2(-1, Math.PI),
+    new THREE.Vector2(1, Math.PI)
+  ),
+  new ControlPoint2(
+    new THREE.Vector2(3, 0),
+    new THREE.Vector2(2, 0),
+    new THREE.Vector2(4, 0)
+  ),
+]);
