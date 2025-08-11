@@ -24,8 +24,8 @@ export class TubeGeometry extends THREE.BufferGeometry {
   /**
    * Constructs a new tube geometry.
    *
-   * @param {THREE.Curve} [axis] - An axial curve that passes through the center of the tube.
-   * @param {THREE.Curve} [cross] - A cross-sectional curve perpendicular to the axis.
+   * @param {THREE.Curve} [axis] - A 3D axial curve that passes through the center of the tube.
+   * @param {THREE.Curve} [cross] - A 2D cross-sectional curve perpendicular to the axis.
    * @param {number} [axisSegments=12] - The number of faces along the axis (per curve, not the entire curve path).
    * @param {number} [crossSegments=8] - The number of faces on the cross section.
    */
