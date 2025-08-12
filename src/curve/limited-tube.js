@@ -13,14 +13,16 @@ import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
 export class LimitedTube {
   /**
    * Constructs a new limited tube.
+   *
+   * @param {Object} parameters - The Parameters for LimitedTubeGeometry.
    */
-  constructor() {
+  constructor(parameters = {}) {
     /**
      * The Parameters for LimitedTubeGeometry.
      *
      * @type {Object}
      */
-    this.parameters = {};
+    this.parameters = parameters;
 
     /**
      * Secret field.
@@ -36,13 +38,10 @@ export class LimitedTube {
    * Create geometry.
    *
    * @param {THREE.Group} group
-   * @param {?Object} parameters - The parameters for LimitedTubeGeometry.
    */
-  createGeometry(group, parameters = null) {
+  createGeometry(group) {
     const lt = this;
     const p = lt.parameters;
-
-    if (parameters) Object.assign(p, parameters);
 
     // This function is used by setGUI() in ./src/curve/limited-tube.js.
     (lt._updateGeometry = () => {

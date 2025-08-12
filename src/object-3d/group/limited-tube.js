@@ -1,17 +1,18 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { LimitedTube } from "../../curve/limited-tube.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
 import { createLineMaterial } from "../../material/line.js";
 import { createToonMaterial } from "../../material/toon.js";
-import { LimitedTube } from "../../curve/limited-tube.js";
 
 /**
  * @param {GUI} gui
+ * @param {LimitedTube} lt
  * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */
-export function createLimitedTubeGroup(gui, scene) {
+export function createLimitedTubeGroup(gui, lt, scene) {
   const group = new THREE.Group();
   const folder = gui.addFolder("limitedTubeGroup");
 
@@ -28,7 +29,6 @@ export function createLimitedTubeGroup(gui, scene) {
   group.add(new THREE.LineSegments(emptyGeometry, lineMaterial));
   group.add(new THREE.Mesh(emptyGeometry, toonMaterial));
 
-  const lt = new LimitedTube();
   lt.createGeometry(group);
   lt.setGUI(folder);
 
