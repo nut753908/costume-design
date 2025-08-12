@@ -9,10 +9,9 @@ import { createToonMaterial } from "../../material/toon.js";
 /**
  * @param {GUI} gui
  * @param {LimitedTube} lt
- * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */
-export function createLimitedTubeGroup(gui, lt, scene) {
+export function createLimitedTubeGroup(gui, lt) {
   const group = new THREE.Group();
   const folder = gui.addFolder("limitedTubeGroup");
 
@@ -31,8 +30,6 @@ export function createLimitedTubeGroup(gui, lt, scene) {
 
   lt.createGeometry(group);
   lt.setGUI(folder);
-
-  scene.add(group);
 
   return group;
 }

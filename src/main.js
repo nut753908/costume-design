@@ -25,21 +25,22 @@ async function init() {
 
   const gui = new GUI();
   scene = createScene(gui);
-  createAxesHelper(gui, scene);
+  scene.add(createAxesHelper(gui));
   /**
    * comment out to concentrate on creating hair bundle
    */
-  // await createBaseGroup(gui, scene).then((baseGroup) => {
+  // await createBaseGroup(gui).then((baseGroup) => {
   //   if (!baseGroup) return;
-  //   createHairBundleGroup(gui, scene);
+  //   scene.add(baseGroup);
+  //   scene.add(createHairBundleGroup(gui));
   // });
 
   // const c = screwShapedCurve3.clone();
   // const c = smallCircleCurve2.clone();
-  // createCurveGroup(gui, c, scene);
+  // scene.add(createCurveGroup(gui, c));
 
   const lt = new LimitedTube();
-  createLimitedTubeGroup(gui, lt, scene);
+  scene.add(createLimitedTubeGroup(gui, lt));
 
   window.addEventListener("resize", onWindowResize);
 }

@@ -10,10 +10,9 @@ import { createPointsMaterial } from "../../material/points.js";
 /**
  * @param {GUI} gui
  * @param {Curve3|Curve2} c
- * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */
-export function createCurveGroup(gui, c, scene) {
+export function createCurveGroup(gui, c) {
   const group = new THREE.Group();
   const folder = gui.addFolder("curveGroup");
 
@@ -21,8 +20,6 @@ export function createCurveGroup(gui, c, scene) {
   group.add(createCpsGroup(folder, c));
 
   c.setGUI(folder);
-
-  scene.add(group);
 
   return group;
 }
