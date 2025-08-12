@@ -2,7 +2,6 @@ import * as THREE from "three";
 
 import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
 
-// TODO: Add functions to change curve type between number and Curve{3,2}.
 // TODO: Fix copy().
 // TODO: Add clone(), toJSON(), and fromJSON().
 /**
@@ -55,10 +54,14 @@ export class LimitedTube {
               p.cross,
               p.axisSegments,
               p.crossSegments,
-              p.scale,
-              p.xScale,
-              p.yScale,
-              p.tilt
+              p.scaleN,
+              p.xScaleN,
+              p.yScaleN,
+              p.tiltN,
+              p.scaleC,
+              p.xScaleC,
+              p.yScaleC,
+              p.tiltC
             )
           : new LimitedTubeGeometry();
 
@@ -81,24 +84,19 @@ export class LimitedTube {
     const lt = this;
     const p = lt.parameters;
 
-    const pi = Math.PI;
     const folder = gui.addFolder("lt");
-    p.axis.setGUI(folder, "axis", update);
-    p.cross.setGUI(folder, "cross", update);
+    p.axis.setGUI(folder, "axis", update, true);
+    p.cross.setGUI(folder, "cross", update, true);
     folder.add(p, "axisSegments").min(1).step(1).onChange(update);
     folder.add(p, "crossSegments").min(3).step(1).onChange(update);
-    typeof p.scale === "number"
-      ? folder.add(p, "scale").min(0).step(0.01).onChange(update)
-      : p.scale.setGUI(folder, "scale", update);
-    typeof p.xScale === "number"
-      ? folder.add(p, "xScale").min(0).step(0.01).onChange(update)
-      : p.xScale.setGUI(folder, "xScale", update);
-    typeof p.yScale === "number"
-      ? folder.add(p, "yScale").min(0).step(0.01).onChange(update)
-      : p.yScale.setGUI(folder, "yScale", update);
-    typeof p.tilt === "number"
-      ? folder.add(p, "tilt", -pi, pi, 0.01).step(0.01).onChange(update)
-      : p.tilt.setGUI(folder, "tilt", update);
+    folder.add(p, "scaleN").min(0).step(0.01).onChange(update);
+    folder.add(p, "xScaleN").min(0).step(0.01).onChange(update);
+    folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
+    folder.add(p, "tiltN", -180, 180, 1).onChange(update);
+    p.scaleC.setGUI(folder, "scaleC", update, true);
+    p.xScaleC.setGUI(folder, "xScaleC", update, true);
+    p.yScaleC.setGUI(folder, "yScaleC", update, true);
+    p.tiltC.setGUI(folder, "tiltC", update, true);
 
     function update() {
       lt._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/limited-tube.js.

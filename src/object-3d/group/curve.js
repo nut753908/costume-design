@@ -11,7 +11,8 @@ import { createPointsMaterial } from "../../material/points.js";
  * @param {GUI} gui
  * @param {Curve3|Curve2} c
  * @param {string} cName - The curve name used in the folder name.
- * @param {boolean} visible
+ * @param {boolean} visible - Whether the curve is visible.
+ * @param {boolean} isClose - Whether to close the folder.
  * @param {boolean} isCSetGUI - Whether to enable c.setGUI().
  * @return {THREE.Group}
  */
@@ -20,6 +21,7 @@ export function createCurveGroup(
   c,
   cName = "",
   visible = true,
+  isClose = false,
   isCSetGUI = true
 ) {
   const group = new THREE.Group();
@@ -27,6 +29,7 @@ export function createCurveGroup(
 
   group.visible = visible;
   folder.add(group, "visible");
+  if (isClose) folder.close();
 
   group.add(createCurvesLine(folder, c));
   group.add(createCpsGroup(folder, c));
