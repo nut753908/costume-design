@@ -6,6 +6,7 @@ import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
 
 // TODO: Simplify the default axis and cross.
 // TODO: Change tilt units from radians to degrees.
+// TODO: Add clone(), toJSON(), and fromJSON().
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *

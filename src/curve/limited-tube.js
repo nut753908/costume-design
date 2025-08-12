@@ -2,6 +2,9 @@ import * as THREE from "three";
 
 import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
 
+// TODO: Add functions to change curve type between number and Curve{3,2}.
+// TODO: Fix copy().
+// TODO: Add clone(), toJSON(), and fromJSON().
 /**
  * A class for managing LimitedTubeGeometry.
  *
@@ -69,7 +72,6 @@ export class LimitedTube {
     })();
   }
 
-  // TODO: Add functions to change curve type between number and Curve{3,2}.
   /**
    * Set GUI.
    *
