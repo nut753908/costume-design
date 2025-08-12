@@ -86,18 +86,18 @@ export class LimitedTube {
 
     const pi = Math.PI;
     const folder = gui.addFolder("lt");
-    p.axis.setGUI(folder, "axis", update);
-    p.cross.setGUI(folder, "cross", update);
+    p.axis.setGUI(folder, "axis", update, true);
+    p.cross.setGUI(folder, "cross", update, true);
     folder.add(p, "axisSegments").min(1).step(1).onChange(update);
     folder.add(p, "crossSegments").min(3).step(1).onChange(update);
     folder.add(p, "scaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "xScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "tiltN", -pi, pi, 0.01).step(0.01).onChange(update);
-    p.scaleC.setGUI(folder, "scaleC", update);
-    p.xScaleC.setGUI(folder, "xScaleC", update);
-    p.yScaleC.setGUI(folder, "yScaleC", update);
-    p.tiltC.setGUI(folder, "tiltC", update);
+    p.scaleC.setGUI(folder, "scaleC", update, true);
+    p.xScaleC.setGUI(folder, "xScaleC", update, true);
+    p.yScaleC.setGUI(folder, "yScaleC", update, true);
+    p.tiltC.setGUI(folder, "tiltC", update, true);
 
     function update() {
       lt._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/limited-tube.js.

@@ -19,12 +19,13 @@ export function createLimitedTubeGroup(gui, lt) {
   const p = lt.parameters;
 
   group.add(createFacesGroup(folder, lt));
-  group.add(createCurveGroup(folder, p.axis, "axis", false, false));
-  group.add(createCurveGroup(folder, p.cross, "cross", false, false));
-  group.add(createCurveGroup(folder, p.scaleC, "scaleC", false, false));
-  group.add(createCurveGroup(folder, p.xScaleC, "xScaleC", false, false));
-  group.add(createCurveGroup(folder, p.yScaleC, "yScaleC", false, false));
-  group.add(createCurveGroup(folder, p.tiltC, "tiltC", false, false));
+  const bools = [false, true, false];
+  group.add(createCurveGroup(folder, p.axis, "axis", ...bools));
+  group.add(createCurveGroup(folder, p.cross, "cross", ...bools));
+  group.add(createCurveGroup(folder, p.scaleC, "scaleC", ...bools));
+  group.add(createCurveGroup(folder, p.xScaleC, "xScaleC", ...bools));
+  group.add(createCurveGroup(folder, p.yScaleC, "yScaleC", ...bools));
+  group.add(createCurveGroup(folder, p.tiltC, "tiltC", ...bools));
 
   lt.setGUI(folder);
 
