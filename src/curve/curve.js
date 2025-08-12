@@ -172,11 +172,13 @@ export class Curve extends THREE.CurvePath {
     }
     function updateEnabled() {
       c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
-      c.rIndexList.indexOf(obj.rIndex) !== -1 ? cRCP.enable() : cRCP.disable();
+      c.safeRIndexList.indexOf(obj.rIndex) !== -1
+        ? cRCP.enable()
+        : cRCP.disable();
     }
     function updateOptions() {
       cII = cII.options(c.iIndexList).onChange(updateEnabled);
-      cRI = cRI.options(c.rIndexList).onChange(updateEnabled);
+      cRI = cRI.options(c.safeRIndexList).onChange(updateEnabled);
     }
     function updateCpsFolder() {
       Array.from(folder.children)
@@ -261,6 +263,15 @@ export class Curve extends THREE.CurvePath {
    */
   get iIndexList() {
     return this.rIndexList.slice(1);
+  }
+
+  /**
+   * The GUI-safe version of iIndexList.
+   *
+   * @returns {Array<number>}
+   */
+  get safeRIndexList() {
+    return this.cps.length >= 3 ? this.rIndexList : [];
   }
 
   /**
