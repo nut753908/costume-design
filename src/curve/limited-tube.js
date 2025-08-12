@@ -1,29 +1,26 @@
+import * as THREE from "three";
+
 import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
 
 /**
  * A class for managing LimitedTubeGeometry.
  *
  * ```js
- * import { LimitedTubeGeometry } from "./src/geometry/limited-tube.js";
  * import { LimitedTube } from "./src/curve/limited-tube.js";
- *
- * const geometry = new LimitedTubeGeometry();
- * const lt = new LimitedTube( geometry );
+ * const lt = new LimitedTube();
  * ```
  */
 export class LimitedTube {
   /**
    * Constructs a new limited tube.
-   *
-   * @param {LimitedTubeGeometry} [geometry] - A geometry class for representing a tube with curve type restricted to Curve{3,2}.
    */
-  constructor(geometry = new LimitedTubeGeometry()) {
+  constructor() {
     /**
-     * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
+     * The Parameters for LimitedTubeGeometry.
      *
-     * @type {LimitedTubeGeometry}
+     * @type {Object}
      */
-    this.geometry = geometry;
+    this.parameters = {};
 
     /**
      * Secret field.
@@ -39,20 +36,40 @@ export class LimitedTube {
    * Create geometry.
    *
    * @param {THREE.Group} group
+   * @param {?Object} parameters - The parameters for LimitedTubeGeometry.
    */
-  createGeometry(group) {
+  createGeometry(group, parameters = null) {
     const lt = this;
+    const p = lt.parameters;
+
+    if (parameters) Object.assign(p, parameters);
 
     // This function is used by setGUI() in ./src/curve/limited-tube.js.
     (lt._updateGeometry = () => {
-      group.children.forEach((v) => {
-        v.geometry.dispose();
-        v.geometry = geometry;
-      });
+      const geometry =
+        Object.keys(p).length !== 0
+          ? new LimitedTubeGeometry(
+              p.axis,
+              p.cross,
+              p.axisSegments,
+              p.crossSegments,
+              p.scale,
+              p.xScale,
+              p.yScale,
+              p.tilt
+            )
+          : new LimitedTubeGeometry();
+
+      Object.assign(p, geometry.parameters);
+
+      group.children[0].geometry.dispose();
+      group.children[1].geometry.dispose();
+
+      group.children[0].geometry = new THREE.WireframeGeometry(geometry);
+      group.children[1].geometry = geometry;
     })();
   }
 
-  // TODO: Add this to the scene.
   // TODO: Set _updateCpsGroup for each curve.
   // TODO: Add functions to change curve type between number and Curve{3,2}.
   /**
@@ -62,26 +79,26 @@ export class LimitedTube {
    */
   setGUI(gui) {
     const lt = this;
-    const p = lt.geometry.parameters;
+    const p = lt.parameters;
 
     const pi = Math.PI;
     const folder = gui.addFolder("lt");
-    p.axis.setGUI(gui, "axis", update);
-    p.cross.setGUI(gui, "cross", update);
+    p.axis.setGUI(folder, "axis", update);
+    p.cross.setGUI(folder, "cross", update);
     folder.add(p, "axisSegments").min(1).step(1).onChange(update);
-    folder.add(p, "crossSegments").min(1).step(1).onChange(update);
+    folder.add(p, "crossSegments").min(3).step(1).onChange(update);
     typeof p.scale === "number"
-      ? folder.add(p, "scale").min(1).step(0.01).onChange(update)
-      : p.scale.setGUI(gui, "scale", update);
+      ? folder.add(p, "scale").min(0).step(0.01).onChange(update)
+      : p.scale.setGUI(folder, "scale", update);
     typeof p.xScale === "number"
-      ? folder.add(p, "xScale").min(1).step(0.01).onChange(update)
-      : p.xScale.setGUI(gui, "xScale", update);
+      ? folder.add(p, "xScale").min(0).step(0.01).onChange(update)
+      : p.xScale.setGUI(folder, "xScale", update);
     typeof p.yScale === "number"
-      ? folder.add(p, "yScale").min(1).step(0.01).onChange(update)
-      : p.yScale.setGUI(gui, "yScale", update);
+      ? folder.add(p, "yScale").min(0).step(0.01).onChange(update)
+      : p.yScale.setGUI(folder, "yScale", update);
     typeof p.tilt === "number"
       ? folder.add(p, "tilt", -pi, pi, 0.01).step(0.01).onChange(update)
-      : p.tilt.setGUI(gui, "tilt", update);
+      : p.tilt.setGUI(folder, "tilt", update);
 
     function update() {
       lt._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/limited-tube.js.

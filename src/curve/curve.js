@@ -36,7 +36,7 @@ export class Curve extends THREE.CurvePath {
      *
      * @type {()=>void}
      */
-    this._updateCurvesAndGeometry = () => {};
+    this._updateGeometry = () => {};
 
     /**
      * Secret field.
@@ -103,18 +103,13 @@ export class Curve extends THREE.CurvePath {
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.js.
-    c._updateCurvesAndGeometry = () => {
-      c.updateCurves();
-      updateGeometry();
-    };
-    function updateGeometry() {
+    (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(c.getPoints());
 
       line.geometry.dispose();
       line.geometry = geometry;
-    }
-    updateGeometry();
+    })();
   }
 
   /**
@@ -164,11 +159,13 @@ export class Curve extends THREE.CurvePath {
       updateEnabled();
       updateOptions();
       updateCpsFolder();
-      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      c.updateCurves();
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
       updateCallback();
     }
     function updateFromCp() {
-      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      c.updateCurves();
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
       updateCallback();
     }
     function updateEnabled() {

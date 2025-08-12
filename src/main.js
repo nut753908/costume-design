@@ -8,10 +8,10 @@ import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
 // import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
-import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
-import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
+// import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
+// import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
-import { LimitedTubeGeometry } from "./geometry/limited-tube.js";
+import { createLimitedTubeGroup } from "./object-3d/group/limited-tube.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -37,17 +37,7 @@ async function init() {
   // const c = smallCircleCurve2.clone();
   // createCurveGroup(gui, c, scene);
 
-  const axis = screwShapedCurve3.clone();
-  const cross = smallCircleCurve2.clone();
-  const geometry = new LimitedTubeGeometry(axis, cross, 12, 8, 1, 1, 1, 0);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    side: THREE.DoubleSide,
-    transparent: true,
-    opacity: 0.2,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  createLimitedTubeGroup(gui, scene);
 
   window.addEventListener("resize", onWindowResize);
 }
