@@ -40,11 +40,11 @@ export class TubeGeometry extends THREE.BufferGeometry {
    * @param {number} [scaleN=1] - The cross section scale ratio.
    * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
    * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
-   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in radians).
+   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
    * @param {THREE.Curve<THREE.Vector2>} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
    * @param {THREE.Curve<THREE.Vector2>} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
    * @param {THREE.Curve<THREE.Vector2>} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
-   * @param {THREE.Curve<THREE.Vector2>} [tiltC] - The circumferential inclination angle of the cross section (in radians). Only the y component is used for the angle.
+   * @param {THREE.Curve<THREE.Vector2>} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
    */
   constructor(
     axis = constant0Curve3.clone(),
@@ -153,7 +153,7 @@ export class TubeGeometry extends THREE.BufferGeometry {
         scale = scaleN * scaleC.getPointAt(u, _P).y;
         xScale = xScaleN * xScaleC.getPointAt(u, _P).y;
         yScale = yScaleN * yScaleC.getPointAt(u, _P).y;
-        tilt = tiltN + tiltC.getPointAt(u, _P).y;
+        tilt = THREE.MathUtils.degToRad(tiltN + tiltC.getPointAt(u, _P).y);
 
         // retrieve corresponding normal and binormal
 

@@ -8,7 +8,6 @@ import {
   constant0Curve2,
 } from "../curve/samples/curve-2.js";
 
-// TODO: Change tilt units from radians to degrees.
 // TODO: Add clone(), toJSON(), and fromJSON().
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
@@ -54,11 +53,11 @@ export class LimitedTubeGeometry extends TubeGeometry {
    * @param {number} [scaleN=1] - The cross section scale ratio.
    * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
    * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
-   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in radians).
+   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
    * @param {Curve2} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
    * @param {Curve2} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
    * @param {Curve2} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
-   * @param {Curve2} [tiltC] - The circumferential inclination angle of the cross section (in radians). Only the y component is used for the angle.
+   * @param {Curve2} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
    */
   constructor(
     axis = constant0Curve3.clone(),

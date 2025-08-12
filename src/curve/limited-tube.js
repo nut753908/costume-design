@@ -84,7 +84,6 @@ export class LimitedTube {
     const lt = this;
     const p = lt.parameters;
 
-    const pi = Math.PI;
     const folder = gui.addFolder("lt");
     p.axis.setGUI(folder, "axis", update, true);
     p.cross.setGUI(folder, "cross", update, true);
@@ -93,7 +92,7 @@ export class LimitedTube {
     folder.add(p, "scaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "xScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
-    folder.add(p, "tiltN", -pi, pi, 0.01).step(0.01).onChange(update);
+    folder.add(p, "tiltN", -180, 180, 1).onChange(update);
     p.scaleC.setGUI(folder, "scaleC", update, true);
     p.xScaleC.setGUI(folder, "xScaleC", update, true);
     p.yScaleC.setGUI(folder, "yScaleC", update, true);
