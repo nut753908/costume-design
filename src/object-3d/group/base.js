@@ -7,10 +7,9 @@ import { createToonMaterial } from "../../material/toon.js";
 
 /**
  * @param {GUI} gui
- * @param {THREE.Scene} scene
  * @return {?THREE.Group}
  */
-export async function createBaseGroup(gui, scene) {
+export async function createBaseGroup(gui) {
   const group = new THREE.Group();
   const folder = gui.addFolder("baseGroup");
 
@@ -22,8 +21,6 @@ export async function createBaseGroup(gui, scene) {
 
   group.add(new THREE.LineSegments(geometry, lineMaterial));
   group.add(new THREE.Mesh(geometry, toonMaterial));
-
-  scene.add(group);
 
   return group;
 }

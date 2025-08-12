@@ -8,10 +8,9 @@ import { createHairBundleGeometry } from "../../geometry/hair-bundle.js";
 
 /**
  * @param {GUI} gui
- * @param {THREE.Scene} scene
  * @return {THREE.Group}
  */
-export function createHairBundleGroup(gui, scene) {
+export function createHairBundleGroup(gui) {
   const group = new THREE.Group();
   const folder = gui.addFolder("hairBundleGroup");
 
@@ -29,8 +28,6 @@ export function createHairBundleGroup(gui, scene) {
   group.add(new THREE.Mesh(geometry, toonMaterial));
 
   createHairBundleGeometry(group, folder);
-
-  scene.add(group);
 
   return group;
 }

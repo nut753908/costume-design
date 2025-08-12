@@ -10,26 +10,35 @@ import { createPointsMaterial } from "../../material/points.js";
 /**
  * @param {GUI} gui
  * @param {Curve3|Curve2} c
- * @param {THREE.Scene} scene
+ * @param {string} cName - The curve name used in the folder name.
+ * @param {boolean} visible
+ * @param {boolean} isCSetGUI - Whether to enable c.setGUI().
  * @return {THREE.Group}
  */
-export function createCurveGroup(gui, c, scene) {
+export function createCurveGroup(
+  gui,
+  c,
+  cName = "",
+  visible = true,
+  isCSetGUI = true
+) {
   const group = new THREE.Group();
-  const folder = gui.addFolder("curveGroup");
+  const folder = gui.addFolder(`curveGroup ${cName}`);
+
+  group.visible = visible;
+  folder.add(group, "visible");
 
   group.add(createCurvesLine(folder, c));
   group.add(createCpsGroup(folder, c));
 
-  c.setGUI(folder);
-
-  scene.add(group);
+  if (isCSetGUI) c.setGUI(folder);
 
   return group;
 }
 
 /**
  * @param {GUI} gui
- * @param {Curve2} c
+ * @param {Curve3|Curve2} c
  * @return {THREE.Group}
  */
 function createCurvesLine(gui, c) {
@@ -48,7 +57,7 @@ function createCurvesLine(gui, c) {
 
 /**
  * @param {GUI} gui
- * @param {Curve2} c
+ * @param {Curve3|Curve2} c
  * @return {THREE.Group}
  */
 function createCpsGroup(gui, c) {

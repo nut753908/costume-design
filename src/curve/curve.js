@@ -36,7 +36,7 @@ export class Curve extends THREE.CurvePath {
      *
      * @type {()=>void}
      */
-    this._updateCurvesAndGeometry = () => {};
+    this._updateGeometry = () => {};
 
     /**
      * Secret field.
@@ -103,26 +103,23 @@ export class Curve extends THREE.CurvePath {
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.js.
-    c._updateCurvesAndGeometry = () => {
-      c.updateCurves();
-      updateGeometry();
-    };
-    function updateGeometry() {
+    (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(c.getPoints());
 
       line.geometry.dispose();
       line.geometry = geometry;
-    }
-    updateGeometry();
+    })();
   }
 
   /**
    * Set GUI.
    *
    * @param {GUI} gui
+   * @param {string} name - The curve folder name used in the GUI.
+   * @param {()=>void} updateCallback - The callback that is invoked after updating curve.
    */
-  setGUI(gui) {
+  setGUI(gui, name = this.name, updateCallback = () => {}) {
     const c = this;
 
     const obj = {
@@ -146,7 +143,7 @@ export class Curve extends THREE.CurvePath {
       },
     };
 
-    const folder = gui.addFolder(c.name);
+    const folder = gui.addFolder(name);
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
     const cICP = folder.add(obj, "interpolateCp");
@@ -162,7 +159,14 @@ export class Curve extends THREE.CurvePath {
       updateEnabled();
       updateOptions();
       updateCpsFolder();
-      c._updateCurvesAndGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      c.updateCurves();
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      updateCallback();
+    }
+    function updateFromCp() {
+      c.updateCurves();
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      updateCallback();
     }
     function updateEnabled() {
       c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
@@ -178,8 +182,7 @@ export class Curve extends THREE.CurvePath {
         .forEach((v) => v.destroy());
       const cpsFolder = folder.addFolder("cps");
       c.cps.forEach((cp, i) => {
-        // c._updateCurvesAndGeometry: Set it in advance using createGeometry() in ./src/curve/curve.js.
-        cp.setGUI(cpsFolder, `${i}`, c._updateCurvesAndGeometry);
+        cp.setGUI(cpsFolder, `${i}`, updateFromCp);
       });
     }
   }
