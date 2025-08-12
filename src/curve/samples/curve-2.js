@@ -71,3 +71,28 @@ export const gentlyRisingCurve2 = createGentlyCurve2();
 export const gentlyDescendingCurve2 = createGentlyCurve2(2, 1);
 export const gentlyRisingCurve2InRadians = createGentlyCurve2(0, Math.PI);
 export const gentlyDescendingCurve2InRadians = createGentlyCurve2(Math.PI, 0);
+
+/**
+ * Create a constant Curve2.
+ *
+ * @param {number} y - The y value.
+ * @param {number} xL - The x length.
+ * @returns {Curve2}
+ */
+function createConstantCurve2(y = 1, xL = 3) {
+  const hL = Math.floor(xL / 3); // The handle length.
+  return new Curve2([
+    new ControlPoint2(
+      new THREE.Vector2(0, y),
+      new THREE.Vector2(-hL, y),
+      new THREE.Vector2(hL, y)
+    ),
+    new ControlPoint2(
+      new THREE.Vector2(xL, y),
+      new THREE.Vector2(xL - hL, y),
+      new THREE.Vector2(xL + hL, y)
+    ),
+  ]);
+}
+export const constant1Curve2 = createConstantCurve2();
+export const constant0Curve2 = createConstantCurve2(0);

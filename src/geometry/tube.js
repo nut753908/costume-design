@@ -1,19 +1,27 @@
 import * as THREE from "three";
 
 import { screwShapedCurve3 } from "../curve/samples/curve-3.js";
-import { smallCircleCurve2 } from "../curve/samples/curve-2.js";
+import {
+  smallCircleCurve2,
+  constant1Curve2,
+  constant0Curve2,
+} from "../curve/samples/curve-2.js";
 
 /**
  * A geometry class for representing a tube.
  *
  * ```js
  * import { screwShapedCurve3 } from "./src/curve/sample/curve-3.js";
- * import { smallCircleCurve2 } from "./src/curve/samples/curve-2.js";
+ * import { smallCircleCurve2, constant1Curve2, constant0Curve2 } from "./src/curve/samples/curve-2.js";
  * import { TubeGeometry } from "./src/geometry/tube.js";
  *
  * const axis = screwShapedCurve3.clone();
  * const cross = smallCircleCurve2.clone();
- * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1, 0 );
+ * const scaleC = constant1Curve2.clone();
+ * const xScaleC = constant1Curve2.clone();
+ * const yScaleC = constant1Curve2.clone();
+ * const tiltC = constant0Curve2.clone();
+ * const geometry = new TubeGeometry( axis, cross, 12, 8, 1, 1, 1, 0, scaleC, xScaleC, yScaleC, tiltC );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
  * scene.add( mesh );
@@ -29,20 +37,28 @@ export class TubeGeometry extends THREE.BufferGeometry {
    * @param {THREE.Curve<THREE.Vector2>} [cross] - A 2D cross-sectional curve perpendicular to the axis.
    * @param {number} [axisSegments=12] - The number of faces along the axis.
    * @param {number} [crossSegments=8] - The number of faces on the cross section.
-   * @param {number|THREE.Curve<THREE.Vector2>} [scale=1] - The cross section scale ratio. For curve, only the y component is used for the scale.
-   * @param {number|THREE.Curve<THREE.Vector2>} [xScale=1] - The cross section scale ratio in the x direction. For curve, only the y component is used for the scale.
-   * @param {number|THREE.Curve<THREE.Vector2>} [yScale=1] - The cross section scale ratio in the y direction. For curve, only the y component is used for the scale.
-   * @param {number|THREE.Curve<THREE.Vector2>} [tilt=0] - The circumferential inclination angle of the cross section (in radians). For curve, only the y component is used for the angle.
+   * @param {number} [scaleN=1] - The cross section scale ratio.
+   * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
+   * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
+   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in radians).
+   * @param {THREE.Curve<THREE.Vector2>} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
+   * @param {THREE.Curve<THREE.Vector2>} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
+   * @param {THREE.Curve<THREE.Vector2>} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
+   * @param {THREE.Curve<THREE.Vector2>} [tiltC] - The circumferential inclination angle of the cross section (in radians). Only the y component is used for the angle.
    */
   constructor(
     axis = screwShapedCurve3.clone(),
     cross = smallCircleCurve2.clone(),
     axisSegments = 12,
     crossSegments = 8,
-    scale = 1,
-    xScale = 1,
-    yScale = 1,
-    tilt = 0
+    scaleN = 1,
+    xScaleN = 1,
+    yScaleN = 1,
+    tiltN = 0,
+    scaleC = constant1Curve2.clone(),
+    xScaleC = constant1Curve2.clone(),
+    yScaleC = constant1Curve2.clone(),
+    tiltC = constant0Curve2.clone()
   ) {
     super();
 
@@ -60,10 +76,14 @@ export class TubeGeometry extends THREE.BufferGeometry {
       cross: cross,
       axisSegments: axisSegments,
       crossSegments: crossSegments,
-      scale: scale,
-      xScale: xScale,
-      yScale: yScale,
-      tilt: tilt,
+      scaleN: scaleN,
+      xScaleN: xScaleN,
+      yScaleN: yScaleN,
+      tiltN: tiltN,
+      scaleC: scaleC,
+      xScaleC: xScaleC,
+      yScaleC: yScaleC,
+      tiltC: tiltC,
     };
 
     cross.getTangentAt = function (u, optionalTarget) {
@@ -80,12 +100,6 @@ export class TubeGeometry extends THREE.BufferGeometry {
 
     const center = new THREE.Vector2(0, 0);
 
-    // (N: Number)
-    let scaleN = typeof scale === "number" ? scale : NaN;
-    let xScaleN = typeof xScale === "number" ? xScale : NaN;
-    let yScaleN = typeof yScale === "number" ? yScale : NaN;
-    let tiltN = typeof tilt === "number" ? tilt : NaN;
-
     // helper variable
 
     const vertex = new THREE.Vector3();
@@ -93,6 +107,11 @@ export class TubeGeometry extends THREE.BufferGeometry {
     const uv = new THREE.Vector2();
     let AP = new THREE.Vector3();
     let _P = new THREE.Vector2();
+
+    let scale;
+    let xScale;
+    let yScale;
+    let tilt;
 
     // buffer
 
@@ -131,10 +150,10 @@ export class TubeGeometry extends THREE.BufferGeometry {
 
         const u = i / axisSegments;
         AP = axis.getPointAt(u, AP);
-        if (typeof scale !== "number") scaleN = scale.getPointAt(u, _P).y;
-        if (typeof xScale !== "number") xScaleN = xScale.getPointAt(u, _P).y;
-        if (typeof yScale !== "number") yScaleN = yScale.getPointAt(u, _P).y;
-        if (typeof tilt !== "number") tiltN = tilt.getPointAt(u, _P).y;
+        scale = scaleN * scaleC.getPointAt(u, _P).y;
+        xScale = xScaleN * xScaleC.getPointAt(u, _P).y;
+        yScale = yScaleN * yScaleC.getPointAt(u, _P).y;
+        tilt = tiltN + tiltC.getPointAt(u, _P).y;
 
         // retrieve corresponding normal and binormal
 
@@ -145,15 +164,15 @@ export class TubeGeometry extends THREE.BufferGeometry {
 
         for (let j = 0; j <= crossSegments; j++) {
           const CP = CPs[j].clone();
-          CP.multiplyScalar(scaleN);
-          CP.x *= xScaleN;
-          CP.y *= yScaleN;
-          CP.rotateAround(center, tiltN);
+          CP.multiplyScalar(scale);
+          CP.x *= xScale;
+          CP.y *= yScale;
+          CP.rotateAround(center, tilt);
 
           const CB = CBs[j].clone();
-          CB.x *= yScaleN;
-          CB.y *= xScaleN;
-          CB.rotateAround(center, tiltN);
+          CB.x *= yScale;
+          CB.y *= xScale;
+          CB.rotateAround(center, tilt);
 
           // normal
 
@@ -216,13 +235,14 @@ export class TubeGeometry extends THREE.BufferGeometry {
     this.parameters.cross.copy(source.parameters.cross);
     this.parameters.axisSegments = source.parameters.axisSegments;
     this.parameters.crossSegments = source.parameters.crossSegments;
-    function multiTypeCopy(thisP, sourceP) {
-      typeof sourceP === "number" ? (thisP = sourceP) : thisP.copy(sourceP);
-    }
-    multiTypeCopy(this.parameters.scale, source.parameters.scale);
-    multiTypeCopy(this.parameters.xScale, source.parameters.xScale);
-    multiTypeCopy(this.parameters.yScale, source.parameters.yScale);
-    multiTypeCopy(this.parameters.tilt, source.parameters.tilt);
+    this.parameters.scaleN = source.parameters.scaleN;
+    this.parameters.xScaleN = source.parameters.xScaleN;
+    this.parameters.yScaleN = source.parameters.yScaleN;
+    this.parameters.tiltN = source.parameters.tiltN;
+    this.parameters.scaleC.copy(source.parameters.scaleC);
+    this.parameters.xScaleC.copy(source.parameters.xScaleC);
+    this.parameters.yScaleC.copy(source.parameters.yScaleC);
+    this.parameters.tiltC.copy(source.parameters.tiltC);
 
     return this;
   }
