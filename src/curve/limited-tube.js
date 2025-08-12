@@ -69,7 +69,6 @@ export class LimitedTube {
     })();
   }
 
-  // TODO: Set _updateCpsGroup for each curve.
   // TODO: Add functions to change curve type between number and Curve{3,2}.
   /**
    * Set GUI.
