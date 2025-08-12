@@ -15,6 +15,22 @@ export function createLimitedTubeGroup(gui, lt) {
   const group = new THREE.Group();
   const folder = gui.addFolder("limitedTubeGroup");
 
+  group.add(createFacesGroup(folder, lt));
+
+  lt.setGUI(folder);
+
+  return group;
+}
+
+/**
+ * @param {GUI} gui
+ * @param {LimitedTube} lt
+ * @return {THREE.Group}
+ */
+function createFacesGroup(gui, lt) {
+  const group = new THREE.Group();
+  const folder = gui.addFolder("facesGroup");
+
   const emptyGeometry = createEmptyGeometry();
 
   const lineMaterial = createLineMaterial(folder);
@@ -29,7 +45,6 @@ export function createLimitedTubeGroup(gui, lt) {
   group.add(new THREE.Mesh(emptyGeometry, toonMaterial));
 
   lt.createGeometry(group);
-  lt.setGUI(folder);
 
   return group;
 }
