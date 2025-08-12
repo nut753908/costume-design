@@ -29,7 +29,7 @@ export function createCurveGroup(gui, c, scene) {
 
 /**
  * @param {GUI} gui
- * @param {Curve2} c
+ * @param {Curve3|Curve2} c
  * @return {THREE.Group}
  */
 function createCurvesLine(gui, c) {
@@ -48,7 +48,7 @@ function createCurvesLine(gui, c) {
 
 /**
  * @param {GUI} gui
- * @param {Curve2} c
+ * @param {Curve3|Curve2} c
  * @return {THREE.Group}
  */
 function createCpsGroup(gui, c) {
