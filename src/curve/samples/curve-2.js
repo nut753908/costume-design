@@ -69,5 +69,5 @@ function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3) {
 }
 export const gentlyRisingCurve2 = createGentlyCurve2();
 export const gentlyDescendingCurve2 = createGentlyCurve2(2, 1);
-export const gentlyRisingCurve2InRadian = createGentlyCurve2(0, Math.PI);
-export const gentlyDescendingCurve2InRadian = createGentlyCurve2(Math.PI, 0);
+export const gentlyRisingCurve2InRadians = createGentlyCurve2(0, Math.PI);
+export const gentlyDescendingCurve2InRadians = createGentlyCurve2(Math.PI, 0);
