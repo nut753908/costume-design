@@ -25,3 +25,16 @@ export const screwShapedCurve3 = new Curve3([
     new THREE.Vector3(5, 4, 4)
   ),
 ]);
+
+export const constant0Curve3 = new Curve3([
+  new ControlPoint3(
+    new THREE.Vector3(0, 0.5, 0),
+    new THREE.Vector3(0, 0.75, 0),
+    new THREE.Vector3(0, 0.25, 0)
+  ),
+  new ControlPoint3(
+    new THREE.Vector3(0, -0.5, 0),
+    new THREE.Vector3(0, -0.25, 0),
+    new THREE.Vector3(0, -0.75, 0)
+  ),
+]);
