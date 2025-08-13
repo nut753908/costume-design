@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
+import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 
 // TODO: Fix copy().
 // TODO: Add clone(), toJSON(), and fromJSON().
@@ -57,10 +58,12 @@ export class LimitedTube {
               p.scaleN,
               p.xScaleN,
               p.yScaleN,
+              p.curvatureN,
               p.tiltN,
               p.scaleC,
               p.xScaleC,
               p.yScaleC,
+              p.curvatureC,
               p.tiltC
             )
           : new LimitedTubeGeometry();
@@ -72,6 +75,13 @@ export class LimitedTube {
 
       group.children[0].geometry = new THREE.WireframeGeometry(geometry);
       group.children[1].geometry = geometry;
+
+      // Add VertexNormalsHelper for debugging.
+      group.children[2] = new VertexNormalsHelper(
+        group.children[1],
+        0.05,
+        0xff0000
+      );
     })();
   }
 
@@ -92,10 +102,12 @@ export class LimitedTube {
     folder.add(p, "scaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "xScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
+    folder.add(p, "curvatureN").step(0.01).onChange(update);
     folder.add(p, "tiltN", -180, 180, 1).onChange(update);
     p.scaleC.setGUI(folder, "scaleC", update, true);
     p.xScaleC.setGUI(folder, "xScaleC", update, true);
     p.yScaleC.setGUI(folder, "yScaleC", update, true);
+    p.scaleC.setGUI(folder, "curvatureC", update, true);
     p.tiltC.setGUI(folder, "tiltC", update, true);
 
     function update() {
