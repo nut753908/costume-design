@@ -324,24 +324,27 @@ export class TubeGeometry extends THREE.BufferGeometry {
   copy(source) {
     super.copy(source);
 
-    this.parameters.axis.copy(source.parameters.axis);
-    this.parameters.cross.copy(source.parameters.cross);
-    this.parameters.axisSegments = source.parameters.axisSegments;
-    this.parameters.crossSegments = source.parameters.crossSegments;
-    this.parameters.scaleN = source.parameters.scaleN;
-    this.parameters.xScaleN = source.parameters.xScaleN;
-    this.parameters.yScaleN = source.parameters.yScaleN;
-    this.parameters.xCurvatureN = source.parameters.xCurvatureN;
-    this.parameters.yCurvatureN = source.parameters.yCurvatureN;
-    this.parameters.tiltN = source.parameters.tiltN;
-    this.parameters.scaleC.copy(source.parameters.scaleC);
-    this.parameters.xScaleC.copy(source.parameters.xScaleC);
-    this.parameters.yScaleC.copy(source.parameters.yScaleC);
-    this.parameters.xCurvatureC.copy(source.parameters.xCurvatureC);
-    this.parameters.yCurvatureC.copy(source.parameters.yCurvatureC);
-    this.parameters.tiltC.copy(source.parameters.tiltC);
-    this.parameters.curvatureOrder = source.parameters.curvatureOrder;
+    this.parameters = Object.assign({}, source.parameters);
+
+    Object.entries(source.parameters).forEach(([k, v]) => {
+      if (v instanceof THREE.Curve) this.parameters[k] = v.clone();
+    });
 
     return this;
+  }
+
+  /**
+   * Serializes the tube geometry into JSON.
+   *
+   * @return {Object} A JSON object representing the serialized tube geometry.
+   */
+  toJSON() {
+    const data = super.toJSON();
+
+    Object.entries(this.parameters).forEach(([k, v]) => {
+      if (v instanceof THREE.Curve) data[k] = v.toJSON();
+    });
+
+    return data;
   }
 }

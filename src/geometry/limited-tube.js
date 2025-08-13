@@ -8,7 +8,6 @@ import {
   constant0Curve2,
 } from "../curve/samples/curve-2.js";
 
-// TODO: Add clone(), toJSON(), and fromJSON().
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *
@@ -111,14 +110,31 @@ export class LimitedTubeGeometry extends TubeGeometry {
   }
 
   /**
-   * Copies the values of the given limited tube geometry to this instance.
+   * Factory method for creating an instance of this class from the given
+   * JSON object.
    *
-   * @param {LimitedTubeGeometry} source - The limited tube geometry to copy.
-   * @returns {LimitedTubeGeometry} A reference to this limited tube geometry.
+   * @param {Object} data - A JSON object representing the serialized limited tube geometry.
+   * @return {LimitedTubeGeometry} A new instance.
    */
-  copy(source) {
-    super.copy(source);
-
-    return this;
+  static fromJSON(data) {
+    return new LimitedTubeGeometry(
+      new Curve3().fromJSON(data.axis),
+      new Curve2().fromJSON(data.cross),
+      data.axisSegments,
+      data.crossSegments,
+      data.scaleN,
+      data.xScaleN,
+      data.yScaleN,
+      data.xCurvatureN,
+      data.yCurvatureN,
+      data.tiltN,
+      new Curve2().fromJSON(data.scaleC),
+      new Curve2().fromJSON(data.xScaleC),
+      new Curve2().fromJSON(data.yScaleC),
+      new Curve2().fromJSON(data.xCurvatureC),
+      new Curve2().fromJSON(data.yCurvatureC),
+      new Curve2().fromJSON(data.tiltC),
+      data.curvatureOrder
+    );
   }
 }

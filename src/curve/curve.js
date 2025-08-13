@@ -284,15 +284,6 @@ export class Curve extends THREE.CurvePath {
   }
 
   /**
-   * Returns a new Curve with copied values from this instance.
-   *
-   * @returns {Curve} A clone of this instance.
-   */
-  clone() {
-    return new this.constructor().copy(this);
-  }
-
-  /**
    * Copies the values of the given Curve to this instance.
    *
    * @param {Curve} source - The Curve to copy.

@@ -51,48 +51,4 @@ export class Curve2 extends Curve {
   get name() {
     return "curve2";
   }
-
-  /**
-   * Returns a new Curve2 with copied values from this instance.
-   *
-   * @returns {Curve2} A clone of this instance.
-   */
-  clone() {
-    return new this.constructor().copy(this);
-  }
-
-  /**
-   * Copies the values of the given Curve2 to this instance.
-   *
-   * @param {Curve2} source - The Curve2 to copy.
-   * @returns {Curve2} A reference to this Curve2.
-   */
-  copy(source) {
-    super.copy(source);
-
-    return this;
-  }
-
-  /**
-   * Serializes the Curve2 into JSON.
-   *
-   * @return {Object} A JSON object representing the serialized Curve2.
-   */
-  toJSON() {
-    const data = super.toJSON();
-
-    return data;
-  }
-
-  /**
-   * Deserializes the Curve2 from the given JSON.
-   *
-   * @param {Object} json - The JSON holding the serialized Curve2.
-   * @return {Curve2} A reference to this Curve2.
-   */
-  fromJSON(json) {
-    super.fromJSON(json);
-
-    return this;
-  }
 }
