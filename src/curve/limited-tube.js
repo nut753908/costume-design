@@ -111,8 +111,8 @@ export class LimitedTube {
     p.scaleC.setGUI(folder, "scaleC", update, true);
     p.xScaleC.setGUI(folder, "xScaleC", update, true);
     p.yScaleC.setGUI(folder, "yScaleC", update, true);
-    p.scaleC.setGUI(folder, "xCurvatureC", update, true);
-    p.scaleC.setGUI(folder, "yCurvatureC", update, true);
+    p.xCurvatureC.setGUI(folder, "xCurvatureC", update, true);
+    p.yCurvatureC.setGUI(folder, "yCurvatureC", update, true);
     p.tiltC.setGUI(folder, "tiltC", update, true);
     folder.add(p, "curvatureOrder", ["xy", "yx"]).onChange(update);
 
