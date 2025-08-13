@@ -22,8 +22,10 @@ import {
  * const scaleC = constant1Curve2.clone();
  * const xScaleC = constant1Curve2.clone();
  * const yScaleC = constant1Curve2.clone();
+ * const xCurvatureC = constant0Curve2.clone();
+ * const yCurvatureC = constant0Curve2.clone();
  * const tiltC = constant0Curve2.clone();
- * const geometry = new LimitedTubeGeometry( axis, cross, 4, 8, 1, 1, 1, 0, scaleC, xScaleC, yScaleC, tiltC );
+ * const geometry = new LimitedTubeGeometry( axis, cross, 4, 8, 1, 1, 1, 0, 0, 0, scaleC, xScaleC, yScaleC, tiltC, xCurvatureC, yCurvatureC, "xy" );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
  * scene.add( mesh );
@@ -39,12 +41,14 @@ export class LimitedTubeGeometry extends TubeGeometry {
    * The parameter changes from this class to TubeGeometry are:
    *
    * - Types
-   *        axis: THREE.Curve<THREE.Vector3> -> Curve3
-   *       cross: THREE.Curve<THREE.Vector2> -> Curve2
-   *      scaleC: THREE.Curve<THREE.Vector2> -> Curve2
-   *     xScaleC: THREE.Curve<THREE.Vector2> -> Curve2
-   *     yScaleC: THREE.Curve<THREE.Vector2> -> Curve2
-   *       tiltC: THREE.Curve<THREE.Vector2> -> Curve2
+   *            axis: THREE.Curve<THREE.Vector3> -> Curve3
+   *           cross: THREE.Curve<THREE.Vector2> -> Curve2
+   *          scaleC: THREE.Curve<THREE.Vector2> -> Curve2
+   *         xScaleC: THREE.Curve<THREE.Vector2> -> Curve2
+   *         yScaleC: THREE.Curve<THREE.Vector2> -> Curve2
+   *     xCurvatureC: THREE.Curve<THREE.Vector2> -> Curve2
+   *     yCurvatureC: THREE.Curve<THREE.Vector2> -> Curve2
+   *           tiltC: THREE.Curve<THREE.Vector2> -> Curve2
    *
    * @param {Curve3} [axis] - A 3D axial curve that passes through the center of the tube.
    * @param {Curve2} [cross] - A 2D cross-sectional curve perpendicular to the axis.
@@ -53,11 +57,16 @@ export class LimitedTubeGeometry extends TubeGeometry {
    * @param {number} [scaleN=1] - The cross section scale ratio.
    * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
    * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
+   * @param {number} [xCurvatureN=0] - The curvature of the cross section in the x direction.
+   * @param {number} [yCurvatureN=0] - The curvature of the cross section in the y direction.
    * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
    * @param {Curve2} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
    * @param {Curve2} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
    * @param {Curve2} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
+   * @param {Curve2} [xCurvatureC] - The curvature of the cross section in the x direction. Only the y component is used for the curvature.
+   * @param {Curve2} [yCurvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
    * @param {Curve2} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
+   * @param {"xy"|"yx"} [curvatureOrder] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
    */
   constructor(
     axis = constant0Curve3.clone(),
@@ -67,11 +76,16 @@ export class LimitedTubeGeometry extends TubeGeometry {
     scaleN = 1,
     xScaleN = 1,
     yScaleN = 1,
+    xCurvatureN = 0,
+    yCurvatureN = 0,
     tiltN = 0,
     scaleC = constant1Curve2.clone(),
     xScaleC = constant1Curve2.clone(),
     yScaleC = constant1Curve2.clone(),
-    tiltC = constant0Curve2.clone()
+    xCurvatureC = constant0Curve2.clone(),
+    yCurvatureC = constant0Curve2.clone(),
+    tiltC = constant0Curve2.clone(),
+    curvatureOrder = "xy"
   ) {
     super(
       axis,
@@ -81,11 +95,16 @@ export class LimitedTubeGeometry extends TubeGeometry {
       scaleN,
       xScaleN,
       yScaleN,
+      xCurvatureN,
+      yCurvatureN,
       tiltN,
       scaleC,
       xScaleC,
       yScaleC,
-      tiltC
+      xCurvatureC,
+      yCurvatureC,
+      tiltC,
+      curvatureOrder
     );
 
     this.type = "LimitedTubeGeometry";

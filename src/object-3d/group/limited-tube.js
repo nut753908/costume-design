@@ -25,6 +25,8 @@ export function createLimitedTubeGroup(gui, lt) {
   group.add(createCurveGroup(folder, p.scaleC, "scaleC", ...bools));
   group.add(createCurveGroup(folder, p.xScaleC, "xScaleC", ...bools));
   group.add(createCurveGroup(folder, p.yScaleC, "yScaleC", ...bools));
+  group.add(createCurveGroup(folder, p.xCurvatureC, "xCurvatureC", ...bools));
+  group.add(createCurveGroup(folder, p.yCurvatureC, "yCurvatureC", ...bools));
   group.add(createCurveGroup(folder, p.tiltC, "tiltC", ...bools));
 
   lt.setGUI(folder);
