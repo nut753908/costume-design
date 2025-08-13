@@ -20,9 +20,10 @@ import {
  * const scaleC = constant1Curve2.clone();
  * const xScaleC = constant1Curve2.clone();
  * const yScaleC = constant1Curve2.clone();
- * const curvatureC = constant0Curve2.clone();
+ * const xCurvatureC = constant0Curve2.clone();
+ * const yCurvatureC = constant0Curve2.clone();
  * const tiltC = constant0Curve2.clone();
- * const geometry = new TubeGeometry( axis, cross, 4, 8, 1, 1, 1, 0, 0, scaleC, xScaleC, yScaleC, curvatureC, tiltC );
+ * const geometry = new TubeGeometry( axis, cross, 4, 8, 1, 1, 1, 0, 0, 0, scaleC, xScaleC, yScaleC, xCurvatureC, yCurvatureC, tiltC, "xy" );
  * const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
  * const mesh = new THREE.Mesh( geometry, material );
  * scene.add( mesh );
@@ -41,13 +42,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
    * @param {number} [scaleN=1] - The cross section scale ratio.
    * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
    * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
-   * @param {number} [curvatureN=0] - The curvature of the cross section in the y direction.
+   * @param {number} [xCurvatureN=0] - The curvature of the cross section in the x direction.
+   * @param {number} [yCurvatureN=0] - The curvature of the cross section in the y direction.
    * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
    * @param {THREE.Curve<THREE.Vector2>} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
    * @param {THREE.Curve<THREE.Vector2>} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
    * @param {THREE.Curve<THREE.Vector2>} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
-   * @param {THREE.Curve<THREE.Vector2>} [curvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
+   * @param {THREE.Curve<THREE.Vector2>} [xCurvatureC] - The curvature of the cross section in the x direction. Only the y component is used for the curvature.
+   * @param {THREE.Curve<THREE.Vector2>} [yCurvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
    * @param {THREE.Curve<THREE.Vector2>} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
+   * @param {"xy"|"yx"} [curvatureOrder] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
    */
   constructor(
     axis = constant0Curve3.clone(),
@@ -57,13 +61,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
     scaleN = 1,
     xScaleN = 1,
     yScaleN = 1,
-    curvatureN = 0,
+    xCurvatureN = 0,
+    yCurvatureN = 0,
     tiltN = 0,
     scaleC = constant1Curve2.clone(),
     xScaleC = constant1Curve2.clone(),
     yScaleC = constant1Curve2.clone(),
-    curvatureC = constant0Curve2.clone(),
-    tiltC = constant0Curve2.clone()
+    xCurvatureC = constant0Curve2.clone(),
+    yCurvatureC = constant0Curve2.clone(),
+    tiltC = constant0Curve2.clone(),
+    curvatureOrder = "xy"
   ) {
     super();
 
@@ -84,13 +91,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
       scaleN: scaleN,
       xScaleN: xScaleN,
       yScaleN: yScaleN,
-      curvatureN: curvatureN,
+      xCurvatureN: xCurvatureN,
+      yCurvatureN: yCurvatureN,
       tiltN: tiltN,
       scaleC: scaleC,
       xScaleC: xScaleC,
       yScaleC: yScaleC,
-      curvatureC: curvatureC,
+      xCurvatureC: xCurvatureC,
+      yCurvatureC: yCurvatureC,
       tiltC: tiltC,
+      curvatureOrder: curvatureOrder,
     };
 
     cross.getTangentAt = function (u, optionalTarget) {
@@ -118,7 +128,8 @@ export class TubeGeometry extends THREE.BufferGeometry {
     let scale;
     let xScale;
     let yScale;
-    let curvature;
+    let xCurvature;
+    let yCurvature;
     let tilt;
 
     // buffer
@@ -161,7 +172,8 @@ export class TubeGeometry extends THREE.BufferGeometry {
         scale = scaleN * scaleC.getPointAt(u, _P).y;
         xScale = xScaleN * xScaleC.getPointAt(u, _P).y;
         yScale = yScaleN * yScaleC.getPointAt(u, _P).y;
-        curvature = curvatureN + curvatureC.getPointAt(u, _P).y;
+        xCurvature = xCurvatureN + xCurvatureC.getPointAt(u, _P).y;
+        yCurvature = yCurvatureN + yCurvatureC.getPointAt(u, _P).y;
         tilt = THREE.MathUtils.degToRad(tiltN + tiltC.getPointAt(u, _P).y);
 
         // retrieve corresponding normal and binormal
@@ -177,13 +189,26 @@ export class TubeGeometry extends THREE.BufferGeometry {
           CP.x *= xScale;
           CP.y *= yScale;
           const CPx = CP.x; // Used in applyCurvatureToCB() below.
-          applyCurvatureToCP(curvature, CP);
+          const CPy = CP.y; // Used in applyCurvatureToCB() below.
+          if (curvatureOrder === "xy") {
+            applyXCurvatureToCP(xCurvature, CP);
+            applyYCurvatureToCP(yCurvature, CP);
+          } else if (curvatureOrder === "yx") {
+            applyYCurvatureToCP(yCurvature, CP);
+            applyXCurvatureToCP(xCurvature, CP);
+          }
           CP.rotateAround(center, tilt);
 
           const CB = CBs[j].clone();
           CB.x *= yScale;
           CB.y *= xScale;
-          applyCurvatureToCB(curvature, CPx, CB);
+          if (curvatureOrder === "xy") {
+            applyXCurvatureToCB(xCurvature, CPy, CB);
+            applyYCurvatureToCB(yCurvature, CPx, CB);
+          } else if (curvatureOrder === "yx") {
+            applyYCurvatureToCB(yCurvature, CPx, CB);
+            applyXCurvatureToCB(xCurvature, CPy, CB);
+          }
           CB.rotateAround(center, tilt);
 
           // normal
@@ -206,30 +231,58 @@ export class TubeGeometry extends THREE.BufferGeometry {
       }
 
       /**
-       * Apply the curvature to CP(Cross Point).
+       * Apply the xCurvature to CP(Cross Point).
        *
-       * @param {number} curvature
+       * @param {number} xCurvature
        * @param {THREE.Vector2} CP
        */
-      function applyCurvatureToCP(curvature, CP) {
-        if (curvature === 0) return;
-        const r = 1 / curvature;
+      function applyXCurvatureToCP(xCurvature, CP) {
+        if (xCurvature === 0) return;
+        const r = 1 / xCurvature;
+        const rMinuxX = r - CP.x;
+        const theta = CP.y * xCurvature;
+        CP.x = r - rMinuxX * Math.cos(theta);
+        CP.y = rMinuxX * Math.sin(theta);
+      }
+
+      /**
+       * Apply the yCurvature to CP(Cross Point).
+       *
+       * @param {number} yCurvature
+       * @param {THREE.Vector2} CP
+       */
+      function applyYCurvatureToCP(yCurvature, CP) {
+        if (yCurvature === 0) return;
+        const r = 1 / yCurvature;
         const rMinuxY = r - CP.y;
-        const theta = CP.x * curvature;
+        const theta = CP.x * yCurvature;
         CP.x = rMinuxY * Math.sin(theta);
         CP.y = r - rMinuxY * Math.cos(theta);
       }
 
       /**
-       * Apply the curvature to CB(Cross Binormal).
+       * Apply the xCurvature to CB(Cross Binormal).
        *
-       * @param {number} curvature
+       * @param {number} xCurvature
+       * @param {number} CPy - The y value of CP(Cross Point) before appling the tilt.
+       * @param {THREE.Vector2} CB
+       */
+      function applyXCurvatureToCB(xCurvature, CPy, CB) {
+        if (xCurvature === 0) return;
+        const theta = CPy * xCurvature;
+        CB.rotateAround(center, -theta);
+      }
+
+      /**
+       * Apply the yCurvature to CB(Cross Binormal).
+       *
+       * @param {number} yCurvature
        * @param {number} CPx - The x value of CP(Cross Point) before appling the tilt.
        * @param {THREE.Vector2} CB
        */
-      function applyCurvatureToCB(curvature, CPx, CB) {
-        if (curvature === 0) return;
-        const theta = CPx * curvature;
+      function applyYCurvatureToCB(yCurvature, CPx, CB) {
+        if (yCurvature === 0) return;
+        const theta = CPx * yCurvature;
         CB.rotateAround(center, theta);
       }
     }
@@ -278,13 +331,16 @@ export class TubeGeometry extends THREE.BufferGeometry {
     this.parameters.scaleN = source.parameters.scaleN;
     this.parameters.xScaleN = source.parameters.xScaleN;
     this.parameters.yScaleN = source.parameters.yScaleN;
-    this.parameters.curvatureN = source.parameters.curvatureN;
+    this.parameters.xCurvatureN = source.parameters.xCurvatureN;
+    this.parameters.yCurvatureN = source.parameters.yCurvatureN;
     this.parameters.tiltN = source.parameters.tiltN;
     this.parameters.scaleC.copy(source.parameters.scaleC);
     this.parameters.xScaleC.copy(source.parameters.xScaleC);
     this.parameters.yScaleC.copy(source.parameters.yScaleC);
-    this.parameters.curvatureC.copy(source.parameters.curvatureC);
+    this.parameters.xCurvatureC.copy(source.parameters.xCurvatureC);
+    this.parameters.yCurvatureC.copy(source.parameters.yCurvatureC);
     this.parameters.tiltC.copy(source.parameters.tiltC);
+    this.parameters.curvatureOrder = source.parameters.curvatureOrder;
 
     return this;
   }

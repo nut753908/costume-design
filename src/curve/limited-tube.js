@@ -58,13 +58,16 @@ export class LimitedTube {
               p.scaleN,
               p.xScaleN,
               p.yScaleN,
-              p.curvatureN,
+              p.xCurvatureN,
+              p.yCurvatureN,
               p.tiltN,
               p.scaleC,
               p.xScaleC,
               p.yScaleC,
-              p.curvatureC,
-              p.tiltC
+              p.xCurvatureC,
+              p.yCurvatureC,
+              p.tiltC,
+              p.curvatureOrder
             )
           : new LimitedTubeGeometry();
 
@@ -102,13 +105,16 @@ export class LimitedTube {
     folder.add(p, "scaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "xScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
-    folder.add(p, "curvatureN").step(0.01).onChange(update);
+    folder.add(p, "xCurvatureN").step(0.01).onChange(update);
+    folder.add(p, "yCurvatureN").step(0.01).onChange(update);
     folder.add(p, "tiltN", -180, 180, 1).onChange(update);
     p.scaleC.setGUI(folder, "scaleC", update, true);
     p.xScaleC.setGUI(folder, "xScaleC", update, true);
     p.yScaleC.setGUI(folder, "yScaleC", update, true);
-    p.scaleC.setGUI(folder, "curvatureC", update, true);
+    p.scaleC.setGUI(folder, "xCurvatureC", update, true);
+    p.scaleC.setGUI(folder, "yCurvatureC", update, true);
     p.tiltC.setGUI(folder, "tiltC", update, true);
+    folder.add(p, "curvatureOrder", ["xy", "yx"]).onChange(update);
 
     function update() {
       lt._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/limited-tube.js.
