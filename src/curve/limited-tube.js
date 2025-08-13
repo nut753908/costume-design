@@ -80,6 +80,9 @@ export class LimitedTube {
       group.children[1].geometry = geometry;
 
       // Add VertexNormalsHelper for debugging.
+      if (group.children[2]) {
+        group.children[2].dispose();
+      }
       group.children[2] = new VertexNormalsHelper(
         group.children[1],
         0.05,
