@@ -35,6 +35,8 @@ export class ControlPoint2 {
     isSyncRadius = true,
     isSyncAngle = true
   ) {
+    this.type = "ControlPoint2";
+
     /**
      * The position of middle control point.
      *
@@ -134,7 +136,7 @@ export class ControlPoint2 {
    * @param {string} name - The cp folder name used in the GUI.
    * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
    */
-  setGUI(gui, name = "cp2", updateCallback = () => {}) {
+  setGUI(gui, name = this.type, updateCallback = () => {}) {
     const cp = this;
 
     let _tmp;
