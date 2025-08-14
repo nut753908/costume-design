@@ -247,75 +247,75 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           const n32 = (crossSegments + 1) * (i + 1) + j;
           if (i === 0) {
             if (j === 0) {
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              const v2322 = CP23.clone().sub(CP22);
+              const v3222 = CP32.clone().sub(CP22);
               c = v2322.clone().cross(v3222);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v3222 = CP32.clone().sub(CP22);
+              const v2122 = CP21.clone().sub(CP22);
               c = v3222.clone().cross(v2122);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v2322 = CP23.clone().sub(CP22);
+              const v3222 = CP32.clone().sub(CP22);
+              const v2122 = CP21.clone().sub(CP22);
               c = v2322.clone().cross(v3222);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
@@ -328,75 +328,75 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             }
           } else if (i === axisSegments) {
             if (j === 0) {
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v1222 = CP12.clone().sub(CP22);
+              const v2322 = CP23.clone().sub(CP22);
               c = v1222.clone().cross(v2322);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              const v2122 = CP21.clone().sub(CP22);
+              const v1222 = CP12.clone().sub(CP22);
               c = v2122.clone().cross(v1222);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v2122 = CP21.clone().sub(CP22);
+              const v1222 = CP12.clone().sub(CP22);
+              const v2322 = CP23.clone().sub(CP22);
               c = v2122.clone().cross(v1222);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
@@ -409,29 +409,29 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             }
           } else {
             if (j === 0) {
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              const v1222 = CP12.clone().sub(CP22);
+              const v2322 = CP23.clone().sub(CP22);
+              const v3222 = CP32.clone().sub(CP22);
               c = v1222.clone().cross(v2322);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
@@ -442,29 +442,29 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else if (j === crossSegments) {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              const v3222 = CP32.clone().sub(CP22);
+              const v2122 = CP21.clone().sub(CP22);
+              const v1222 = CP12.clone().sub(CP22);
               c = v3222.clone().cross(v2122);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
@@ -475,35 +475,35 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else {
-              const CPsAfter3_n21 = new THREE.Vector3(
+              const CP21 = new THREE.Vector3(
                 CPsAfter[n21].x,
                 CPsAfter[n21].y,
                 0
               );
-              const CPsAfter3_n23 = new THREE.Vector3(
+              const CP23 = new THREE.Vector3(
                 CPsAfter[n23].x,
                 CPsAfter[n23].y,
                 0
               );
-              const CPsAfter3_n12 = new THREE.Vector3(
+              const CP12 = new THREE.Vector3(
                 CPsAfter[n12].x,
                 CPsAfter[n12].y,
                 -axisLengthSegment
               );
-              const CPsAfter3_n22 = new THREE.Vector3(
+              const CP22 = new THREE.Vector3(
                 CPsAfter[n22].x,
                 CPsAfter[n22].y,
                 0
               );
-              const CPsAfter3_n32 = new THREE.Vector3(
+              const CP32 = new THREE.Vector3(
                 CPsAfter[n32].x,
                 CPsAfter[n32].y,
                 axisLengthSegment
               );
-              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
-              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
-              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
-              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v1222 = CP12.clone().sub(CP22);
+              const v2322 = CP23.clone().sub(CP22);
+              const v3222 = CP32.clone().sub(CP22);
+              const v2122 = CP21.clone().sub(CP22);
               c = v1222.clone().cross(v2322);
               const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
               const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
