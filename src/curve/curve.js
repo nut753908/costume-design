@@ -266,7 +266,7 @@ export class Curve extends THREE.CurvePath {
   }
 
   /**
-   * The GUI-safe version of iIndexList.
+   * Get the GUI-safe version of iIndexList.
    *
    * @returns {Array<number>}
    */
