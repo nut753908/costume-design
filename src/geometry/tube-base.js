@@ -160,6 +160,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     function generateBufferData() {
       generateSegment();
 
+      calculateCBzAndSetNormals();
+
       generateUVs();
 
       generateIndices();
@@ -233,8 +235,66 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
         }
       }
 
-      const l = axis.getLength() / axisSegments;
-      let c, r;
+      /**
+       * Apply the xCurvature to CP(Cross Point).
+       *
+       * @param {number} xCurvature
+       * @param {THREE.Vector2} CP
+       */
+      function applyXCurvatureToCP(xCurvature, CP) {
+        if (xCurvature === 0) return;
+        const r = 1 / xCurvature;
+        const rMinuxX = r - CP.x;
+        const theta = CP.y * xCurvature;
+        CP.x = r - rMinuxX * Math.cos(theta);
+        CP.y = rMinuxX * Math.sin(theta);
+      }
+
+      /**
+       * Apply the yCurvature to CP(Cross Point).
+       *
+       * @param {number} yCurvature
+       * @param {THREE.Vector2} CP
+       */
+      function applyYCurvatureToCP(yCurvature, CP) {
+        if (yCurvature === 0) return;
+        const r = 1 / yCurvature;
+        const rMinuxY = r - CP.y;
+        const theta = CP.x * yCurvature;
+        CP.x = rMinuxY * Math.sin(theta);
+        CP.y = r - rMinuxY * Math.cos(theta);
+      }
+
+      /**
+       * Apply the xCurvature to CB(Cross Binormal).
+       *
+       * @param {number} xCurvature
+       * @param {number} CPy - The y value of CP(Cross Point) before appling the tilt.
+       * @param {THREE.Vector2} CB
+       */
+      function applyXCurvatureToCB(xCurvature, CPy, CB) {
+        if (xCurvature === 0) return;
+        const theta = CPy * xCurvature;
+        CB.rotateAround(center, -theta);
+      }
+
+      /**
+       * Apply the yCurvature to CB(Cross Binormal).
+       *
+       * @param {number} yCurvature
+       * @param {number} CPx - The x value of CP(Cross Point) before appling the tilt.
+       * @param {THREE.Vector2} CB
+       */
+      function applyYCurvatureToCB(yCurvature, CPx, CB) {
+        if (yCurvature === 0) return;
+        const theta = CPx * yCurvature;
+        CB.rotateAround(center, theta);
+      }
+    }
+
+    function calculateCBzAndSetNormals() {
+      const l = axis.getLength() / axisSegments; // l: axis length devided by axisSegments
+      let c, r; // c: cross vector, r: CBz
 
       for (let i = 0; i <= axisSegments; i++) {
         const AT = axisFrames.tangents[i];
@@ -399,62 +459,6 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           normals[n22 * 3 + 1] = normal.y;
           normals[n22 * 3 + 2] = normal.z;
         }
-      }
-
-      /**
-       * Apply the xCurvature to CP(Cross Point).
-       *
-       * @param {number} xCurvature
-       * @param {THREE.Vector2} CP
-       */
-      function applyXCurvatureToCP(xCurvature, CP) {
-        if (xCurvature === 0) return;
-        const r = 1 / xCurvature;
-        const rMinuxX = r - CP.x;
-        const theta = CP.y * xCurvature;
-        CP.x = r - rMinuxX * Math.cos(theta);
-        CP.y = rMinuxX * Math.sin(theta);
-      }
-
-      /**
-       * Apply the yCurvature to CP(Cross Point).
-       *
-       * @param {number} yCurvature
-       * @param {THREE.Vector2} CP
-       */
-      function applyYCurvatureToCP(yCurvature, CP) {
-        if (yCurvature === 0) return;
-        const r = 1 / yCurvature;
-        const rMinuxY = r - CP.y;
-        const theta = CP.x * yCurvature;
-        CP.x = rMinuxY * Math.sin(theta);
-        CP.y = r - rMinuxY * Math.cos(theta);
-      }
-
-      /**
-       * Apply the xCurvature to CB(Cross Binormal).
-       *
-       * @param {number} xCurvature
-       * @param {number} CPy - The y value of CP(Cross Point) before appling the tilt.
-       * @param {THREE.Vector2} CB
-       */
-      function applyXCurvatureToCB(xCurvature, CPy, CB) {
-        if (xCurvature === 0) return;
-        const theta = CPy * xCurvature;
-        CB.rotateAround(center, -theta);
-      }
-
-      /**
-       * Apply the yCurvature to CB(Cross Binormal).
-       *
-       * @param {number} yCurvature
-       * @param {number} CPx - The x value of CP(Cross Point) before appling the tilt.
-       * @param {THREE.Vector2} CB
-       */
-      function applyYCurvatureToCB(yCurvature, CPx, CB) {
-        if (yCurvature === 0) return;
-        const theta = CPx * yCurvature;
-        CB.rotateAround(center, theta);
       }
     }
 
