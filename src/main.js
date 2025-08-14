@@ -39,14 +39,18 @@ async function init() {
 
   // const cp = new ControlPoint3();
   // const cp = new ControlPoint2();
-  // scene.add(createControlPointGroup(gui, cp, ms));
+  // scene.add(createControlPointGroup(cp, ms));
+  // cp.setGUI(gui);
 
   // const c = screwShapedCurve3.clone();
   // const c = smallCircleCurve2.clone();
-  // scene.add(createCurveGroup(gui, c, ms));
+  // scene.add(createCurveGroup(c, ms));
+  // c.setGUI(gui);
 
+  // TODO: Sets the visibility of each curve group, defaults to false.
   const t = new Tube();
-  scene.add(createTubeGroup(gui, t, ms));
+  scene.add(createTubeGroup(t, ms));
+  t.setGUI(gui);
 
   window.addEventListener("resize", onWindowResize);
 }
