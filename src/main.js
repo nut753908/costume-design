@@ -6,10 +6,14 @@ import { createControlsAndGizmo } from "./main/controls.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
-// import { createBaseGroup } from "./object-3d/group/base.js";
-// import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
-// import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
-// import { createCurveGroup } from "./object-3d/group/curve.js";
+import { createMaterials } from "./material/materials.js";
+import { createBaseGroup } from "./object-3d/group/base.js";
+import { ControlPoint2 } from "./curve/control-point-2.js";
+import { ControlPoint3 } from "./curve/control-point-3.js";
+import { createControlPointGroup } from "./object-3d/group/control-point.js";
+import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
+import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
+import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { createTubeGroup } from "./object-3d/group/tube.js";
 
@@ -26,17 +30,23 @@ async function init() {
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
 
-  // await createBaseGroup(gui).then((baseGroup) => {
+  const ms = createMaterials(gui);
+
+  // await createBaseGroup(ms).then((baseGroup) => {
   //   if (!baseGroup) return;
   //   scene.add(baseGroup);
   // });
 
+  // const cp = new ControlPoint3();
+  // const cp = new ControlPoint2();
+  // scene.add(createControlPointGroup(gui, cp, ms));
+
   // const c = screwShapedCurve3.clone();
   // const c = smallCircleCurve2.clone();
-  // scene.add(createCurveGroup(gui, c));
+  // scene.add(createCurveGroup(gui, c, ms));
 
   const t = new Tube();
-  scene.add(createTubeGroup(gui, t));
+  scene.add(createTubeGroup(gui, t, ms));
 
   window.addEventListener("resize", onWindowResize);
 }

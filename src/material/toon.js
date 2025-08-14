@@ -13,7 +13,7 @@ import { createColor } from "../math/color.js";
  */
 export function createToonMaterial(
   gui,
-  name = "toonMaterial (u=uniforms)",
+  name = "toonMaterial",
   baseColorHex = 0xfcd7e9,
   shadeColorHex = 0xf8c1de,
   side = THREE.FrontSide
@@ -32,7 +32,7 @@ export function createToonMaterial(
     side: side,
   });
   {
-    const folder = gui.addFolder(name);
+    const folder = gui.addFolder(`${name} (u=uniforms)`);
     folder.add(toonMaterial, "wireframe");
     const u = toonMaterial.uniforms;
     folder.add(u.checkShape, "value").name("u.checkShape");
