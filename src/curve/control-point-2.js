@@ -141,19 +141,20 @@ export class ControlPoint2 {
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
-    folder.add(cp, "isSyncRadius");
-    folder.add(cp, "isSyncAngle");
     folder.add(cp.leftPos, "x").step(0.01).name("left.x").onChange(uLP);
     folder.add(cp.leftPos, "y").step(0.01).name("left.y").onChange(uLP);
-    _tmp = folder.add(cp.leftC, "radius").min(0).step(0.01);
-    _tmp.name("left.radius").onChange(uLS);
-    folder.add(cp.leftC, "angle", 0, 360, 1).name("left.angle").onChange(uLS);
     folder.add(cp.rightPos, "x").step(0.01).name("right.x").onChange(uRP);
     folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uRP);
+    folder.add(cp, "isSyncRadius");
+    folder.add(cp, "isSyncAngle");
+    _tmp = folder.add(cp.leftC, "radius").min(0).step(0.01);
+    _tmp.name("left.radius").onChange(uLC);
+    _tmp = folder.add(cp.leftC, "angle").step(1);
+    _tmp.name("left.angle").onChange(uLC);
     _tmp = folder.add(cp.rightC, "radius").min(0).step(0.01);
-    _tmp.name("right.radius").onChange(uRS);
-    _tmp = folder.add(cp.rightC, "angle", 0, 360, 1);
-    _tmp.name("right.angle").onChange(uRS);
+    _tmp.name("right.radius").onChange(uRC);
+    _tmp = folder.add(cp.rightC, "angle").step(1);
+    _tmp.name("right.angle").onChange(uRC);
 
     const leftRightControllers = folder.controllers.filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
@@ -165,17 +166,17 @@ export class ControlPoint2 {
     function uLP() /* updateFromLeftPos */ {
       updateFrom("leftPos");
     }
-    function uLS() /* updateFromLeftC */ {
-      updateFrom("leftC");
-    }
     function uRP() /* updateFromRightPos */ {
       updateFrom("rightPos");
     }
-    function uRS() /* updateFromRightC */ {
+    function uLC() /* updateFromLeftC */ {
+      updateFrom("leftC");
+    }
+    function uRC() /* updateFromRightC */ {
       updateFrom("rightC");
     }
     /**
-     * @param {"middlePos"|"leftPos"|"leftC"|"leftPos"|"leftC"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"leftPos"|"rightPos"|"leftC"|"rightC"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
@@ -197,8 +198,8 @@ export class ControlPoint2 {
   updateFrom = {
     middlePos: () => this.updateFromMiddlePos(),
     leftPos: () => this.updateFromLeftPos(),
-    leftC: () => this.updateFromLeftC(),
     rightPos: () => this.updateFromRightPos(),
+    leftC: () => this.updateFromLeftC(),
     rightC: () => this.updateFromRightC(),
   };
 
@@ -283,13 +284,13 @@ export class ControlPoint2 {
   copy(source) {
     this.middlePos.copy(source.middlePos);
     this.leftPos.copy(source.leftPos);
-    this.leftV.copy(source.leftV);
-    this.leftC.copy(source.leftC);
     this.rightPos.copy(source.rightPos);
-    this.rightV.copy(source.rightV);
-    this.rightC.copy(source.rightC);
     this.isSyncRadius = source.isSyncRadius;
     this.isSyncAngle = source.isSyncAngle;
+    this.leftV.copy(source.leftV);
+    this.rightV.copy(source.rightV);
+    this.leftC.copy(source.leftC);
+    this.rightC.copy(source.rightC);
 
     return this;
   }
@@ -304,13 +305,13 @@ export class ControlPoint2 {
 
     data.middlePos = this.middlePos.toArray();
     data.leftPos = this.leftPos.toArray();
-    data.leftV = this.leftV.toArray();
-    data.leftC = this.leftC.toJSON();
     data.rightPos = this.rightPos.toArray();
-    data.rightV = this.rightV.toArray();
-    data.rightC = this.rightC.toJSON();
     data.isSyncRadius = this.isSyncRadius;
     data.isSyncAngle = this.isSyncAngle;
+    data.leftV = this.leftV.toArray();
+    data.leftC = this.leftC.toJSON();
+    data.rightV = this.rightV.toArray();
+    data.rightC = this.rightC.toJSON();
 
     return data;
   }
@@ -324,13 +325,13 @@ export class ControlPoint2 {
   fromJSON(json) {
     this.middlePos.fromArray(json.middlePos);
     this.leftPos.fromArray(json.leftPos);
-    this.leftV.fromArray(json.leftV);
-    this.leftC.fromJSON(json.leftC);
     this.rightPos.fromArray(json.rightPos);
-    this.rightV.fromArray(json.rightV);
-    this.rightC.fromJSON(json.rightC);
     this.isSyncRadius = json.isSyncRadius;
     this.isSyncAngle = json.isSyncAngle;
+    this.leftV.fromArray(json.leftV);
+    this.leftC.fromJSON(json.leftC);
+    this.rightV.fromArray(json.rightV);
+    this.rightC.fromJSON(json.rightC);
 
     return this;
   }

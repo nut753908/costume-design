@@ -182,11 +182,10 @@ export class Curve extends THREE.CurvePath {
     }
     function updateCpsFolder() {
       Array.from(folder.children)
-        .filter((v) => v._title === "cps")
+        .filter((v) => v._title?.startsWith("cp"))
         .forEach((v) => v.destroy());
-      const cpsFolder = folder.addFolder("cps");
       c.cps.forEach((cp, i) => {
-        cp.setGUI(cpsFolder, `${i}`, updateFromCp);
+        cp.setGUI(folder, `cp${i}`, updateFromCp);
       });
     }
   }
