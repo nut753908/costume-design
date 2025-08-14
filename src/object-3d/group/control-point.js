@@ -18,11 +18,11 @@ export function createControlPointGroup(gui, cp) {
 
   const geometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder, 0x000000);
-  const pointsMaterial = createPointsMaterial(folder, 0x000000);
+  const pointsMaterial = createPointsMaterial(folder, "cp points", 0x000000);
+  const lineMaterial = createLineMaterial(folder, "cp line", 0x000000);
 
-  group.add(new THREE.Line(geometry, lineMaterial));
   group.add(new THREE.Points(geometry, pointsMaterial));
+  group.add(new THREE.Line(geometry, lineMaterial));
 
   cp.createGeometry(group);
   cp.setGUI(folder);

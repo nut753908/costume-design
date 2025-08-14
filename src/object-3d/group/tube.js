@@ -49,11 +49,12 @@ function createFacesGroup(gui, t, visible = true) {
 
   const emptyGeometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder);
+  const lineMaterial = createLineMaterial(folder, "faces line");
   const toonMaterial = createToonMaterial(
+    folder,
+    "faces toon",
     0xfcd7e9,
     0xf8c1de,
-    folder,
     THREE.DoubleSide
   );
 

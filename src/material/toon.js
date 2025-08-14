@@ -4,16 +4,18 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createColor } from "../math/color.js";
 
 /**
- * @param {THREE.Color} baseColorHex
- * @param {THREE.Color} shadeColorHex
  * @param {GUI} gui
+ * @param {string} name - The folder name.
+ * @param {number} baseColorHex
+ * @param {number} shadeColorHex
  * @param {THREE.Side} side
  * @return {THREE.ShaderMaterial}
  */
 export function createToonMaterial(
-  baseColorHex,
-  shadeColorHex,
   gui,
+  name = "toonMaterial (u=uniforms)",
+  baseColorHex = 0xfcd7e9,
+  shadeColorHex = 0xf8c1de,
   side = THREE.FrontSide
 ) {
   const toonMaterial = new THREE.ShaderMaterial({
@@ -30,7 +32,7 @@ export function createToonMaterial(
     side: side,
   });
   {
-    const folder = gui.addFolder("toonMaterial (u=uniforms)");
+    const folder = gui.addFolder(name);
     folder.add(toonMaterial, "wireframe");
     const u = toonMaterial.uniforms;
     folder.add(u.checkShape, "value").name("u.checkShape");

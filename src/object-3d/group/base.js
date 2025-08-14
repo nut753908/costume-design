@@ -16,8 +16,13 @@ export async function createBaseGroup(gui) {
   const geometry = await loadBaseGeometry();
   if (!geometry) return null;
 
-  const lineMaterial = createLineMaterial(folder, 0xffffff, 0);
-  const toonMaterial = createToonMaterial(0xfef3ef, 0xfde2df, folder);
+  const lineMaterial = createLineMaterial(folder, "base line", 0xffffff, 0);
+  const toonMaterial = createToonMaterial(
+    folder,
+    "base toon",
+    0xfef3ef,
+    0xfde2df
+  );
 
   group.add(new THREE.LineSegments(geometry, lineMaterial));
   group.add(new THREE.Mesh(geometry, toonMaterial));

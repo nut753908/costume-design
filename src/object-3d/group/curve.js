@@ -49,7 +49,7 @@ function createCurvesLine(gui, c) {
 
   const geometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder, 0x000000);
+  const lineMaterial = createLineMaterial(folder, "curves line", 0x000000);
 
   const line = new THREE.Line(geometry, lineMaterial);
 
@@ -69,8 +69,8 @@ function createCpsGroup(gui, c) {
 
   const geometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder, 0x000000);
-  const pointsMaterial = createPointsMaterial(folder, 0x000000);
+  const pointsMaterial = createPointsMaterial(folder, "cps points", 0x000000);
+  const lineMaterial = createLineMaterial(folder, "cps line", 0x000000);
 
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
   (c._updateCpsGroup = () => {
@@ -83,8 +83,8 @@ function createCpsGroup(gui, c) {
     c.cps.forEach((cp) => {
       const g = new THREE.Group();
 
-      g.add(new THREE.Line(geometry, lineMaterial));
       g.add(new THREE.Points(geometry, pointsMaterial));
+      g.add(new THREE.Line(geometry, lineMaterial));
 
       cp.createGeometry(g);
 
