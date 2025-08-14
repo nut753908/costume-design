@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
+import { Spherical } from "../math/spherical.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
-import { sphericalToJSON, sphericalFromJSON } from "../math/spherical.js";
 
 /**
  * A class representing a 3D control point of curve.
@@ -83,7 +83,7 @@ export class ControlPoint3 {
   /**
    * Initialize "left".
    * "leftV" is "leftPos - middlePos" and its type is THREE.'V'ector3.
-   * "leftS" is "leftPos - middlePos" and its type is THREE.'S'pherical.
+   * "leftS" is "leftPos - middlePos" and its type is 'S'pherical.
    * "leftA" represents each angle of "leftV" as THREE.Vector3.
    *   "leftA.x" is the angle around the x axis.
    *   "leftA.y" is the angle around the y axis.
@@ -95,13 +95,13 @@ export class ControlPoint3 {
   initLeft(leftPos) {
     this.leftPos = leftPos;
     this.leftV = leftPos.clone().sub(this.middlePos);
-    this.leftS = new THREE.Spherical().setFromVector3(this.leftV);
+    this.leftS = new Spherical().setFromVector3(this.leftV);
     this.leftA = this.getA(this.leftV);
   }
   /**
    * Initialize "right".
    * "rightV" is "rightPos - middlePos" and its type is THREE.'V'ector3.
-   * "rightS" is "rightPos - middlePos" and its type is THREE.'S'pherical.
+   * "rightS" is "rightPos - middlePos" and its type is 'S'pherical.
    * "rightA" represents each angle of "rightV" as THREE.Vector3.
    *   "rightA.x" is the angle around the x axis.
    *   "rightA.y" is the angle around the y axis.
@@ -113,7 +113,7 @@ export class ControlPoint3 {
   initRight(rightPos) {
     this.rightPos = rightPos;
     this.rightV = rightPos.clone().sub(this.middlePos);
-    this.rightS = new THREE.Spherical().setFromVector3(this.rightV);
+    this.rightS = new Spherical().setFromVector3(this.rightV);
     this.rightA = this.getA(this.rightV);
   }
 
@@ -451,10 +451,10 @@ export class ControlPoint3 {
     data.isSyncRadius = this.isSyncRadius;
     data.isSyncAngle = this.isSyncAngle;
     data.leftV = this.leftV.toArray();
-    data.leftS = sphericalToJSON(this.leftS);
+    data.leftS = this.leftS.toJSON();
     data.leftA = this.leftA.toArray();
     data.rightV = this.rightV.toArray();
-    data.rightS = sphericalToJSON(this.rightS);
+    data.rightS = this.rightS.toJSON();
     data.rightA = this.rightA.toArray();
 
     return data;
@@ -473,10 +473,10 @@ export class ControlPoint3 {
     this.isSyncRadius = json.isSyncRadius;
     this.isSyncAngle = json.isSyncAngle;
     this.leftV.fromArray(json.leftV);
-    sphericalFromJSON(this.leftS, json.leftS);
+    this.leftS.fromJSON(json.leftS);
     this.leftA.fromArray(json.leftA);
     this.rightV.fromArray(json.rightV);
-    sphericalFromJSON(this.rightS, json.rightS);
+    this.rightS.fromJSON(json.rightS);
     this.rightA.fromArray(json.rightA);
 
     return this;
