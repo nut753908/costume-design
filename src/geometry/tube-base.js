@@ -305,6 +305,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           const n22 = (crossSegments + 1) * i + j;
           const n23 = (crossSegments + 1) * i + (j + 1);
           const n32 = (crossSegments + 1) * (i + 1) + j;
+
+          // Calculate CBz (as r).
           if (i === 0) {
             if (j === 0) {
               const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
@@ -451,6 +453,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               r = (z1 / xy1 + z2 / xy2 + z3 / xy3 + z4 / xy4) / 4;
             }
           }
+
+          // Set normals.
           normal.x = normals[n22 * 3] + r * AT.x;
           normal.y = normals[n22 * 3 + 1] + r * AT.y;
           normal.z = normals[n22 * 3 + 2] + r * AT.z;
