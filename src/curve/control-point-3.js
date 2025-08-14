@@ -152,24 +152,24 @@ export class ControlPoint3 {
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
     folder.add(cp.middlePos, "z").step(0.01).name("middle.z").onChange(uMP);
+    folder.add(cp.leftPos, "x").step(0.01).name("left.x").onChange(uLP);
+    folder.add(cp.leftPos, "y").step(0.01).name("left.y").onChange(uLP);
+    folder.add(cp.leftPos, "z").step(0.01).name("left.z").onChange(uLP);
+    folder.add(cp.rightPos, "x").step(0.01).name("right.x").onChange(uRP);
+    folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uRP);
+    folder.add(cp.rightPos, "z").step(0.01).name("right.z").onChange(uRP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    folder.add(cp.leftPos, "x").step(0.01).name("left.x").onChange(uUP);
-    folder.add(cp.leftPos, "y").step(0.01).name("left.y").onChange(uUP);
-    folder.add(cp.leftPos, "z").step(0.01).name("left.z").onChange(uUP);
     _tmp = folder.add(cp.leftS, "radius").min(0).step(0.01);
-    _tmp.name("left.radius").onChange(uUS);
-    folder.add(cp.leftA, "x", 0, 360, 1).name("left.Ax").onChange(uUAx);
-    folder.add(cp.leftA, "y", 0, 360, 1).name("left.Ay").onChange(uUAy);
-    folder.add(cp.leftA, "z", 0, 360, 1).name("left.Az").onChange(uUAz);
-    folder.add(cp.rightPos, "x").step(0.01).name("right.x").onChange(uDP);
-    folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uDP);
-    folder.add(cp.rightPos, "z").step(0.01).name("right.z").onChange(uDP);
+    _tmp.name("left.radius").onChange(uLS);
+    folder.add(cp.leftA, "x", 0, 360, 1).name("left.Ax").onChange(uLAx);
+    folder.add(cp.leftA, "y", 0, 360, 1).name("left.Ay").onChange(uLAy);
+    folder.add(cp.leftA, "z", 0, 360, 1).name("left.Az").onChange(uLAz);
     _tmp = folder.add(cp.rightS, "radius").min(0).step(0.01);
-    _tmp.name("right.radius").onChange(uDS);
-    folder.add(cp.rightA, "x", 0, 360, 1).name("right.Ax").onChange(uDAx);
-    folder.add(cp.rightA, "y", 0, 360, 1).name("right.Ay").onChange(uDAy);
-    folder.add(cp.rightA, "z", 0, 360, 1).name("right.Az").onChange(uDAz);
+    _tmp.name("right.radius").onChange(uRS);
+    folder.add(cp.rightA, "x", 0, 360, 1).name("right.Ax").onChange(uRAx);
+    folder.add(cp.rightA, "y", 0, 360, 1).name("right.Ay").onChange(uRAy);
+    folder.add(cp.rightA, "z", 0, 360, 1).name("right.Az").onChange(uRAz);
 
     const leftRightControllers = folder.controllers.filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
@@ -178,38 +178,38 @@ export class ControlPoint3 {
     function uMP() /* updateFromMiddlePos */ {
       updateFrom("middlePos");
     }
-    function uUP() /* updateFromLeftPos */ {
+    function uLP() /* updateFromLeftPos */ {
       updateFrom("leftPos");
     }
-    function uUS() /* updateFromLeftS */ {
-      updateFrom("leftS");
-    }
-    function uUAx() /* updateFromLeftAx */ {
-      updateFrom("leftAx");
-    }
-    function uUAy() /* updateFromLeftAy */ {
-      updateFrom("leftAy");
-    }
-    function uUAz() /* updateFromLeftAz */ {
-      updateFrom("leftAz");
-    }
-    function uDP() /* updateFromRightPos */ {
+    function uRP() /* updateFromRightPos */ {
       updateFrom("rightPos");
     }
-    function uDS() /* updateFromRightS */ {
+    function uLS() /* updateFromLeftS */ {
+      updateFrom("leftS");
+    }
+    function uLAx() /* updateFromLeftAx */ {
+      updateFrom("leftAx");
+    }
+    function uLAy() /* updateFromLeftAy */ {
+      updateFrom("leftAy");
+    }
+    function uLAz() /* updateFromLeftAz */ {
+      updateFrom("leftAz");
+    }
+    function uRS() /* updateFromRightS */ {
       updateFrom("rightS");
     }
-    function uDAx() /* updateFromRightAx */ {
+    function uRAx() /* updateFromRightAx */ {
       updateFrom("rightAx");
     }
-    function uDAy() /* updateFromRightAy */ {
+    function uRAy() /* updateFromRightAy */ {
       updateFrom("rightAy");
     }
-    function uDAz() /* updateFromRightAz */ {
+    function uRAz() /* updateFromRightAz */ {
       updateFrom("rightAz");
     }
     /**
-     * @param {"middlePos"|"leftPos"|"leftS"|"leftAx"|"leftAy"|"leftAz"|"rightPos"|"rightS"|"rightAx"|"rightAy"|"rightAz"} key - A key to pass to this.updateFrom.
+     * @param {"middlePos"|"leftPos"|"rightPos"|"leftS"|"leftAx"|"leftAy"|"leftAz"|"rightS"|"rightAx"|"rightAy"|"rightAz"} key - A key to pass to this.updateFrom.
      */
     function updateFrom(key) {
       cp.updateFrom[key]();
@@ -231,11 +231,11 @@ export class ControlPoint3 {
   updateFrom = {
     middlePos: () => this.updateFromMiddlePos(),
     leftPos: () => this.updateFromLeftPos(),
+    rightPos: () => this.updateFromRightPos(),
     leftS: () => this.updateFromLeftS(),
     leftAx: () => this.updateFromLeftAx(),
     leftAy: () => this.updateFromLeftAy(),
     leftAz: () => this.updateFromLeftAz(),
-    rightPos: () => this.updateFromRightPos(),
     rightS: () => this.updateFromRightS(),
     rightAx: () => this.updateFromRightAx(),
     rightAy: () => this.updateFromRightAy(),
@@ -424,15 +424,15 @@ export class ControlPoint3 {
   copy(source) {
     this.middlePos.copy(source.middlePos);
     this.leftPos.copy(source.leftPos);
+    this.rightPos.copy(source.rightPos);
+    this.isSyncRadius = source.isSyncRadius;
+    this.isSyncAngle = source.isSyncAngle;
     this.leftV.copy(source.leftV);
     this.leftS.copy(source.leftS);
     this.leftA.copy(source.leftA);
-    this.rightPos.copy(source.rightPos);
     this.rightV.copy(source.rightV);
     this.rightS.copy(source.rightS);
     this.rightA.copy(source.rightA);
-    this.isSyncRadius = source.isSyncRadius;
-    this.isSyncAngle = source.isSyncAngle;
 
     return this;
   }
@@ -447,15 +447,15 @@ export class ControlPoint3 {
 
     data.middlePos = this.middlePos.toArray();
     data.leftPos = this.leftPos.toArray();
+    data.rightPos = this.rightPos.toArray();
+    data.isSyncRadius = this.isSyncRadius;
+    data.isSyncAngle = this.isSyncAngle;
     data.leftV = this.leftV.toArray();
     data.leftS = sphericalToJSON(this.leftS);
     data.leftA = this.leftA.toArray();
-    data.rightPos = this.rightPos.toArray();
     data.rightV = this.rightV.toArray();
     data.rightS = sphericalToJSON(this.rightS);
     data.rightA = this.rightA.toArray();
-    data.isSyncRadius = this.isSyncRadius;
-    data.isSyncAngle = this.isSyncAngle;
 
     return data;
   }
@@ -469,15 +469,15 @@ export class ControlPoint3 {
   fromJSON(json) {
     this.middlePos.fromArray(json.middlePos);
     this.leftPos.fromArray(json.leftPos);
+    this.rightPos.fromArray(json.rightPos);
+    this.isSyncRadius = json.isSyncRadius;
+    this.isSyncAngle = json.isSyncAngle;
     this.leftV.fromArray(json.leftV);
     sphericalFromJSON(this.leftS, json.leftS);
     this.leftA.fromArray(json.leftA);
-    this.rightPos.fromArray(json.rightPos);
     this.rightV.fromArray(json.rightV);
     sphericalFromJSON(this.rightS, json.rightS);
     this.rightA.fromArray(json.rightA);
-    this.isSyncRadius = json.isSyncRadius;
-    this.isSyncAngle = json.isSyncAngle;
 
     return this;
   }
