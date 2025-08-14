@@ -117,7 +117,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     const center = new THREE.Vector2(0, 0);
 
-    const CPsAfter = [];
+    const CPsA = []; // A: After
 
     // helper variable
 
@@ -200,7 +200,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             applyXCurvatureToCP(xCurvature, CP);
           }
           CP.rotateAround(center, tilt);
-          CPsAfter.push(CP.clone());
+          CPsA.push(CP.clone());
 
           const CB = CBs[j].clone();
           CB.x *= yScale;
@@ -233,7 +233,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
         }
       }
 
-      const axisLengthSegment = axis.getLength() / axisSegments;
+      const l = axis.getLength() / axisSegments;
       let c, r;
 
       for (let i = 0; i <= axisSegments; i++) {
@@ -247,21 +247,9 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           const n32 = (crossSegments + 1) * (i + 1) + j;
           if (i === 0) {
             if (j === 0) {
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
               c = v23.clone().cross(v32);
@@ -270,21 +258,9 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
               c = v32.clone().cross(v21);
@@ -293,26 +269,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z1 = c.z;
               r = z1 / xy1;
             } else {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
@@ -328,21 +288,9 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             }
           } else if (i === axisSegments) {
             if (j === 0) {
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
               c = v12.clone().cross(v23);
@@ -351,21 +299,9 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
               const v21 = CP21.clone().sub(CP22);
               const v12 = CP12.clone().sub(CP22);
               c = v21.clone().cross(v12);
@@ -374,26 +310,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z1 = c.z;
               r = z1 / xy1;
             } else {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
               const v21 = CP21.clone().sub(CP22);
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
@@ -409,26 +329,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             }
           } else {
             if (j === 0) {
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
@@ -442,26 +346,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else if (j === crossSegments) {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
               const v12 = CP12.clone().sub(CP22);
@@ -475,31 +363,11 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else {
-              const CP21 = new THREE.Vector3(
-                CPsAfter[n21].x,
-                CPsAfter[n21].y,
-                0
-              );
-              const CP23 = new THREE.Vector3(
-                CPsAfter[n23].x,
-                CPsAfter[n23].y,
-                0
-              );
-              const CP12 = new THREE.Vector3(
-                CPsAfter[n12].x,
-                CPsAfter[n12].y,
-                -axisLengthSegment
-              );
-              const CP22 = new THREE.Vector3(
-                CPsAfter[n22].x,
-                CPsAfter[n22].y,
-                0
-              );
-              const CP32 = new THREE.Vector3(
-                CPsAfter[n32].x,
-                CPsAfter[n32].y,
-                axisLengthSegment
-              );
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
