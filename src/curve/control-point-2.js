@@ -149,11 +149,11 @@ export class ControlPoint2 {
     folder.add(cp, "isSyncAngle");
     _tmp = folder.add(cp.leftC, "radius").min(0).step(0.01);
     _tmp.name("left.radius").onChange(uLC);
-    _tmp = folder.add(cp.leftC, "angle", 0, 360, 1);
+    _tmp = folder.add(cp.leftC, "angle").step(1);
     _tmp.name("left.angle").onChange(uLC);
     _tmp = folder.add(cp.rightC, "radius").min(0).step(0.01);
     _tmp.name("right.radius").onChange(uRC);
-    _tmp = folder.add(cp.rightC, "angle", 0, 360, 1);
+    _tmp = folder.add(cp.rightC, "angle").step(1);
     _tmp.name("right.angle").onChange(uRC);
 
     const leftRightControllers = folder.controllers.filter(

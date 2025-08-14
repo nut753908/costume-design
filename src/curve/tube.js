@@ -111,7 +111,7 @@ export class Tube {
     folder.add(p, "yScaleN").min(0).step(0.01).onChange(update);
     folder.add(p, "xCurvatureN").step(0.01).onChange(update);
     folder.add(p, "yCurvatureN").step(0.01).onChange(update);
-    folder.add(p, "tiltN", -180, 180, 1).onChange(update);
+    folder.add(p, "tiltN").step(1).onChange(update);
     p.scaleC.setGUI(folder, "scaleC", update, true);
     p.xScaleC.setGUI(folder, "xScaleC", update, true);
     p.yScaleC.setGUI(folder, "yScaleC", update, true);
