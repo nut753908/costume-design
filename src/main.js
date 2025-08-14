@@ -7,7 +7,6 @@ import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { createBaseGroup } from "./object-3d/group/base.js";
-// import { createHairBundleGroup } from "./object-3d/group/hair-bundle.js";
 // import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 // import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
@@ -26,13 +25,10 @@ async function init() {
   const gui = new GUI();
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
-  /**
-   * comment out to concentrate on creating hair bundle
-   */
+
   // await createBaseGroup(gui).then((baseGroup) => {
   //   if (!baseGroup) return;
   //   scene.add(baseGroup);
-  //   scene.add(createHairBundleGroup(gui));
   // });
 
   // const c = screwShapedCurve3.clone();
