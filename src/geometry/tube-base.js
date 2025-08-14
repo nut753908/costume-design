@@ -103,13 +103,24 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       curvatureOrder: curvatureOrder,
     };
 
+    cross.getTangentAt = function (u, optionalTarget) {
+      const t = this.getUtoTmapping(u);
+      const p = this.getTangent(t, optionalTarget);
+      return new THREE.Vector3(p.x, p.y, 0); // Change from Vector2 to Vector3 before computeFrenetFrames().
+    };
+
     const axisFrames = axis.computeFrenetFrames(axisSegments, false);
+    const crossFrames = cross.computeFrenetFrames(crossSegments, false);
+
     const CPs = cross.getSpacedPoints(crossSegments);
+    const CBs = crossFrames.binormals.map((b) => new THREE.Vector2(b.x, b.y));
+
     const center = new THREE.Vector2(0, 0);
 
     // helper variable
 
     const vertex = new THREE.Vector3();
+    const normal = new THREE.Vector3();
     const uv = new THREE.Vector2();
     let AP = new THREE.Vector3();
     let _P = new THREE.Vector2();
@@ -141,7 +152,6 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     );
     this.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
     this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
-    this.computeVertexNormals();
 
     // functions
 
@@ -178,6 +188,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           CP.multiplyScalar(scale);
           CP.x *= xScale;
           CP.y *= yScale;
+          const CPx = CP.x; // Used in applyCurvatureToCB() below.
+          const CPy = CP.y; // Used in applyCurvatureToCB() below.
           if (curvatureOrder === "xy") {
             applyXCurvatureToCP(xCurvature, CP);
             applyYCurvatureToCP(yCurvature, CP);
@@ -187,9 +199,26 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           }
           CP.rotateAround(center, tilt);
 
-          // normal (The normals will be calculated later using this.computeVertexNormals().)
+          const CB = CBs[j].clone();
+          CB.x *= yScale;
+          CB.y *= xScale;
+          if (curvatureOrder === "xy") {
+            applyXCurvatureToCB(xCurvature, CPy, CB);
+            applyYCurvatureToCB(yCurvature, CPx, CB);
+          } else if (curvatureOrder === "yx") {
+            applyYCurvatureToCB(yCurvature, CPx, CB);
+            applyXCurvatureToCB(xCurvature, CPy, CB);
+          }
+          CB.rotateAround(center, tilt);
 
-          normals.push(0, 0, 0);
+          // normal
+
+          normal.x = CB.x * AN.x + -CB.y * AB.x;
+          normal.y = CB.x * AN.y + -CB.y * AB.y;
+          normal.z = CB.x * AN.z + -CB.y * AB.z;
+          normal.normalize();
+
+          normals.push(normal.x, normal.y, normal.z);
 
           // vertex
 
@@ -229,6 +258,32 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
         const theta = CP.x * yCurvature;
         CP.x = rMinuxY * Math.sin(theta);
         CP.y = r - rMinuxY * Math.cos(theta);
+      }
+
+      /**
+       * Apply the xCurvature to CB(Cross Binormal).
+       *
+       * @param {number} xCurvature
+       * @param {number} CPy - The y value of CP(Cross Point) before appling the tilt.
+       * @param {THREE.Vector2} CB
+       */
+      function applyXCurvatureToCB(xCurvature, CPy, CB) {
+        if (xCurvature === 0) return;
+        const theta = CPy * xCurvature;
+        CB.rotateAround(center, -theta);
+      }
+
+      /**
+       * Apply the yCurvature to CB(Cross Binormal).
+       *
+       * @param {number} yCurvature
+       * @param {number} CPx - The x value of CP(Cross Point) before appling the tilt.
+       * @param {THREE.Vector2} CB
+       */
+      function applyYCurvatureToCB(yCurvature, CPx, CB) {
+        if (yCurvature === 0) return;
+        const theta = CPx * yCurvature;
+        CB.rotateAround(center, theta);
       }
     }
 
