@@ -7,7 +7,7 @@ import { createControlPointGroup } from "./control-point.js";
 
 /**
  * @param {Curve3|Curve2} c
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 export function createCurveGroup(c, ms) {
@@ -21,7 +21,7 @@ export function createCurveGroup(c, ms) {
 
 /**
  * @param {Curve3|Curve2} c
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 function createCurvesLine(c, ms) {
@@ -36,7 +36,7 @@ function createCurvesLine(c, ms) {
 
 /**
  * @param {Curve3|Curve2} c
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 function createCpsGroup(c, ms) {

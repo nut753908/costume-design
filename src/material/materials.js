@@ -7,7 +7,7 @@ import { createToonMaterial } from "./toon.js";
 
 /**
  * @param {GUI} gui
- * @return {{[string]:{[string]:THREE.Material}}} The materials.
+ * @return {{[k1:string]:{[k2:string]:THREE.Material}}} The materials.
  */
 export function createMaterials(gui) {
   const folder = gui.addFolder("THREE.Material").close();

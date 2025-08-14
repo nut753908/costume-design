@@ -6,7 +6,7 @@ import { createEmptyGeometry } from "../../geometry/empty.js";
 
 /**
  * @param {Tube} t
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 export function createTubeGroup(t, ms) {
@@ -29,7 +29,7 @@ export function createTubeGroup(t, ms) {
 
 /**
  * @param {Tube} t
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 function createFacesGroup(t, ms) {

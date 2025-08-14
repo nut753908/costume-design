@@ -6,7 +6,7 @@ import { createEmptyGeometry } from "../../geometry/empty.js";
 
 /**
  * @param {ControlPoint3|ControlPoint2} cp
- * @param {{[string]:{[string]:THREE.Material}}} ms - The materials.
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
 export function createControlPointGroup(cp, ms) {
