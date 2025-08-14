@@ -15,7 +15,7 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
-import { createTubeGroup } from "./object-3d/group/tube.js";
+import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -47,9 +47,10 @@ async function init() {
   // scene.add(createCurveGroup(c, ms));
   // c.setGUI(gui);
 
-  // TODO: Sets the visibility of each curve group, defaults to false.
   const t = new Tube();
-  scene.add(createTubeGroup(t, ms));
+  const group = createTubeGroup(t, ms);
+  scene.add(group);
+  setTubeGroupGUI(gui, group);
   t.setGUI(gui);
 
   window.addEventListener("resize", onWindowResize);
