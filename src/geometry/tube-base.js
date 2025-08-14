@@ -234,7 +234,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       }
 
       const axisLengthSegment = axis.getLength() / axisSegments;
-      let d;
+      let c, xy, z;
 
       for (let i = 0; i <= axisSegments; i++) {
         const AT = axisFrames.tangents[i];
@@ -242,27 +242,193 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
         for (let j = 0; j <= crossSegments; j++) {
           const n0 = (crossSegments + 1) * i + j;
           if (i === 0) {
-            const n2 = n0;
-            const n3 = (crossSegments + 1) * (i + 1) + j;
-            const l2 = CPsAfter[n2].length();
-            const l3 = CPsAfter[n3].length();
-            d = l3 - l2;
+            const n22 = n0;
+            const n32 = (crossSegments + 1) * (i + 1) + j;
+            if (j === 0) {
+              const n23 = (crossSegments + 1) * i + (j + 1);
+              const CPsAfter3_n23 = new THREE.Vector3(
+                CPsAfter[n23].x,
+                CPsAfter[n23].y,
+                0
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const CPsAfter3_n32 = new THREE.Vector3(
+                CPsAfter[n32].x,
+                CPsAfter[n32].y,
+                axisLengthSegment
+              );
+              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              c = v2322.cross(v3222);
+            } else {
+              const n21 = (crossSegments + 1) * i + (j - 1);
+              const CPsAfter3_n21 = new THREE.Vector3(
+                CPsAfter[n21].x,
+                CPsAfter[n21].y,
+                0
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const CPsAfter3_n32 = new THREE.Vector3(
+                CPsAfter[n32].x,
+                CPsAfter[n32].y,
+                axisLengthSegment
+              );
+              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              c = v3222.cross(v2122);
+            }
+            xy = Math.sqrt(c.x ** 2 + c.y ** 2);
+            z = c.z;
           } else if (i === axisSegments) {
-            const n1 = (crossSegments + 1) * (i - 1) + j;
-            const n2 = n0;
-            const l1 = CPsAfter[n1].length();
-            const l2 = CPsAfter[n2].length();
-            d = l2 - l1;
+            const n12 = (crossSegments + 1) * (i - 1) + j;
+            const n22 = n0;
+            if (j === 0) {
+              const n23 = (crossSegments + 1) * i + (j + 1);
+              const CPsAfter3_n23 = new THREE.Vector3(
+                CPsAfter[n23].x,
+                CPsAfter[n23].y,
+                0
+              );
+              const CPsAfter3_n12 = new THREE.Vector3(
+                CPsAfter[n12].x,
+                CPsAfter[n12].y,
+                -axisLengthSegment
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              c = v1222.cross(v2322);
+            } else {
+              const n21 = (crossSegments + 1) * i + (j - 1);
+              const CPsAfter3_n21 = new THREE.Vector3(
+                CPsAfter[n21].x,
+                CPsAfter[n21].y,
+                0
+              );
+              const CPsAfter3_n12 = new THREE.Vector3(
+                CPsAfter[n12].x,
+                CPsAfter[n12].y,
+                -axisLengthSegment
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              c = v2122.cross(v1222);
+            }
+            xy = Math.sqrt(c.x ** 2 + c.y ** 2);
+            z = c.z;
           } else {
-            const n1 = (crossSegments + 1) * (i - 1) + j;
-            const n3 = (crossSegments + 1) * (i + 1) + j;
-            const l1 = CPsAfter[n1].length();
-            const l3 = CPsAfter[n3].length();
-            d = (l3 - l1) / 2;
+            const n12 = (crossSegments + 1) * (i - 1) + j;
+            const n22 = n0;
+            if (j === 0) {
+              const n23 = (crossSegments + 1) * i + (j + 1);
+              const CPsAfter3_n23 = new THREE.Vector3(
+                CPsAfter[n23].x,
+                CPsAfter[n23].y,
+                0
+              );
+              const CPsAfter3_n12 = new THREE.Vector3(
+                CPsAfter[n12].x,
+                CPsAfter[n12].y,
+                -axisLengthSegment
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              c = v1222.cross(v2322);
+            } else {
+              const n21 = (crossSegments + 1) * i + (j - 1);
+              const CPsAfter3_n21 = new THREE.Vector3(
+                CPsAfter[n21].x,
+                CPsAfter[n21].y,
+                0
+              );
+              const CPsAfter3_n12 = new THREE.Vector3(
+                CPsAfter[n12].x,
+                CPsAfter[n12].y,
+                -axisLengthSegment
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v1222 = CPsAfter3_n12.clone().sub(CPsAfter3_n22);
+              c = v2122.cross(v1222);
+            }
+            const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
+            const z1 = c.z;
+            const n32 = (crossSegments + 1) * (i + 1) + j;
+            if (j === 0) {
+              const n23 = (crossSegments + 1) * i + (j + 1);
+              const CPsAfter3_n23 = new THREE.Vector3(
+                CPsAfter[n23].x,
+                CPsAfter[n23].y,
+                0
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const CPsAfter3_n32 = new THREE.Vector3(
+                CPsAfter[n32].x,
+                CPsAfter[n32].y,
+                axisLengthSegment
+              );
+              const v2322 = CPsAfter3_n23.clone().sub(CPsAfter3_n22);
+              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              c = v2322.cross(v3222);
+            } else {
+              const n21 = (crossSegments + 1) * i + (j - 1);
+              const CPsAfter3_n21 = new THREE.Vector3(
+                CPsAfter[n21].x,
+                CPsAfter[n21].y,
+                0
+              );
+              const CPsAfter3_n22 = new THREE.Vector3(
+                CPsAfter[n22].x,
+                CPsAfter[n22].y,
+                0
+              );
+              const CPsAfter3_n32 = new THREE.Vector3(
+                CPsAfter[n32].x,
+                CPsAfter[n32].y,
+                axisLengthSegment
+              );
+              const v2122 = CPsAfter3_n21.clone().sub(CPsAfter3_n22);
+              const v3222 = CPsAfter3_n32.clone().sub(CPsAfter3_n22);
+              c = v3222.cross(v2122);
+            }
+            const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
+            const z2 = c.z;
+            xy = (xy1 + xy2) / 2;
+            z = (z1 + z2) / 2;
           }
-          normal.x = normals[n0 * 3] + -(d / axisLengthSegment) * AT.x;
-          normal.y = normals[n0 * 3 + 1] + -(d / axisLengthSegment) * AT.y;
-          normal.z = normals[n0 * 3 + 2] + -(d / axisLengthSegment) * AT.z;
+          normal.x = normals[n0 * 3] + (z / xy) * AT.x;
+          normal.y = normals[n0 * 3 + 1] + (z / xy) * AT.y;
+          normal.z = normals[n0 * 3 + 2] + (z / xy) * AT.z;
           normal.normalize();
           normals[n0 * 3] = normal.x;
           normals[n0 * 3 + 1] = normal.y;
