@@ -117,6 +117,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     const center = new THREE.Vector2(0, 0);
 
+    const CPsAfter = [];
+
     // helper variable
 
     const vertex = new THREE.Vector3();
@@ -198,6 +200,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             applyXCurvatureToCP(xCurvature, CP);
           }
           CP.rotateAround(center, tilt);
+          CPsAfter.push(CP.clone());
 
           const CB = CBs[j].clone();
           CB.x *= yScale;
@@ -227,6 +230,43 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
           vertex.z = AP.z + -CP.x * AN.z + CP.y * AB.z;
 
           vertices.push(vertex.x, vertex.y, vertex.z);
+        }
+      }
+
+      const axisLengthSegment = axis.getLength() / axisSegments;
+      let d;
+
+      for (let i = 0; i <= axisSegments; i++) {
+        const AT = axisFrames.tangents[i];
+
+        for (let j = 0; j <= crossSegments; j++) {
+          const n0 = (crossSegments + 1) * i + j;
+          if (i === 0) {
+            const n2 = n0;
+            const n3 = (crossSegments + 1) * (i + 1) + j;
+            const l2 = CPsAfter[n2].length();
+            const l3 = CPsAfter[n3].length();
+            d = l3 - l2;
+          } else if (i === axisSegments) {
+            const n1 = (crossSegments + 1) * (i - 1) + j;
+            const n2 = n0;
+            const l1 = CPsAfter[n1].length();
+            const l2 = CPsAfter[n2].length();
+            d = l2 - l1;
+          } else {
+            const n1 = (crossSegments + 1) * (i - 1) + j;
+            const n3 = (crossSegments + 1) * (i + 1) + j;
+            const l1 = CPsAfter[n1].length();
+            const l3 = CPsAfter[n3].length();
+            d = (l3 - l1) / 2;
+          }
+          normal.x = normals[n0 * 3] + -(d / axisLengthSegment) * AT.x;
+          normal.y = normals[n0 * 3 + 1] + -(d / axisLengthSegment) * AT.y;
+          normal.z = normals[n0 * 3 + 2] + -(d / axisLengthSegment) * AT.z;
+          normal.normalize();
+          normals[n0 * 3] = normal.x;
+          normals[n0 * 3 + 1] = normal.y;
+          normals[n0 * 3 + 2] = normal.z;
         }
       }
 
