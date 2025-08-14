@@ -315,8 +315,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
               c = v23.clone().cross(v32);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
@@ -326,8 +325,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
               c = v32.clone().cross(v21);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else {
@@ -339,12 +337,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
               c = v23.clone().cross(v32);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               c = v32.clone().cross(v21);
-              const _xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy2 = _xy2 !== 0 ? _xy2 : Number.EPSILON;
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             }
@@ -356,8 +352,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
               c = v12.clone().cross(v23);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else if (j === crossSegments) {
@@ -367,8 +362,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v21 = CP21.clone().sub(CP22);
               const v12 = CP12.clone().sub(CP22);
               c = v21.clone().cross(v12);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               r = z1 / xy1;
             } else {
@@ -380,12 +374,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v12 = CP12.clone().sub(CP22);
               const v23 = CP23.clone().sub(CP22);
               c = v21.clone().cross(v12);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               c = v12.clone().cross(v23);
-              const _xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy2 = _xy2 !== 0 ? _xy2 : Number.EPSILON;
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             }
@@ -399,12 +391,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v23 = CP23.clone().sub(CP22);
               const v32 = CP32.clone().sub(CP22);
               c = v12.clone().cross(v23);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               c = v23.clone().cross(v32);
-              const _xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy2 = _xy2 !== 0 ? _xy2 : Number.EPSILON;
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else if (j === crossSegments) {
@@ -416,12 +406,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v21 = CP21.clone().sub(CP22);
               const v12 = CP12.clone().sub(CP22);
               c = v32.clone().cross(v21);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               c = v21.clone().cross(v12);
-              const _xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy2 = _xy2 !== 0 ? _xy2 : Number.EPSILON;
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
               r = (z1 / xy1 + z2 / xy2) / 2;
             } else {
@@ -435,20 +423,16 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               const v32 = CP32.clone().sub(CP22);
               const v21 = CP21.clone().sub(CP22);
               c = v12.clone().cross(v23);
-              const _xy1 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy1 = _xy1 !== 0 ? _xy1 : Number.EPSILON;
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z1 = c.z;
               c = v23.clone().cross(v32);
-              const _xy2 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy2 = _xy2 !== 0 ? _xy2 : Number.EPSILON;
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
               c = v32.clone().cross(v21);
-              const _xy3 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy3 = _xy3 !== 0 ? _xy3 : Number.EPSILON;
+              const xy3 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z3 = c.z;
               c = v21.clone().cross(v12);
-              const _xy4 = Math.sqrt(c.x ** 2 + c.y ** 2);
-              const xy4 = _xy4 !== 0 ? _xy4 : Number.EPSILON;
+              const xy4 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z4 = c.z;
               r = (z1 / xy1 + z2 / xy2 + z3 / xy3 + z4 / xy4) / 4;
             }
