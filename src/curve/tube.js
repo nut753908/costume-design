@@ -101,7 +101,7 @@ export class Tube {
     const t = this;
     const p = t.parameters;
 
-    const folder = gui.addFolder("t");
+    const folder = gui.addFolder("tube");
     p.axis.setGUI(folder, "axis", update, true);
     p.cross.setGUI(folder, "cross", update, true);
     folder.add(p, "axisSegments").min(1).step(1).onChange(update);
