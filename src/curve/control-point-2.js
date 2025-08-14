@@ -219,20 +219,20 @@ export class ControlPoint2 {
     this.syncLeftToRight();
   }
   /**
-   * Update "leftV" and "leftPos" from "leftC".
-   */
-  updateFromLeftC() {
-    this.leftV.set(this.leftC.x, this.leftC.y);
-    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
-    this.syncLeftToRight();
-  }
-  /**
    * Update "rightV" and "rightC" from "rightPos".
    */
   updateFromRightPos() {
     this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
     this.rightC.setFromVector2(this.rightV);
     this.syncRightToLeft();
+  }
+  /**
+   * Update "leftV" and "leftPos" from "leftC".
+   */
+  updateFromLeftC() {
+    this.leftV.set(this.leftC.x, this.leftC.y);
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    this.syncLeftToRight();
   }
   /**
    * Update "rightV" and "rightPos" from "rightC".

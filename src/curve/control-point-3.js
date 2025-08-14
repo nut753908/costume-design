@@ -259,6 +259,15 @@ export class ControlPoint3 {
     this.syncLeftToRight();
   }
   /**
+   * Update "rightV", "rightS" and "rightA" from "rightPos".
+   */
+  updateFromRightPos() {
+    this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
+    this.rightS.setFromVector3(this.rightV);
+    this.rightA.copy(this.getA(this.rightV));
+    this.syncRightToLeft();
+  }
+  /**
    * Update "leftV", "leftA" and "leftPos" from "leftS".
    */
   updateFromLeftS() {
@@ -299,15 +308,6 @@ export class ControlPoint3 {
     this.leftS.phi = safeAcos(y, this.leftS.radius);
     this.leftS.theta = atan2In2PI(x, z);
     this.updateFromLeftS();
-  }
-  /**
-   * Update "rightV", "rightS" and "rightA" from "rightPos".
-   */
-  updateFromRightPos() {
-    this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
-    this.rightS.setFromVector3(this.rightV);
-    this.rightA.copy(this.getA(this.rightV));
-    this.syncRightToLeft();
   }
   /**
    * Update "rightV", "rightA" and "rightPos" from "rightS".
