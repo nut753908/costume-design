@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { LimitedTube } from "../../curve/limited-tube.js";
+import { Tube } from "../../curve/tube.js";
 import { createCurveGroup } from "./curve.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
 import { createLineMaterial } from "../../material/line.js";
@@ -9,16 +9,16 @@ import { createToonMaterial } from "../../material/toon.js";
 
 /**
  * @param {GUI} gui
- * @param {LimitedTube} lt
+ * @param {Tube} t
  * @return {THREE.Group}
  */
-export function createLimitedTubeGroup(gui, lt) {
+export function createTubeGroup(gui, t) {
   const group = new THREE.Group();
-  const folder = gui.addFolder("limitedTubeGroup");
+  const folder = gui.addFolder("TubeGroup");
 
-  const p = lt.parameters;
+  const p = t.parameters;
 
-  group.add(createFacesGroup(folder, lt));
+  group.add(createFacesGroup(folder, t));
   const bools = [false, true, false];
   group.add(createCurveGroup(folder, p.axis, "axis", ...bools));
   group.add(createCurveGroup(folder, p.cross, "cross", ...bools));
@@ -29,18 +29,18 @@ export function createLimitedTubeGroup(gui, lt) {
   group.add(createCurveGroup(folder, p.yCurvatureC, "yCurvatureC", ...bools));
   group.add(createCurveGroup(folder, p.tiltC, "tiltC", ...bools));
 
-  lt.setGUI(folder);
+  t.setGUI(folder);
 
   return group;
 }
 
 /**
  * @param {GUI} gui
- * @param {LimitedTube} lt
+ * @param {Tube} t
  * @param {boolean} visible
  * @return {THREE.Group}
  */
-function createFacesGroup(gui, lt, visible = true) {
+function createFacesGroup(gui, t, visible = true) {
   const group = new THREE.Group();
   const folder = gui.addFolder("facesGroup");
 
@@ -60,7 +60,7 @@ function createFacesGroup(gui, lt, visible = true) {
   group.add(new THREE.LineSegments(emptyGeometry, lineMaterial));
   group.add(new THREE.Mesh(emptyGeometry, toonMaterial));
 
-  lt.createGeometry(group);
+  t.createGeometry(group);
 
   return group;
 }

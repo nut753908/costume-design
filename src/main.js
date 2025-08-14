@@ -11,8 +11,8 @@ import { createAxesHelper } from "./object-3d/axes-helper.js";
 // import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 // import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 // import { createCurveGroup } from "./object-3d/group/curve.js";
-import { LimitedTube } from "./curve/limited-tube.js";
-import { createLimitedTubeGroup } from "./object-3d/group/limited-tube.js";
+import { Tube } from "./curve/tube.js";
+import { createTubeGroup } from "./object-3d/group/tube.js";
 
 let renderer, camera, gizmo, scene;
 
@@ -39,8 +39,8 @@ async function init() {
   // const c = smallCircleCurve2.clone();
   // scene.add(createCurveGroup(gui, c));
 
-  const lt = new LimitedTube();
-  scene.add(createLimitedTubeGroup(gui, lt));
+  const t = new Tube();
+  scene.add(createTubeGroup(gui, t));
 
   window.addEventListener("resize", onWindowResize);
 }
