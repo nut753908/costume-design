@@ -5,25 +5,23 @@ import { createColor } from "../math/color.js";
 
 /**
  * @param {GUI} gui
+ * @param {string} name - The folder name.
  * @param {number} colorHex
- * @param {number} size
- * @param {number} opacity
  * @return {THREE.PointsMaterial}
  */
 export function createPointsMaterial(
   gui,
-  colorHex = 0xffffff,
-  size = 5,
-  opacity = 1
+  name = "pointsMaterial",
+  colorHex = 0xffffff
 ) {
   const pointsMaterial = new THREE.PointsMaterial({
     color: createColor(colorHex),
-    size: size,
+    size: 5,
     transparent: true,
-    opacity: opacity,
+    opacity: 1,
   });
   {
-    const folder = gui.addFolder("pointsMaterial");
+    const folder = gui.addFolder(name);
     folder.addColor(pointsMaterial, "color");
     folder.add(pointsMaterial, "size", 0, 10, 0.01);
     folder.add(pointsMaterial, "opacity", 0, 1, 0.01);

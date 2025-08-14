@@ -11,7 +11,7 @@ export function createScene(gui) {
   const scene = new THREE.Scene();
   scene.background = createColor(0xffffff);
   {
-    const folder = gui.addFolder("THREE.Scene");
+    const folder = gui.addFolder("THREE.Scene").close();
     folder.addColor(scene, "background");
   }
   return scene;

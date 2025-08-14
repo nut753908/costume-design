@@ -120,7 +120,7 @@ export class Curve extends THREE.CurvePath {
    * @param {()=>void} updateCallback - The callback that is invoked after updating curve.
    * @param {boolean} isClose - Whether to close the folder.
    */
-  setGUI(gui, name = this.name, updateCallback = () => {}, isClose = false) {
+  setGUI(gui, name = this.type, updateCallback = () => {}, isClose = false) {
     const c = this;
 
     const obj = {

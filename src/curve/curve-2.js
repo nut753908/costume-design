@@ -42,13 +42,4 @@ export class Curve2 extends Curve {
   get cpClass() {
     return ControlPoint2;
   }
-
-  /**
-   * Get the folder name used in setGUI().
-   *
-   * @return {string}
-   */
-  get name() {
-    return "curve2";
-  }
 }

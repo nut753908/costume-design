@@ -1,57 +1,33 @@
 import * as THREE from "three";
 
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { Curve3 } from "../../curve/curve-3.js";
 import { Curve2 } from "../../curve/curve-2.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
-import { createLineMaterial } from "../../material/line.js";
-import { createPointsMaterial } from "../../material/points.js";
+import { createControlPointGroup } from "./control-point.js";
 
 /**
- * @param {GUI} gui
  * @param {Curve3|Curve2} c
- * @param {string} cName - The curve name used in the folder name.
- * @param {boolean} visible - Whether the curve is visible.
- * @param {boolean} isClose - Whether to close the folder.
- * @param {boolean} isCSetGUI - Whether to enable c.setGUI().
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
-export function createCurveGroup(
-  gui,
-  c,
-  cName = "",
-  visible = true,
-  isClose = false,
-  isCSetGUI = true
-) {
+export function createCurveGroup(c, ms) {
   const group = new THREE.Group();
-  const folder = gui.addFolder(`curveGroup ${cName}`);
 
-  group.visible = visible;
-  folder.add(group, "visible");
-  if (isClose) folder.close();
-
-  group.add(createCurvesLine(folder, c));
-  group.add(createCpsGroup(folder, c));
-
-  if (isCSetGUI) c.setGUI(folder);
+  group.add(createCurvesLine(c, ms));
+  group.add(createCpsGroup(c, ms));
 
   return group;
 }
 
 /**
- * @param {GUI} gui
  * @param {Curve3|Curve2} c
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
-function createCurvesLine(gui, c) {
-  const folder = gui.addFolder("curvesLine");
-
+function createCurvesLine(c, ms) {
   const geometry = createEmptyGeometry();
 
-  const lineMaterial = createLineMaterial(folder, 0x000000);
-
-  const line = new THREE.Line(geometry, lineMaterial);
+  const line = new THREE.Line(geometry, ms.curve.line);
 
   c.createGeometry(line);
 
@@ -59,18 +35,12 @@ function createCurvesLine(gui, c) {
 }
 
 /**
- * @param {GUI} gui
  * @param {Curve3|Curve2} c
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
-function createCpsGroup(gui, c) {
+function createCpsGroup(c, ms) {
   const group = new THREE.Group();
-  const folder = gui.addFolder("cpsGroup");
-
-  const geometry = createEmptyGeometry();
-
-  const lineMaterial = createLineMaterial(folder, 0x000000);
-  const pointsMaterial = createPointsMaterial(folder, 0x000000);
 
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
   (c._updateCpsGroup = () => {
@@ -80,16 +50,7 @@ function createCpsGroup(gui, c) {
     });
     group.clear();
 
-    c.cps.forEach((cp) => {
-      const g = new THREE.Group();
-
-      g.add(new THREE.Line(geometry, lineMaterial));
-      g.add(new THREE.Points(geometry, pointsMaterial));
-
-      cp.createGeometry(g);
-
-      group.add(g);
-    });
+    c.cps.forEach((cp) => group.add(createControlPointGroup(cp, ms)));
   })();
 
   return group;

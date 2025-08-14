@@ -35,6 +35,8 @@ export class ControlPoint2 {
     isSyncRadius = true,
     isSyncAngle = true
   ) {
+    this.type = "ControlPoint2";
+
     /**
      * The position of middle control point.
      *
@@ -134,7 +136,7 @@ export class ControlPoint2 {
    * @param {string} name - The cp folder name used in the GUI.
    * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
    */
-  setGUI(gui, name = "cp2", updateCallback = () => {}) {
+  setGUI(gui, name = this.type, updateCallback = () => {}) {
     const cp = this;
 
     let _tmp;
@@ -147,16 +149,20 @@ export class ControlPoint2 {
     folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uRP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    _tmp = folder.add(cp.leftC, "radius").min(0).step(0.01);
+    const lFolder = folder.addFolder("local").close();
+    _tmp = lFolder.add(cp.leftC, "radius").min(0).step(0.01);
     _tmp.name("left.radius").onChange(uLC);
-    _tmp = folder.add(cp.leftC, "angle").step(1);
+    _tmp = lFolder.add(cp.leftC, "angle").step(1);
     _tmp.name("left.angle").onChange(uLC);
-    _tmp = folder.add(cp.rightC, "radius").min(0).step(0.01);
+    _tmp = lFolder.add(cp.rightC, "radius").min(0).step(0.01);
     _tmp.name("right.radius").onChange(uRC);
-    _tmp = folder.add(cp.rightC, "angle").step(1);
+    _tmp = lFolder.add(cp.rightC, "angle").step(1);
     _tmp.name("right.angle").onChange(uRC);
 
-    const leftRightControllers = folder.controllers.filter(
+    const leftRightControllers = [
+      ...folder.controllers,
+      ...lFolder.controllers,
+    ].filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
@@ -219,20 +225,20 @@ export class ControlPoint2 {
     this.syncLeftToRight();
   }
   /**
-   * Update "leftV" and "leftPos" from "leftC".
-   */
-  updateFromLeftC() {
-    this.leftV.set(this.leftC.x, this.leftC.y);
-    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
-    this.syncLeftToRight();
-  }
-  /**
    * Update "rightV" and "rightC" from "rightPos".
    */
   updateFromRightPos() {
     this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
     this.rightC.setFromVector2(this.rightV);
     this.syncRightToLeft();
+  }
+  /**
+   * Update "leftV" and "leftPos" from "leftC".
+   */
+  updateFromLeftC() {
+    this.leftV.set(this.leftC.x, this.leftC.y);
+    this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+    this.syncLeftToRight();
   }
   /**
    * Update "rightV" and "rightPos" from "rightC".

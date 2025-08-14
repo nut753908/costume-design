@@ -1,66 +1,71 @@
 import * as THREE from "three";
 
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 import { Tube } from "../../curve/tube.js";
 import { createCurveGroup } from "./curve.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
-import { createLineMaterial } from "../../material/line.js";
-import { createToonMaterial } from "../../material/toon.js";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 /**
- * @param {GUI} gui
  * @param {Tube} t
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
-export function createTubeGroup(gui, t) {
+export function createTubeGroup(t, ms) {
   const group = new THREE.Group();
-  const folder = gui.addFolder("TubeGroup");
 
   const p = t.parameters;
 
-  group.add(createFacesGroup(folder, t));
-  const bools = [false, true, false];
-  group.add(createCurveGroup(folder, p.axis, "axis", ...bools));
-  group.add(createCurveGroup(folder, p.cross, "cross", ...bools));
-  group.add(createCurveGroup(folder, p.scaleC, "scaleC", ...bools));
-  group.add(createCurveGroup(folder, p.xScaleC, "xScaleC", ...bools));
-  group.add(createCurveGroup(folder, p.yScaleC, "yScaleC", ...bools));
-  group.add(createCurveGroup(folder, p.xCurvatureC, "xCurvatureC", ...bools));
-  group.add(createCurveGroup(folder, p.yCurvatureC, "yCurvatureC", ...bools));
-  group.add(createCurveGroup(folder, p.tiltC, "tiltC", ...bools));
+  group.add(createTubeGroupWithNoCurves(t, ms));
+  group.add(createCurveGroup(p.axis, ms));
+  group.add(createCurveGroup(p.cross, ms));
+  group.add(createCurveGroup(p.scaleC, ms));
+  group.add(createCurveGroup(p.xScaleC, ms));
+  group.add(createCurveGroup(p.yScaleC, ms));
+  group.add(createCurveGroup(p.xCurvatureC, ms));
+  group.add(createCurveGroup(p.yCurvatureC, ms));
+  group.add(createCurveGroup(p.tiltC, ms));
 
-  t.setGUI(folder);
+  return group;
+}
+
+/**
+ * @param {Tube} t
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
+ * @return {THREE.Group}
+ */
+function createTubeGroupWithNoCurves(t, ms) {
+  const group = new THREE.Group();
+
+  const geometry = createEmptyGeometry();
+
+  group.add(new THREE.LineSegments(geometry, ms.tube.line));
+  group.add(new THREE.Mesh(geometry, ms.tube.toon));
+
+  t.createGeometry(group);
 
   return group;
 }
 
 /**
  * @param {GUI} gui
- * @param {Tube} t
- * @param {boolean} visible
- * @return {THREE.Group}
+ * @param {THREE.Group} group - The tube group.
  */
-function createFacesGroup(gui, t, visible = true) {
-  const group = new THREE.Group();
-  const folder = gui.addFolder("facesGroup");
-
-  group.visible = visible;
-  folder.add(group, "visible");
-
-  const emptyGeometry = createEmptyGeometry();
-
-  const lineMaterial = createLineMaterial(folder);
-  const toonMaterial = createToonMaterial(
-    0xfcd7e9,
-    0xf8c1de,
-    folder,
-    THREE.DoubleSide
-  );
-
-  group.add(new THREE.LineSegments(emptyGeometry, lineMaterial));
-  group.add(new THREE.Mesh(emptyGeometry, toonMaterial));
-
-  t.createGeometry(group);
-
-  return group;
+export function setTubeGroupGUI(gui, group) {
+  const folder = gui.addFolder("TubeGroup");
+  const gFolder = folder.addFolder("visible");
+  const names = [
+    "tube",
+    "axis",
+    "cross",
+    "scaleC",
+    "xScaleC",
+    "yScaleC",
+    "xCurvatureC",
+    "yCurvatureC",
+    "tiltC",
+  ];
+  group.children.forEach((g, i) => {
+    if (i !== 0) g.visible = false;
+    gFolder.add(g, "visible").name(names[i]);
+  });
 }
