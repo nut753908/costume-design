@@ -14,7 +14,7 @@ export function createTubeGroup(t, ms) {
 
   const p = t.parameters;
 
-  group.add(createFacesGroup(t, ms));
+  group.add(createTubeGroupWithNoCurves(t, ms));
   group.add(createCurveGroup(p.axis, ms));
   group.add(createCurveGroup(p.cross, ms));
   group.add(createCurveGroup(p.scaleC, ms));
@@ -32,7 +32,7 @@ export function createTubeGroup(t, ms) {
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
  */
-function createFacesGroup(t, ms) {
+function createTubeGroupWithNoCurves(t, ms) {
   const group = new THREE.Group();
 
   const geometry = createEmptyGeometry();
