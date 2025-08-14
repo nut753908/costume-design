@@ -117,6 +117,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     const center = new THREE.Vector2(0, 0);
 
+    const CPsA = []; // A: After
+
     // helper variable
 
     const vertex = new THREE.Vector3();
@@ -158,6 +160,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     function generateBufferData() {
       generateSegment();
 
+      calculateCBzAndSetNormals();
+
       generateUVs();
 
       generateIndices();
@@ -198,6 +202,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
             applyXCurvatureToCP(xCurvature, CP);
           }
           CP.rotateAround(center, tilt);
+          CPsA.push(CP.clone());
 
           const CB = CBs[j].clone();
           CB.x *= yScale;
@@ -284,6 +289,164 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
         if (yCurvature === 0) return;
         const theta = CPx * yCurvature;
         CB.rotateAround(center, theta);
+      }
+    }
+
+    function calculateCBzAndSetNormals() {
+      const l = axis.getLength() / axisSegments; // l: axis length devided by axisSegments
+      let c, r; // c: cross vector, r: CBz
+
+      for (let i = 0; i <= axisSegments; i++) {
+        const AT = axisFrames.tangents[i];
+
+        for (let j = 0; j <= crossSegments; j++) {
+          const n12 = (crossSegments + 1) * (i - 1) + j;
+          const n21 = (crossSegments + 1) * i + (j - 1);
+          const n22 = (crossSegments + 1) * i + j;
+          const n23 = (crossSegments + 1) * i + (j + 1);
+          const n32 = (crossSegments + 1) * (i + 1) + j;
+
+          // Calculate CBz (as r).
+          if (i === 0) {
+            if (j === 0) {
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v23 = CP23.clone().sub(CP22);
+              const v32 = CP32.clone().sub(CP22);
+              c = v23.clone().cross(v32);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              r = z1 / xy1;
+            } else if (j === crossSegments) {
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v32 = CP32.clone().sub(CP22);
+              const v21 = CP21.clone().sub(CP22);
+              c = v32.clone().cross(v21);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              r = z1 / xy1;
+            } else {
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v23 = CP23.clone().sub(CP22);
+              const v32 = CP32.clone().sub(CP22);
+              const v21 = CP21.clone().sub(CP22);
+              c = v23.clone().cross(v32);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              c = v32.clone().cross(v21);
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z2 = c.z;
+              r = (z1 / xy1 + z2 / xy2) / 2;
+            }
+          } else if (i === axisSegments) {
+            if (j === 0) {
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v12 = CP12.clone().sub(CP22);
+              const v23 = CP23.clone().sub(CP22);
+              c = v12.clone().cross(v23);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              r = z1 / xy1;
+            } else if (j === crossSegments) {
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v21 = CP21.clone().sub(CP22);
+              const v12 = CP12.clone().sub(CP22);
+              c = v21.clone().cross(v12);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              r = z1 / xy1;
+            } else {
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v21 = CP21.clone().sub(CP22);
+              const v12 = CP12.clone().sub(CP22);
+              const v23 = CP23.clone().sub(CP22);
+              c = v21.clone().cross(v12);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              c = v12.clone().cross(v23);
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z2 = c.z;
+              r = (z1 / xy1 + z2 / xy2) / 2;
+            }
+          } else {
+            if (j === 0) {
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v12 = CP12.clone().sub(CP22);
+              const v23 = CP23.clone().sub(CP22);
+              const v32 = CP32.clone().sub(CP22);
+              c = v12.clone().cross(v23);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              c = v23.clone().cross(v32);
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z2 = c.z;
+              r = (z1 / xy1 + z2 / xy2) / 2;
+            } else if (j === crossSegments) {
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v32 = CP32.clone().sub(CP22);
+              const v21 = CP21.clone().sub(CP22);
+              const v12 = CP12.clone().sub(CP22);
+              c = v32.clone().cross(v21);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              c = v21.clone().cross(v12);
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z2 = c.z;
+              r = (z1 / xy1 + z2 / xy2) / 2;
+            } else {
+              const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
+              const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
+              const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
+              const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
+              const CP22 = new THREE.Vector3(CPsA[n22].x, CPsA[n22].y, 0);
+              const v12 = CP12.clone().sub(CP22);
+              const v23 = CP23.clone().sub(CP22);
+              const v32 = CP32.clone().sub(CP22);
+              const v21 = CP21.clone().sub(CP22);
+              c = v12.clone().cross(v23);
+              const xy1 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z1 = c.z;
+              c = v23.clone().cross(v32);
+              const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z2 = c.z;
+              c = v32.clone().cross(v21);
+              const xy3 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z3 = c.z;
+              c = v21.clone().cross(v12);
+              const xy4 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
+              const z4 = c.z;
+              r = (z1 / xy1 + z2 / xy2 + z3 / xy3 + z4 / xy4) / 4;
+            }
+          }
+
+          // Set normals.
+          normal.x = normals[n22 * 3] + r * AT.x;
+          normal.y = normals[n22 * 3 + 1] + r * AT.y;
+          normal.z = normals[n22 * 3 + 2] + r * AT.z;
+          normal.normalize();
+          normals[n22 * 3] = normal.x;
+          normals[n22 * 3 + 1] = normal.y;
+          normals[n22 * 3 + 2] = normal.z;
+        }
       }
     }
 
