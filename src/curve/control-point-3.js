@@ -160,18 +160,22 @@ export class ControlPoint3 {
     folder.add(cp.rightPos, "z").step(0.01).name("right.z").onChange(uRP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    _tmp = folder.add(cp.leftS, "radius").min(0).step(0.01);
+    const lFolder = folder.addFolder("local").close();
+    _tmp = lFolder.add(cp.leftS, "radius").min(0).step(0.01);
     _tmp.name("left.radius").onChange(uLS);
-    folder.add(cp.leftA, "x").step(1).name("left.Ax").onChange(uLAx);
-    folder.add(cp.leftA, "y").step(1).name("left.Ay").onChange(uLAy);
-    folder.add(cp.leftA, "z").step(1).name("left.Az").onChange(uLAz);
-    _tmp = folder.add(cp.rightS, "radius").min(0).step(0.01);
+    lFolder.add(cp.leftA, "x").step(1).name("left.Ax").onChange(uLAx);
+    lFolder.add(cp.leftA, "y").step(1).name("left.Ay").onChange(uLAy);
+    lFolder.add(cp.leftA, "z").step(1).name("left.Az").onChange(uLAz);
+    _tmp = lFolder.add(cp.rightS, "radius").min(0).step(0.01);
     _tmp.name("right.radius").onChange(uRS);
-    folder.add(cp.rightA, "x").step(1).name("right.Ax").onChange(uRAx);
-    folder.add(cp.rightA, "y").step(1).name("right.Ay").onChange(uRAy);
-    folder.add(cp.rightA, "z").step(1).name("right.Az").onChange(uRAz);
+    lFolder.add(cp.rightA, "x").step(1).name("right.Ax").onChange(uRAx);
+    lFolder.add(cp.rightA, "y").step(1).name("right.Ay").onChange(uRAy);
+    lFolder.add(cp.rightA, "z").step(1).name("right.Az").onChange(uRAz);
 
-    const leftRightControllers = folder.controllers.filter(
+    const leftRightControllers = [
+      ...folder.controllers,
+      ...lFolder.controllers,
+    ].filter(
       (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
