@@ -1,28 +1,28 @@
 import * as THREE from "three";
 
-import { LimitedTubeGeometry } from "../geometry/limited-tube.js";
+import { TubeGeometry } from "../geometry/tube.js";
 import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 import { Curve } from "./curve.js";
 import { Curve3 } from "./curve-3.js";
 import { Curve2 } from "./curve-2.js";
 
 /**
- * A class for managing LimitedTubeGeometry.
+ * A class for managing TubeGeometry.
  *
  * ```js
- * import { LimitedTube } from "./src/curve/limited-tube.js";
- * const lt = new LimitedTube();
+ * import { Tube } from "./src/curve/tube.js";
+ * const t = new Tube();
  * ```
  */
-export class LimitedTube {
+export class Tube {
   /**
-   * Constructs a new limited tube.
+   * Constructs a new tube.
    *
-   * @param {Object} parameters - The Parameters for LimitedTubeGeometry.
+   * @param {Object} parameters - The Parameters for TubeGeometry.
    */
   constructor(parameters = {}) {
     /**
-     * The Parameters for LimitedTubeGeometry.
+     * The Parameters for TubeGeometry.
      *
      * @type {Object}
      */
@@ -30,8 +30,8 @@ export class LimitedTube {
 
     /**
      * Secret field.
-     * This function is used by setGUI() in ./src/curve/limited-tube.js.
-     * Set it in advance using createGeometry() in ./src/curve/limited-tube.js.
+     * This function is used by setGUI() in ./src/curve/tube.js.
+     * Set it in advance using createGeometry() in ./src/curve/tube.js.
      *
      * @type {()=>void}
      */
@@ -44,14 +44,14 @@ export class LimitedTube {
    * @param {THREE.Group} group
    */
   createGeometry(group) {
-    const lt = this;
-    const p = lt.parameters;
+    const t = this;
+    const p = t.parameters;
 
-    // This function is used by setGUI() in ./src/curve/limited-tube.js.
-    (lt._updateGeometry = () => {
+    // This function is used by setGUI() in ./src/curve/tube.js.
+    (t._updateGeometry = () => {
       const geometry =
         Object.keys(p).length !== 0
-          ? new LimitedTubeGeometry(
+          ? new TubeGeometry(
               p.axis,
               p.cross,
               p.axisSegments,
@@ -70,7 +70,7 @@ export class LimitedTube {
               p.tiltC,
               p.curvatureOrder
             )
-          : new LimitedTubeGeometry();
+          : new TubeGeometry();
 
       Object.assign(p, geometry.parameters);
 
@@ -98,10 +98,10 @@ export class LimitedTube {
    * @param {GUI} gui
    */
   setGUI(gui) {
-    const lt = this;
-    const p = lt.parameters;
+    const t = this;
+    const p = t.parameters;
 
-    const folder = gui.addFolder("lt");
+    const folder = gui.addFolder("t");
     p.axis.setGUI(folder, "axis", update, true);
     p.cross.setGUI(folder, "cross", update, true);
     folder.add(p, "axisSegments").min(1).step(1).onChange(update);
@@ -121,24 +121,24 @@ export class LimitedTube {
     folder.add(p, "curvatureOrder", ["xy", "yx"]).onChange(update);
 
     function update() {
-      lt._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/limited-tube.js.
+      t._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/tube.js.
     }
   }
 
   /**
-   * Returns a new limited tube with copied values from this instance.
+   * Returns a new tube with copied values from this instance.
    *
-   * @return {LimitedTube} A clone of this instance.
+   * @return {Tube} A clone of this instance.
    */
   clone() {
     return new this.constructor().copy(this);
   }
 
   /**
-   * Copies the values of the given limited tube to this instance.
+   * Copies the values of the given tube to this instance.
    *
-   * @param {LimitedTube} source - The limited tube to copy.
-   * @returns {LimitedTube} A reference to this limited tube.
+   * @param {Tube} source - The tube to copy.
+   * @returns {Tube} A reference to this tube.
    */
   copy(source) {
     this.parameters = Object.assign({}, source.parameters);
@@ -151,9 +151,9 @@ export class LimitedTube {
   }
 
   /**
-   * Serializes the limited tube into JSON.
+   * Serializes the tube into JSON.
    *
-   * @return {Object} A JSON object representing the serialized limited tube.
+   * @return {Object} A JSON object representing the serialized tube.
    */
   toJSON() {
     const data = Object.assign({}, this.parameters);
@@ -166,10 +166,10 @@ export class LimitedTube {
   }
 
   /**
-   * Deserializes the limited tube from the given JSON.
+   * Deserializes the tube from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized limited tube.
-   * @return {LimitedTube} A reference to this limited tube.
+   * @param {Object} json - The JSON holding the serialized tube.
+   * @return {Tube} A reference to this tube.
    */
   fromJSON(json) {
     const p = this.parameters;
