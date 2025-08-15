@@ -342,7 +342,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               c = v32.clone().cross(v21);
               const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
-              r = (z1 / xy1 + z2 / xy2) / 2;
+              r = (z1 + z2) / (xy1 + xy2);
             }
           } else if (i === axisSegments) {
             if (j === 0) {
@@ -379,7 +379,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               c = v12.clone().cross(v23);
               const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
-              r = (z1 / xy1 + z2 / xy2) / 2;
+              r = (z1 + z2) / (xy1 + xy2);
             }
           } else {
             if (j === 0) {
@@ -396,7 +396,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               c = v23.clone().cross(v32);
               const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
-              r = (z1 / xy1 + z2 / xy2) / 2;
+              r = (z1 + z2) / (xy1 + xy2);
             } else if (j === crossSegments) {
               const CP32 = new THREE.Vector3(CPsA[n32].x, CPsA[n32].y, l);
               const CP21 = new THREE.Vector3(CPsA[n21].x, CPsA[n21].y, 0);
@@ -411,7 +411,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               c = v21.clone().cross(v12);
               const xy2 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z2 = c.z;
-              r = (z1 / xy1 + z2 / xy2) / 2;
+              r = (z1 + z2) / (xy1 + xy2);
             } else {
               const CP12 = new THREE.Vector3(CPsA[n12].x, CPsA[n12].y, -l);
               const CP23 = new THREE.Vector3(CPsA[n23].x, CPsA[n23].y, 0);
@@ -434,7 +434,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
               c = v21.clone().cross(v12);
               const xy4 = Math.sqrt(c.x ** 2 + c.y ** 2) + Number.EPSILON;
               const z4 = c.z;
-              r = (z1 / xy1 + z2 / xy2 + z3 / xy3 + z4 / xy4) / 4;
+              r = (z1 + z2 + z3 + z4) / (xy1 + xy2 + xy3 + xy4);
             }
           }
 
