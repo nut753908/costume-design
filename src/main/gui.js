@@ -1,13 +1,37 @@
 /**
+ * guiObj = {
+ *   controllers: {
+ *     [_name]: [any]
+ *   }
+ *   folders: {
+ *     [_title]: {
+ *       controllers,
+ *       folders
+ *     }
+ *   }
+ * }
+ */
+
+/**
+ * @param {Object} guiObj
+ * @returns {Object} guiObj
+ */
+export function pickStaticFolders(guiObj) {
+  return [
+    "THREE.Scene",
+    "THREE.AxesHelper",
+    "THREE.Material",
+    "TubeGroup",
+  ].reduce((o, k) => ({ ...o, [k]: guiObj.folders[k] }), {});
+}
+
+/**
  * closedObj = {
  *   _closed: boolean,
  *   folders: {
  *     [_title]: {
  *       _closed: boolean,
- *       folders: [_title]: {
- *         _closed: boolean,
- *         folders: ...
- *       }
+ *       folders
  *     }
  *   }
  * }
