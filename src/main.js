@@ -100,16 +100,14 @@ function applyLastUndos() {
 function onWindowKeydown(e) {
   if (e.ctrlKey || e.metaKey) {
     if (e.key === "z") {
-      // Ctrl+Z (Undo)
       if (undos.length > 1) {
-        redos.push(undos.pop());
+        redos.push(undos.pop()); // Ctrl+Z (Undo)
         applyLastUndos();
       }
       e.preventDefault();
     } else if (e.key === "Z" || e.key === "y") {
-      // Ctrl+Shift+Z or Ctrl+Y (Redo)
       if (redos.length > 0) {
-        undos.push(redos.pop());
+        undos.push(redos.pop()); // Ctrl+Shift+Z or Ctrl+Y (Redo)
         applyLastUndos();
       }
       e.preventDefault();
