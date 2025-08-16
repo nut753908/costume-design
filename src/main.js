@@ -68,9 +68,7 @@ function save() {
 
   const guiObj = gui.save();
   guiObj.folders = pickStaticFolders(guiObj);
-
   closedObj = saveClosed(gui);
-
   undos.push({ c: c.toJSON(), gui: guiObj });
   redos.length = 0;
 }
