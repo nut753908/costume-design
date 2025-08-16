@@ -101,6 +101,9 @@ export class Tube {
     const t = this;
     const p = t.parameters;
 
+    Array.from(gui.children)
+      .filter((v) => v._title === "Tube")
+      .forEach((v) => v.destroy());
     const folder = gui.addFolder("Tube");
     p.axis.setGUI(folder, "axis", update, true);
     p.cross.setGUI(folder, "cross", update, true);

@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { ControlPoint3 } from "./control-point-3.js";
 import { ControlPoint2 } from "./control-point-2.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 import { isInvalidIndex } from "../math/utils.js";
 
 /**
@@ -144,6 +144,9 @@ export class Curve extends THREE.CurvePath {
       },
     };
 
+    Array.from(gui.children)
+      .filter((v) => v._title === name)
+      .forEach((v) => v.destroy());
     const folder = gui.addFolder(name);
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
@@ -298,6 +301,8 @@ export class Curve extends THREE.CurvePath {
       this.cps.push(cp.clone());
     }
 
+    this.updateCurves();
+
     return this;
   }
 
@@ -334,6 +339,8 @@ export class Curve extends THREE.CurvePath {
       const cp = json.cps[i];
       this.cps.push(new this.cpClass().fromJSON(cp));
     }
+
+    this.updateCurves();
 
     return this;
   }

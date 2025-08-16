@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Tube } from "../../curve/tube.js";
 import { createCurveGroup } from "./curve.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 
 /**
  * @param {Tube} t
@@ -51,6 +51,9 @@ function createTubeGroupWithNoCurves(t, ms) {
  * @param {THREE.Group} group - The tube group.
  */
 export function setTubeGroupGUI(gui, group) {
+  Array.from(gui.children)
+    .filter((v) => v._title === "TubeGroup")
+    .forEach((v) => v.destroy());
   const folder = gui.addFolder("TubeGroup");
   const gFolder = folder.addFolder("visible");
   const names = [
