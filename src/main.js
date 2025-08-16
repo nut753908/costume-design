@@ -75,7 +75,7 @@ function save() {
   redos.length = 0;
 }
 
-function applyLastUndos() {
+function applyLastUndo() {
   applying = true;
 
   scene.remove(group);
@@ -102,13 +102,13 @@ function onWindowKeydown(e) {
     if (e.key === "z") {
       if (undos.length > 1) {
         redos.push(undos.pop()); // Ctrl+Z (Undo)
-        applyLastUndos();
+        applyLastUndo();
       }
       e.preventDefault();
     } else if (e.key === "Z" || e.key === "y") {
       if (redos.length > 0) {
         undos.push(redos.pop()); // Ctrl+Shift+Z or Ctrl+Y (Redo)
-        applyLastUndos();
+        applyLastUndo();
       }
       e.preventDefault();
     }
