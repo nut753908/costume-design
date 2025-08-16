@@ -20,7 +20,7 @@ import { pickStaticFolders, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeRecursively } from "./object-3d/group/dispose.js";
 
 let renderer, camera, gizmo, scene;
-let gui, ms, cp, c, t, group;
+let gui, ms, c, group;
 
 let applying = false;
 let closedObj;
@@ -45,23 +45,17 @@ async function init() {
   //   scene.add(baseGroup);
   // });
 
-  // cp = new ControlPoint3();
-  // cp = new ControlPoint2();
-  // group = createControlPointGroup(cp, ms);
-  // scene.add(group);
-  // cp.setGUI(gui);
-
+  // c = new ControlPoint3();
+  // c = new ControlPoint2();
+  // group = createControlPointGroup(c, ms);
   // c = screwShapedCurve3.clone();
   // c = smallCircleCurve2.clone();
   // group = createCurveGroup(c, ms);
-  // scene.add(group);
-  // c.setGUI(gui);
-
-  t = new Tube();
-  group = createTubeGroup(t, ms);
+  c = new Tube();
+  group = createTubeGroup(c, ms);
+  setTubeGroupGUI(gui, group); // Tube only.
+  c.setGUI(gui);
   scene.add(group);
-  setTubeGroupGUI(gui, group);
-  t.setGUI(gui);
 
   save();
   gui.onFinishChange(save);
@@ -77,12 +71,7 @@ function save() {
 
   closedObj = saveClosed(gui);
 
-  undos.push({
-    // cp: cp.toJSON(),
-    // c: c.toJSON(),
-    t: t.toJSON(),
-    gui: guiObj,
-  });
+  undos.push({ c: c.toJSON(), gui: guiObj });
   redos.length = 0;
 }
 
@@ -93,23 +82,15 @@ function applyLastUndos() {
   disposeRecursively(group);
 
   const obj = undos[undos.length - 1];
-  {
-    // cp.fromJSON(obj.cp);
-    // group = createControlPointGroup(cp, ms);
-    // scene.add(group);
-    // cp.setGUI(gui);
 
-    // c.fromJSON(obj.c);
-    // group = createCurveGroup(c, ms);
-    // scene.add(group);
-    // c.setGUI(gui);
+  c.fromJSON(obj.c);
+  // group = createControlPointGroup(c, ms);
+  // group = createCurveGroup(c, ms);
+  group = createTubeGroup(c, ms);
+  setTubeGroupGUI(gui, group); // Tube only.
+  c.setGUI(gui);
+  scene.add(group);
 
-    t.fromJSON(obj.t);
-    group = createTubeGroup(t, ms);
-    scene.add(group);
-    setTubeGroupGUI(gui, group);
-    t.setGUI(gui);
-  }
   gui.load(obj.gui);
   loadClosed(gui, closedObj);
 
