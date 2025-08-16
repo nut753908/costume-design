@@ -17,7 +17,7 @@ import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
-import { disposeRecursively } from "./object-3d/group/dispose.js";
+import { disposeRecursively } from "./main/dispose.js";
 
 let renderer, camera, gizmo, scene;
 let gui, ms, c, group;
