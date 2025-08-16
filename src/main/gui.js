@@ -1,3 +1,5 @@
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
 /**
  * guiObj = {
  *   controllers: {
@@ -10,26 +12,21 @@
  *     }
  *   }
  * }
- *
- * folders = {
- *   [_title]: {
- *     controllers,
- *     folders
- *   }
- * }
  */
 
 /**
- * @param {Object} guiObj
- * @returns {Object} folders
+ * @param {GUI} gui
+ * @returns {Object} guiObj
  */
-export function pickStaticFolders(guiObj) {
-  return [
+export function saveGui(gui) {
+  const guiObj = gui.save();
+  guiObj.folders = [
     "THREE.Scene",
     "THREE.AxesHelper",
     "THREE.Material",
     "TubeGroup",
   ].reduce((o, k) => ({ ...o, [k]: guiObj.folders[k] }), {});
+  return guiObj;
 }
 
 /**

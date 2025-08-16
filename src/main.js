@@ -16,7 +16,7 @@ import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
-import { pickStaticFolders, saveClosed, loadClosed } from "./main/gui.js";
+import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeRecursively } from "./object-3d/group/dispose.js";
 
 let renderer, camera, gizmo, scene;
@@ -66,10 +66,8 @@ async function init() {
 function save() {
   if (applying) return; // "applying" is set by applyLastUndo().
 
-  const guiObj = gui.save();
-  guiObj.folders = pickStaticFolders(guiObj);
   closedObj = saveClosed(gui);
-  undos.push({ c: c.toJSON(), gui: guiObj });
+  undos.push({ c: c.toJSON(), gui: saveGui(gui) });
   redos.length = 0;
 }
 
