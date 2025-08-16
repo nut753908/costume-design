@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { ControlPoint3 } from "./control-point-3.js";
 import { ControlPoint2 } from "./control-point-2.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 import { isInvalidIndex } from "../math/utils.js";
 
 /**

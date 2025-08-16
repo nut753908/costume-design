@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Circular } from "../math/circular.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 import { rotate180 } from "../math/utils.js";
 
 /**

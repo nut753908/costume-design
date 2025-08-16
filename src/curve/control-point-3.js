@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Spherical } from "../math/spherical.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
 
 /**

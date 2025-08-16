@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { createRenderer, updateRenderer } from "./main/renderer.js";
 import { createCamera, updateCamera } from "./main/camera.js";
 import { createControlsAndGizmo } from "./main/controls.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { createMaterials } from "./material/materials.js";
@@ -23,7 +23,6 @@ let renderer, camera, gizmo, scene;
 let gui, ms, c, group;
 
 let applying = false;
-let closedObj;
 const undos = [];
 const redos = [];
 
@@ -58,6 +57,7 @@ async function init() {
   scene.add(group);
 
   save();
+  gui.onOpenClose(save);
   gui.onFinishChange(save);
   window.addEventListener("keydown", onWindowKeydown);
   window.addEventListener("resize", onWindowResize);
@@ -66,8 +66,7 @@ async function init() {
 function save() {
   if (applying) return; // "applying" is set by applyLastUndo().
 
-  closedObj = saveClosed(gui);
-  undos.push({ c: c.toJSON(), gui: saveGui(gui) });
+  undos.push({ c: c.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
   redos.length = 0;
 }
 
@@ -88,7 +87,7 @@ function applyLastUndo() {
   scene.add(group);
 
   gui.load(obj.gui);
-  loadClosed(gui, closedObj);
+  loadClosed(gui, obj.closed);
 
   applying = false;
 }

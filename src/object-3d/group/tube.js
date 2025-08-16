@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Tube } from "../../curve/tube.js";
 import { createCurveGroup } from "./curve.js";
 import { createEmptyGeometry } from "../../geometry/empty.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import { GUI } from "lil-gui";
 
 /**
  * @param {Tube} t
