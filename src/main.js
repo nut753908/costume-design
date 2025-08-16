@@ -21,6 +21,7 @@ let renderer, camera, gizmo, scene;
 let gui, ms, cp, cpGroup, c, cGroup, t, tGroup;
 
 let applying = false;
+let closedObj = {};
 const undos = [];
 const redos = [];
 
@@ -77,6 +78,17 @@ function save() {
     "TubeGroup",
   ].reduce((o, k) => ({ ...o, [k]: guiObj.folders[k] }), {});
 
+  function saveClosed(gui) {
+    return {
+      _closed: gui._closed,
+      folders: (gui.folders ?? []).reduce(
+        (acc, f) => ({ ...acc, [f._title]: saveClosed(f) }),
+        {}
+      ),
+    };
+  }
+  closedObj = saveClosed(gui);
+
   undos.push({
     // cp: cp.toJSON(),
     // c: c.toJSON(),
@@ -123,6 +135,12 @@ function applyLastUndos() {
     t.setGUI(gui);
   }
   gui.load(obj.gui);
+
+  function loadClosed(gui, closedObj) {
+    gui.open(!closedObj._closed);
+    gui.folders.map((f) => loadClosed(f, closedObj.folders[f._title]));
+  }
+  loadClosed(gui, closedObj);
 
   applying = false;
 }
