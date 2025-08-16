@@ -116,7 +116,6 @@ function applyLastUndos() {
     t.setGUI(gui);
   }
   gui.load(obj.gui);
-
   loadClosed(gui, closedObj);
 
   applying = false;
