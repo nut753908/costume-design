@@ -17,6 +17,7 @@ import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveClosed, loadClosed } from "./gui/closed.js";
+import { disposeRecursively } from "./object-3d/group/dispose.js";
 
 let renderer, camera, gizmo, scene;
 let gui, ms, cp, cpGroup, c, cGroup, t, tGroup;
@@ -97,13 +98,6 @@ function applyLastUndos() {
   // scene.remove(cGroup);
   scene.remove(tGroup);
 
-  function disposeRecursively(group) {
-    group.children.forEach((g) => {
-      if (g.dispose) g.dispose();
-      if (g.geometry && g.geometry.dispose) g.geometry.dispose();
-      disposeRecursively(g);
-    });
-  }
   // disposeRecursively(cpGroup);
   // disposeRecursively(cGroup);
   disposeRecursively(tGroup);
