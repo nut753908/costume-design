@@ -18,6 +18,11 @@ import { Tube } from "./curve/tube.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 
 let renderer, camera, gizmo, scene;
+let gui, ms, cp, cpGroup, c, cGroup, t, tGroup;
+
+let applying = false;
+const undos = [];
+const redos = [];
 
 init();
 
@@ -26,34 +31,120 @@ async function init() {
   camera = createCamera();
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
-  const gui = new GUI();
+  gui = new GUI();
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
 
-  const ms = createMaterials(gui);
+  ms = createMaterials(gui);
 
   // await createBaseGroup(ms).then((baseGroup) => {
   //   if (!baseGroup) return;
   //   scene.add(baseGroup);
   // });
 
-  // const cp = new ControlPoint3();
-  // const cp = new ControlPoint2();
-  // scene.add(createControlPointGroup(cp, ms));
+  // cp = new ControlPoint3();
+  // cp = new ControlPoint2();
+  // cpGroup = createControlPointGroup(cp, ms);
+  // scene.add(cpGroup);
   // cp.setGUI(gui);
 
-  // const c = screwShapedCurve3.clone();
-  // const c = smallCircleCurve2.clone();
-  // scene.add(createCurveGroup(c, ms));
+  // c = screwShapedCurve3.clone();
+  // c = smallCircleCurve2.clone();
+  // cGroup = createCurveGroup(c, ms);
+  // scene.add(cGroup);
   // c.setGUI(gui);
 
-  const t = new Tube();
-  const group = createTubeGroup(t, ms);
-  scene.add(group);
-  setTubeGroupGUI(gui, group);
+  t = new Tube();
+  tGroup = createTubeGroup(t, ms);
+  scene.add(tGroup);
+  setTubeGroupGUI(gui, tGroup);
   t.setGUI(gui);
 
+  save();
+  gui.onFinishChange(save);
+  window.addEventListener("keydown", onWindowKeydown);
   window.addEventListener("resize", onWindowResize);
+}
+
+function save() {
+  if (applying) return; // "applying" is set by applyLastUndos().
+
+  const guiObj = gui.save();
+  guiObj.folders = [
+    "THREE.Scene",
+    "THREE.AxesHelper",
+    "THREE.Material",
+    "TubeGroup",
+  ].reduce((o, k) => ({ ...o, [k]: guiObj.folders[k] }), {});
+
+  undos.push({
+    // cp: cp.toJSON(),
+    // c: c.toJSON(),
+    t: t.toJSON(),
+    gui: guiObj,
+  });
+  redos.length = 0;
+}
+
+function applyLastUndos() {
+  applying = true;
+
+  // scene.remove(cpGroup);
+  // scene.remove(cGroup);
+  scene.remove(tGroup);
+
+  function disposeRecursively(group) {
+    group.children.forEach((g) => {
+      if (g.dispose) g.dispose();
+      if (g.geometry && g.geometry.dispose) g.geometry.dispose();
+      disposeRecursively(g);
+    });
+  }
+  // disposeRecursively(cpGroup);
+  // disposeRecursively(cGroup);
+  disposeRecursively(tGroup);
+
+  const obj = undos[undos.length - 1];
+  {
+    // cp.fromJSON(obj.cp);
+    // cpGroup = createControlPointGroup(cp, ms);
+    // scene.add(cpGroup);
+    // cp.setGUI(gui);
+
+    // c.fromJSON(obj.c);
+    // cGroup = createCurveGroup(c, ms);
+    // scene.add(cGroup);
+    // c.setGUI(gui);
+
+    t.fromJSON(obj.t);
+    tGroup = createTubeGroup(t, ms);
+    scene.add(tGroup);
+    setTubeGroupGUI(gui, tGroup);
+    t.setGUI(gui);
+  }
+  gui.load(obj.gui);
+
+  applying = false;
+}
+
+function onWindowKeydown(e) {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === "z") {
+      // Ctrl+Z (Undo)
+      if (undos.length > 1) {
+        redos.push(undos.pop());
+        applyLastUndos();
+      }
+      e.preventDefault();
+    } else if (e.key === "Z" || e.key === "y") {
+      // Ctrl+Shift+Z or Ctrl+Y (Redo)
+      if (redos.length > 0) {
+        undos.push(redos.pop());
+        applyLastUndos();
+      }
+      e.preventDefault();
+    }
+  }
 }
 
 function onWindowResize() {
