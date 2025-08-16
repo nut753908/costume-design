@@ -10,11 +10,18 @@
  *     }
  *   }
  * }
+ *
+ * folders = {
+ *   [_title]: {
+ *     controllers,
+ *     folders
+ *   }
+ * }
  */
 
 /**
  * @param {Object} guiObj
- * @returns {Object} guiObj
+ * @returns {Object} folders
  */
 export function pickStaticFolders(guiObj) {
   return [
