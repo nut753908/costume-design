@@ -301,6 +301,8 @@ export class Curve extends THREE.CurvePath {
       this.cps.push(cp.clone());
     }
 
+    this.updateCurves();
+
     return this;
   }
 
@@ -337,6 +339,8 @@ export class Curve extends THREE.CurvePath {
       const cp = json.cps[i];
       this.cps.push(new this.cpClass().fromJSON(cp));
     }
+
+    this.updateCurves();
 
     return this;
   }
