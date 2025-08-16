@@ -22,7 +22,7 @@ import { disposeRecursively } from "./main/dispose.js";
 let renderer, camera, gizmo, scene;
 let gui, ms, c, group;
 
-let applying = false;
+let loading = false;
 const undos = [];
 const redos = [];
 
@@ -63,14 +63,14 @@ async function init() {
 }
 
 function save() {
-  if (applying) return; // "applying" is set by applyLastUndo().
+  if (loading) return; // "loading" is set by loadLastUndo().
 
   undos.push({ c: c.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
   redos.length = 0;
 }
 
-function applyLastUndo() {
-  applying = true;
+function loadLastUndo() {
+  loading = true;
 
   scene.remove(group);
   disposeRecursively(group);
@@ -88,7 +88,7 @@ function applyLastUndo() {
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);
 
-  applying = false;
+  loading = false;
 }
 
 function onWindowKeydown(e) {
@@ -96,13 +96,13 @@ function onWindowKeydown(e) {
     if (e.key === "z") {
       if (undos.length > 1) {
         redos.push(undos.pop()); // Ctrl+Z (Undo)
-        applyLastUndo();
+        loadLastUndo();
       }
       e.preventDefault();
     } else if (e.key === "Z" || e.key === "y") {
       if (redos.length > 0) {
         undos.push(redos.pop()); // Ctrl+Shift+Z or Ctrl+Y (Redo)
-        applyLastUndo();
+        loadLastUndo();
       }
       e.preventDefault();
     }
