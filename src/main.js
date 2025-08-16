@@ -64,7 +64,7 @@ async function init() {
 }
 
 function save() {
-  if (applying) return; // "applying" is set by applyLastUndos().
+  if (applying) return; // "applying" is set by applyLastUndo().
 
   const guiObj = gui.save();
   guiObj.folders = pickStaticFolders(guiObj);
