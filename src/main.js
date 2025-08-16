@@ -58,7 +58,7 @@ async function init() {
 
   save();
   gui.onOpenClose(save);
-  gui.onFinishChange(save);
+  gui.onFinishChange(save); // TODO: Handling calls from function type
   window.addEventListener("keydown", onWindowKeydown);
   window.addEventListener("resize", onWindowResize);
 }
