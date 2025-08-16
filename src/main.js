@@ -20,7 +20,7 @@ import { pickStaticFolders, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeRecursively } from "./object-3d/group/dispose.js";
 
 let renderer, camera, gizmo, scene;
-let gui, ms, cp, cpGroup, c, cGroup, t, tGroup;
+let gui, ms, cp, c, t, group;
 
 let applying = false;
 let closedObj;
@@ -47,20 +47,20 @@ async function init() {
 
   // cp = new ControlPoint3();
   // cp = new ControlPoint2();
-  // cpGroup = createControlPointGroup(cp, ms);
-  // scene.add(cpGroup);
+  // group = createControlPointGroup(cp, ms);
+  // scene.add(group);
   // cp.setGUI(gui);
 
   // c = screwShapedCurve3.clone();
   // c = smallCircleCurve2.clone();
-  // cGroup = createCurveGroup(c, ms);
-  // scene.add(cGroup);
+  // group = createCurveGroup(c, ms);
+  // scene.add(group);
   // c.setGUI(gui);
 
   t = new Tube();
-  tGroup = createTubeGroup(t, ms);
-  scene.add(tGroup);
-  setTubeGroupGUI(gui, tGroup);
+  group = createTubeGroup(t, ms);
+  scene.add(group);
+  setTubeGroupGUI(gui, group);
   t.setGUI(gui);
 
   save();
@@ -89,30 +89,25 @@ function save() {
 function applyLastUndos() {
   applying = true;
 
-  // scene.remove(cpGroup);
-  // scene.remove(cGroup);
-  scene.remove(tGroup);
-
-  // disposeRecursively(cpGroup);
-  // disposeRecursively(cGroup);
-  disposeRecursively(tGroup);
+  scene.remove(group);
+  disposeRecursively(group);
 
   const obj = undos[undos.length - 1];
   {
     // cp.fromJSON(obj.cp);
-    // cpGroup = createControlPointGroup(cp, ms);
-    // scene.add(cpGroup);
+    // group = createControlPointGroup(cp, ms);
+    // scene.add(group);
     // cp.setGUI(gui);
 
     // c.fromJSON(obj.c);
-    // cGroup = createCurveGroup(c, ms);
-    // scene.add(cGroup);
+    // group = createCurveGroup(c, ms);
+    // scene.add(group);
     // c.setGUI(gui);
 
     t.fromJSON(obj.t);
-    tGroup = createTubeGroup(t, ms);
-    scene.add(tGroup);
-    setTubeGroupGUI(gui, tGroup);
+    group = createTubeGroup(t, ms);
+    scene.add(group);
+    setTubeGroupGUI(gui, group);
     t.setGUI(gui);
   }
   gui.load(obj.gui);
