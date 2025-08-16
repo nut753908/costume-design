@@ -36,7 +36,6 @@ async function init() {
   gui = new GUI();
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
-
   ms = createMaterials(gui);
 
   // await createBaseGroup(ms).then((baseGroup) => {
