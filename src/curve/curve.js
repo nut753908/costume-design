@@ -144,6 +144,9 @@ export class Curve extends THREE.CurvePath {
       },
     };
 
+    Array.from(gui.children)
+      .filter((v) => v._title === name)
+      .forEach((v) => v.destroy());
     const folder = gui.addFolder(name);
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");

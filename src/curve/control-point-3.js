@@ -150,6 +150,9 @@ export class ControlPoint3 {
     const cp = this;
 
     let _tmp;
+    Array.from(gui.children)
+      .filter((v) => v._title === name)
+      .forEach((v) => v.destroy());
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);

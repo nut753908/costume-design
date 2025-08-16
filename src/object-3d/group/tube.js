@@ -51,6 +51,9 @@ function createTubeGroupWithNoCurves(t, ms) {
  * @param {THREE.Group} group - The tube group.
  */
 export function setTubeGroupGUI(gui, group) {
+  Array.from(gui.children)
+    .filter((v) => v._title === "TubeGroup")
+    .forEach((v) => v.destroy());
   const folder = gui.addFolder("TubeGroup");
   const gFolder = folder.addFolder("visible");
   const names = [
