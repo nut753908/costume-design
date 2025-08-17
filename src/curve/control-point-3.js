@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { Spherical } from "../math/spherical.js";
 import { GUI } from "lil-gui";
+import { deleteFolder, closeFolder } from "../main/gui.js";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
 
 /**
@@ -150,9 +151,7 @@ export class ControlPoint3 {
     const cp = this;
 
     let _tmp;
-    Array.from(gui.children)
-      .filter((v) => v._title === name)
-      .forEach((v) => v.destroy());
+    deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
@@ -165,7 +164,8 @@ export class ControlPoint3 {
     folder.add(cp.rightPos, "z").step(0.01).name("right.z").onChange(uRP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    const lFolder = folder.addFolder("local").close();
+    const lFolder = folder.addFolder("local");
+    closeFolder(lFolder);
     _tmp = lFolder.add(cp.leftS, "radius").min(0).step(0.01);
     _tmp.name("left.radius").onChange(uLS);
     lFolder.add(cp.leftA, "x").step(1).name("left.Ax").onChange(uLAx);

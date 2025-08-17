@@ -57,7 +57,10 @@ async function init() {
 
   save();
   gui.onOpenClose(save);
-  gui.onFinishChange(save); // TODO: Handling calls from function type
+  gui.onChange((e) => {
+    if (e.controller.domElement.classList.contains("function")) save();
+  });
+  gui.onFinishChange(save);
   window.addEventListener("keydown", onWindowKeydown);
   window.addEventListener("resize", onWindowResize);
 }

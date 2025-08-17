@@ -63,3 +63,34 @@ export function loadClosed(gui, closedObj) {
   gui.open(!closedObj._closed);
   gui.folders.map((f) => loadClosed(f, closedObj.folders[f._title]));
 }
+
+/**
+ * @param {GUI} parent - The parent of the folder to delete.
+ * @param {string} _title - The title of the folder to delete.
+ * @param {string} titleStart - The starting string for the title of the folder to delete.
+ */
+export function deleteFolder(parent, _title, titleStart = null) {
+  if (_title) {
+    Array.from(parent.children)
+      .filter((v) => v._title === _title)
+      .forEach((v) => v.destroy());
+  } else if (titleStart) {
+    Array.from(parent.children)
+      .filter((v) => v._title?.startsWith(titleStart))
+      .forEach((v) => v.destroy());
+  }
+}
+
+/**
+ * @param {GUI} folder
+ */
+export function closeFolder(folder) {
+  if (!folder.parent) {
+    folder.close();
+    return;
+  }
+  const func = folder.parent._callOnOpenClose;
+  folder.parent._callOnOpenClose = () => {};
+  folder.close();
+  folder.parent._callOnOpenClose = func;
+}
