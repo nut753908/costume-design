@@ -159,9 +159,7 @@ export class Curve extends THREE.CurvePath {
     updateEnabled();
     updateOptions();
     updateCpsFolder();
-    if (isClose) {
-      closeFolderWithoutEventsBubblingUpward(folder);
-    }
+    if (isClose) closeFolderWithoutEventsBubblingUpward(folder);
 
     function updateIfCpsLengthChanges() {
       c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
