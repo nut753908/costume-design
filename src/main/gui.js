@@ -48,7 +48,7 @@ export function saveGui(gui) {
 export function saveClosed(gui) {
   return {
     _closed: gui._closed,
-    folders: (gui.folders ?? []).reduce(
+    folders: gui.folders.reduce(
       (acc, f) => ({ ...acc, [f._title]: saveClosed(f) }),
       {}
     ),
