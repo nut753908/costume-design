@@ -65,6 +65,23 @@ export function loadClosed(gui, closedObj) {
 }
 
 /**
+ * @param {GUI} parent - The parent of the folder to delete.
+ * @param {string} _title - The title of the folder to delete.
+ * @param {string} titleStart - The starting string for the title of the folder to delete.
+ */
+export function deleteFolder(parent, _title, titleStart = null) {
+  if (_title) {
+    Array.from(parent.children)
+      .filter((v) => v._title === _title)
+      .forEach((v) => v.destroy());
+  } else if (titleStart) {
+    Array.from(parent.children)
+      .filter((v) => v._title?.startsWith(titleStart))
+      .forEach((v) => v.destroy());
+  }
+}
+
+/**
  * @param {GUI} folder
  */
 export function closeFolderWithoutEventsBubblingUpward(folder) {

@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { TubeGeometry } from "../geometry/tube.js";
 import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
+import { deleteFolder } from "../main/gui.js";
 import { Curve } from "./curve.js";
 import { Curve3 } from "./curve-3.js";
 import { Curve2 } from "./curve-2.js";
@@ -101,9 +102,7 @@ export class Tube {
     const t = this;
     const p = t.parameters;
 
-    Array.from(gui.children)
-      .filter((v) => v._title === "Tube")
-      .forEach((v) => v.destroy());
+    deleteFolder(gui, "Tube");
     const folder = gui.addFolder("Tube");
     p.axis.setGUI(folder, "axis", update, true);
     p.cross.setGUI(folder, "cross", update, true);

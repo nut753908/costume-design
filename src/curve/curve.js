@@ -3,7 +3,10 @@ import * as THREE from "three";
 import { ControlPoint3 } from "./control-point-3.js";
 import { ControlPoint2 } from "./control-point-2.js";
 import { GUI } from "lil-gui";
-import { closeFolderWithoutEventsBubblingUpward } from "../main/gui.js";
+import {
+  deleteFolder,
+  closeFolderWithoutEventsBubblingUpward,
+} from "../main/gui.js";
 import { isInvalidIndex } from "../math/utils.js";
 
 /**
@@ -145,9 +148,7 @@ export class Curve extends THREE.CurvePath {
       },
     };
 
-    Array.from(gui.children)
-      .filter((v) => v._title === name)
-      .forEach((v) => v.destroy());
+    deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(obj, "addCpToFirst");
     folder.add(obj, "addCpToLast");
@@ -187,9 +188,7 @@ export class Curve extends THREE.CurvePath {
       cRI = cRI.options(c.safeRIndexList).onChange(updateEnabled);
     }
     function updateCpsFolder() {
-      Array.from(folder.children)
-        .filter((v) => v._title?.startsWith("cp"))
-        .forEach((v) => v.destroy());
+      deleteFolder(folder, null, "cp");
       c.cps.forEach((cp, i) => {
         cp.setGUI(folder, `cp${i}`, updateFromCp);
       });

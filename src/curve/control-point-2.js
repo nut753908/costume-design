@@ -2,7 +2,10 @@ import * as THREE from "three";
 
 import { Circular } from "../math/circular.js";
 import { GUI } from "lil-gui";
-import { closeFolderWithoutEventsBubblingUpward } from "../main/gui.js";
+import {
+  deleteFolder,
+  closeFolderWithoutEventsBubblingUpward,
+} from "../main/gui.js";
 import { rotate180 } from "../math/utils.js";
 
 /**
@@ -141,9 +144,7 @@ export class ControlPoint2 {
     const cp = this;
 
     let _tmp;
-    Array.from(gui.children)
-      .filter((v) => v._title === name)
-      .forEach((v) => v.destroy());
+    deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
     folder.add(cp.middlePos, "y").step(0.01).name("middle.y").onChange(uMP);
