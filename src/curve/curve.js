@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { ControlPoint3 } from "./control-point-3.js";
 import { ControlPoint2 } from "./control-point-2.js";
 import { GUI } from "lil-gui";
+import { closeFolderWithoutEventsBubblingUpward } from "../main/gui.js";
 import { isInvalidIndex } from "../math/utils.js";
 
 /**
@@ -157,7 +158,9 @@ export class Curve extends THREE.CurvePath {
     updateEnabled();
     updateOptions();
     updateCpsFolder();
-    if (isClose) folder.close();
+    if (isClose) {
+      closeFolderWithoutEventsBubblingUpward(folder);
+    }
 
     function updateIfCpsLengthChanges() {
       c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.

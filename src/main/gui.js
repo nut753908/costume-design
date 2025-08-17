@@ -63,3 +63,17 @@ export function loadClosed(gui, closedObj) {
   gui.open(!closedObj._closed);
   gui.folders.map((f) => loadClosed(f, closedObj.folders[f._title]));
 }
+
+/**
+ * @param {GUI} folder
+ */
+export function closeFolderWithoutEventsBubblingUpward(folder) {
+  if (!folder.parent) {
+    folder.close();
+    return;
+  }
+  const func = folder.parent._callOnOpenClose;
+  folder.parent._callOnOpenClose = () => {};
+  folder.close();
+  folder.parent._callOnOpenClose = func;
+}

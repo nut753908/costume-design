@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { Circular } from "../math/circular.js";
 import { GUI } from "lil-gui";
+import { closeFolderWithoutEventsBubblingUpward } from "../main/gui.js";
 import { rotate180 } from "../math/utils.js";
 
 /**
@@ -152,7 +153,8 @@ export class ControlPoint2 {
     folder.add(cp.rightPos, "y").step(0.01).name("right.y").onChange(uRP);
     folder.add(cp, "isSyncRadius");
     folder.add(cp, "isSyncAngle");
-    const lFolder = folder.addFolder("local").close();
+    const lFolder = folder.addFolder("local");
+    closeFolderWithoutEventsBubblingUpward(lFolder);
     _tmp = lFolder.add(cp.leftC, "radius").min(0).step(0.01);
     _tmp.name("left.radius").onChange(uLC);
     _tmp = lFolder.add(cp.leftC, "angle").step(1);
