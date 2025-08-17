@@ -1,10 +1,10 @@
 /**
  * @param {THREE.Group}
  */
-export function disposeRecursively(group) {
+export function disposeGroup(group) {
   group.children.forEach((g) => {
     if (g.dispose) g.dispose();
     if (g.geometry && g.geometry.dispose) g.geometry.dispose();
-    disposeRecursively(g);
+    disposeGroup(g);
   });
 }
