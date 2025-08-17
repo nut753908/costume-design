@@ -28,7 +28,7 @@ const redos = [];
 
 init();
 
-async function init() {
+function init() {
   renderer = createRenderer(animate);
   camera = createCamera();
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
