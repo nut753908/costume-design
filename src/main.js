@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { createRenderer, updateRenderer } from "./main/renderer.js";
 import { createCamera, updateCamera } from "./main/camera.js";
 import { createControlsAndGizmo } from "./main/controls.js";
-import { GUI } from "lil-gui";
+import { GUI, FunctionController } from "lil-gui";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { createMaterials } from "./material/materials.js";
@@ -57,9 +57,7 @@ async function init() {
 
   save();
   gui.onOpenClose(save);
-  gui.onChange((e) => {
-    if (e.controller.domElement.classList.contains("function")) save();
-  });
+  gui.onChange((e) => e.controller instanceof FunctionController && save());
   gui.onFinishChange(save);
   window.addEventListener("keydown", onWindowKeydown);
   window.addEventListener("resize", onWindowResize);
