@@ -84,7 +84,7 @@ export function deleteFolder(parent, _title, titleStart = null) {
 /**
  * @param {GUI} folder
  */
-export function closeFolderWithoutEventsBubblingUpward(folder) {
+export function closeFolder(folder) {
   if (!folder.parent) {
     folder.close();
     return;
