@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
 import { TubeGeometry } from "../geometry/tube.js";
-import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
 import { deleteFolder } from "../main/gui.js";
 import { Curve } from "./curve.js";
 import { Curve3 } from "./curve-3.js";
@@ -80,16 +79,6 @@ export class Tube {
 
       group.children[0].geometry = new THREE.WireframeGeometry(geometry);
       group.children[1].geometry = geometry;
-
-      // Add VertexNormalsHelper for debugging.
-      if (group.children[2]) {
-        group.children[2].dispose();
-      }
-      group.children[2] = new VertexNormalsHelper(
-        group.children[1],
-        0.05,
-        0xff0000
-      );
     })();
   }
 
