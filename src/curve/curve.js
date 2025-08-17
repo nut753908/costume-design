@@ -70,15 +70,6 @@ export class Curve extends THREE.CurvePath {
   }
 
   /**
-   * Get the folder name used in setGUI().
-   *
-   * @return {string}
-   */
-  get name() {
-    console.warn("Curve: .name not implemented.");
-  }
-
-  /**
    * Update curves using this.cps.
    */
   updateCurves() {
