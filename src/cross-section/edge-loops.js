@@ -1,5 +1,3 @@
-// TODO: test constructor(), clone(), copy(), toJSON(), fromJSON()
-
 import * as THREE from "three";
 
 import { EdgeLoop } from "./edge-loop.js";
@@ -42,9 +40,11 @@ export class EdgeLoops {
 
       const firstV1 = edge.v1;
       const firstV2 = edge.v2;
-      let v1 = firstV1;
-      let v2 = firstV2;
+      let v1;
+      let v2;
 
+      v1 = firstV1;
+      v2 = firstV2;
       while (true) {
         const v3 = this.findNextVertex(indices, v1, v2);
         if (!v3) break;
@@ -59,6 +59,8 @@ export class EdgeLoops {
         if (v3 === firstV1) break;
       }
 
+      v1 = firstV1;
+      v2 = firstV2;
       while (true) {
         const v0 = this.findNextVertex(indices, v2, v1);
         if (!v0) break;
@@ -200,7 +202,7 @@ No edges found.
 
     for (let i = 0, l = json.edgeLoops.length; i < l; i++) {
       const edgeLoop = json.edgeLoops[i];
-      this.edgeLoops.push(new EdgeLoops().fromJSON(edgeLoop));
+      this.edgeLoops.push(new EdgeLoop().fromJSON(edgeLoop));
     }
 
     return this;

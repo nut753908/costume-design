@@ -1,5 +1,3 @@
-// TODO: test constructor(), clone(), copy(), toJSON(), fromJSON()
-
 import { Edge } from "./edge.js";
 
 /**
