@@ -79,7 +79,7 @@ export class EdgeLoops {
       edges.sort((a, b) =>
         a.index < b.index ? -1 : a.index > b.index ? 1 : 0
       );
-      const edgeLoop = new EdgeLoop(edges, false);
+      const edgeLoop = new EdgeLoop(edges);
       edgeLoops.push(edgeLoop);
     }
     return edgeLoops;
