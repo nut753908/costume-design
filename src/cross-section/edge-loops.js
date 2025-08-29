@@ -30,7 +30,7 @@ export class EdgeLoops {
     // Set all non-overlapping edge loops from the geometry.
     const indices = geometry.getIndex();
     if (!indices) return;
-    const remainingVertexMap = this.createRemainingVertexMap(indices);
+    const remainingVerticesMap = this.createRemainingVerticesMap(indices);
     const allEdges = new Edges(geometry).edges;
     const edgeMap = this.createEdgeMap(allEdges);
     for (let i = 0, l = allEdges.length; i < l; i++) {
@@ -44,7 +44,7 @@ export class EdgeLoops {
       let v1 = firstV1;
       let v2 = firstV2;
       while (true) {
-        const v3 = this.findNextVertex(remainingVertexMap, v1, v2);
+        const v3 = this.findNextVertex(remainingVerticesMap, v1, v2);
         if (!v3) break;
         v1 = v2;
         v2 = v3;
@@ -56,7 +56,7 @@ export class EdgeLoops {
       v1 = firstV1;
       v2 = firstV2;
       while (true) {
-        const v0 = this.findNextVertex(remainingVertexMap, v2, v1);
+        const v0 = this.findNextVertex(remainingVerticesMap, v2, v1);
         if (!v0) break;
         v2 = v1;
         v1 = v0;
@@ -71,12 +71,12 @@ export class EdgeLoops {
   }
 
   /**
-   * Create the remaining vertex map. The key is a string of two vertices.
+   * Create the remaining vertices map. The key is a string of two vertices.
    *
    * @param {THREE.BufferAttribute} indices - The indices of the geometry.
-   * @returns {{[k:string]:number}} The remaining vertex map.
+   * @returns {{[k:string]:number}} The remaining vertices map.
    */
-  createRemainingVertexMap(indices) {
+  createRemainingVerticesMap(indices) {
     const map = {};
     for (let i = 0, l = indices.count; i < l; i += 3) {
       const a = indices.array[i];
@@ -114,7 +114,7 @@ export class EdgeLoops {
   /**
    * Find the next vertex in the direction v1 -> v2.
    *
-   * @param {Object} map - The remaining vertex map.
+   * @param {Object} map - The remaining vertices map.
    * @param {number} v1 - The index of the first vertex of the edge.
    * @param {number} v2 - The index of the second vertex of the edge.
    * @returns {number} The next vertex.
