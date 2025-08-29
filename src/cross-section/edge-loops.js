@@ -31,10 +31,7 @@ export class EdgeLoops {
     if (!indices) return;
     const remainingVertexMap = this.createRemainingVertexMap(indices);
     const allEdges = new Edges(geometry).edges;
-    const edgeMap = allEdges.reduce(
-      (map, e) => ({ ...map, [`${e.v1},${e.v2}`]: e, [`${e.v2},${e.v1}`]: e }),
-      {}
-    );
+    const edgeMap = this.createEdgeMap(allEdges);
     for (let i = 0, l = allEdges.length; i < l; i++) {
       const edges = [];
 
@@ -102,6 +99,15 @@ export class EdgeLoops {
         k in map ? map[k].push(v) : (map[k] = [v]);
       });
     }
+    return map;
+  }
+
+  createEdgeMap(edges) {
+    const map = {};
+    edges.forEach((e) => {
+      map[`${e.v1},${e.v2}`] = e;
+      map[`${e.v2},${e.v1}`] = e;
+    });
     return map;
   }
 
