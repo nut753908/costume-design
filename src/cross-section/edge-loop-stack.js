@@ -8,18 +8,18 @@ import { EdgeLoop } from "./edge-loop.js";
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
  * import { EdgeLoopStack } from "./src/cross-section/edge-loop-stack.js";
  * const edges1 = [
- *   new Edge( 0, 1, true ),
- *   new Edge( 1, 2, true ),
- *   new Edge( 0, 2, true )
+ *   new Edge( 0, 1, 0 ),
+ *   new Edge( 1, 2, 1 ),
+ *   new Edge( 0, 2, -1 )
  * ];
  * const edges2 = [
- *   new Edge( 3, 4, true ),
- *   new Edge( 4, 5, true ),
- *   new Edge( 3, 5, true )
+ *   new Edge( 3, 4, 0 ),
+ *   new Edge( 4, 5, 1 ),
+ *   new Edge( 3, 5, -1 )
  * ]
  * const edgeLoops = [
- *   new EdgeLoop( edges1, true ),
- *   new EdgeLoop( edges2, true )
+ *   new EdgeLoop( edges1, 0 ),
+ *   new EdgeLoop( edges2, 1 )
  * ];
  * const edgeLoopStack = new EdgeLoopStack( edgeLoops );
  * ```
