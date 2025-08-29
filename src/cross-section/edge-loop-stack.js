@@ -21,7 +21,7 @@ import { EdgeLoop } from "./edge-loop.js";
  *   new EdgeLoop( edges1, true, 0 ),
  *   new EdgeLoop( edges2, true, 1 )
  * ];
- * const edgeLoopStack = new EdgeLoopStack( edgeLoops );
+ * const edgeLoopStack = new EdgeLoopStack( edgeLoops, false );
  * ```
  */
 export class EdgeLoopStack {
@@ -29,14 +29,22 @@ export class EdgeLoopStack {
    * Constructs a new edge loop stack.
    *
    * @param {Array<EdgeLoop>} edgeLoops - The edge loops within an edge loop stack.
+   * @param {boolean} closed - Whether the edge loop is closed.
    */
-  constructor(edgeLoops = []) {
+  constructor(edgeLoops = [], closed = false) {
     /**
      * The edge loops within an edge loop.
      *
      * @type {Array<EdgeLoop>}
      */
     this.edgeLoops = edgeLoops;
+
+    /**
+     * Whether the edge loop is closed.
+     *
+     * @type {boolean}
+     */
+    this.closed = closed;
   }
 
   /**
@@ -60,6 +68,7 @@ export class EdgeLoopStack {
       const edgeLoop = source.edgeLoops[i];
       this.edgeLoops.push(edgeLoop.clone());
     }
+    this.closed = source.closed;
 
     return this;
   }
@@ -77,6 +86,7 @@ export class EdgeLoopStack {
       const edgeLoop = this.edgeLoops[i];
       data.edgeLoops.push(edgeLoop.toJSON());
     }
+    data.closed = this.closed;
 
     return data;
   }
@@ -93,6 +103,7 @@ export class EdgeLoopStack {
       const edgeLoop = json.edgeLoops[i];
       this.edgeLoops.push(new EdgeLoop().fromJSON(edgeLoop));
     }
+    this.closed = json.closed;
 
     return this;
   }
