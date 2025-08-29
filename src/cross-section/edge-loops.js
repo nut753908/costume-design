@@ -71,10 +71,10 @@ export class EdgeLoops {
   }
 
   /**
-   * Create the remaining vertices map. The key is a string of two vertices.
+   * Create the remaining vertices map.
    *
    * @param {THREE.BufferAttribute} indices - The indices of the geometry.
-   * @returns {{[k:string]:number}} The remaining vertices map.
+   * @returns {{[k:string]:number}} The remaining vertices map. The key is a string of two vertices.
    */
   createRemainingVerticesMap(indices) {
     const map = {};
@@ -97,10 +97,10 @@ export class EdgeLoops {
   }
 
   /**
-   * Create the edge map. The key is a string of pairs v1, v2.
+   * Create the edge map.
    *
    * @param {Array<Edge>} edges - Edges of the geometry.
-   * @returns {{[k:string]:Edge}} The edge map.
+   * @returns {{[k:string]:Edge}} The edge map. The key is a string of pairs v1, v2.
    */
   createEdgeMap(edges) {
     const map = {};
@@ -114,7 +114,7 @@ export class EdgeLoops {
   /**
    * Find the next vertex in the direction v1 -> v2.
    *
-   * @param {Object} map - The remaining vertices map.
+   * @param {{[k:string]:number}} map - The remaining vertices map. The key is a string of two vertices.
    * @param {number} v1 - The index of the first vertex of the edge.
    * @param {number} v2 - The index of the second vertex of the edge.
    * @returns {number} The next vertex.
