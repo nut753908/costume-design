@@ -29,6 +29,7 @@ export class EdgeLoops {
     // Set all non-overlapping edge loops from the geometry.
     const indices = geometry.getIndex();
     if (!indices) return;
+    const remainingVertexMap = this.createRemainingVertexMap(indices);
     const allEdges = new Edges(geometry).edges;
     const edgeMap = allEdges.reduce(
       (map, e) => ({ ...map, [`${e.v1},${e.v2}`]: e, [`${e.v2},${e.v1}`]: e }),
@@ -50,7 +51,7 @@ export class EdgeLoops {
       v1 = firstV1;
       v2 = firstV2;
       while (true) {
-        const v3 = this.findNextVertex(indices, v1, v2);
+        const v3 = this.findNextVertex(remainingVertexMap, v1, v2);
         if (!v3) break;
         v1 = v2;
         v2 = v3;
@@ -66,7 +67,7 @@ export class EdgeLoops {
       v1 = firstV1;
       v2 = firstV2;
       while (true) {
-        const v0 = this.findNextVertex(indices, v2, v1);
+        const v0 = this.findNextVertex(remainingVertexMap, v2, v1);
         if (!v0) break;
         v2 = v1;
         v1 = v0;
@@ -84,53 +85,48 @@ export class EdgeLoops {
     }
   }
 
-  findNextVertex(indices, v1, v2) {
-    const vs0 = this.findRemainingVertices(indices, v1, v2);
+  createRemainingVertexMap(indices) {
+    const map = {};
+    for (let i = 0, l = indices.count; i < l; i += 3) {
+      const a = indices.array[i];
+      const b = indices.array[i + 1];
+      const c = indices.array[i + 2];
+      Object.entries({
+        [`${a},${b}`]: c,
+        [`${b},${a}`]: c,
+        [`${b},${c}`]: a,
+        [`${c},${b}`]: a,
+        [`${c},${a}`]: b,
+        [`${a},${c}`]: b,
+      }).forEach(([k, v]) => {
+        k in map ? map[k].push(v) : (map[k] = [v]);
+      });
+    }
+    return map;
+  }
+
+  findNextVertex(map, v1, v2) {
+    const vs0 = map[`${v1},${v2}`];
     if (vs0.length !== 2) return null;
 
     const a = vs0[0];
-    const vs1 = this.findRemainingVertices(indices, a, v2);
+    const vs1 = map[`${a},${v2}`];
     if (vs1.length !== 2) return null;
     const b = vs1[vs1[0] === v1 ? 1 : 0];
-    const vs2 = this.findRemainingVertices(indices, b, v2);
+    const vs2 = map[`${b},${v2}`];
     if (vs2.length !== 2) return null;
     const c = vs2[vs2[0] === a ? 1 : 0];
 
     const d = vs0[1];
-    const vs3 = this.findRemainingVertices(indices, d, v2);
+    const vs3 = map[`${d},${v2}`];
     if (vs3.length !== 2) return null;
     const e = vs3[vs3[0] === v1 ? 1 : 0];
-    const vs4 = this.findRemainingVertices(indices, e, v2);
+    const vs4 = map[`${e},${v2}`];
     if (vs4.length !== 2) return null;
     const f = vs4[vs4[0] === d ? 1 : 0];
 
     if (c !== f) return null;
     return c;
-  }
-
-  findRemainingVertices(indices, v1, v2) {
-    const vertices = [];
-    for (let i = 0, l = indices.count; i < l; i += 3) {
-      const a = indices.array[i];
-      const b = indices.array[i + 1];
-      const c = indices.array[i + 2];
-      if ((a === v1 && b === v2) || (a === v2 && b === v1)) {
-        vertices.push(c);
-      } else if ((b === v1 && c === v2) || (b === v2 && c === v1)) {
-        vertices.push(a);
-      } else if ((c === v1 && a === v2) || (c === v2 && a === v1)) {
-        vertices.push(b);
-      }
-    }
-    if (vertices.length !== 1 && vertices.length !== 2) {
-      console.error(`\
-vertices.length !== 1 && vertices.length !== 2
-- vertices:${JSON.stringify(vertices)}
-- indices:${JSON.stringify(indices)}
-- v1:${v1}
-- v2:${v2}`);
-    }
-    return vertices;
   }
 
   /**
