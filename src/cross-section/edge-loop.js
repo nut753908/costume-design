@@ -11,7 +11,7 @@ import { Edge } from "./edge.js";
  *   new Edge( 1, 2, true ),
  *   new Edge( 0, 2, true )
  * ];
- * const el = new EdgeLoop( edges, false );
+ * const edgeLoop = new EdgeLoop( edges, false );
  * ```
  */
 export class EdgeLoop {

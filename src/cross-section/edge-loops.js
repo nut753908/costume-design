@@ -9,7 +9,7 @@ import { Edge } from "./edge.js";
  * ```js
  * import { EdgeLoops } from "./src/cross-section/edge-loops.js";
  * const geometry = new THREE.CylinderGeometry( 5, 5, 20, 32, 8, true );
- * const el = new EdgeLoops( geometry );
+ * const edgeLoops = new EdgeLoops( geometry );
  * ```
  */
 export class EdgeLoops {

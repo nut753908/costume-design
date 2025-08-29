@@ -3,7 +3,7 @@
  *
  * ```js
  * import { Edge } from "./src/cross-section/edge.js";
- * const e = new Edge( 0, 1, false );
+ * const edge = new Edge( 0, 1, false );
  * ```
  */
 export class Edge {
