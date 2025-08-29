@@ -49,7 +49,6 @@ export class EdgeLoops {
         v1 = v2;
         v2 = v3;
         edge = edgeMap[`${v1},${v2}`];
-        if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
         if (v3 === firstV1) break;
@@ -62,7 +61,6 @@ export class EdgeLoops {
         v2 = v1;
         v1 = v0;
         edge = edgeMap[`${v1},${v2}`];
-        if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
         if (v0 === firstV2) break;
