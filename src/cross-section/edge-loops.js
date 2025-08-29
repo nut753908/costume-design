@@ -35,33 +35,25 @@ export class EdgeLoops {
     const edgeMap = this.createEdgeMap(allEdges);
     for (let i = 0, l = allEdges.length; i < l; i++) {
       const edges = [];
-
       let edge = allEdges[i];
       if (edge.checked) continue;
       edge.checked = true;
       edges.push(edge);
-
       const firstV1 = edge.v1;
       const firstV2 = edge.v2;
-      let v1;
-      let v2;
-
-      v1 = firstV1;
-      v2 = firstV2;
+      let v1 = firstV1;
+      let v2 = firstV2;
       while (true) {
         const v3 = this.findNextVertex(remainingVertexMap, v1, v2);
         if (!v3) break;
         v1 = v2;
         v2 = v3;
-
         edge = edgeMap[`${v1},${v2}`];
         if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
-
         if (v3 === firstV1) break;
       }
-
       v1 = firstV1;
       v2 = firstV2;
       while (true) {
@@ -69,15 +61,12 @@ export class EdgeLoops {
         if (!v0) break;
         v2 = v1;
         v1 = v0;
-
         edge = edgeMap[`${v1},${v2}`];
         if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
-
         if (v0 === firstV2) break;
       }
-
       const edgeLoop = new EdgeLoop(edges, false);
       this.edgeLoops.push(edgeLoop);
     }
