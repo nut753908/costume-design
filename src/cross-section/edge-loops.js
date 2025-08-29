@@ -76,9 +76,9 @@ export class EdgeLoops {
         edges.push(edge);
         if (v0 === firstV2) break;
       }
-      edges.sort((a, b) =>
-        a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-      );
+      // edges.sort((a, b) =>
+      //   a.index < b.index ? -1 : a.index > b.index ? 1 : 0
+      // );
       const edgeLoop = new EdgeLoop(edges);
       edgeLoops.push(edgeLoop);
     }
