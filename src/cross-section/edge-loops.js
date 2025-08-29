@@ -45,7 +45,7 @@ export class EdgeLoops {
       let v2 = firstV2;
       while (true) {
         const v3 = this.findNextVertex(remainingVerticesMap, v1, v2);
-        if (!v3) break;
+        if (v3 === null) break;
         v1 = v2;
         v2 = v3;
         edge = edgeMap[`${v1},${v2}`];
@@ -57,7 +57,7 @@ export class EdgeLoops {
       v2 = firstV2;
       while (true) {
         const v0 = this.findNextVertex(remainingVerticesMap, v2, v1);
-        if (!v0) break;
+        if (v0 === null) break;
         v2 = v1;
         v1 = v0;
         edge = edgeMap[`${v1},${v2}`];
