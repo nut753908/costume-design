@@ -16,9 +16,6 @@ import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { EdgeLoops } from "./cross-section/edge-loops.js";
-import { Edge } from "./cross-section/edge.js";
-import { EdgeLoop } from "./cross-section/edge-loop.js";
-import { EdgeLoopStack } from "./cross-section/edge-loop-stack.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeGroup } from "./main/dispose.js";
@@ -59,20 +56,9 @@ function init() {
   c.setGUI(gui);
   scene.add(group);
 
-  // const geometry = new THREE.CylinderGeometry(5, 5, 20, 32, 8, true);
-  const edges1 = [
-    new Edge(0, 1, true),
-    new Edge(1, 2, true),
-    new Edge(0, 2, true),
-  ];
-  const edges2 = [
-    new Edge(3, 4, true),
-    new Edge(4, 5, true),
-    new Edge(3, 5, true),
-  ];
-  const edgeLoops = [new EdgeLoop(edges1, true), new EdgeLoop(edges2, true)];
-  const edgeLoopStack = new EdgeLoopStack(edgeLoops);
-  console.log(edgeLoopStack.toJSON());
+  const geometry = new THREE.CylinderGeometry(5, 5, 20, 32, 8, true);
+  const edgeLoops = new EdgeLoops(geometry);
+  console.log(edgeLoops.toJSON());
 
   save();
   gui.onOpenClose(save);
