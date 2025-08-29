@@ -30,6 +30,10 @@ export class EdgeLoops {
     const indices = geometry.getIndex();
     if (!indices) return;
     const allEdges = new Edges(geometry).edges;
+    const edgeMap = allEdges.reduce(
+      (map, e) => ({ ...map, [`${e.v1},${e.v2}`]: e, [`${e.v2},${e.v1}`]: e }),
+      {}
+    );
     for (let i = 0, l = allEdges.length; i < l; i++) {
       const edges = [];
 
@@ -51,7 +55,7 @@ export class EdgeLoops {
         v1 = v2;
         v2 = v3;
 
-        edge = this.findEdge(allEdges, v1, v2);
+        edge = edgeMap[`${v1},${v2}`];
         if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
@@ -67,7 +71,7 @@ export class EdgeLoops {
         v2 = v1;
         v1 = v0;
 
-        edge = this.findEdge(allEdges, v2, v1);
+        edge = edgeMap[`${v1},${v2}`];
         if (!edge) break; // error
         edge.checked = true;
         edges.push(edge);
@@ -127,24 +131,6 @@ vertices.length !== 1 && vertices.length !== 2
 - v2:${v2}`);
     }
     return vertices;
-  }
-
-  findEdge(edges, v1, v2) {
-    for (let i = 0, l = edges.length; i < l; i++) {
-      if (
-        (edges[i].v1 === v1 && edges[i].v2 === v2) ||
-        (edges[i].v1 === v2 && edges[i].v2 === v1)
-      ) {
-        return edges[i];
-      }
-    }
-    console.error(`\
-No edges found.
-- edges:${JSON.stringify(edges)}
-- v1:${v1}
-- v2:${v2}
-`);
-    return null;
   }
 
   /**
