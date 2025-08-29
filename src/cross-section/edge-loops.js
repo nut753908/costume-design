@@ -26,9 +26,19 @@ export class EdgeLoops {
      */
     this.edgeLoops = [];
 
-    // Set all non-overlapping edge loops from the geometry.
     const indices = geometry.getIndex();
     if (!indices) return;
+    this.edgeLoops = this.createAllEdgeLoops(indices);
+  }
+
+  /**
+   * Create all non-overlapping edge loops.
+   *
+   * @param {THREE.BufferAttribute} indices - The indices of the geometry.
+   * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
+   */
+  createAllEdgeLoops(indices) {
+    const edgeLoops = [];
     const allEdges = this.createAllEdges(indices);
     const remainingVerticesMap = this.createRemainingVerticesMap(indices);
     const edgeMap = this.createEdgeMap(allEdges);
@@ -65,8 +75,9 @@ export class EdgeLoops {
         if (v0 === firstV2) break;
       }
       const edgeLoop = new EdgeLoop(edges, false);
-      this.edgeLoops.push(edgeLoop);
+      edgeLoops.push(edgeLoop);
     }
+    return edgeLoops;
   }
 
   /**
