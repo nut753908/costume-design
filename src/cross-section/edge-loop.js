@@ -9,9 +9,9 @@ import { Edge } from "./edge.js";
  * const edges = [
  *   new Edge( 0, 1, 0 ),
  *   new Edge( 1, 2, 1 ),
- *   new Edge( 0, 2, -1 )
+ *   new Edge( 0, 2, 2 )
  * ];
- * const edgeLoop = new EdgeLoop( edges );
+ * const edgeLoop = new EdgeLoop( edges, true );
  * ```
  */
 export class EdgeLoop {
@@ -19,15 +19,23 @@ export class EdgeLoop {
    * Constructs a new edge loop.
    *
    * @param {Array<Edge>} edges - The edges within an edge loop.
+   * @param {boolean} closed - Whether the edge loop is closed.
    * @param {number} index - The index within the edge loop stack.
    */
-  constructor(edges = [], index = Number.MAX_SAFE_INTEGER) {
+  constructor(edges = [], closed = false, index = Number.MAX_SAFE_INTEGER) {
     /**
      * The edges within an edge loop.
      *
      * @type {Array<Edge>}
      */
     this.edges = edges;
+
+    /**
+     * Whether the edge loop is closed.
+     *
+     * @type {boolean}
+     */
+    this.closed = closed;
 
     /**
      * The index within the edge loop stack.
@@ -58,6 +66,7 @@ export class EdgeLoop {
       const edge = source.edges[i];
       this.edges.push(edge.clone());
     }
+    this.closed = source.closed;
     this.index = source.index;
 
     return this;
@@ -76,6 +85,7 @@ export class EdgeLoop {
       const edge = this.edges[i];
       data.edges.push(edge.toJSON());
     }
+    data.closed = this.closed;
     data.index = this.index;
 
     return data;
@@ -93,6 +103,7 @@ export class EdgeLoop {
       const edge = json.edges[i];
       this.edges.push(new Edge().fromJSON(edge));
     }
+    this.closed = json.closed;
     this.index = json.index;
 
     return this;

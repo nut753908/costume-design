@@ -53,7 +53,7 @@ export class EdgeLoops {
       let v1 = firstV1;
       let v2 = firstV2;
       let index = 0;
-      let prev = true;
+      let opened = true;
       while (true) {
         const v3 = this.findNextVertex(remainingVerticesMap, v1, v2);
         if (v3 === null) break;
@@ -63,14 +63,14 @@ export class EdgeLoops {
         edge.index = ++index;
         edges.push(edge);
         if (v3 === firstV1) {
-          prev = false;
+          opened = false;
           break;
         }
       }
       v1 = firstV1;
       v2 = firstV2;
       index = 0;
-      while (prev) {
+      while (opened) {
         const v0 = this.findNextVertex(remainingVerticesMap, v2, v1);
         if (v0 === null) break;
         v2 = v1;
@@ -82,7 +82,7 @@ export class EdgeLoops {
       // edges.sort((a, b) =>
       //   a.index < b.index ? -1 : a.index > b.index ? 1 : 0
       // );
-      const edgeLoop = new EdgeLoop(edges);
+      const edgeLoop = new EdgeLoop(edges, !opened);
       edgeLoops.push(edgeLoop);
     }
     return edgeLoops;
