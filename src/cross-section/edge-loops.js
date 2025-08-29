@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { EdgeLoop } from "./edge-loop.js";
 import { Edges } from "./edges.js";
+import { Edge } from "./edge.js";
 
 /**
  * Edge loops of geometry.
@@ -82,6 +83,12 @@ export class EdgeLoops {
     }
   }
 
+  /**
+   * Create the remaining vertex map. The key is a string of two vertices.
+   *
+   * @param {THREE.BufferAttribute} indices - The indices of the geometry.
+   * @returns {{[k:string]:number}} The remaining vertex map.
+   */
   createRemainingVertexMap(indices) {
     const map = {};
     for (let i = 0, l = indices.count; i < l; i += 3) {
@@ -102,6 +109,12 @@ export class EdgeLoops {
     return map;
   }
 
+  /**
+   * Create the edge map. The key is a string of pairs v1, v2.
+   *
+   * @param {Array<Edge>} edges - Edges of the geometry.
+   * @returns {{[k:string]:Edge}} The edge map.
+   */
   createEdgeMap(edges) {
     const map = {};
     edges.forEach((e) => {
@@ -111,6 +124,14 @@ export class EdgeLoops {
     return map;
   }
 
+  /**
+   * Find the next vertex in the direction v1 -> v2.
+   *
+   * @param {Object} map - The remaining vertex map.
+   * @param {number} v1 - The index of the first vertex of the edge.
+   * @param {number} v2 - The index of the second vertex of the edge.
+   * @returns {number} The next vertex.
+   */
   findNextVertex(map, v1, v2) {
     const vs0 = map[`${v1},${v2}`];
     if (vs0.length !== 2) return null;
