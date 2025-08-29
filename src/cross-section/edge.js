@@ -12,9 +12,9 @@ export class Edge {
    *
    * @param {number} v1 - The index of the first vertex of the edge.
    * @param {number} v2 - The index of the second vertex of the edge.
-   * @param {boolean} isComplete - Whether the edge loop calculation is complete.
+   * @param {boolean} checked - Whether the edge loop calculation is checked.
    */
-  constructor(v1 = -1, v2 = -1, isComplete = false) {
+  constructor(v1 = -1, v2 = -1, checked = false) {
     /**
      * The index of the first vertex of the edge.
      *
@@ -30,11 +30,11 @@ export class Edge {
     this.v2 = v2;
 
     /**
-     * Whether the edge loop calculation is complete.
+     * Whether the edge loop calculation is checked.
      *
      * @type {boolean}
      */
-    this.isComplete = isComplete;
+    this.checked = checked;
   }
 
   /**
@@ -55,7 +55,7 @@ export class Edge {
   copy(source) {
     this.v1 = source.v1;
     this.v2 = source.v2;
-    this.isComplete = source.isComplete;
+    this.checked = source.checked;
 
     return this;
   }
@@ -70,7 +70,7 @@ export class Edge {
 
     data.v1 = this.v1;
     data.v2 = this.v2;
-    data.isComplete = this.isComplete;
+    data.checked = this.checked;
 
     return data;
   }
@@ -84,7 +84,7 @@ export class Edge {
   fromJSON(json) {
     this.v1 = json.v1;
     this.v2 = json.v2;
-    this.isComplete = json.isComplete;
+    this.checked = json.checked;
 
     return this;
   }
