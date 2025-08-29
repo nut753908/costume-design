@@ -1,5 +1,3 @@
-// TODO: test constructor(), clone(), copy(), toJSON(), fromJSON()
-
 import * as THREE from "three";
 
 import { Edge } from "./edge.js";
@@ -9,7 +7,7 @@ import { Edge } from "./edge.js";
  *
  * ```js
  * import { Edges } from "./src/cross-section/edges.js";
- * const geometry = new THREE.CylinderGeometry( 5, 5, 20, 32, 8 );
+ * const geometry = new THREE.CylinderGeometry( 5, 5, 20, 32, 8, true );
  * const e = new Edges( geometry );
  * ```
  */
@@ -19,7 +17,7 @@ export class Edges {
    *
    * @param {THREE.BufferGeometry} geometry - The geometry.
    */
-  constructor(geometry) {
+  constructor(geometry = new THREE.BufferGeometry()) {
     /**
      * Edges of the geometry.
      *
@@ -31,10 +29,10 @@ export class Edges {
     const indices = geometry.getIndex();
     if (!indices) return;
     const set = new Set();
-    for (let i = 0, l = indices.length / 3; i < l; i++) {
-      const a = indices[i];
-      const b = indices[i + 1];
-      const c = indices[i + 2];
+    for (let i = 0, l = indices.count; i < l; i += 3) {
+      const a = indices.array[i];
+      const b = indices.array[i + 1];
+      const c = indices.array[i + 2];
       set.add(a < b ? `${a},${b}` : `${b},${a}`);
       set.add(b < c ? `${b},${c}` : `${c},${b}`);
       set.add(c < a ? `${c},${a}` : `${a},${c}`);
