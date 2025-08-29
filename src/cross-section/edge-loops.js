@@ -45,7 +45,7 @@ export class EdgeLoops {
     for (let i = 0, l = allEdges.length; i < l; i++) {
       const edges = [];
       let edge = allEdges[i];
-      if (edge.checked) continue;
+      if (edge.index !== Number.MAX_SAFE_INTEGER) continue;
       edge.index = 0;
       edges.push(edge);
       const firstV1 = edge.v1;
@@ -101,7 +101,7 @@ export class EdgeLoops {
     return set
       .values()
       .map((s) => s.split(","))
-      .map(([a, b]) => new Edge(Number(a), Number(b), false))
+      .map(([a, b]) => new Edge(Number(a), Number(b)))
       .toArray();
   }
 
