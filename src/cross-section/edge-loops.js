@@ -81,6 +81,29 @@ export class EdgeLoops {
   }
 
   /**
+   * Create all non-overlapping edges.
+   *
+   * @param {THREE.BufferAttribute} indices - The indices of the geometry.
+   * @returns {Array<Edge>} All non-overlapping edges.
+   */
+  createAllEdges(indices) {
+    const set = new Set();
+    for (let i = 0, l = indices.count; i < l; i += 3) {
+      const a = indices.array[i];
+      const b = indices.array[i + 1];
+      const c = indices.array[i + 2];
+      set.add(a < b ? `${a},${b}` : `${b},${a}`);
+      set.add(b < c ? `${b},${c}` : `${c},${b}`);
+      set.add(c < a ? `${c},${a}` : `${a},${c}`);
+    }
+    return set
+      .values()
+      .map((s) => s.split(","))
+      .map(([a, b]) => new Edge(Number(a), Number(b), false))
+      .toArray();
+  }
+
+  /**
    * Create the remaining vertices map.
    *
    * @param {THREE.BufferAttribute} indices - The indices of the geometry.
@@ -104,29 +127,6 @@ export class EdgeLoops {
       });
     }
     return map;
-  }
-
-  /**
-   * Create all non-overlapping edges.
-   *
-   * @param {THREE.BufferAttribute} indices - The indices of the geometry.
-   * @returns {Array<Edge>} All non-overlapping edges.
-   */
-  createAllEdges(indices) {
-    const set = new Set();
-    for (let i = 0, l = indices.count; i < l; i += 3) {
-      const a = indices.array[i];
-      const b = indices.array[i + 1];
-      const c = indices.array[i + 2];
-      set.add(a < b ? `${a},${b}` : `${b},${a}`);
-      set.add(b < c ? `${b},${c}` : `${c},${b}`);
-      set.add(c < a ? `${c},${a}` : `${a},${c}`);
-    }
-    return set
-      .values()
-      .map((s) => s.split(","))
-      .map(([a, b]) => new Edge(Number(a), Number(b), false))
-      .toArray();
   }
 
   /**
