@@ -17,45 +17,45 @@ import {
  * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
  */
 export function createAllEdgeLoopStacks(indices) {
-  const edgeLoopStacks = [];
-  const allEdgeLoops = createAllEdgeLoops(indices);
-  const edgeLoopMap = createEdgeLoopMap(allEdgeLoops);
+  const stacks = []; // edgeLoopStacks
+  const allEls = createAllEdgeLoops(indices);
+  const elMap = createEdgeLoopMap(allEls);
   const remainingVerticesMap = createRemainingVerticesMap(indices);
-  for (let i = 0, l = allEdgeLoops.length; i < l; i++) {
-    const edgeLoops = [];
-    let edgeLoop = allEdgeLoops[i];
-    if (!edgeLoop.closed) continue;
-    if (edgeLoop.checked) continue;
-    edgeLoop.checked = true;
-    edgeLoops.push(edgeLoop);
-    const firstEdgeLoop = edgeLoop;
-    const firstVertexPairs = createEdgeLoopVertexPairs(firstEdgeLoop);
+  for (let i = 0, l = allEls.length; i < l; i++) {
+    const els = []; // edgeLoops
+    let el = allEls[i]; // edgeLoop
+    if (!el.closed) continue;
+    if (el.checked) continue;
+    el.checked = true;
+    els.push(el);
+    const firstEl = el;
+    const firstVertexPairs = createEdgeLoopVertexPairs(firstEl);
     let opened = true;
     while (true) {
-      const v1 = edgeLoop.vertices[0];
-      const v2 = edgeLoop.vertices[1];
+      const v1 = el.vertices[0];
+      const v2 = el.vertices[1];
       const { a, b } = getAB(remainingVerticesMap, v1, v2);
-      edgeLoop = edgeLoopMap[`${a},${b}`];
-      if (!edgeLoop.closed) break;
+      el = elMap[`${a},${b}`];
+      if (!el.closed) break;
       if (firstVertexPairs.includes(`${a},${b}`)) {
         opened = false;
         break;
       }
-      edgeLoop.checked = true;
-      edgeLoops.push(edgeLoop);
+      el.checked = true;
+      els.push(el);
     }
-    edgeLoop = firstEdgeLoop;
+    el = firstEl;
     while (opened) {
-      const v1 = edgeLoop.vertices[0];
-      const v2 = edgeLoop.vertices[1];
+      const v1 = el.vertices[0];
+      const v2 = el.vertices[1];
       const { d, e } = getDE(remainingVerticesMap, v1, v2);
-      edgeLoop = edgeLoopMap[`${d},${e}`];
-      if (!edgeLoop.closed) break;
-      edgeLoop.checked = true;
-      edgeLoops.unshift(edgeLoop);
+      el = elMap[`${d},${e}`];
+      if (!el.closed) break;
+      el.checked = true;
+      els.unshift(el);
     }
-    const edgeLoopStack = new EdgeLoopStack(edgeLoops, !opened);
-    edgeLoopStacks.push(edgeLoopStack);
+    const stack = new EdgeLoopStack(els, !opened);
+    stacks.push(stack);
   }
-  return edgeLoopStacks;
+  return stacks;
 }

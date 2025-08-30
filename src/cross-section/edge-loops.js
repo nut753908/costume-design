@@ -11,7 +11,7 @@ import { createAllEdges, createEdgeMap } from "./edges.js";
  * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
  */
 export function createAllEdgeLoops(indices) {
-  const edgeLoops = [];
+  const els = []; // egdeLoops
   const allEdges = createAllEdges(indices);
   const remainingVerticesMap = createRemainingVerticesMap(indices);
   const edgeMap = createEdgeMap(allEdges);
@@ -51,21 +51,21 @@ export function createAllEdgeLoops(indices) {
       edge.checked = true;
       vertices.unshift(v0);
     }
-    const edgeLoop = new EdgeLoop(vertices, !opened);
-    edgeLoops.push(edgeLoop);
+    const el = new EdgeLoop(vertices, !opened);
+    els.push(el);
   }
-  return edgeLoops;
+  return els;
 }
 
 /**
  * Create the edge map.
  *
- * @param {Array<EdgeLoop>} edgeLoops - Edge loops of the geometry.
+ * @param {Array<EdgeLoop>} els - Edge loops of the geometry.
  * @returns {{[k:string]:EdgeLoop}} The edge loop map. The key is a string of pairs v1, v2.
  */
-export function createEdgeLoopMap(edgeLoops) {
+export function createEdgeLoopMap(els) {
   const map = {};
-  edgeLoops.forEach((el) => {
+  els.forEach((el) => {
     for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
       const v1 = el.vertices[i];
       const v2 = el.vertices[i + 1];
