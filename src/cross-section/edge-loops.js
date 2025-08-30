@@ -33,12 +33,11 @@ export function createAllEdgeLoops(indices) {
       v2 = v3;
       edge = edgeMap[`${v1},${v2}`];
       edge.checked = true;
-      vertices.push(v3);
       if (v3 === firstV1) {
         opened = false;
-        vertices.pop();
         break;
       }
+      vertices.push(v3);
     }
     v1 = firstV1;
     v2 = firstV2;
