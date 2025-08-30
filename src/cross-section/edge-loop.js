@@ -1,3 +1,7 @@
+import * as THREE from "three";
+
+import { getPoint } from "./vertices.js";
+
 /**
  * An edge loop of geometry.
  *
@@ -55,6 +59,16 @@ export class EdgeLoop {
       pairs.push(`${v1},${v2}`, `${v2},${v1}`);
     }
     return pairs;
+  }
+
+  /**
+   * Get the points.
+   *
+   * @param {THREE.BufferAttribute} vertices - The valid results of geometry.getAttribute("position").
+   * @returns {Array<THREE.Vector3>} The points.
+   */
+  getPoints(vertices) {
+    return this.vertices.map((v) => getPoint(vertices, v));
   }
 
   /**

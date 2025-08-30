@@ -97,3 +97,18 @@ export function getAB(map, v1, v2) {
 
   return { a, b };
 }
+
+/**
+ * Get the point.
+ *
+ * @param {THREE.BufferAttribute} vertices - The valid results of geometry.getAttribute("position").
+ * @param {number} index - The index of the vertex.
+ * @returns {THREE.Vector3} The point.
+ */
+export function getPoint(vertices, index) {
+  return new THREE.Vector3(
+    vertices.array[3 * index],
+    vertices.array[3 * index + 1],
+    vertices.array[3 * index + 2]
+  );
+}
