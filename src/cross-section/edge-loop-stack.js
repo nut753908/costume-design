@@ -18,7 +18,7 @@ export class EdgeLoopStack {
    * Constructs a new edge loop stack.
    *
    * @param {Array<EdgeLoop>} edgeLoops - The edge loops within an edge loop stack.
-   * @param {boolean} closed - Whether the edge loop is closed.
+   * @param {boolean} closed - Whether the edge loop stack is closed.
    */
   constructor(edgeLoops = [], closed = false) {
     /**
@@ -29,7 +29,7 @@ export class EdgeLoopStack {
     this.edgeLoops = edgeLoops;
 
     /**
-     * Whether the edge loop is closed.
+     * Whether the edge loop stack is closed.
      *
      * @type {boolean}
      */
