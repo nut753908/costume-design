@@ -4,22 +4,11 @@ import { EdgeLoop } from "./edge-loop.js";
  * An edge loop stack of geometry.
  *
  * ```js
- * import { Edge } from "./src/cross-section/edge.js";
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
  * import { EdgeLoopStack } from "./src/cross-section/edge-loop-stack.js";
- * const edges1 = [
- *   new Edge( 0, 1, 0 ),
- *   new Edge( 1, 2, 1 ),
- *   new Edge( 0, 2, 2 )
- * ];
- * const edges2 = [
- *   new Edge( 3, 4, 0 ),
- *   new Edge( 4, 5, 1 ),
- *   new Edge( 3, 5, 2 )
- * ]
  * const edgeLoops = [
- *   new EdgeLoop( edges1, true, 0 ),
- *   new EdgeLoop( edges2, true, 1 )
+ *   new EdgeLoop( [ 0, 1, 2 ], true, 0 ),
+ *   new EdgeLoop( [ 3, 4, 5 ], true, 1 )
  * ];
  * const edgeLoopStack = new EdgeLoopStack( edgeLoops, false );
  * ```

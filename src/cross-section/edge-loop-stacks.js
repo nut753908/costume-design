@@ -2,8 +2,11 @@ import * as THREE from "three";
 
 import { EdgeLoopStack } from "./edge-loop-stack.js";
 import { createRemainingVerticesMap, getAB, getDE } from "./vertices.js";
-import { createEdgeMap } from "./edges.js";
-import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
+import {
+  createAllEdgeLoops,
+  createEdgeLoopMap,
+  createEdgeLoopVertexPairs,
+} from "./edge-loops.js";
 
 // TODO: handle mirror cases
 // TODO: handle opened cases (start and end in the same position)
@@ -26,16 +29,16 @@ export function createAllEdgeLoopStacks(indices) {
     edgeLoop.index = 0;
     edgeLoops.push(edgeLoop);
     const firstEdgeLoop = edgeLoop;
-    const firstEdgeMap = createEdgeMap(firstEdgeLoop.edges);
+    const firstVertexPairs = createEdgeLoopVertexPairs(firstEdgeLoop);
     let index = 0;
     let opened = true;
     while (true) {
-      const v1 = edgeLoop.edges[0].v1;
-      const v2 = edgeLoop.edges[0].v2;
+      const v1 = edgeLoop.vertices[0];
+      const v2 = edgeLoop.vertices[1];
       const { a, b } = getAB(remainingVerticesMap, v1, v2);
       edgeLoop = edgeLoopMap[`${a},${b}`];
       if (!edgeLoop.closed) break;
-      if (firstEdgeMap[`${a},${b}`]) {
+      if (firstVertexPairs.includes(`${a},${b}`)) {
         opened = false;
         break;
       }
@@ -45,8 +48,8 @@ export function createAllEdgeLoopStacks(indices) {
     edgeLoop = firstEdgeLoop;
     index = 0;
     while (opened) {
-      const v1 = edgeLoop.edges[0].v1;
-      const v2 = edgeLoop.edges[0].v2;
+      const v1 = edgeLoop.vertices[0];
+      const v2 = edgeLoop.vertices[1];
       const { d, e } = getDE(remainingVerticesMap, v1, v2);
       edgeLoop = edgeLoopMap[`${d},${e}`];
       if (!edgeLoop.closed) break;

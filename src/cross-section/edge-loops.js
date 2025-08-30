@@ -16,11 +16,11 @@ export function createAllEdgeLoops(indices) {
   const remainingVerticesMap = createRemainingVerticesMap(indices);
   const edgeMap = createEdgeMap(allEdges);
   for (let i = 0, l = allEdges.length; i < l; i++) {
-    const edges = [];
+    const vertices = [];
     let edge = allEdges[i];
     if (edge.index !== Number.MAX_SAFE_INTEGER) continue;
     edge.index = 0;
-    edges.push(edge);
+    vertices.push(edge.v1, edge.v2);
     const firstV1 = edge.v1;
     const firstV2 = edge.v2;
     let v1 = firstV1;
@@ -34,9 +34,10 @@ export function createAllEdgeLoops(indices) {
       v2 = v3;
       edge = edgeMap[`${v1},${v2}`];
       edge.index = ++index;
-      edges.push(edge);
+      vertices.push(v3);
       if (v3 === firstV1) {
         opened = false;
+        vertices.pop();
         break;
       }
     }
@@ -50,12 +51,9 @@ export function createAllEdgeLoops(indices) {
       v1 = v0;
       edge = edgeMap[`${v1},${v2}`];
       edge.index = --index;
-      edges.push(edge);
+      vertices.unshift(v0);
     }
-    // edges.sort((a, b) =>
-    //   a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-    // );
-    const edgeLoop = new EdgeLoop(edges, !opened);
+    const edgeLoop = new EdgeLoop(vertices, !opened);
     edgeLoops.push(edgeLoop);
   }
   return edgeLoops;
@@ -70,10 +68,39 @@ export function createAllEdgeLoops(indices) {
 export function createEdgeLoopMap(edgeLoops) {
   const map = {};
   edgeLoops.forEach((el) => {
-    el.edges.forEach((e) => {
-      map[`${e.v1},${e.v2}`] = el;
-      map[`${e.v2},${e.v1}`] = el;
-    });
+    for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
+      const v1 = el.vertices[i];
+      const v2 = el.vertices[i + 1];
+      map[`${v1},${v2}`] = el;
+      map[`${v2},${v1}`] = el;
+    }
+    if (el.closed) {
+      const v1 = el.vertices[el.vertices.length - 1];
+      const v2 = el.vertices[0];
+      map[`${v1},${v2}`] = el;
+      map[`${v2},${v1}`] = el;
+    }
   });
   return map;
+}
+
+/**
+ * Create edge loop vertex pairs.
+ *
+ * @param {EdgeLoop} el - An edge loop of the geometry.
+ * @returns {Array<string>} Edge loop vertex pairs.
+ */
+export function createEdgeLoopVertexPairs(el) {
+  const pairs = [];
+  for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
+    const v1 = el.vertices[i];
+    const v2 = el.vertices[i + 1];
+    pairs.push(`${v1},${v2}`, `${v2},${v1}`);
+  }
+  if (el.closed) {
+    const v1 = el.vertices[el.vertices.length - 1];
+    const v2 = el.vertices[0];
+    pairs.push(`${v1},${v2}`, `${v2},${v1}`);
+  }
+  return pairs;
 }
