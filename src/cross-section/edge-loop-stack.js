@@ -2,13 +2,8 @@
  * An edge loop stack of geometry.
  *
  * ```js
- * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
  * import { EdgeLoopStack } from "./src/cross-section/edge-loop-stack.js";
- * const edgeLoops = [
- *   new EdgeLoop( [ 0, 1, 2 ], true, true ),
- *   new EdgeLoop( [ 3, 4, 5 ], true, true )
- * ];
- * const edgeLoopStack = new EdgeLoopStack( edgeLoops, false );
+ * const edgeLoopStack = new EdgeLoopStack( [ [ 0, 1, 2 ], [ 3, 4, 5 ] ], false );
  * ```
  */
 export class EdgeLoopStack {
