@@ -59,14 +59,14 @@ export function findNextVertex(map, v1, v2) {
 }
 
 /**
- * Gets the vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
+ * Gets the a,b vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
  *
  * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
  * @param {number} v1 - The index of the first vertex of the edge.
  * @param {number} v2 - The index of the second vertex of the edge.
- * @returns {{a:number,b:number,d:number,e:number}} The index of each vertex.
+ * @returns {{a:number,b:number}} The index of each vertex.
  */
-export function getVertices(map, v1, v2) {
+export function getAB(map, v1, v2) {
   const vs0 = map[`${v1},${v2}`];
   if (vs0.length !== 2) return {};
 
@@ -75,10 +75,25 @@ export function getVertices(map, v1, v2) {
   if (vs1.length !== 2) return {};
   const b = vs1[vs1[0] === v1 ? 1 : 0];
 
+  return { a, b };
+}
+
+/**
+ * Gets the d,e vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
+ *
+ * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {number} v1 - The index of the first vertex of the edge.
+ * @param {number} v2 - The index of the second vertex of the edge.
+ * @returns {{d:number,e:number}} The index of each vertex.
+ */
+export function getDE(map, v1, v2) {
+  const vs0 = map[`${v1},${v2}`];
+  if (vs0.length !== 2) return {};
+
   const d = vs0[1];
   const vs3 = map[`${d},${v2}`];
   if (vs3.length !== 2) return {};
   const e = vs3[vs3[0] === v1 ? 1 : 0];
 
-  return { a, b, d, e };
+  return { d, e };
 }
