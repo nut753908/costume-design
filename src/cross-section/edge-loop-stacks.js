@@ -2,11 +2,7 @@ import * as THREE from "three";
 
 import { EdgeLoopStack } from "./edge-loop-stack.js";
 import { createRemainingVerticesMap, getDE, getAB } from "./vertices.js";
-import {
-  createAllEdgeLoops,
-  createEdgeLoopMap,
-  createEdgeLoopVertexPairs,
-} from "./edge-loops.js";
+import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 
 // TODO: handle mirror cases
 // TODO: handle opened cases (start and end in the same position)
@@ -29,7 +25,7 @@ export function createAllEdgeLoopStacks(indices) {
     el.checked = true;
     vertices.push(el.vertices);
     const firstEl = el;
-    const firstVertexPairs = createEdgeLoopVertexPairs(firstEl);
+    const firstVertexPairs = firstEl.createVertexPairs();
     let opened = true;
     while (true) {
       const v1 = el.vertices[0];

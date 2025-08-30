@@ -38,6 +38,26 @@ export class EdgeLoop {
   }
 
   /**
+   * Create vertex pairs.
+   *
+   * @returns {Array<string>} Vertex pairs.
+   */
+  createVertexPairs() {
+    const pairs = [];
+    for (let i = 0, l = this.vertices.length - 1; i < l; i++) {
+      const v1 = this.vertices[i];
+      const v2 = this.vertices[i + 1];
+      pairs.push(`${v1},${v2}`, `${v2},${v1}`);
+    }
+    if (this.closed) {
+      const v1 = this.vertices[this.vertices.length - 1];
+      const v2 = this.vertices[0];
+      pairs.push(`${v1},${v2}`, `${v2},${v1}`);
+    }
+    return pairs;
+  }
+
+  /**
    * Returns a new edge loop with copied values from this instance.
    *
    * @return {EdgeLoop} A clone of this instance.

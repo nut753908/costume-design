@@ -80,24 +80,3 @@ export function createEdgeLoopMap(els) {
   });
   return map;
 }
-
-/**
- * Create edge loop vertex pairs.
- *
- * @param {EdgeLoop} el - An edge loop of the geometry.
- * @returns {Array<string>} Edge loop vertex pairs.
- */
-export function createEdgeLoopVertexPairs(el) {
-  const pairs = [];
-  for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
-    const v1 = el.vertices[i];
-    const v2 = el.vertices[i + 1];
-    pairs.push(`${v1},${v2}`, `${v2},${v1}`);
-  }
-  if (el.closed) {
-    const v1 = el.vertices[el.vertices.length - 1];
-    const v2 = el.vertices[0];
-    pairs.push(`${v1},${v2}`, `${v2},${v1}`);
-  }
-  return pairs;
-}
