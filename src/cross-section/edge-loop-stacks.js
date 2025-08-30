@@ -54,11 +54,8 @@ export function createAllEdgeLoopStacks(indices) {
       edgeLoop = edgeLoopMap[`${d},${e}`];
       if (!edgeLoop.closed) break;
       edgeLoop.index = --index;
-      edgeLoops.push(edgeLoop);
+      edgeLoops.unshift(edgeLoop);
     }
-    // edgeLoops.sort((a, b) =>
-    //   a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-    // );
     const edgeLoopStack = new EdgeLoopStack(edgeLoops, !opened);
     edgeLoopStacks.push(edgeLoopStack);
   }
