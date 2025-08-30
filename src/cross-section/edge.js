@@ -1,3 +1,7 @@
+import * as THREE from "three";
+
+import { getPoint } from "./vertices.js";
+
 /**
  * An edge of geometry.
  *
@@ -35,6 +39,16 @@ export class Edge {
      * @type {boolean}
      */
     this.checked = checked;
+  }
+
+  /**
+   * Get the points.
+   *
+   * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
+   * @returns {Array<THREE.Vector3>} The points.
+   */
+  getPoints(vertices) {
+    return [getPoint(vertices, this.v1), getPoint(vertices, this.v2)];
   }
 
   /**

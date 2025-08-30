@@ -9,7 +9,7 @@ import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 /**
  * Create all non-overlapping edge loop stacks.
  *
- * @param {THREE.BufferAttribute} indices - The indices of the geometry.
+ * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
  * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
  */
 export function createAllEdgeLoopStacks(indices) {
@@ -47,6 +47,10 @@ export function createAllEdgeLoopStacks(indices) {
       const { a, b } = getAB(remainingVerticesMap, v1, v2);
       el = elMap[`${a},${b}`];
       if (!el.closed) break;
+      if (firstVertexPairs.includes(`${a},${b}`)) {
+        opened = false;
+        break;
+      }
       el.checked = true;
       vertices.unshift(el.vertices);
     }
