@@ -18,14 +18,13 @@ export function createAllEdgeLoops(indices) {
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const vertices = [];
     let edge = allEdges[i];
-    if (edge.index !== Number.MAX_SAFE_INTEGER) continue;
-    edge.index = 0;
+    if (edge.checked) continue;
+    edge.checked = true;
     vertices.push(edge.v1, edge.v2);
     const firstV1 = edge.v1;
     const firstV2 = edge.v2;
     let v1 = firstV1;
     let v2 = firstV2;
-    let index = 0;
     let opened = true;
     while (true) {
       const v3 = findNextVertex(remainingVerticesMap, v1, v2);
@@ -33,7 +32,7 @@ export function createAllEdgeLoops(indices) {
       v1 = v2;
       v2 = v3;
       edge = edgeMap[`${v1},${v2}`];
-      edge.index = ++index;
+      edge.checked = true;
       vertices.push(v3);
       if (v3 === firstV1) {
         opened = false;
@@ -43,14 +42,13 @@ export function createAllEdgeLoops(indices) {
     }
     v1 = firstV1;
     v2 = firstV2;
-    index = 0;
     while (opened) {
       const v0 = findNextVertex(remainingVerticesMap, v2, v1);
       if (v0 === null) break;
       v2 = v1;
       v1 = v0;
       edge = edgeMap[`${v1},${v2}`];
-      edge.index = --index;
+      edge.checked = true;
       vertices.unshift(v0);
     }
     const edgeLoop = new EdgeLoop(vertices, !opened);
