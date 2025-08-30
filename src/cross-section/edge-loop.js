@@ -64,7 +64,7 @@ export class EdgeLoop {
   /**
    * Get the points.
    *
-   * @param {THREE.BufferAttribute} vertices - The valid results of geometry.getAttribute("position").
+   * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
    * @returns {Array<THREE.Vector3>} The points.
    */
   getPoints(vertices) {

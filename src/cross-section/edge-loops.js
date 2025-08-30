@@ -7,7 +7,7 @@ import { createAllEdges, createEdgeMap } from "./edges.js";
 /**
  * Create all non-overlapping edge loops.
  *
- * @param {THREE.BufferAttribute} indices - The valid results of geometry.getIndex().
+ * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
  * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
  */
 export function createAllEdgeLoops(indices) {

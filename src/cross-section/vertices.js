@@ -3,7 +3,7 @@ import * as THREE from "three";
 /**
  * Create the remaining vertices map.
  *
- * @param {THREE.BufferAttribute} indices - The valid results of geometry.getIndex().
+ * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
  * @returns {{[k:string]:Array<number>}} The remaining vertices map. The key is a string of two vertices.
  */
 export function createRemainingVerticesMap(indices) {
@@ -101,7 +101,7 @@ export function getAB(map, v1, v2) {
 /**
  * Get the point.
  *
- * @param {THREE.BufferAttribute} vertices - The valid results of geometry.getAttribute("position").
+ * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
  * @param {number} index - The index of the vertex.
  * @returns {THREE.Vector3} The point.
  */

@@ -5,7 +5,7 @@ import { Edge } from "./edge.js";
 /**
  * Create all non-overlapping edges.
  *
- * @param {THREE.BufferAttribute} indices - The valid results of geometry.getIndex().
+ * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
  * @returns {Array<Edge>} All non-overlapping edges.
  */
 export function createAllEdges(indices) {
