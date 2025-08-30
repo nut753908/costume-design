@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createRemainingVerticesMap, getAB, getDE } from "./vertices.js";
+import { createRemainingVerticesMap, getDE, getAB } from "./vertices.js";
 import {
   createAllEdgeLoops,
   createEdgeLoopMap,
@@ -34,10 +34,10 @@ export function createAllEdgeLoopStacks(indices) {
     while (true) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const { a, b } = getAB(remainingVerticesMap, v1, v2);
-      el = elMap[`${a},${b}`];
+      const { d, e } = getDE(remainingVerticesMap, v1, v2);
+      el = elMap[`${d},${e}`];
       if (!el.closed) break;
-      if (firstVertexPairs.includes(`${a},${b}`)) {
+      if (firstVertexPairs.includes(`${d},${e}`)) {
         opened = false;
         break;
       }
@@ -48,8 +48,8 @@ export function createAllEdgeLoopStacks(indices) {
     while (opened) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const { d, e } = getDE(remainingVerticesMap, v1, v2);
-      el = elMap[`${d},${e}`];
+      const { a, b } = getAB(remainingVerticesMap, v1, v2);
+      el = elMap[`${a},${b}`];
       if (!el.closed) break;
       el.checked = true;
       vertices.unshift(el.vertices);
