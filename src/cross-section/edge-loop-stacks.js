@@ -1,9 +1,8 @@
-// TODO: test constructor(), clone(), copy(), toJSON(), fromJSON()
-
 import * as THREE from "three";
 
 import { EdgeLoopStack } from "./edge-loop-stack.js";
 import { EdgeLoop } from "./edge-loop.js";
+import { Edge } from "./edge.js";
 
 /**
  * Edge loop stacks of geometry.
@@ -43,11 +42,9 @@ export class EdgeLoopStacks {
    */
   createAllEdgeLoopStacks(indices) {
     const edgeLoopStacks = [];
-    // TODO: organize common variables across multiple functions
     const allEdgeLoops = this.createAllEdgeLoops(indices);
-    const allEdges = this.createAllEdges(indices);
+    const edgeLoopMap = this.createEdgeLoopMap(allEdgeLoops);
     const remainingVerticesMap = this.createRemainingVerticesMap(indices);
-    const edgeMap = this.createEdgeMap(allEdges);
     for (let i = 0, l = allEdgeLoops.length; i < l; i++) {
       const edgeLoops = [];
       let edgeLoop = allEdgeLoops[i];
@@ -56,16 +53,16 @@ export class EdgeLoopStacks {
       edgeLoop.index = 0;
       edgeLoops.push(edgeLoop);
       const firstEdgeLoop = edgeLoop;
+      const firstEdgeMap = this.createEdgeMap(firstEdgeLoop.edges);
       let index = 0;
       let opened = true;
       while (true) {
         const v1 = edgeLoop.edges[0].v1;
         const v2 = edgeLoop.edges[0].v2;
-        const edge = this.findNextEdge(remainingVerticesMap, edgeMap, v1, v2); // TODO: implementation
-        edgeLoop = this.findEdgeLoop(allEdgeLoops, edge); // TODO: implementation
+        const { a, b } = this.getVertices(remainingVerticesMap, v1, v2);
+        edgeLoop = edgeLoopMap[`${a},${b}`];
         if (!edgeLoop.closed) break;
-        // TODO: implementation
-        if (this.hasEdgeInEdgeLoop(firstEdgeLoop, edge)) {
+        if (firstEdgeMap[`${a},${b}`]) {
           opened = false;
           break;
         }
@@ -77,8 +74,8 @@ export class EdgeLoopStacks {
       while (opened) {
         const v1 = edgeLoop.edges[0].v1;
         const v2 = edgeLoop.edges[0].v2;
-        const edge = this.findNextEdge(remainingVerticesMap, edgeMap, v2, v1);
-        edgeLoop = this.findEdgeLoop(allEdgeLoops, edge);
+        const { d, e } = this.getVertices(remainingVerticesMap, v1, v2);
+        edgeLoop = edgeLoopMap[`${d},${e}`];
         if (!edgeLoop.closed) break;
         edgeLoop.index = --index;
         edgeLoops.push(edgeLoop);
@@ -147,6 +144,48 @@ export class EdgeLoopStacks {
       edgeLoops.push(edgeLoop);
     }
     return edgeLoops;
+  }
+
+  /**
+   * Gets the vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
+   *
+   * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
+   * @param {number} v1 - The index of the first vertex of the edge.
+   * @param {number} v2 - The index of the second vertex of the edge.
+   * @returns {{a:number,b:number,d:number,e:number}} The index of each vertex.
+   */
+  getVertices(map, v1, v2) {
+    const vs0 = map[`${v1},${v2}`];
+    if (vs0.length !== 2) return {};
+
+    const a = vs0[0];
+    const vs1 = map[`${a},${v2}`];
+    if (vs1.length !== 2) return {};
+    const b = vs1[vs1[0] === v1 ? 1 : 0];
+
+    const d = vs0[1];
+    const vs3 = map[`${d},${v2}`];
+    if (vs3.length !== 2) return {};
+    const e = vs3[vs3[0] === v1 ? 1 : 0];
+
+    return { a, b, d, e };
+  }
+
+  /**
+   * Create the edge map.
+   *
+   * @param {Array<EdgeLoop>} edgeLoops - Edge loops of the geometry.
+   * @returns {{[k:string]:EdgeLoop}} The edge loop map. The key is a string of pairs v1, v2.
+   */
+  createEdgeLoopMap(edgeLoops) {
+    const map = {};
+    edgeLoops.forEach((el) => {
+      el.edges.forEach((e) => {
+        map[`${e.v1},${e.v2}`] = el;
+        map[`${e.v2},${e.v1}`] = el;
+      });
+    });
+    return map;
   }
 
   /**
