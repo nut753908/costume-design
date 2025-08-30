@@ -164,10 +164,8 @@ export class Curve extends THREE.CurvePath {
       updateCallback();
     }
     function updateEnabled() {
-      c.iIndexList.indexOf(obj.iIndex) !== -1 ? cICP.enable() : cICP.disable();
-      c.safeRIndexList.indexOf(obj.rIndex) !== -1
-        ? cRCP.enable()
-        : cRCP.disable();
+      c.iIndexList.includes(obj.iIndex) ? cICP.enable() : cICP.disable();
+      c.safeRIndexList.includes(obj.rIndex) ? cRCP.enable() : cRCP.disable();
     }
     function updateOptions() {
       cII = cII.options(c.iIndexList).onChange(updateEnabled);
