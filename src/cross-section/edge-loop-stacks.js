@@ -47,6 +47,10 @@ export function createAllEdgeLoopStacks(indices) {
       const { a, b } = getAB(remainingVerticesMap, v1, v2);
       el = elMap[`${a},${b}`];
       if (!el.closed) break;
+      if (firstVertexPairs.includes(`${a},${b}`)) {
+        opened = false;
+        break;
+      }
       el.checked = true;
       vertices.unshift(el.vertices);
     }

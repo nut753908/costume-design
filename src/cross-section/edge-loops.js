@@ -48,6 +48,10 @@ export function createAllEdgeLoops(indices) {
       v1 = v0;
       edge = edgeMap[`${v1},${v2}`];
       edge.checked = true;
+      if (v0 === firstV2) {
+        opened = false;
+        break;
+      }
       vertices.unshift(v0);
     }
     const el = new EdgeLoop(vertices, !opened);
