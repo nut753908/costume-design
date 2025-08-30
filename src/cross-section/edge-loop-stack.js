@@ -1,46 +1,28 @@
-import { EdgeLoop } from "./edge-loop.js";
-
 /**
  * An edge loop stack of geometry.
  *
  * ```js
- * import { Edge } from "./src/cross-section/edge.js";
- * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
  * import { EdgeLoopStack } from "./src/cross-section/edge-loop-stack.js";
- * const edges1 = [
- *   new Edge( 0, 1, 0 ),
- *   new Edge( 1, 2, 1 ),
- *   new Edge( 0, 2, 2 )
- * ];
- * const edges2 = [
- *   new Edge( 3, 4, 0 ),
- *   new Edge( 4, 5, 1 ),
- *   new Edge( 3, 5, 2 )
- * ]
- * const edgeLoops = [
- *   new EdgeLoop( edges1, true, 0 ),
- *   new EdgeLoop( edges2, true, 1 )
- * ];
- * const edgeLoopStack = new EdgeLoopStack( edgeLoops, false );
+ * const edgeLoopStack = new EdgeLoopStack( [ [ 0, 1, 2 ], [ 3, 4, 5 ] ], false );
  * ```
  */
 export class EdgeLoopStack {
   /**
    * Constructs a new edge loop stack.
    *
-   * @param {Array<EdgeLoop>} edgeLoops - The edge loops within an edge loop stack.
-   * @param {boolean} closed - Whether the edge loop is closed.
+   * @param {Array<Array<number>>} vertices - The vertices within an edge loop stack.
+   * @param {boolean} closed - Whether the edge loop stack is closed.
    */
-  constructor(edgeLoops = [], closed = false) {
+  constructor(vertices = [], closed = false) {
     /**
-     * The edge loops within an edge loop.
+     * The vertices within an edge loop.
      *
-     * @type {Array<EdgeLoop>}
+     * @type {Array<Array<number>>}
      */
-    this.edgeLoops = edgeLoops;
+    this.vertices = vertices;
 
     /**
-     * Whether the edge loop is closed.
+     * Whether the edge loop stack is closed.
      *
      * @type {boolean}
      */
@@ -63,11 +45,7 @@ export class EdgeLoopStack {
    * @returns {EdgeLoopStack} A reference to this edge loop stack.
    */
   copy(source) {
-    this.edgeLoops = [];
-    for (let i = 0, l = source.edgeLoops.length; i < l; i++) {
-      const edgeLoop = source.edgeLoops[i];
-      this.edgeLoops.push(edgeLoop.clone());
-    }
+    this.vertices = source.vertices.map((vs) => Array.from(vs));
     this.closed = source.closed;
 
     return this;
@@ -81,11 +59,7 @@ export class EdgeLoopStack {
   toJSON() {
     const data = {};
 
-    data.edgeLoops = [];
-    for (let i = 0, l = this.edgeLoops.length; i < l; i++) {
-      const edgeLoop = this.edgeLoops[i];
-      data.edgeLoops.push(edgeLoop.toJSON());
-    }
+    data.vertices = this.vertices.map((vs) => Array.from(vs));
     data.closed = this.closed;
 
     return data;
@@ -98,11 +72,7 @@ export class EdgeLoopStack {
    * @return {EdgeLoopStack} A reference to this edge loop stack.
    */
   fromJSON(json) {
-    this.edgeLoops = [];
-    for (let i = 0, l = json.edgeLoops.length; i < l; i++) {
-      const edgeLoop = json.edgeLoops[i];
-      this.edgeLoops.push(new EdgeLoop().fromJSON(edgeLoop));
-    }
+    this.vertices = json.vertices.map((vs) => Array.from(vs));
     this.closed = json.closed;
 
     return this;

@@ -1,8 +1,7 @@
 import * as THREE from "three";
 
 import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createRemainingVerticesMap, getAB, getDE } from "./vertices.js";
-import { createEdgeMap } from "./edges.js";
+import { createRemainingVerticesMap, getDE, getAB } from "./vertices.js";
 import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 
 // TODO: handle mirror cases
@@ -14,50 +13,45 @@ import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
  * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
  */
 export function createAllEdgeLoopStacks(indices) {
-  const edgeLoopStacks = [];
-  const allEdgeLoops = createAllEdgeLoops(indices);
-  const edgeLoopMap = createEdgeLoopMap(allEdgeLoops);
+  const stacks = []; // edgeLoopStacks
+  const allEls = createAllEdgeLoops(indices);
+  const elMap = createEdgeLoopMap(allEls);
   const remainingVerticesMap = createRemainingVerticesMap(indices);
-  for (let i = 0, l = allEdgeLoops.length; i < l; i++) {
-    const edgeLoops = [];
-    let edgeLoop = allEdgeLoops[i];
-    if (!edgeLoop.closed) continue;
-    if (edgeLoop.index !== Number.MAX_SAFE_INTEGER) continue;
-    edgeLoop.index = 0;
-    edgeLoops.push(edgeLoop);
-    const firstEdgeLoop = edgeLoop;
-    const firstEdgeMap = createEdgeMap(firstEdgeLoop.edges);
-    let index = 0;
+  for (let i = 0, l = allEls.length; i < l; i++) {
+    const vertices = [];
+    let el = allEls[i]; // edgeLoop
+    if (!el.closed) continue;
+    if (el.checked) continue;
+    el.checked = true;
+    vertices.push(el.vertices);
+    const firstEl = el;
+    const firstVertexPairs = firstEl.createVertexPairs();
     let opened = true;
     while (true) {
-      const v1 = edgeLoop.edges[0].v1;
-      const v2 = edgeLoop.edges[0].v2;
-      const { a, b } = getAB(remainingVerticesMap, v1, v2);
-      edgeLoop = edgeLoopMap[`${a},${b}`];
-      if (!edgeLoop.closed) break;
-      if (firstEdgeMap[`${a},${b}`]) {
+      const v1 = el.vertices[0];
+      const v2 = el.vertices[1];
+      const { d, e } = getDE(remainingVerticesMap, v1, v2);
+      el = elMap[`${d},${e}`];
+      if (!el.closed) break;
+      if (firstVertexPairs.includes(`${d},${e}`)) {
         opened = false;
         break;
       }
-      edgeLoop.index = ++index;
-      edgeLoops.push(edgeLoop);
+      el.checked = true;
+      vertices.push(el.vertices);
     }
-    edgeLoop = firstEdgeLoop;
-    index = 0;
+    el = firstEl;
     while (opened) {
-      const v1 = edgeLoop.edges[0].v1;
-      const v2 = edgeLoop.edges[0].v2;
-      const { d, e } = getDE(remainingVerticesMap, v1, v2);
-      edgeLoop = edgeLoopMap[`${d},${e}`];
-      if (!edgeLoop.closed) break;
-      edgeLoop.index = --index;
-      edgeLoops.push(edgeLoop);
+      const v1 = el.vertices[0];
+      const v2 = el.vertices[1];
+      const { a, b } = getAB(remainingVerticesMap, v1, v2);
+      el = elMap[`${a},${b}`];
+      if (!el.closed) break;
+      el.checked = true;
+      vertices.unshift(el.vertices);
     }
-    // edgeLoops.sort((a, b) =>
-    //   a.index < b.index ? -1 : a.index > b.index ? 1 : 0
-    // );
-    const edgeLoopStack = new EdgeLoopStack(edgeLoops, !opened);
-    edgeLoopStacks.push(edgeLoopStack);
+    const stack = new EdgeLoopStack(vertices, !opened);
+    stacks.push(stack);
   }
-  return edgeLoopStacks;
+  return stacks;
 }
