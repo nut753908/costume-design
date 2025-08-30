@@ -22,12 +22,12 @@ export function createAllEdgeLoopStacks(indices) {
   const elMap = createEdgeLoopMap(allEls);
   const remainingVerticesMap = createRemainingVerticesMap(indices);
   for (let i = 0, l = allEls.length; i < l; i++) {
-    const els = []; // edgeLoops
+    const vertices = [];
     let el = allEls[i]; // edgeLoop
     if (!el.closed) continue;
     if (el.checked) continue;
     el.checked = true;
-    els.push(el);
+    vertices.push(el.vertices);
     const firstEl = el;
     const firstVertexPairs = createEdgeLoopVertexPairs(firstEl);
     let opened = true;
@@ -42,7 +42,7 @@ export function createAllEdgeLoopStacks(indices) {
         break;
       }
       el.checked = true;
-      els.push(el);
+      vertices.push(el.vertices);
     }
     el = firstEl;
     while (opened) {
@@ -52,9 +52,9 @@ export function createAllEdgeLoopStacks(indices) {
       el = elMap[`${d},${e}`];
       if (!el.closed) break;
       el.checked = true;
-      els.unshift(el);
+      vertices.unshift(el.vertices);
     }
-    const stack = new EdgeLoopStack(els, !opened);
+    const stack = new EdgeLoopStack(vertices, !opened);
     stacks.push(stack);
   }
   return stacks;
