@@ -453,6 +453,18 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     function generateIndices() {
       for (let i = 1; i <= axisSegments; i++) {
         for (let j = 1; j <= crossSegments; j++) {
+          // start the debug code
+          if (j === crossSegments) {
+            const a = (crossSegments + 1) * (i - 1) + (j - 1);
+            const b = (crossSegments + 1) * i + (j - 1);
+            const c = (crossSegments + 1) * i;
+            const d = (crossSegments + 1) * (i - 1);
+
+            indices.push(a, b, d);
+            indices.push(b, c, d);
+            continue;
+          }
+          // end the debug code
           const a = (crossSegments + 1) * (i - 1) + (j - 1);
           const b = (crossSegments + 1) * i + (j - 1);
           const c = (crossSegments + 1) * i + j;

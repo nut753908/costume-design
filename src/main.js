@@ -15,7 +15,7 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
-import { EdgeLoops } from "./cross-section/edge-loops.js";
+import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeGroup } from "./main/dispose.js";
@@ -56,9 +56,13 @@ function init() {
   c.setGUI(gui);
   scene.add(group);
 
-  const geometry = new THREE.CylinderGeometry(5, 5, 20, 32, 8, true);
-  const el = new EdgeLoops(geometry);
-  console.log(el.toJSON());
+  // const geometry = new THREE.CylinderGeometry(5, 5, 20, 32, 8, true);
+  const geometry = group.children[0].children[1].geometry;
+  const indices = geometry.getIndex();
+  if (indices) {
+    const edgeLoopStacks = createAllEdgeLoopStacks(indices);
+    console.log(edgeLoopStacks);
+  }
 
   save();
   gui.onOpenClose(save);

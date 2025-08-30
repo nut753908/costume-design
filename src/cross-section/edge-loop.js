@@ -7,11 +7,11 @@ import { Edge } from "./edge.js";
  * import { Edge } from "./src/cross-section/edge.js";
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
  * const edges = [
- *   new Edge( 0, 1, true ),
- *   new Edge( 1, 2, true ),
- *   new Edge( 0, 2, true )
+ *   new Edge( 0, 1, 0 ),
+ *   new Edge( 1, 2, 1 ),
+ *   new Edge( 0, 2, 2 )
  * ];
- * const el = new EdgeLoop( edges, false );
+ * const edgeLoop = new EdgeLoop( edges, true );
  * ```
  */
 export class EdgeLoop {
@@ -19,9 +19,10 @@ export class EdgeLoop {
    * Constructs a new edge loop.
    *
    * @param {Array<Edge>} edges - The edges within an edge loop.
-   * @param {boolean} checked - Whether the edge loop stack calculation is checked.
+   * @param {boolean} closed - Whether the edge loop is closed.
+   * @param {number} index - The index within the edge loop stack.
    */
-  constructor(edges = [], checked = false) {
+  constructor(edges = [], closed = false, index = Number.MAX_SAFE_INTEGER) {
     /**
      * The edges within an edge loop.
      *
@@ -30,11 +31,18 @@ export class EdgeLoop {
     this.edges = edges;
 
     /**
-     * Whether the edge loop calculation is checked.
+     * Whether the edge loop is closed.
      *
      * @type {boolean}
      */
-    this.checked = checked;
+    this.closed = closed;
+
+    /**
+     * The index within the edge loop stack.
+     *
+     * @type {number}
+     */
+    this.index = index;
   }
 
   /**
@@ -58,7 +66,8 @@ export class EdgeLoop {
       const edge = source.edges[i];
       this.edges.push(edge.clone());
     }
-    this.checked = source.checked;
+    this.closed = source.closed;
+    this.index = source.index;
 
     return this;
   }
@@ -76,7 +85,8 @@ export class EdgeLoop {
       const edge = this.edges[i];
       data.edges.push(edge.toJSON());
     }
-    data.checked = this.checked;
+    data.closed = this.closed;
+    data.index = this.index;
 
     return data;
   }
@@ -93,7 +103,8 @@ export class EdgeLoop {
       const edge = json.edges[i];
       this.edges.push(new Edge().fromJSON(edge));
     }
-    this.checked = json.checked;
+    this.closed = json.closed;
+    this.index = json.index;
 
     return this;
   }

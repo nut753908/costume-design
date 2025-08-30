@@ -3,7 +3,7 @@
  *
  * ```js
  * import { Edge } from "./src/cross-section/edge.js";
- * const e = new Edge( 0, 1, false );
+ * const edge = new Edge( 0, 1 );
  * ```
  */
 export class Edge {
@@ -12,9 +12,9 @@ export class Edge {
    *
    * @param {number} v1 - The index of the first vertex of the edge.
    * @param {number} v2 - The index of the second vertex of the edge.
-   * @param {boolean} checked - Whether the edge loop calculation is checked.
+   * @param {number} index - The index within the edge loop.
    */
-  constructor(v1 = -1, v2 = -1, checked = false) {
+  constructor(v1 = -1, v2 = -1, index = Number.MAX_SAFE_INTEGER) {
     /**
      * The index of the first vertex of the edge.
      *
@@ -30,11 +30,11 @@ export class Edge {
     this.v2 = v2;
 
     /**
-     * Whether the edge loop calculation is checked.
+     * The index within the edge loop.
      *
-     * @type {boolean}
+     * @type {number}
      */
-    this.checked = checked;
+    this.index = index;
   }
 
   /**
@@ -55,7 +55,7 @@ export class Edge {
   copy(source) {
     this.v1 = source.v1;
     this.v2 = source.v2;
-    this.checked = source.checked;
+    this.index = source.index;
 
     return this;
   }
@@ -70,7 +70,7 @@ export class Edge {
 
     data.v1 = this.v1;
     data.v2 = this.v2;
-    data.checked = this.checked;
+    data.index = this.index;
 
     return data;
   }
@@ -84,7 +84,7 @@ export class Edge {
   fromJSON(json) {
     this.v1 = json.v1;
     this.v2 = json.v2;
-    this.checked = json.checked;
+    this.index = json.index;
 
     return this;
   }
