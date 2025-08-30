@@ -25,12 +25,11 @@ export function createAllEdgeLoopStacks(indices) {
     const edgeLoops = [];
     let edgeLoop = allEdgeLoops[i];
     if (!edgeLoop.closed) continue;
-    if (edgeLoop.index !== Number.MAX_SAFE_INTEGER) continue;
-    edgeLoop.index = 0;
+    if (edgeLoop.checked) continue;
+    edgeLoop.checked = true;
     edgeLoops.push(edgeLoop);
     const firstEdgeLoop = edgeLoop;
     const firstVertexPairs = createEdgeLoopVertexPairs(firstEdgeLoop);
-    let index = 0;
     let opened = true;
     while (true) {
       const v1 = edgeLoop.vertices[0];
@@ -42,18 +41,17 @@ export function createAllEdgeLoopStacks(indices) {
         opened = false;
         break;
       }
-      edgeLoop.index = ++index;
+      edgeLoop.checked = true;
       edgeLoops.push(edgeLoop);
     }
     edgeLoop = firstEdgeLoop;
-    index = 0;
     while (opened) {
       const v1 = edgeLoop.vertices[0];
       const v2 = edgeLoop.vertices[1];
       const { d, e } = getDE(remainingVerticesMap, v1, v2);
       edgeLoop = edgeLoopMap[`${d},${e}`];
       if (!edgeLoop.closed) break;
-      edgeLoop.index = --index;
+      edgeLoop.checked = true;
       edgeLoops.unshift(edgeLoop);
     }
     const edgeLoopStack = new EdgeLoopStack(edgeLoops, !opened);

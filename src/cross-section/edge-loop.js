@@ -12,9 +12,9 @@ export class EdgeLoop {
    *
    * @param {Array<number>} vertices - The vertices within an edge loop.
    * @param {boolean} closed - Whether the edge loop is closed.
-   * @param {number} index - The index within the edge loop stack.
+   * @param {boolean} checked - Whether the edge loop is checked within the edge loop stack.
    */
-  constructor(vertices = [], closed = false, index = Number.MAX_SAFE_INTEGER) {
+  constructor(vertices = [], closed = false, checked = false) {
     /**
      * The vertices within an edge loop.
      *
@@ -30,11 +30,11 @@ export class EdgeLoop {
     this.closed = closed;
 
     /**
-     * The index within the edge loop stack.
+     * Whether the edge loop is checked within the edge loop stack.
      *
-     * @type {number}
+     * @type {boolean}
      */
-    this.index = index;
+    this.checked = checked;
   }
 
   /**
@@ -55,7 +55,7 @@ export class EdgeLoop {
   copy(source) {
     this.vertices = Array.from(source.vertices);
     this.closed = source.closed;
-    this.index = source.index;
+    this.checked = source.checked;
 
     return this;
   }
@@ -70,7 +70,7 @@ export class EdgeLoop {
 
     data.vertices = Array.from(this.vertices);
     data.closed = this.closed;
-    data.index = this.index;
+    data.checked = this.checked;
 
     return data;
   }
@@ -84,7 +84,7 @@ export class EdgeLoop {
   fromJSON(json) {
     this.vertices = Array.from(json.vertices);
     this.closed = json.closed;
-    this.index = json.index;
+    this.checked = json.checked;
 
     return this;
   }
