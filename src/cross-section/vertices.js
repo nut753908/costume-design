@@ -3,7 +3,7 @@ import * as THREE from "three";
 /**
  * Create the remaining vertices map.
  *
- * @param {THREE.BufferAttribute} indices - The indices of the geometry.
+ * @param {THREE.BufferAttribute} indices - The valid results of geometry.getIndex().
  * @returns {{[k:string]:Array<number>}} The remaining vertices map. The key is a string of two vertices.
  */
 export function createRemainingVerticesMap(indices) {
