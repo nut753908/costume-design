@@ -33,6 +33,5 @@ export async function loadBaseGeometry() {
     geometry.getAttribute("position"),
     indices
   );
-  geometry.nPolygonPositions = positions;
   return geometry;
 }
