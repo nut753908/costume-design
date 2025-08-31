@@ -44,11 +44,11 @@ export class Edge {
   /**
    * Get the points.
    *
-   * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
+   * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
    * @returns {Array<THREE.Vector3>} The points.
    */
-  getPoints(vertices) {
-    return [getPoint(vertices, this.v1), getPoint(vertices, this.v2)];
+  getPoints(positions) {
+    return [getPoint(positions, this.v1), getPoint(positions, this.v2)];
   }
 
   /**

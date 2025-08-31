@@ -152,14 +152,14 @@ export function getAs(map, v1, v2) {
 /**
  * Get the point.
  *
- * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
+ * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
  * @param {number} index - The index of the vertex.
  * @returns {THREE.Vector3} The point.
  */
-export function getPoint(vertices, index) {
+export function getPoint(positions, index) {
   return new THREE.Vector3(
-    vertices.array[3 * index],
-    vertices.array[3 * index + 1],
-    vertices.array[3 * index + 2]
+    positions.array[3 * index],
+    positions.array[3 * index + 1],
+    positions.array[3 * index + 2]
   );
 }
