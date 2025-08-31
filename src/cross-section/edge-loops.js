@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 import { EdgeLoop } from "./edge-loop.js";
 import { createRemainingVerticesMap, findNextVertex } from "./vertices.js";
 import { createAllEdges, createEdgeMap } from "./edges.js";
@@ -7,13 +5,13 @@ import { createAllEdges, createEdgeMap } from "./edges.js";
 /**
  * Create all non-overlapping edge loops.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
  * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
  */
-export function createAllEdgeLoops(indices) {
+export function createAllEdgeLoops(nPolygonIndices) {
   const els = []; // egdeLoops
-  const allEdges = createAllEdges(indices);
-  const remainingVerticesMap = createRemainingVerticesMap(indices);
+  const allEdges = createAllEdges(nPolygonIndices);
+  const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const edgeMap = createEdgeMap(allEdges);
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const vertices = [];

@@ -1,7 +1,5 @@
-import * as THREE from "three";
-
 import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createRemainingVerticesMap, getDE, getAB } from "./vertices.js";
+import { createRemainingVerticesMap, getCs, getAs } from "./vertices.js";
 import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 
 // TODO: handle mirror cases
@@ -9,14 +7,14 @@ import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 /**
  * Create all non-overlapping edge loop stacks.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
  * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
  */
-export function createAllEdgeLoopStacks(indices) {
+export function createAllEdgeLoopStacks(nPolygonIndices) {
   const stacks = []; // edgeLoopStacks
-  const allEls = createAllEdgeLoops(indices);
+  const allEls = createAllEdgeLoops(nPolygonIndices);
   const elMap = createEdgeLoopMap(allEls);
-  const remainingVerticesMap = createRemainingVerticesMap(indices);
+  const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   for (let i = 0, l = allEls.length; i < l; i++) {
     const vertices = [];
     let el = allEls[i]; // edgeLoop
@@ -30,10 +28,10 @@ export function createAllEdgeLoopStacks(indices) {
     while (true) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const { d, e } = getDE(remainingVerticesMap, v1, v2);
-      el = elMap[`${d},${e}`];
+      const cs = getCs(remainingVerticesMap, v1, v2);
+      el = elMap[`${cs[0]},${cs[1]}`];
       if (!el.closed) break;
-      if (firstVertexPairs.includes(`${d},${e}`)) {
+      if (firstVertexPairs.includes(`${cs[0]},${cs[1]}`)) {
         opened = false;
         break;
       }
@@ -44,10 +42,10 @@ export function createAllEdgeLoopStacks(indices) {
     while (opened) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const { a, b } = getAB(remainingVerticesMap, v1, v2);
-      el = elMap[`${a},${b}`];
+      const as = getAs(remainingVerticesMap, v1, v2);
+      el = elMap[`${as[0]},${as[1]}`];
       if (!el.closed) break;
-      if (firstVertexPairs.includes(`${a},${b}`)) {
+      if (firstVertexPairs.includes(`${as[0]},${as[1]}`)) {
         opened = false;
         break;
       }

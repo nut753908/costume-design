@@ -1,51 +1,54 @@
 import * as THREE from "three";
 
 /**
- * Create the remaining vertices map.
+ * Create the correct n polygon indices.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
- * @returns {{[k:string]:Array<number>}} The remaining vertices map. The key is a string of two vertices.
+ * @param {Array<Array<number>>} nPolygonPositions - The n polygon positions.
+ * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
+ * @returns {Array<Array<number>>} The correct n polygon indices.
  */
-export function createRemainingVerticesMap(indices) {
-  const map = {};
-  for (let i = 0, l = indices.count; i < l; i += 3) {
-    const a = indices.array[i];
-    const b = indices.array[i + 1];
-    const c = indices.array[i + 2];
-    Object.entries({
-      [`${a},${b}`]: c,
-      [`${b},${a}`]: c,
-      [`${b},${c}`]: a,
-      [`${c},${b}`]: a,
-      [`${c},${a}`]: b,
-      [`${a},${c}`]: b,
-    }).forEach(([k, v]) => {
-      k in map ? map[k].push(v) : (map[k] = [v]);
-    });
+export function correctNPolygonIndices(
+  nPolygonPositions,
+  positions,
+  nPolygonIndices
+) {
+  const EPS = Number.EPSILON;
+  const map = Array(nPolygonPositions.length);
+  for (let i = 0, l1 = nPolygonPositions.length; i < l1; i++) {
+    for (let j = 0, l2 = positions.count * 3; j < l2; j += 3) {
+      if (
+        Math.abs(positions.array[j] - nPolygonPositions[i][0]) < EPS &&
+        Math.abs(positions.array[j + 1] - nPolygonPositions[i][2]) < EPS &&
+        Math.abs(positions.array[j + 2] + nPolygonPositions[i][1]) < EPS
+      ) {
+        map[i] = j / 3; // note: one i may have many j's.
+        break;
+      }
+    }
   }
-  return map;
+  return nPolygonIndices
+    .map((list) => list.map((v) => map[v]))
+    .filter((list) => !list.includes(undefined));
 }
 
 /**
- * Create the remaining vertices map (version 2).
+ * Create the remaining vertices map.
  *
  * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {{[k:string]:Set<number>}} The remaining vertices map (version 2). The key is a string of two vertices.
+ * @returns {{[k:string]:Array<Array<number>>}} The remaining vertices map. The key is a string of two vertices.
  */
-export function createRemainingVerticesMap2(nPolygonIndices) {
+export function createRemainingVerticesMap(nPolygonIndices) {
   const map = {};
   nPolygonIndices.forEach((list) => {
-    list.forEach((a) => {
-      list
-        .filter((b) => a !== b)
-        .forEach((b) => {
-          const k = `${a},${b}`;
-          const listC = list.filter((c) => a !== c && b !== c);
-          k in map
-            ? (map[k] = new Set([...map[k].values(), ...listC]))
-            : (map[k] = new Set(listC));
-        });
-    });
+    for (let i = 0, l = list.length; i < l; i++) {
+      const a = list[i];
+      const b = i !== list.length - 1 ? list[i + 1] : list[0];
+      const cList = list.filter((c) => a !== c && b !== c);
+      [`${a},${b}`, `${b},${a}`].forEach((k) => {
+        k in map ? map[k].push(cList) : (map[k] = [cList]);
+      });
+    }
   });
   return map;
 }
@@ -53,73 +56,97 @@ export function createRemainingVerticesMap2(nPolygonIndices) {
 /**
  * Find the next vertex in the direction v1 -> v2.
  *
- * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {number} v1 - The index of the first vertex of the edge.
- * @param {number} v2 - The index of the second vertex of the edge.
+ * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {number} v1 - The first vertex of the edge.
+ * @param {number} v2 - The second vertex of the edge.
  * @returns {number} The next vertex.
  */
 export function findNextVertex(map, v1, v2) {
-  const vs0 = map[`${v1},${v2}`];
+  const vs0 = map[`${v1},${v2}`]; // [a,c]
   if (vs0.length !== 2) return null;
+  if (vs0[0].length !== 2) return null;
+  if (vs0[1].length !== 2) return null;
 
-  const a = vs0[0];
+  let a = null;
+  if (`${vs0[0][0]},${v2}` in map) a = vs0[0][0];
+  if (`${vs0[0][1]},${v2}` in map) a = vs0[0][1];
+  if (a === null) {
+    console.error("a === null");
+    return null;
+  }
   const vs1 = map[`${a},${v2}`];
   if (vs1.length !== 2) return null;
-  const b = vs1[vs1[0] === v1 ? 1 : 0];
-  const vs2 = map[`${b},${v2}`];
+  if (vs1[0].length !== 2) return null;
+  if (vs1[1].length !== 2) return null;
+  let b = null;
+  if (vs1[0].includes(v1)) {
+    if (`${vs1[1][0]},${v2}` in map) b = vs1[1][0];
+    if (`${vs1[1][1]},${v2}` in map) b = vs1[1][1];
+  } else if (vs1[1].includes(v1)) {
+    if (`${vs1[0][0]},${v2}` in map) b = vs1[0][0];
+    if (`${vs1[0][1]},${v2}` in map) b = vs1[0][1];
+  }
+  if (b === null) {
+    console.error("b === null");
+    return null;
+  }
+
+  let c = null;
+  if (`${vs0[1][0]},${v2}` in map) c = vs0[1][0];
+  if (`${vs0[1][1]},${v2}` in map) c = vs0[1][1];
+  if (c === null) {
+    console.error("c === null");
+    return null;
+  }
+  const vs2 = map[`${c},${v2}`];
   if (vs2.length !== 2) return null;
-  const c = vs2[vs2[0] === a ? 1 : 0];
+  if (vs2[0].length !== 2) return null;
+  if (vs2[1].length !== 2) return null;
+  let d = null;
+  if (vs2[0].includes(v1)) {
+    if (`${vs2[1][0]},${v2}` in map) d = vs2[1][0];
+    if (`${vs2[1][1]},${v2}` in map) d = vs2[1][1];
+  } else if (vs2[1].includes(v1)) {
+    if (`${vs2[0][0]},${v2}` in map) d = vs2[0][0];
+    if (`${vs2[0][1]},${v2}` in map) d = vs2[0][1];
+  }
+  if (d === null) {
+    console.error("d === null");
+    return null;
+  }
 
-  const d = vs0[1];
-  const vs3 = map[`${d},${v2}`];
-  if (vs3.length !== 2) return null;
-  const e = vs3[vs3[0] === v1 ? 1 : 0];
-  const vs4 = map[`${e},${v2}`];
-  if (vs4.length !== 2) return null;
-  const f = vs4[vs4[0] === d ? 1 : 0];
-
-  if (c !== f) return null;
-  return c;
+  if (b !== d) return null;
+  return b;
 }
 
 /**
- * Gets the d,e vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
+ * Gets the c vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
  *
- * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {number} v1 - The index of the first vertex of the edge.
- * @param {number} v2 - The index of the second vertex of the edge.
- * @returns {{d:number,e:number}} The index of each vertex.
+ * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {number} v1 - The first vertex of the edge.
+ * @param {number} v2 - The second vertex of the edge.
+ * @returns {Array<number>} The c vertices.
  */
-export function getDE(map, v1, v2) {
-  const vs0 = map[`${v1},${v2}`];
-  if (vs0.length !== 2) return {};
-
-  const d = vs0[1];
-  const vs3 = map[`${d},${v2}`];
-  if (vs3.length !== 2) return {};
-  const e = vs3[vs3[0] === v1 ? 1 : 0];
-
-  return { d, e };
+export function getCs(map, v1, v2) {
+  const vs0 = map[`${v1},${v2}`]; // [a,c]
+  if (vs0.length !== 2) return null;
+  if (vs0[1].length !== 2) return null;
+  return vs0[1];
 }
 
 /**
- * Gets the a,b vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
+ * Gets the a vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
  *
- * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {number} v1 - The index of the first vertex of the edge.
- * @param {number} v2 - The index of the second vertex of the edge.
- * @returns {{a:number,b:number}} The index of each vertex.
+ * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {number} v1 - The first vertex of the edge.
+ * @param {number} v2 - The second vertex of the edge.
+ * @returns {Array<number>} The a vertices.
  */
-export function getAB(map, v1, v2) {
-  const vs0 = map[`${v1},${v2}`];
-  if (vs0.length !== 2) return {};
-
-  const a = vs0[0];
-  const vs1 = map[`${a},${v2}`];
-  if (vs1.length !== 2) return {};
-  const b = vs1[vs1[0] === v1 ? 1 : 0];
-
-  return { a, b };
+export function getAs(map, v1, v2) {
+  const vs0 = map[`${v1},${v2}`]; // [a,c]
+  if (vs0.length !== 2) return null;
+  if (vs0[0].length !== 2) return null;
+  return vs0[0];
 }
 
 /**

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { correctNPolygonIndices } from "../cross-section/vertices.js";
 
 /**
  * @return {THREE.BufferGeometry}
@@ -13,13 +14,25 @@ export async function loadBaseGeometry() {
   if (!gltf) return null;
 
   loader = new THREE.FileLoader();
-  const json = await loader
+  const indices = await loader
     .setResponseType("json")
     .loadAsync("../../models/base1-22-n-polygon-indices.txt")
     .catch((error) => console.error(error));
-  if (!json) return null;
+  if (!indices) return null;
+
+  loader = new THREE.FileLoader();
+  const positions = await loader
+    .setResponseType("json")
+    .loadAsync("../../models/base1-22-n-polygon-positions.txt")
+    .catch((error) => console.error(error));
+  if (!positions) return null;
 
   const geometry = gltf.scene.children[0].geometry;
-  geometry.nPolygonIndices = json;
+  geometry.nPolygonIndices = correctNPolygonIndices(
+    positions,
+    geometry.getAttribute("position"),
+    indices
+  );
+  geometry.nPolygonPositions = positions;
   return geometry;
 }
