@@ -7,6 +7,6 @@ indices = [list(face.vertices) for face in obj.data.polygons]
 with open('n-polygon-indices.txt', mode='w') as f:
     f.write(str(indices).replace(' ', ''))
 
-indices = [list(face.co) for face in obj.data.vertices]
+positions = [list(face.co) for face in obj.data.vertices]
 with open('n-polygon-positions.txt', mode='w') as f:
-    f.write(str(indices).replace(' ', ''))
+    f.write(str(positions).replace(' ', ''))
