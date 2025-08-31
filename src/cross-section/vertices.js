@@ -22,7 +22,7 @@ export function correctNPolygonIndices(
         Math.abs(positions.array[j + 1] - nPolygonPositions[i][2]) < EPS &&
         Math.abs(positions.array[j + 2] + nPolygonPositions[i][1]) < EPS
       ) {
-        map[i] = j / 3; // note: one i may have many j's.
+        map[i] = j / 3; // note: one i may have many j/3.
         break;
       }
     }
