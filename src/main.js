@@ -45,14 +45,13 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    // TODO: correctly treat triangle polygons like quad polygons.
     // start the debug code
     const geometry = baseGroup.children[1].geometry;
     const nPolygonIndices = geometry.nPolygonIndices;
     const vertices = geometry.getAttribute("position");
-    const list = createAllEdges(nPolygonIndices);
-    // const list = createAllEdgeLoops(nPolygonIndices); // TODO: test
-    // const list = createAllEdgeLoopStacks(nPolygonIndices); // TODO: test
+    // const list = createAllEdges(nPolygonIndices);
+    // const list = createAllEdgeLoops(nPolygonIndices);
+    const list = createAllEdgeLoopStacks(nPolygonIndices);
     const group2 = new THREE.Group();
     const folder = gui.addFolder("test");
     list.map((v, i) => {
@@ -63,12 +62,12 @@ async function init() {
       // _group.add(new THREE.Points(_geometry, ms.cp.points));
       _group.add(new THREE.Line(_geometry, ms.cp.line));
       group2.add(_group);
-      // _group.visible = false;
+      _group.visible = false;
       folder.add(_group, "visible").name(i);
     });
     scene.add(group2);
-    // console.log(list);
-    // console.log(list.map((v) => v.getPoints(vertices)));
+    console.log(list);
+    console.log(list.map((v) => v.getPoints(vertices)));
     // end the debug code
   });
 

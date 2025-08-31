@@ -2,6 +2,8 @@ import { EdgeLoopStack } from "./edge-loop-stack.js";
 import { createRemainingVerticesMap, getCs, getAs } from "./vertices.js";
 import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
 
+// FIXME: fix inifinite loop
+// TODO: add the top and bottom edge loops
 // TODO: handle mirror cases
 // TODO: handle opened cases (start and end in the same position)
 /**
@@ -25,32 +27,50 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
     const firstEl = el;
     const firstVertexPairs = firstEl.createVertexPairs();
     let opened = true;
+    let count = 0; // debug code
     while (true) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const cs = getCs(remainingVerticesMap, v1, v2);
-      el = elMap[`${cs[0]},${cs[1]}`];
+      const vs = getCs(remainingVerticesMap, v1, v2);
+      if (vs === null) break;
+      el = elMap[`${vs[0]},${vs[1]}`];
       if (!el.closed) break;
-      if (firstVertexPairs.includes(`${cs[0]},${cs[1]}`)) {
+      if (firstVertexPairs.includes(`${vs[0]},${vs[1]}`)) {
         opened = false;
         break;
       }
       el.checked = true;
       vertices.push(el.vertices);
+      // start the debug code
+      count++;
+      if (count > 100) {
+        console.log("first loop: count > 100");
+        break;
+      }
+      // end the debug code
     }
     el = firstEl;
+    count = 0; // debug code
     while (opened) {
       const v1 = el.vertices[0];
       const v2 = el.vertices[1];
-      const as = getAs(remainingVerticesMap, v1, v2);
-      el = elMap[`${as[0]},${as[1]}`];
+      const vs = getAs(remainingVerticesMap, v1, v2);
+      if (vs === null) break;
+      el = elMap[`${vs[0]},${vs[1]}`];
       if (!el.closed) break;
-      if (firstVertexPairs.includes(`${as[0]},${as[1]}`)) {
+      if (firstVertexPairs.includes(`${vs[0]},${vs[1]}`)) {
         opened = false;
         break;
       }
       el.checked = true;
       vertices.unshift(el.vertices);
+      // start the debug code
+      count++;
+      if (count > 100) {
+        console.log("second loop: count > 100");
+        break;
+      }
+      // end the debug code
     }
     const stack = new EdgeLoopStack(vertices, !opened);
     stacks.push(stack);
