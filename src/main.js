@@ -15,6 +15,8 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
+import { createAllEdges, findDiagonals } from "./cross-section/edges.js";
+import { createRemainingVerticesMap } from "./cross-section/vertices.js";
 import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
@@ -49,8 +51,11 @@ async function init() {
     const geometry = baseGroup.children[1].geometry;
     const indices = geometry.getIndex();
     const vertices = geometry.getAttribute("position");
+    const allEdges = createAllEdges(indices);
+    const map = createRemainingVerticesMap(indices);
+    const list = findDiagonals(allEdges, map, vertices);
     // const list = createAllEdgeLoops(indices);
-    const list = createAllEdgeLoopStacks(indices);
+    // const list = createAllEdgeLoopStacks(indices);
     const group2 = new THREE.Group();
     const folder = gui.addFolder("test");
     list.map((v, i) => {
@@ -58,10 +63,10 @@ async function init() {
         v.getPoints(vertices)
       );
       const _group = new THREE.Group();
-      _group.add(new THREE.Points(_geometry, ms.cp.points));
+      // _group.add(new THREE.Points(_geometry, ms.cp.points));
       _group.add(new THREE.Line(_geometry, ms.cp.line));
       group2.add(_group);
-      _group.visible = false;
+      // _group.visible = false;
       folder.add(_group, "visible").name(i);
     });
     scene.add(group2);

@@ -1,6 +1,30 @@
 import * as THREE from "three";
 
 import { Edge } from "./edge.js";
+import { getPoint } from "./vertices.js";
+
+/**
+ * Find the diagonals.
+ *
+ * @param {Array<Edge>} allEdges - All non-overlapping edges.
+ * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
+ * @returns {Array<Edge>} The diagonals.
+ */
+export function findDiagonals(allEdges, map, vertices) {
+  return allEdges.filter((e) => {
+    const rvs = map[`${e.v1},${e.v2}`];
+    if (rvs.length !== 2) return false;
+    const a = getPoint(vertices, e.v1);
+    const b = getPoint(vertices, e.v2);
+    const c = getPoint(vertices, rvs[0]);
+    const d = getPoint(vertices, rvs[1]);
+    b.sub(a);
+    c.sub(a);
+    d.sub(a);
+    return Math.abs(b.dot(c.cross(d))) < 1e-10;
+  });
+}
 
 /**
  * Create all non-overlapping edges.
