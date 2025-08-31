@@ -15,14 +15,64 @@ export function findDiagonals(allEdges, map, vertices) {
   return allEdges.filter((e) => {
     const rvs = map[`${e.v1},${e.v2}`];
     if (rvs.length !== 2) return false;
-    const a = getPoint(vertices, e.v1);
-    const b = getPoint(vertices, e.v2);
-    const c = getPoint(vertices, rvs[0]);
-    const d = getPoint(vertices, rvs[1]);
-    b.sub(a);
-    c.sub(a);
-    d.sub(a);
-    return Math.abs(b.dot(c.cross(d))) < 1e-10;
+    const v1 = getPoint(vertices, e.v1);
+    const v2 = getPoint(vertices, rvs[0]);
+    const v3 = getPoint(vertices, e.v2);
+    const v4 = getPoint(vertices, rvs[1]);
+
+    let error = 0;
+    {
+      const n1 = new THREE.Vector3();
+      const n2 = new THREE.Vector3();
+      const e21 = v1.clone().sub(v2);
+      const e32 = v2.clone().sub(v3);
+      const e31 = v1.clone().sub(v3);
+      const e43 = v3.clone().sub(v4);
+      const e14 = v4.clone().sub(v1);
+      n1.crossVectors(e21, e32).normalize();
+      n2.crossVectors(e31, e43).normalize();
+      const angleA = Math.acos(n1.dot(n2));
+      n1.crossVectors(e32, e43).normalize();
+      n2.crossVectors(e14, e21).normalize();
+      const angleB = Math.acos(n1.dot(n2));
+      const diff = (angleA + angleB) / (Math.PI * 2);
+      error += diff;
+    }
+    {
+      const M_PI_2 = Math.PI / 2;
+      const e21 = v1.clone().sub(v2).normalize();
+      const e32 = v2.clone().sub(v3).normalize();
+      const e43 = v3.clone().sub(v4).normalize();
+      const e14 = v4.clone().sub(v1).normalize();
+      const diff =
+        (Math.abs(Math.acos(e21.dot(e32)) - M_PI_2) +
+          Math.abs(Math.acos(e32.dot(e43)) - M_PI_2) +
+          Math.abs(Math.acos(e43.dot(e14)) - M_PI_2) +
+          Math.abs(Math.acos(e14.dot(e21)) - M_PI_2)) /
+        (Math.PI * 2);
+      error += diff;
+    }
+    {
+      const n1 = new THREE.Vector3();
+      const n2 = new THREE.Vector3();
+      const e21 = v1.clone().sub(v2);
+      const e32 = v2.clone().sub(v3);
+      const e31 = v1.clone().sub(v3);
+      const e43 = v3.clone().sub(v4);
+      const e14 = v4.clone().sub(v1);
+      const areaA =
+        n1.crossVectors(e21, e32).length() / 2 +
+        n2.crossVectors(e31, e43).length() / 2;
+      const areaB =
+        n1.crossVectors(e32, e43).length() / 2 +
+        n2.crossVectors(e14, e21).length() / 2;
+      const areaMin = Math.min(areaA, areaB);
+      const areaMax = Math.max(areaA, areaB);
+      const diff = areaMax ? 1 - areaMin / areaMax : 1;
+      error += diff;
+    }
+    console.log(error);
+    return error < 0.25;
   });
 }
 
