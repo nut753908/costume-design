@@ -27,6 +27,30 @@ export function createRemainingVerticesMap(indices) {
 }
 
 /**
+ * Create the remaining vertices map (version 2).
+ *
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
+ * @returns {{[k:string]:Set<number>}} The remaining vertices map (version 2). The key is a string of two vertices.
+ */
+export function createRemainingVerticesMap2(nPolygonIndices) {
+  const map = {};
+  nPolygonIndices.forEach((list) => {
+    list.forEach((a) => {
+      list
+        .filter((b) => a !== b)
+        .forEach((b) => {
+          const k = `${a},${b}`;
+          const listC = list.filter((c) => a !== c && b !== c);
+          k in map
+            ? (map[k] = new Set([...map[k].values(), ...listC]))
+            : (map[k] = new Set(listC));
+        });
+    });
+  });
+  return map;
+}
+
+/**
  * Find the next vertex in the direction v1 -> v2.
  *
  * @param {{[k:string]:Array<number>}} map - The remaining vertices map. The key is a string of two vertices.
