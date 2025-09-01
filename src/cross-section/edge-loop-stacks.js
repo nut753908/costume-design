@@ -14,8 +14,8 @@ import { findNextEdge } from "./edges.js";
 export function createAllEdgeLoopStacks(nPolygonIndices) {
   const stacks = []; // edgeLoopStacks
   const allEls = createAllEdgeLoops(nPolygonIndices);
-  const elMap = createEdgeLoopMap(allEls);
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
+  const elMap = createEdgeLoopMap(allEls);
   for (let i = 0, l = allEls.length; i < l; i++) {
     const vertices = [];
     let el = allEls[i]; // edgeLoop

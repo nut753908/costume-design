@@ -21,36 +21,25 @@ export function createAllEdgeLoops(nPolygonIndices) {
     vertices.push(edge.v1, edge.v2);
     const firstV1 = edge.v1;
     const firstV2 = edge.v2;
-    let v1 = firstV1;
-    let v2 = firstV2;
     let opened = true;
-    while (true) {
-      const v3 = findNextVertex(remainingVerticesMap, v1, v2);
-      if (v3 === null) break;
-      v1 = v2;
-      v2 = v3;
-      edge = edgeMap[`${v1},${v2}`];
-      edge.checked = true;
-      if (v3 === firstV1) {
-        opened = false;
-        break;
+    for (let i = 0; i < 2; i++) {
+      let v1 = i === 0 ? firstV1 : firstV2;
+      let v2 = i === 0 ? firstV2 : firstV1;
+      const lastV = i === 0 ? firstV1 : firstV2;
+      while (opened) {
+        const v3 = findNextVertex(remainingVerticesMap, v1, v2);
+        if (v3 === null) break;
+        v1 = v2;
+        v2 = v3;
+        edge = edgeMap[`${v1},${v2}`];
+        edge.checked = true;
+        if (v3 === lastV) {
+          opened = false;
+          break;
+        }
+        if (i === 0) vertices.push(v3);
+        if (i === 1) vertices.unshift(v3);
       }
-      vertices.push(v3);
-    }
-    v1 = firstV1;
-    v2 = firstV2;
-    while (opened) {
-      const v0 = findNextVertex(remainingVerticesMap, v2, v1);
-      if (v0 === null) break;
-      v2 = v1;
-      v1 = v0;
-      edge = edgeMap[`${v1},${v2}`];
-      edge.checked = true;
-      if (v0 === firstV2) {
-        opened = false;
-        break;
-      }
-      vertices.unshift(v0);
     }
     const el = new EdgeLoop(vertices, !opened);
     els.push(el);
