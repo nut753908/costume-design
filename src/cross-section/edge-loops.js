@@ -22,10 +22,10 @@ export function createAllEdgeLoops(nPolygonIndices) {
     const firstV1 = edge.v1;
     const firstV2 = edge.v2;
     let opened = true;
-    for (let i = 0; i < 2; i++) {
-      let v1 = i === 0 ? firstV1 : firstV2;
-      let v2 = i === 0 ? firstV2 : firstV1;
-      const lastV = i === 0 ? firstV1 : firstV2;
+    for (let n = 0; n < 2; n++) {
+      let v1 = n === 0 ? firstV1 : firstV2;
+      let v2 = n === 0 ? firstV2 : firstV1;
+      const lastV = n === 0 ? firstV1 : firstV2;
       while (opened) {
         const v3 = findNextVertex(remainingVerticesMap, v1, v2);
         if (v3 === null) break;
@@ -37,8 +37,8 @@ export function createAllEdgeLoops(nPolygonIndices) {
           opened = false;
           break;
         }
-        if (i === 0) vertices.push(v3);
-        if (i === 1) vertices.unshift(v3);
+        if (n === 0) vertices.push(v3);
+        if (n === 1) vertices.unshift(v3);
       }
     }
     const el = new EdgeLoop(vertices, !opened);

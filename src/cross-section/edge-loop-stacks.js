@@ -26,7 +26,7 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
     const firstE = new Edge(el.vertices[0], el.vertices[1]); // firstEdge
     let secondE = null; // secondEdge
     let opened = true;
-    for (let i = 0; i < 2; i++) {
+    for (let n = 0; n < 2; n++) {
       let e1 = secondE; // edge1
       let e2 = firstE; // edge2
       while (opened) {
@@ -42,8 +42,8 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
           break;
         }
         el.checked = true;
-        if (i === 0) vertices.push(el.vertices);
-        if (i === 1) vertices.unshift(el.vertices);
+        if (n === 0) vertices.push(el.vertices);
+        if (n === 1) vertices.unshift(el.vertices);
       }
     }
     const stack = new EdgeLoopStack(vertices, !opened);
