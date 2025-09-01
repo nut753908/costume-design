@@ -1,28 +1,25 @@
-import * as THREE from "three";
-
 import { Edge } from "./edge.js";
 
 /**
  * Create all non-overlapping edges.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
  * @returns {Array<Edge>} All non-overlapping edges.
  */
-export function createAllEdges(indices) {
-  const set = new Set();
-  for (let i = 0, l = indices.count; i < l; i += 3) {
-    const a = indices.array[i];
-    const b = indices.array[i + 1];
-    const c = indices.array[i + 2];
-    set.add(a < b ? `${a},${b}` : `${b},${a}`);
-    set.add(b < c ? `${b},${c}` : `${c},${b}`);
-    set.add(c < a ? `${c},${a}` : `${a},${c}`);
-  }
-  return set
-    .values()
+export function createAllEdges(nPolygonIndices) {
+  const edges = [];
+  nPolygonIndices.forEach((list) => {
+    for (let i = 0, l = list.length; i < l; i++) {
+      const a = list[i];
+      const b = i !== list.length - 1 ? list[i + 1] : list[0];
+      const ab = `${a},${b}`;
+      const ba = `${b},${a}`;
+      if (!edges.includes(ab) && !edges.includes(ba)) edges.push(ab);
+    }
+  });
+  return edges
     .map((s) => s.split(","))
-    .map(([a, b]) => new Edge(Number(a), Number(b)))
-    .toArray();
+    .map(([a, b]) => new Edge(Number(a), Number(b)));
 }
 
 /**
@@ -38,4 +35,37 @@ export function createEdgeMap(edges) {
     map[`${e.v2},${e.v1}`] = e;
   });
   return map;
+}
+
+/**
+ * Find the next edge in the direction e1 -> e2.
+ *
+ * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
+ * @param {?Edge} e1 - The first edge.
+ * @param {?Edge} e2 - The second edge.
+ * @returns {?Edge} The next edge.
+ */
+export function findNextEdge(map, e1, e2) {
+  if (e2 === null) {
+    console.error("e2 === null");
+    return null;
+  }
+  const vs0 = map[`${e2.v1},${e2.v2}`];
+  if (vs0.length !== 2) return null;
+  if (vs0[0].length !== 2) return null;
+  if (vs0[1].length !== 2) return null;
+
+  const e3_0 = new Edge(vs0[0][0], vs0[0][1]);
+  const e3_1 = new Edge(vs0[1][0], vs0[1][1]);
+  if (e1 === null) return e3_0;
+  if (e3_0.equals(e1)) return e3_1;
+  if (e3_1.equals(e1)) return e3_0;
+  console.error(`\
+!(e1 === null) && !e3_0.equals(e1) && !e3_1.equals(e1)
+- e1: ${JSON.stringify(e1)}
+- e2: ${JSON.stringify(e2)}
+- e3_0: ${JSON.stringify(e3_0)}
+- e3_1: ${JSON.stringify(e3_1)}
+`);
+  return null;
 }

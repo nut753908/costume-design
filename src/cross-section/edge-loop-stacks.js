@@ -1,22 +1,21 @@
-import * as THREE from "three";
-
 import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createRemainingVerticesMap, getDE, getAB } from "./vertices.js";
 import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
+import { createRemainingVerticesMap } from "./vertices.js";
+import { Edge } from "./edge.js";
+import { findNextEdge } from "./edges.js";
 
-// TODO: handle mirror cases
-// TODO: handle opened cases (start and end in the same position)
+// TODO: add the top and bottom edge loops
 /**
  * Create all non-overlapping edge loop stacks.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
  * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
  */
-export function createAllEdgeLoopStacks(indices) {
+export function createAllEdgeLoopStacks(nPolygonIndices) {
   const stacks = []; // edgeLoopStacks
-  const allEls = createAllEdgeLoops(indices);
+  const allEls = createAllEdgeLoops(nPolygonIndices);
+  const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const elMap = createEdgeLoopMap(allEls);
-  const remainingVerticesMap = createRemainingVerticesMap(indices);
   for (let i = 0, l = allEls.length; i < l; i++) {
     const vertices = [];
     let el = allEls[i]; // edgeLoop
@@ -24,35 +23,28 @@ export function createAllEdgeLoopStacks(indices) {
     if (el.checked) continue;
     el.checked = true;
     vertices.push(el.vertices);
-    const firstEl = el;
-    const firstVertexPairs = firstEl.createVertexPairs();
+    const firstE = new Edge(el.vertices[0], el.vertices[1]); // firstEdge
+    let secondE = null; // secondEdge
     let opened = true;
-    while (true) {
-      const v1 = el.vertices[0];
-      const v2 = el.vertices[1];
-      const { d, e } = getDE(remainingVerticesMap, v1, v2);
-      el = elMap[`${d},${e}`];
-      if (!el.closed) break;
-      if (firstVertexPairs.includes(`${d},${e}`)) {
-        opened = false;
-        break;
+    for (let n = 0; n < 2; n++) {
+      let e1 = secondE; // edge1
+      let e2 = firstE; // edge2
+      while (opened) {
+        const e3 = findNextEdge(remainingVerticesMap, e1, e2); // edge3
+        if (e3 === null) break;
+        if (secondE === null) secondE = e3;
+        e1 = e2;
+        e2 = e3;
+        el = elMap[`${e3.v1},${e3.v2}`];
+        el.checked = true;
+        if (!el.closed) break;
+        if (e3.equals(firstE)) {
+          opened = false;
+          break;
+        }
+        if (n === 0) vertices.push(el.vertices);
+        if (n === 1) vertices.unshift(el.vertices);
       }
-      el.checked = true;
-      vertices.push(el.vertices);
-    }
-    el = firstEl;
-    while (opened) {
-      const v1 = el.vertices[0];
-      const v2 = el.vertices[1];
-      const { a, b } = getAB(remainingVerticesMap, v1, v2);
-      el = elMap[`${a},${b}`];
-      if (!el.closed) break;
-      if (firstVertexPairs.includes(`${a},${b}`)) {
-        opened = false;
-        break;
-      }
-      el.checked = true;
-      vertices.unshift(el.vertices);
     }
     const stack = new EdgeLoopStack(vertices, !opened);
     stacks.push(stack);

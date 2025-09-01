@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 import { EdgeLoop } from "./edge-loop.js";
 import { createRemainingVerticesMap, findNextVertex } from "./vertices.js";
 import { createAllEdges, createEdgeMap } from "./edges.js";
@@ -7,13 +5,13 @@ import { createAllEdges, createEdgeMap } from "./edges.js";
 /**
  * Create all non-overlapping edge loops.
  *
- * @param {THREE.BufferAttribute} indices - The results of geometry.getIndex().
+ * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
  * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
  */
-export function createAllEdgeLoops(indices) {
+export function createAllEdgeLoops(nPolygonIndices) {
   const els = []; // egdeLoops
-  const allEdges = createAllEdges(indices);
-  const remainingVerticesMap = createRemainingVerticesMap(indices);
+  const allEdges = createAllEdges(nPolygonIndices);
+  const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const edgeMap = createEdgeMap(allEdges);
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const vertices = [];
@@ -23,36 +21,25 @@ export function createAllEdgeLoops(indices) {
     vertices.push(edge.v1, edge.v2);
     const firstV1 = edge.v1;
     const firstV2 = edge.v2;
-    let v1 = firstV1;
-    let v2 = firstV2;
     let opened = true;
-    while (true) {
-      const v3 = findNextVertex(remainingVerticesMap, v1, v2);
-      if (v3 === null) break;
-      v1 = v2;
-      v2 = v3;
-      edge = edgeMap[`${v1},${v2}`];
-      edge.checked = true;
-      if (v3 === firstV1) {
-        opened = false;
-        break;
+    for (let n = 0; n < 2; n++) {
+      let v1 = n === 0 ? firstV1 : firstV2;
+      let v2 = n === 0 ? firstV2 : firstV1;
+      const lastV = n === 0 ? firstV1 : firstV2;
+      while (opened) {
+        const v3 = findNextVertex(remainingVerticesMap, v1, v2);
+        if (v3 === null) break;
+        v1 = v2;
+        v2 = v3;
+        edge = edgeMap[`${v1},${v2}`];
+        edge.checked = true;
+        if (v3 === lastV) {
+          opened = false;
+          break;
+        }
+        if (n === 0) vertices.push(v3);
+        if (n === 1) vertices.unshift(v3);
       }
-      vertices.push(v3);
-    }
-    v1 = firstV1;
-    v2 = firstV2;
-    while (opened) {
-      const v0 = findNextVertex(remainingVerticesMap, v2, v1);
-      if (v0 === null) break;
-      v2 = v1;
-      v1 = v0;
-      edge = edgeMap[`${v1},${v2}`];
-      edge.checked = true;
-      if (v0 === firstV2) {
-        opened = false;
-        break;
-      }
-      vertices.unshift(v0);
     }
     const el = new EdgeLoop(vertices, !opened);
     els.push(el);

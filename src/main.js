@@ -15,6 +15,7 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
+import { createAllEdges } from "./cross-section/edges.js";
 import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
@@ -44,13 +45,13 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    // TODO: correctly treat triangle polygons like quad polygons.
     // start the debug code
     const geometry = baseGroup.children[1].geometry;
-    const indices = geometry.getIndex();
+    const nPolygonIndices = geometry.nPolygonIndices;
     const vertices = geometry.getAttribute("position");
-    // const list = createAllEdgeLoops(indices);
-    const list = createAllEdgeLoopStacks(indices);
+    // const list = createAllEdges(nPolygonIndices);
+    // const list = createAllEdgeLoops(nPolygonIndices);
+    const list = createAllEdgeLoopStacks(nPolygonIndices);
     const group2 = new THREE.Group();
     const folder = gui.addFolder("test");
     list.map((v, i) => {
@@ -58,7 +59,7 @@ async function init() {
         v.getPoints(vertices)
       );
       const _group = new THREE.Group();
-      _group.add(new THREE.Points(_geometry, ms.cp.points));
+      // _group.add(new THREE.Points(_geometry, ms.cp.points));
       _group.add(new THREE.Line(_geometry, ms.cp.line));
       group2.add(_group);
       _group.visible = false;

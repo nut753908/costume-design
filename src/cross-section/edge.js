@@ -44,11 +44,24 @@ export class Edge {
   /**
    * Get the points.
    *
-   * @param {THREE.BufferAttribute} vertices - The results of geometry.getAttribute("position").
+   * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
    * @returns {Array<THREE.Vector3>} The points.
    */
-  getPoints(vertices) {
-    return [getPoint(vertices, this.v1), getPoint(vertices, this.v2)];
+  getPoints(positions) {
+    return [getPoint(positions, this.v1), getPoint(positions, this.v2)];
+  }
+
+  /**
+   * Return `true` if this edge is equal with the given one.
+   *
+   * @param {Edge} e - The edge to test for equality.
+   * @returns {boolean} Whether this edge is equal with the given one.
+   */
+  equals(e) {
+    return (
+      (e.v1 === this.v1 && e.v2 === this.v2) ||
+      (e.v1 === this.v2 && e.v2 === this.v1)
+    );
   }
 
   /**
