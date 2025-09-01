@@ -4,7 +4,6 @@ import { createRemainingVerticesMap } from "./vertices.js";
 import { Edge } from "./edge.js";
 import { findNextEdge } from "./edges.js";
 
-// TODO: add the top and bottom edge loops
 /**
  * Create all non-overlapping edge loop stacks.
  *
@@ -17,13 +16,13 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const elMap = createEdgeLoopMap(allEls);
   for (let i = 0, l = allEls.length; i < l; i++) {
-    const vertices = [];
     let el = allEls[i]; // edgeLoop
     if (!el.closed) continue;
     if (el.checked) continue;
     el.checked = true;
-    vertices.push(el.vertices);
-    const firstE = new Edge(el.vertices[0], el.vertices[1]); // firstEdge
+    const vertices = [el.vertices];
+    // note: use el.vertices[2]/[3] so that the index/middle finger do not connect.
+    const firstE = new Edge(el.vertices[2], el.vertices[3]); // firstEdge
     let secondE = null; // secondEdge
     let opened = true;
     for (let n = 0; n < 2; n++) {
@@ -36,8 +35,10 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         e1 = e2;
         e2 = e3;
         el = elMap[`${e3.v1},${e3.v2}`];
-        el.checked = true;
+        if (el === undefined) break;
         if (!el.closed) break;
+        if (vertices[0].length !== el.vertices.length) break;
+        el.checked = true;
         if (e3.equals(firstE)) {
           opened = false;
           break;
