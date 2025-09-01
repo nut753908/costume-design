@@ -52,6 +52,19 @@ export class Edge {
   }
 
   /**
+   * Return `true` if this edge is equal with the given one.
+   *
+   * @param {Edge} e - The edge to test for equality.
+   * @returns {boolean} Whether this edge is equal with the given one.
+   */
+  equals(e) {
+    return (
+      (e.v1 === this.v1 && e.v2 === this.v2) ||
+      (e.v1 === this.v2 && e.v2 === this.v1)
+    );
+  }
+
+  /**
    * Returns a new edge with copied values from this instance.
    *
    * @return {Edge} A clone of this instance.

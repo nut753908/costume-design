@@ -123,36 +123,6 @@ export function findNextVertex(map, v1, v2) {
 }
 
 /**
- * Gets the c vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
- *
- * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {number} v1 - The first vertex of the edge.
- * @param {number} v2 - The second vertex of the edge.
- * @returns {Array<number>} The c vertices.
- */
-export function getCs(map, v1, v2) {
-  const vs0 = map[`${v1},${v2}`]; // [a,c]
-  if (vs0.length !== 2) return null;
-  if (vs0[1].length !== 2) return null;
-  return vs0[1];
-}
-
-/**
- * Gets the a vertices to pass through when searching for the next vertex in the v1 -> v2 direction.
- *
- * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {number} v1 - The first vertex of the edge.
- * @param {number} v2 - The second vertex of the edge.
- * @returns {Array<number>} The a vertices.
- */
-export function getAs(map, v1, v2) {
-  const vs0 = map[`${v1},${v2}`]; // [a,c]
-  if (vs0.length !== 2) return null;
-  if (vs0[0].length !== 2) return null;
-  return vs0[0];
-}
-
-/**
  * Get the point.
  *
  * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
