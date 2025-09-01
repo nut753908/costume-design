@@ -7,19 +7,19 @@ import { Edge } from "./edge.js";
  * @returns {Array<Edge>} All non-overlapping edges.
  */
 export function createAllEdges(nPolygonIndices) {
-  const set = new Set();
+  const edges = [];
   nPolygonIndices.forEach((list) => {
     for (let i = 0, l = list.length; i < l; i++) {
       const a = list[i];
       const b = i !== list.length - 1 ? list[i + 1] : list[0];
-      set.add(a < b ? `${a},${b}` : `${b},${a}`);
+      const ab = `${a},${b}`;
+      const ba = `${b},${a}`;
+      if (!edges.includes(ab) && !edges.includes(ba)) edges.push(ab);
     }
   });
-  return set
-    .values()
+  return edges
     .map((s) => s.split(","))
-    .map(([a, b]) => new Edge(Number(a), Number(b)))
-    .toArray();
+    .map(([a, b]) => new Edge(Number(a), Number(b)));
 }
 
 /**
