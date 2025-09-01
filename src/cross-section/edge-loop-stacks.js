@@ -36,12 +36,12 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         e1 = e2;
         e2 = e3;
         el = elMap[`${e3.v1},${e3.v2}`];
+        el.checked = true;
         if (!el.closed) break;
         if (e3.equals(firstE)) {
           opened = false;
           break;
         }
-        el.checked = true;
         if (n === 0) vertices.push(el.vertices);
         if (n === 1) vertices.unshift(el.vertices);
       }
