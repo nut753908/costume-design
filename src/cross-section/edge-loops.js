@@ -46,28 +46,21 @@ export function createAllEdgeLoops(nPolygonIndices) {
 
   // TODO: show all needed
   // TODO: lighten the processing
-  const newClosedEls = [];
+  let newClosedEls = [];
   const openEls = els.filter((el) => !el.closed);
-  openEls.forEach((openEl) => (openEl.checked = false));
-  openEls.forEach((openEl, i) => {
-    if (openEl.checked) return;
-    let closed = false;
+  openEls.forEach((openEl) => {
     const firstV1 = openEl.vertices[0];
     const firstV2 = openEl.vertices[1];
     const vss = remainingVerticesMap[`${firstV1},${firstV2}`];
     vss.forEach((vs) => {
-      if (closed) return;
       if (vs.length !== 2) return;
-      const checkedList = openEls.map((v) => v.checked);
-      checkedList[i] = true;
       let v1 = firstV1;
       let v2 = firstV2;
-      const vertices1 = [v1, v2];
-      const vertices2 = Array.from(openEl.vertices);
+      const vertices = [v1, v2];
       const e1_0 = edgeMap[`${v1},${vs[0]}`];
+      const e2_1 = edgeMap[`${v2},${vs[1]}`];
       const e1_1 = edgeMap[`${v1},${vs[1]}`];
       const e2_0 = edgeMap[`${v2},${vs[0]}`];
-      const e2_1 = edgeMap[`${v2},${vs[1]}`];
       let e1;
       let e2;
       if (e1_0 && e2_1) {
@@ -107,35 +100,17 @@ export function createAllEdgeLoops(nPolygonIndices) {
 `);
           break;
         }
-        vertices1.push(v3);
-        let found = false;
-        for (let j = 0, l2 = openEls.length; j < l2; j++) {
-          openEl = openEls[j];
-          if (openEl.createVertexPairs().includes(`${v2},${v3}`)) {
-            found = true;
-            vertices2.push(...openEl.vertices);
-            checkedList[j] = true;
-            break;
-          }
-        }
-        if (!found) {
-          console.error("!found");
-          break;
-        }
         if (v3 === firstV1) {
-          vertices1.pop(); // remove the last duplicate vertex
-          const a = vertices1.toSorted();
-          const b = [...new Set(vertices2)].toSorted();
-          if (JSON.stringify(a) === JSON.stringify(b)) {
-            const el = new EdgeLoop(vertices1, true, true);
-            newClosedEls.push(el);
-            openEls.forEach((v, j) => {
-              if (checkedList[j]) v.checked = true;
-            });
-            closed = true;
-          }
+          const s = JSON.stringify(vertices.toSorted());
+          const list = newClosedEls.filter(
+            (el) => JSON.stringify(el.vertices.toSorted()) === s
+          );
+          if (list.length > 0) break;
+          const el = new EdgeLoop(vertices, true, true);
+          newClosedEls.push(el);
           break;
         }
+        vertices.push(v3);
         v1 = v2;
         v2 = v3;
         e1 = e2;
