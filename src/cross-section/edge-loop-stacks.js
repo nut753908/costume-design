@@ -12,17 +12,17 @@ import { findNextEdge } from "./edges.js";
  */
 export function createAllEdgeLoopStacks(nPolygonIndices) {
   const stacks = []; // edgeLoopStacks
+  const strings = []; // [JSON.stringify(stack.vertices.toSorted()) for stack in each stacks]
   const allEls = createAllEdgeLoops(nPolygonIndices);
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const elsMap = createEdgeLoopsMap(allEls);
   for (let i = 0, l = allEls.length; i < l; i++) {
     let el = allEls[i]; // edgeLoop
     if (!el.closed) continue;
-    if (el.checked) continue;
-    el.checked = true;
     const vertices = [el.vertices];
+    const firstCount = el.vertices.length;
     // note: use el.vertices[2]/[3] so that the index/middle finger do not connect.
-    const firstE = new Edge(el.vertices[2], el.vertices[3]); // firstEdge
+    const firstE = new Edge(el.vertices[0], el.vertices[1]); // firstEdge
     let secondE = null; // secondEdge
     let opened = true;
     for (let n = 0; n < 2; n++) {
@@ -36,14 +36,8 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         e2 = e3;
         const els = elsMap[`${e3.v1},${e3.v2}`];
         if (els === undefined) break;
-        el = null;
-        for (let j = 0, l2 = els.length; j < l2; j++) {
-          if (!els[j].closed) continue;
-          if (vertices[0].length !== els[j].vertices.length) continue;
-          el = els[j];
-        }
-        if (el === null) break;
-        el.checked = true;
+        el = els.find((v) => v.closed && firstCount === v.vertices.length);
+        if (el === undefined) break;
         if (e3.equals(firstE)) {
           opened = false;
           break;
@@ -52,6 +46,9 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         if (n === 1) vertices.unshift(el.vertices);
       }
     }
+    const s = JSON.stringify(vertices.toSorted());
+    if (strings.includes(s)) continue;
+    strings.push(s);
     const stack = new EdgeLoopStack(vertices, !opened);
     stacks.push(stack);
   }
