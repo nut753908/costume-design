@@ -32,6 +32,10 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
           const e3 = findNextEdge(remainingVerticesMap, e1, e2); // edge3
           if (e3 === null) break;
           if (secondE === null) secondE = e3;
+          if (e3.equals(firstE)) {
+            opened = false;
+            break;
+          }
           e1 = e2;
           e2 = e3;
           const els = elsMap[`${e3.v1},${e3.v2}`];
@@ -40,10 +44,6 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
             (v) => v.closed && el.vertices.length === v.vertices.length
           );
           if (el2 === undefined) break;
-          if (e3.equals(firstE)) {
-            opened = false;
-            break;
-          }
           const s = JSON.stringify(el2.vertices.toSorted());
           if (strings2.includes(s)) continue;
           strings2.push(s);
