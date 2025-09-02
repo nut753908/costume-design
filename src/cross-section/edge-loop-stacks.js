@@ -22,7 +22,10 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
     for (let j = 0, l2 = el.vertices.length; j < l2; j++) {
       const vertices = [el.vertices];
       const strings2 = [JSON.stringify(el.vertices.toSorted())]; // [JSON.stringify(el.vertices.toSorted()) for el in els]
-      const firstE = new Edge(el.vertices[j], el.vertices[(j + 1) % l2]); // firstEdge
+      const firstE = new Edge(
+        el.vertices[j],
+        el.vertices[j !== l2 - 1 ? j + 1 : 0]
+      ); // firstEdge
       let secondE = null; // secondEdge
       let opened = true;
       for (let n = 0; n < 2; n++) {
