@@ -7,7 +7,7 @@ import { getPoint } from "./vertices.js";
  *
  * ```js
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
- * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ] );
+ * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ], true );
  * ```
  */
 export class EdgeLoop {
