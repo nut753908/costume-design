@@ -1,5 +1,5 @@
 import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createAllEdgeLoops, createEdgeLoopMap } from "./edge-loops.js";
+import { createAllEdgeLoops, createEdgeLoopsMap } from "./edge-loops.js";
 import { createRemainingVerticesMap } from "./vertices.js";
 import { Edge } from "./edge.js";
 import { findNextEdge } from "./edges.js";
@@ -14,7 +14,7 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
   const stacks = []; // edgeLoopStacks
   const allEls = createAllEdgeLoops(nPolygonIndices);
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
-  const elMap = createEdgeLoopMap(allEls);
+  const elsMap = createEdgeLoopsMap(allEls);
   for (let i = 0, l = allEls.length; i < l; i++) {
     let el = allEls[i]; // edgeLoop
     if (!el.closed) continue;
@@ -34,10 +34,15 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         if (secondE === null) secondE = e3;
         e1 = e2;
         e2 = e3;
-        el = elMap[`${e3.v1},${e3.v2}`];
-        if (el === undefined) break;
-        if (!el.closed) break;
-        if (vertices[0].length !== el.vertices.length) break;
+        const els = elsMap[`${e3.v1},${e3.v2}`];
+        if (els === undefined) break;
+        el = null;
+        for (let j = 0, l2 = els.length; j < l2; j++) {
+          if (!els[j].closed) continue;
+          if (vertices[0].length !== els[j].vertices.length) continue;
+          el = els[j];
+        }
+        if (el === null) break;
         el.checked = true;
         if (e3.equals(firstE)) {
           opened = false;

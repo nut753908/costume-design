@@ -121,25 +121,27 @@ export function createAllEdgeLoops(nPolygonIndices) {
 }
 
 /**
- * Create the edge map.
+ * Create the edge loops map.
  *
  * @param {Array<EdgeLoop>} els - Edge loops of the geometry.
- * @returns {{[k:string]:EdgeLoop}} The edge loop map. The key is a string of pairs v1, v2.
+ * @returns {{[k:string]:Array<EdgeLoop>}} The edge loops map. The key is a string of pairs v1, v2.
  */
-export function createEdgeLoopMap(els) {
+export function createEdgeLoopsMap(els) {
   const map = {};
   els.forEach((el) => {
     for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
       const v1 = el.vertices[i];
       const v2 = el.vertices[i + 1];
-      map[`${v1},${v2}`] = el;
-      map[`${v2},${v1}`] = el;
+      [`${v1},${v2}`, `${v2},${v1}`].forEach((k) => {
+        k in map ? map[k].push(el) : (map[k] = [el]);
+      });
     }
     if (el.closed) {
       const v1 = el.vertices[el.vertices.length - 1];
       const v2 = el.vertices[0];
-      map[`${v1},${v2}`] = el;
-      map[`${v2},${v1}`] = el;
+      [`${v1},${v2}`, `${v2},${v1}`].forEach((k) => {
+        k in map ? map[k].push(el) : (map[k] = [el]);
+      });
     }
   });
   return map;
