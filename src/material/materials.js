@@ -18,6 +18,11 @@ export function createMaterials(gui) {
     toon: createToonMaterial(baseFolder, "toon", 0xfef3ef, 0xfde2df),
   };
 
+  const edgeFolder = folder.addFolder("edge").close();
+  const edge = {
+    line: createLineMaterial(edgeFolder, "line", 0x000000),
+  };
+
   const cpFolder = folder.addFolder("cp").close();
   const cp = {
     points: createPointsMaterial(cpFolder, "points", 0x000000),
@@ -43,6 +48,7 @@ export function createMaterials(gui) {
 
   return {
     base,
+    edge,
     cp,
     curve,
     tube,
