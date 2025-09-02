@@ -105,7 +105,7 @@ export function createAllEdgeLoops(nPolygonIndices) {
             const s = JSON.stringify(vertices.toSorted());
             if (strings.includes(s)) break;
             strings.push(s);
-            const el = new EdgeLoop(vertices, true, true);
+            const el = new EdgeLoop(vertices, true);
             closedEls2.push(el);
             break;
           }

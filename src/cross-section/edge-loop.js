@@ -7,7 +7,7 @@ import { getPoint } from "./vertices.js";
  *
  * ```js
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
- * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ], true );
+ * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ] );
  * ```
  */
 export class EdgeLoop {
@@ -16,9 +16,8 @@ export class EdgeLoop {
    *
    * @param {Array<number>} vertices - The vertices within an edge loop.
    * @param {boolean} closed - Whether the edge loop is closed.
-   * @param {boolean} checked - Whether the edge loop is checked within the edge loop stack.
    */
-  constructor(vertices = [], closed = false, checked = false) {
+  constructor(vertices = [], closed = false) {
     /**
      * The vertices within an edge loop.
      *
@@ -32,13 +31,6 @@ export class EdgeLoop {
      * @type {boolean}
      */
     this.closed = closed;
-
-    /**
-     * Whether the edge loop is checked within the edge loop stack.
-     *
-     * @type {boolean}
-     */
-    this.checked = checked;
   }
 
   /**
@@ -69,7 +61,6 @@ export class EdgeLoop {
   copy(source) {
     this.vertices = Array.from(source.vertices);
     this.closed = source.closed;
-    this.checked = source.checked;
 
     return this;
   }
@@ -84,7 +75,6 @@ export class EdgeLoop {
 
     data.vertices = Array.from(this.vertices);
     data.closed = this.closed;
-    data.checked = this.checked;
 
     return data;
   }
@@ -98,7 +88,6 @@ export class EdgeLoop {
   fromJSON(json) {
     this.vertices = Array.from(json.vertices);
     this.closed = json.closed;
-    this.checked = json.checked;
 
     return this;
   }
