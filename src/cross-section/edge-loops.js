@@ -46,7 +46,7 @@ export function createAllEdgeLoops(nPolygonIndices) {
 
   const closedEls1 = els.filter((el) => el.closed);
   const closedEls2 = [];
-  const strings = []; // [JSON.stringify(el.vertices.toSorted()) for el in each closedEls2]
+  const strings = []; // [JSON.stringify(el.vertices.toSorted()) for el in closedEls2]
   els
     .filter((el) => !el.closed)
     .forEach((openEl) => {
