@@ -20,13 +20,15 @@ import { GUI } from "lil-gui";
  */
 export function saveGui(gui) {
   const guiObj = gui.save();
-  guiObj.folders = [
+  const folders = {};
+  [
     "THREE.Scene",
     "THREE.AxesHelper",
     "THREE.Material",
     "EdgesGroup",
     "TubeGroup",
-  ].reduce((o, k) => ({ ...o, [k]: guiObj.folders[k] }), {});
+  ].forEach((k) => (folders[k] = guiObj.folders[k]));
+  guiObj.folders = folders;
   return guiObj;
 }
 
@@ -47,12 +49,11 @@ export function saveGui(gui) {
  * @returns {Object} closedObj
  */
 export function saveClosed(gui) {
+  const folders = {};
+  gui.folders.forEach((f) => (folders[f._title] = saveClosed(f)));
   return {
     _closed: gui._closed,
-    folders: gui.folders.reduce(
-      (acc, f) => ({ ...acc, [f._title]: saveClosed(f) }),
-      {}
-    ),
+    folders: folders,
   };
 }
 
