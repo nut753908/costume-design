@@ -40,18 +40,18 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
           }
           e1 = e2;
           e2 = e3;
-          const els = elsMap[`${e3.v1},${e3.v2}`];
+          const els = elsMap[`${e3.v1},${e3.v2}`]; // edgeLoops
           if (els === undefined) break;
           const el2 = els.find(
             (v) => v.closed && el.vertices.length === v.vertices.length
-          );
+          ); // edgeLoop2
           if (el2 === undefined) break;
           if (n === 0) vertices.push(el2.vertices);
           if (n === 1) vertices.unshift(el2.vertices);
         }
       }
       if (vertices.length === 1) continue;
-      const s = JSON.stringify(vertices.toSorted());
+      const s = JSON.stringify(vertices.toSorted()); // string
       if (strings.includes(s)) continue;
       strings.push(s);
       const stack = new EdgeLoopStack(vertices, !opened);

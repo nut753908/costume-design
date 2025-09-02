@@ -17,16 +17,16 @@ export function createAllEdgeLoops(nPolygonIndices) {
     let edge = allEdges[i];
     if (edge.checked) continue;
     edge.checked = true;
-    const firstV1 = edge.v1;
-    const firstV2 = edge.v2;
+    const firstV1 = edge.v1; // firstVertex1
+    const firstV2 = edge.v2; // firstVertex2
     const vertices = [firstV1, firstV2];
     let opened = true;
     for (let n = 0; n < 2; n++) {
-      let v1 = n === 0 ? firstV1 : firstV2;
-      let v2 = n === 0 ? firstV2 : firstV1;
-      const lastV = n === 0 ? firstV1 : firstV2;
+      let v1 = n === 0 ? firstV1 : firstV2; // vertex1
+      let v2 = n === 0 ? firstV2 : firstV1; // vertex2
+      const lastV = n === 0 ? firstV1 : firstV2; // lastVertex
       while (opened) {
-        const v3 = findNextVertex(remainingVerticesMap, v1, v2);
+        const v3 = findNextVertex(remainingVerticesMap, v1, v2); // vertex3
         if (v3 === null) break;
         v1 = v2;
         v2 = v3;
@@ -44,26 +44,26 @@ export function createAllEdgeLoops(nPolygonIndices) {
     els.push(el);
   }
 
-  const closedEls1 = els.filter((el) => el.closed);
-  const closedEls2 = [];
+  const closedEls1 = els.filter((el) => el.closed); // closedEdgeLoops1
+  const closedEls2 = []; // closedEdgeLoops2
   const strings = []; // [JSON.stringify(el.vertices.toSorted()) for el in closedEls2]
   els
     .filter((el) => !el.closed)
     .forEach((openEl) => {
       const firstV1 = openEl.vertices[0];
       const firstV2 = openEl.vertices[1];
-      const vss = remainingVerticesMap[`${firstV1},${firstV2}`];
+      const vss = remainingVerticesMap[`${firstV1},${firstV2}`]; // vertices's
       vss.forEach((vs) => {
         if (vs.length !== 2) return;
-        let v1 = firstV1;
-        let v2 = firstV2;
+        let v1 = firstV1; // vertex1
+        let v2 = firstV2; // vertex2
         const vertices = [v1, v2];
-        const e1_0 = edgeMap[`${v1},${vs[0]}`];
-        const e2_1 = edgeMap[`${v2},${vs[1]}`];
-        const e1_1 = edgeMap[`${v1},${vs[1]}`];
-        const e2_0 = edgeMap[`${v2},${vs[0]}`];
-        let e1;
-        let e2;
+        const e1_0 = edgeMap[`${v1},${vs[0]}`]; // edge1_0
+        const e2_1 = edgeMap[`${v2},${vs[1]}`]; // edge2_1
+        const e1_1 = edgeMap[`${v1},${vs[1]}`]; // edge1_1
+        const e2_0 = edgeMap[`${v2},${vs[0]}`]; // edge2_0
+        let e1; // edge1
+        let e2; // edge2
         if (e1_0 && e2_1) {
           e1 = e1_0;
           e2 = e2_1;
@@ -84,9 +84,9 @@ export function createAllEdgeLoops(nPolygonIndices) {
           return;
         }
         while (true) {
-          const e3 = findNextEdge(remainingVerticesMap, e1, e2);
+          const e3 = findNextEdge(remainingVerticesMap, e1, e2); // edge3
           if (e3 === null) break;
-          let v3;
+          let v3; // vertex3
           if (`${v2},${e3.v1}` in edgeMap) {
             v3 = e3.v1;
           } else if (`${v2},${e3.v2}` in edgeMap) {
@@ -102,10 +102,10 @@ export function createAllEdgeLoops(nPolygonIndices) {
             break;
           }
           if (v3 === firstV1) {
-            const s = JSON.stringify(vertices.toSorted());
+            const s = JSON.stringify(vertices.toSorted()); // string
             if (strings.includes(s)) break;
             strings.push(s);
-            const el = new EdgeLoop(vertices, true);
+            const el = new EdgeLoop(vertices, true); // edgeLoop
             closedEls2.push(el);
             break;
           }

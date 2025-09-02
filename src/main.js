@@ -8,6 +8,10 @@ import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
 import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
+import { createAllEdges } from "./cross-section/edges.js";
+import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
+import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
+import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
 import { ControlPoint3 } from "./curve/control-point-3.js";
 import { ControlPoint2 } from "./curve/control-point-2.js";
 import { createControlPointGroup } from "./object-3d/group/control-point.js";
@@ -15,9 +19,6 @@ import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
 import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
 import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
-import { createAllEdges } from "./cross-section/edges.js";
-import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
-import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
 import { disposeGroup } from "./main/dispose.js";
@@ -45,31 +46,20 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    // start the debug code
-    const geometry = baseGroup.children[1].geometry;
+    const geometry = baseGroup.children[0].geometry;
     const nPolygonIndices = geometry.nPolygonIndices;
-    const vertices = geometry.getAttribute("position");
-    // const list = createAllEdges(nPolygonIndices);
-    // const list = createAllEdgeLoops(nPolygonIndices);
-    const list = createAllEdgeLoopStacks(nPolygonIndices);
-    const group2 = new THREE.Group();
-    const folder = gui.addFolder("test");
-    list.map((v, i) => {
-      const _geometry = new THREE.BufferGeometry().setFromPoints(
-        // v.getPoints(vertices)
-        v.getPoints(vertices).flat()
-      );
-      const _group = new THREE.Group();
-      // _group.add(new THREE.Points(_geometry, ms.cp.points));
-      _group.add(new THREE.Line(_geometry, ms.cp.line));
-      group2.add(_group);
-      // _group.visible = false;
-      folder.add(_group, "visible").name(i);
-    });
-    scene.add(group2);
-    console.log(list);
-    console.log(list.map((v) => v.getPoints(vertices)));
-    // end the debug code
+    const positions = geometry.getAttribute("position");
+
+    let edges;
+    // edges = createAllEdges(nPolygonIndices);
+    // edges = createAllEdgeLoops(nPolygonIndices);
+    edges = createAllEdgeLoopStacks(nPolygonIndices);
+    const edgesGroup = createEdgesGroup(edges, positions, ms);
+    setEdgesGroupGUI(gui, edgesGroup, false);
+    scene.add(edgesGroup);
+
+    console.log(edges);
+    console.log(edges.map((v) => v.getPoints(positions)));
   });
 
   // c = new ControlPoint3();
