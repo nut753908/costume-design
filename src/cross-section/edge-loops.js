@@ -44,33 +44,34 @@ export function createAllEdgeLoops(nPolygonIndices) {
     els.push(el);
   }
 
-  // TODO: show all needed
-  // TODO: lighten the processing
-  let newClosedEls = [];
-  const openEls = els.filter((el) => !el.closed);
-  openEls.forEach((openEl) => {
-    const firstV1 = openEl.vertices[0];
-    const firstV2 = openEl.vertices[1];
-    const vss = remainingVerticesMap[`${firstV1},${firstV2}`];
-    vss.forEach((vs) => {
-      if (vs.length !== 2) return;
-      let v1 = firstV1;
-      let v2 = firstV2;
-      const vertices = [v1, v2];
-      const e1_0 = edgeMap[`${v1},${vs[0]}`];
-      const e2_1 = edgeMap[`${v2},${vs[1]}`];
-      const e1_1 = edgeMap[`${v1},${vs[1]}`];
-      const e2_0 = edgeMap[`${v2},${vs[0]}`];
-      let e1;
-      let e2;
-      if (e1_0 && e2_1) {
-        e1 = e1_0;
-        e2 = e2_1;
-      } else if (e1_1 && e2_0) {
-        e1 = e1_1;
-        e2 = e2_0;
-      } else {
-        console.error(`\
+  const closedEls1 = els.filter((el) => el.closed);
+  const closedEls2 = [];
+  const strings = []; // [JSON.stringify(el.vertices.toSorted()) for el in each closedEls2]
+  els
+    .filter((el) => !el.closed)
+    .forEach((openEl) => {
+      const firstV1 = openEl.vertices[0];
+      const firstV2 = openEl.vertices[1];
+      const vss = remainingVerticesMap[`${firstV1},${firstV2}`];
+      vss.forEach((vs) => {
+        if (vs.length !== 2) return;
+        let v1 = firstV1;
+        let v2 = firstV2;
+        const vertices = [v1, v2];
+        const e1_0 = edgeMap[`${v1},${vs[0]}`];
+        const e2_1 = edgeMap[`${v2},${vs[1]}`];
+        const e1_1 = edgeMap[`${v1},${vs[1]}`];
+        const e2_0 = edgeMap[`${v2},${vs[0]}`];
+        let e1;
+        let e2;
+        if (e1_0 && e2_1) {
+          e1 = e1_0;
+          e2 = e2_1;
+        } else if (e1_1 && e2_0) {
+          e1 = e1_1;
+          e2 = e2_0;
+        } else {
+          console.error(`\
 !(e1_0 && e2_1) && !(e1_1 && e2_0)
 - v1: ${v1}
 - v2: ${v2}
@@ -80,46 +81,43 @@ export function createAllEdgeLoops(nPolygonIndices) {
 - e2_0: ${JSON.stringify(e2_0)}
 - e2_1: ${JSON.stringify(e2_1)}
 `);
-        return;
-      }
-      while (true) {
-        const e3 = findNextEdge(remainingVerticesMap, e1, e2);
-        if (e3 === null) break;
-        let v3;
-        if (`${v2},${e3.v1}` in edgeMap) {
-          v3 = e3.v1;
-        } else if (`${v2},${e3.v2}` in edgeMap) {
-          v3 = e3.v2;
-        } else {
-          console.error(`\
+          return;
+        }
+        while (true) {
+          const e3 = findNextEdge(remainingVerticesMap, e1, e2);
+          if (e3 === null) break;
+          let v3;
+          if (`${v2},${e3.v1}` in edgeMap) {
+            v3 = e3.v1;
+          } else if (`${v2},${e3.v2}` in edgeMap) {
+            v3 = e3.v2;
+          } else {
+            console.error(`\
 !(\`\${v2},\${e3.v1}\` in edgeMap) && !(\`\${v2},\${e3.v2}\` in edgeMap)
 - v2: ${v2}
 - e1: ${JSON.stringify(e1)}
 - e2: ${JSON.stringify(e2)}
 - e3: ${JSON.stringify(e3)}
 `);
-          break;
+            break;
+          }
+          if (v3 === firstV1) {
+            const s = JSON.stringify(vertices.toSorted());
+            if (strings.includes(s)) break;
+            strings.push(s);
+            const el = new EdgeLoop(vertices, true, true);
+            closedEls2.push(el);
+            break;
+          }
+          vertices.push(v3);
+          v1 = v2;
+          v2 = v3;
+          e1 = e2;
+          e2 = e3;
         }
-        if (v3 === firstV1) {
-          const s = JSON.stringify(vertices.toSorted());
-          const list = newClosedEls.filter(
-            (el) => JSON.stringify(el.vertices.toSorted()) === s
-          );
-          if (list.length > 0) break;
-          const el = new EdgeLoop(vertices, true, true);
-          newClosedEls.push(el);
-          break;
-        }
-        vertices.push(v3);
-        v1 = v2;
-        v2 = v3;
-        e1 = e2;
-        e2 = e3;
-      }
+      });
     });
-  });
-  const newEls = els.filter((el) => el.closed).concat(newClosedEls);
-  return newEls;
+  return closedEls1.concat(closedEls2);
 }
 
 /**
