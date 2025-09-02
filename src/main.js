@@ -46,7 +46,7 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    const geometry = baseGroup.children[1].geometry;
+    const geometry = baseGroup.children[0].geometry;
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute("position");
 
