@@ -21,7 +21,6 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
     if (!el.closed) continue;
     for (let j = 0, l2 = el.vertices.length; j < l2; j++) {
       const vertices = [el.vertices];
-      const strings2 = [JSON.stringify(el.vertices.toSorted())]; // [JSON.stringify(el.vertices.toSorted()) for el in els]
       const firstE = new Edge(
         el.vertices[j],
         el.vertices[j !== l2 - 1 ? j + 1 : 0]
@@ -47,9 +46,6 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
             (v) => v.closed && el.vertices.length === v.vertices.length
           );
           if (el2 === undefined) break;
-          const s = JSON.stringify(el2.vertices.toSorted());
-          if (strings2.includes(s)) continue;
-          strings2.push(s);
           if (n === 0) vertices.push(el2.vertices);
           if (n === 1) vertices.unshift(el2.vertices);
         }
