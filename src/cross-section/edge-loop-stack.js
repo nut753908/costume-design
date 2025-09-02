@@ -40,7 +40,8 @@ export class EdgeLoopStack {
    * @returns {Array<THREE.Vector3>} The points.
    */
   getPoints(positions) {
-    return this.vertices.flat().map((v) => getPoint(positions, v));
+    return this.vertices.map((list) => list.map((v) => getPoint(positions, v)));
+    // return this.vertices.flat().map((v) => getPoint(positions, v));
   }
 
   /**

@@ -56,13 +56,14 @@ async function init() {
     const folder = gui.addFolder("test");
     list.map((v, i) => {
       const _geometry = new THREE.BufferGeometry().setFromPoints(
-        v.getPoints(vertices)
+        // v.getPoints(vertices)
+        v.getPoints(vertices).flat()
       );
       const _group = new THREE.Group();
       // _group.add(new THREE.Points(_geometry, ms.cp.points));
       _group.add(new THREE.Line(_geometry, ms.cp.line));
       group2.add(_group);
-      _group.visible = false;
+      // _group.visible = false;
       folder.add(_group, "visible").name(i);
     });
     scene.add(group2);
