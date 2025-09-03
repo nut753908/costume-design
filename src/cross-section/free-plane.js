@@ -7,8 +7,8 @@ import { Plane } from "./plane.js";
  *
  * ```js
  * import { FreePlane } from "./src/cross-section/free-plane.js";
- * const normal = new THREE.Vector3(0, 1, 0);
- * const position = new THREE.Vector3(0, 0, 0);
+ * const normal = new THREE.Vector3( 0, 1, 0 );
+ * const position = new THREE.Vector3( 0, 0, 0 );
  * const freePlane = new FreePlane( normal, position );
  * ```
  */

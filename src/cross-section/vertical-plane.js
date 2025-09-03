@@ -7,8 +7,8 @@ import { Plane } from "./plane.js";
  *
  * ```js
  * import { VerticalPlane } from "./src/cross-section/vertical-plane.js";
- * const points = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 1, 0)];
- * const line = new THREE.LineCurve3(points[0], points[1]);
+ * const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 1, 0 ) ];
+ * const line = new THREE.LineCurve3( points[0], points[1] );
  * const linePath = new THREE.CurvePath();
  * linePath.add( line );
  * const verticalPlane = new VerticalPlane( linePath, 0 );
