@@ -59,7 +59,7 @@ export class EdgeLoopStack {
    * @returns {EdgeLoopStack} A reference to this edge loop stack.
    */
   copy(source) {
-    this.vertices = source.vertices.map((vs) => Array.from(vs));
+    this.vertices = source.vertices.map((list) => Array.from(list));
     this.closed = source.closed;
 
     return this;
@@ -73,7 +73,7 @@ export class EdgeLoopStack {
   toJSON() {
     const data = {};
 
-    data.vertices = this.vertices.map((vs) => Array.from(vs));
+    data.vertices = this.vertices.map((list) => Array.from(list));
     data.closed = this.closed;
 
     return data;
@@ -86,7 +86,7 @@ export class EdgeLoopStack {
    * @return {EdgeLoopStack} A reference to this edge loop stack.
    */
   fromJSON(json) {
-    this.vertices = json.vertices.map((vs) => Array.from(vs));
+    this.vertices = json.vertices.map((list) => Array.from(list));
     this.closed = json.closed;
 
     return this;
