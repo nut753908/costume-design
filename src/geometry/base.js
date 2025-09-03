@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 /**
- * @return {THREE.BufferGeometry}
+ * @return {Promise<?THREE.BufferGeometry>}
  */
 export async function loadBaseGeometry() {
   let loader = new GLTFLoader();
