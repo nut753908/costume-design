@@ -5,7 +5,7 @@ import { EdgeLoop } from "../../cross-section/edge-loop.js";
 import { EdgeLoopStack } from "../../cross-section/edge-loop-stack.js";
 import { createEdgeGroup } from "./edge.js";
 import { GUI } from "lil-gui";
-import { deleteFolder } from "../../main/gui.js";
+import { closeFolder, deleteFolder } from "../../main/gui.js";
 
 /**
  * @param {Array<Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath>} edges - Edges / Edge loops / Edge loop stacks / Curve paths
@@ -29,6 +29,7 @@ export function createEdgesGroup(edges, positions, ms) {
 export function setEdgesGroupGUI(gui, group, visible = false) {
   deleteFolder(gui, "EdgesGroup");
   const folder = gui.addFolder("EdgesGroup");
+  closeFolder(folder);
   const gFolder = folder.addFolder("visible");
   group.children.forEach((g, i) => {
     g.visible = visible;
