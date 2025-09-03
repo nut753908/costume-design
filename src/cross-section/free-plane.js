@@ -8,8 +8,8 @@ import { Plane } from "./plane.js";
  * ```js
  * import { FreePlane } from "./src/cross-section/free-plane.js";
  * const normal = new THREE.Vector3( 0, 1, 0 );
- * const position = new THREE.Vector3( 0, 0, 0 );
- * const freePlane = new FreePlane( normal, position );
+ * const point = new THREE.Vector3( 0, 0, 0 );
+ * const freePlane = new FreePlane( normal, point );
  * ```
  */
 export class FreePlane extends Plane {
@@ -17,9 +17,9 @@ export class FreePlane extends Plane {
    * Constructs a new free plane.
    *
    * @param {THREE.Vector3} [normal=(0,1,0)] - The normal direction of the plane. Must be a unit vector.
-   * @param {THREE.Vector3} [position=(0,0,0)] - The reference position on the plane.
+   * @param {THREE.Vector3} [point=(0,0,0)] - The reference point on the plane.
    */
-  constructor(normal = new THREE.Vector3(), position = new THREE.Vector3()) {
+  constructor(normal = new THREE.Vector3(), point = new THREE.Vector3()) {
     super();
 
     /**
@@ -30,11 +30,11 @@ export class FreePlane extends Plane {
     this.normal = normal;
 
     /**
-     * The reference position on the plane.
+     * The reference point on the plane.
      *
      * @type {THREE.Vector3}
      */
-    this.position = position;
+    this.point = point;
   }
 
   /**
@@ -47,12 +47,12 @@ export class FreePlane extends Plane {
   }
 
   /**
-   * Get the reference position on the plane.
+   * Get the reference point on the plane.
    *
    * @returns {THREE.Vector3}
    */
-  getPosition() {
-    return this.position;
+  getPoint() {
+    return this.point;
   }
 
   /**
@@ -72,7 +72,7 @@ export class FreePlane extends Plane {
    */
   copy(source) {
     this.normal.copy(source.normal);
-    this.position.copy(source.position);
+    this.point.copy(source.point);
 
     return this;
   }
@@ -86,7 +86,7 @@ export class FreePlane extends Plane {
     const data = {};
 
     data.normal = this.normal.toArray();
-    data.position = this.position.toArray();
+    data.point = this.point.toArray();
 
     return data;
   }
@@ -99,7 +99,7 @@ export class FreePlane extends Plane {
    */
   fromJSON(json) {
     this.normal.fromArray(json.normal);
-    this.position.fromArray(json.position);
+    this.point.fromArray(json.point);
 
     return this;
   }

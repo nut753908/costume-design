@@ -49,11 +49,11 @@ export class VerticalPlane extends Plane {
   }
 
   /**
-   * Get the reference position on the plane.
+   * Get the reference point on the plane.
    *
    * @returns {THREE.Vector3}
    */
-  getPosition() {
+  getPoint() {
     return this.linePath.getPointAt(this.u);
   }
 
