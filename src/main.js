@@ -14,6 +14,8 @@ import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { getCentroids } from "./cross-section/points.js";
 import { createLinePath } from "./cross-section/line-path.js";
 import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
+import { VerticalPlane } from "./cross-section/vertical-plane.js";
+import { createPlanesGroup } from "./object-3d/group/planes.js";
 import { ControlPoint3 } from "./curve/control-point-3.js";
 import { ControlPoint2 } from "./curve/control-point-2.js";
 import { createControlPointGroup } from "./object-3d/group/control-point.js";
@@ -67,6 +69,10 @@ async function init() {
 
     console.log(edges);
     console.log(edges.map((e) => e.getPoints(positions)));
+
+    const planes = edges.map((e) => new VerticalPlane(e));
+    const planesGroup = createPlanesGroup(gui, planes);
+    scene.add(planesGroup);
   });
 
   // c = new ControlPoint3();
