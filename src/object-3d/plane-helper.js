@@ -23,10 +23,10 @@ export function createPlaneHelper(
     helper.visible = false;
     folder.add(helper, "visible");
     if (showPlaneParams) {
-      const nfolder = folder.addFolder("normal");
-      nfolder.add(helper.plane.normal, "x").step(0.01);
-      nfolder.add(helper.plane.normal, "y").step(0.01);
-      nfolder.add(helper.plane.normal, "z").step(0.01);
+      const nFolder = folder.addFolder("normal");
+      nFolder.add(helper.plane.normal, "x").step(0.01);
+      nFolder.add(helper.plane.normal, "y").step(0.01);
+      nFolder.add(helper.plane.normal, "z").step(0.01);
       folder.add(helper.plane, "constant").step(0.01);
     }
     folder.add(helper, "size").step(0.01);
