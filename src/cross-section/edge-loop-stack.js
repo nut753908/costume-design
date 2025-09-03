@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { getPoint } from "./vertices.js";
+import { getPoint } from "./points.js";
 
 /**
  * An edge loop stack of geometry.

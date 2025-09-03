@@ -1,37 +1,3 @@
-import * as THREE from "three";
-
-/**
- * Create the correct n polygon indices.
- *
- * @param {Array<Array<number>>} nPolygonPositions - The n polygon positions.
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {Array<Array<number>>} The correct n polygon indices.
- */
-export function correctNPolygonIndices(
-  nPolygonPositions,
-  positions,
-  nPolygonIndices
-) {
-  const EPS = Number.EPSILON;
-  const map = Array(nPolygonPositions.length);
-  for (let i = 0, l1 = nPolygonPositions.length; i < l1; i++) {
-    for (let j = 0, l2 = positions.count * 3; j < l2; j += 3) {
-      if (
-        Math.abs(positions.array[j] - nPolygonPositions[i][0]) < EPS &&
-        Math.abs(positions.array[j + 1] - nPolygonPositions[i][2]) < EPS &&
-        Math.abs(positions.array[j + 2] + nPolygonPositions[i][1]) < EPS
-      ) {
-        map[i] = j / 3; // note: one i may have many j/3.
-        break;
-      }
-    }
-  }
-  return nPolygonIndices
-    .map((list) => list.map((v) => map[v]))
-    .filter((list) => !list.includes(undefined));
-}
-
 /**
  * Create the remaining vertices map.
  *
@@ -120,19 +86,4 @@ export function findNextVertex(map, v1, v2) {
 
   if (b !== d) return null;
   return b;
-}
-
-/**
- * Get the point.
- *
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {number} index - The index of the vertex.
- * @returns {THREE.Vector3} The point.
- */
-export function getPoint(positions, index) {
-  return new THREE.Vector3(
-    positions.array[3 * index],
-    positions.array[3 * index + 1],
-    positions.array[3 * index + 2]
-  );
 }
