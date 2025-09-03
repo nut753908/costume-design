@@ -3,7 +3,7 @@ import * as THREE from "three";
 /**
  * Create a line path.
  *
- * @param {Array<THREE.Vector3>} points - The points within an edge loop stack.
+ * @param {Array<THREE.Vector3>} points
  * @returns {THREE.CurvePath} A line path.
  */
 export function createLinePath(points) {
