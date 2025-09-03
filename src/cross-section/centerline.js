@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+// TODO: change centroids type to CurvePath
+// TODO: connect muptiple centroids
 /**
  * The centerline of the edge loop stack.
  *
