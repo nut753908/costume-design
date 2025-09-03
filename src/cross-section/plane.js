@@ -51,4 +51,15 @@ export class Plane {
     const normal = this.getNormal();
     return normal.y < 0 ? normal : normal.clone().negate();
   }
+
+  /**
+   * Get the THREE.Plane instance.
+   *
+   * @returns {THREE.Plane}
+   */
+  getPlane() {
+    const normal = this.getNormal();
+    const position = this.getPosition();
+    return new THREE.Plane(normal, normal.dot(position));
+  }
 }
