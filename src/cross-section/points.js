@@ -34,6 +34,6 @@ export function getCentroids(points) {
 function getCentroid(points) {
   const centroid = new THREE.Vector3(0, 0, 0);
   points.forEach((p) => centroid.add(p));
-  centroid.subScalar(points.length);
+  centroid.divideScalar(points.length);
   return centroid;
 }
