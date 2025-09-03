@@ -14,8 +14,8 @@ export class EdgeLoopStack {
   /**
    * Constructs a new edge loop stack.
    *
-   * @param {Array<Array<number>>} vertices - The vertices within an edge loop stack.
-   * @param {boolean} closed - Whether the edge loop stack is closed.
+   * @param {Array<Array<number>>} [vertices=[]] - The vertices within an edge loop stack.
+   * @param {boolean} [closed=false] - Whether the edge loop stack is closed.
    */
   constructor(vertices = [], closed = false) {
     /**

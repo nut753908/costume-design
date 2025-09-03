@@ -19,7 +19,7 @@ export class VerticalPlane extends Plane {
    * Constructs a new vertical plane.
    *
    * @param {THREE.CurvePath} linePath - The line path.
-   * @param {number} u - The position on the line path according to the arc length. Must be in the range [0, 1].
+   * @param {number} [u=0] - The position on the line path according to the arc length. Must be in the range [0, 1].
    */
   constructor(linePath = new THREE.CurvePath(), u = 0) {
     super();

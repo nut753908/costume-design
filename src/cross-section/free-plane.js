@@ -16,8 +16,8 @@ export class FreePlane extends Plane {
   /**
    * Constructs a new free plane.
    *
-   * @param {THREE.Vector3} normal - The normal direction of the plane.
-   * @param {THREE.Vector3} position - The reference position on the plane.
+   * @param {THREE.Vector3} [normal=(0,0,0)] - The normal direction of the plane.
+   * @param {THREE.Vector3} [position=(0,0,0)] - The reference position on the plane.
    */
   constructor(normal = new THREE.Vector3(), position = new THREE.Vector3()) {
     super();

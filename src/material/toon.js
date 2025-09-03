@@ -5,10 +5,10 @@ import { createColor } from "../math/color.js";
 
 /**
  * @param {GUI} gui
- * @param {string} name - The folder name.
- * @param {number} baseColorHex
- * @param {number} shadeColorHex
- * @param {THREE.Side} side
+ * @param {string} [name="toonMaterial"] - The folder name.
+ * @param {number} [baseColorHex=0xfcd7e9]
+ * @param {number} [shadeColorHex=0xf8c1de]
+ * @param {THREE.Side} [side=THREE.FrontSide]
  * @return {THREE.ShaderMaterial}
  */
 export function createToonMaterial(

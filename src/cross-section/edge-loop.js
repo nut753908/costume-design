@@ -14,8 +14,8 @@ export class EdgeLoop {
   /**
    * Constructs a new edge loop.
    *
-   * @param {Array<number>} vertices - The vertices within an edge loop.
-   * @param {boolean} closed - Whether the edge loop is closed.
+   * @param {Array<number>} [vertices=[]] - The vertices within an edge loop.
+   * @param {boolean} [closed=false] - Whether the edge loop is closed.
    */
   constructor(vertices = [], closed = false) {
     /**
