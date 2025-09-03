@@ -11,7 +11,7 @@ export function createAllEdges(nPolygonIndices) {
   nPolygonIndices.forEach((list) => {
     for (let i = 0, l = list.length; i < l; i++) {
       const a = list[i];
-      const b = i !== list.length - 1 ? list[i + 1] : list[0];
+      const b = i + 1 < l ? list[i + 1] : list[0];
       const ab = `${a},${b}`;
       const ba = `${b},${a}`;
       if (!edges.includes(ab) && !edges.includes(ba)) edges.push(ab);
