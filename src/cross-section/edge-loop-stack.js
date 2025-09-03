@@ -19,7 +19,7 @@ export class EdgeLoopStack {
    */
   constructor(vertices = [], closed = false) {
     /**
-     * The vertices within an edge loop.
+     * The vertices within an edge loop stack.
      *
      * @type {Array<Array<number>>}
      */
