@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Plane } from "./plane.js";
 
 /**
- * A vertical plane at infinity.
+ * A plane at infinity. The plane is perpendicular to the line path at position u.
  *
  * ```js
  * import { VerticalPlane } from "./src/cross-section/vertical-plane.js";
