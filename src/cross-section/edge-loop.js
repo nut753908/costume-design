@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-import { getPoint } from "./vertices.js";
+import { getPoint } from "./points.js";
 
 /**
  * An edge loop of geometry.
  *
  * ```js
  * import { EdgeLoop } from "./src/cross-section/edge-loop.js";
- * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ] );
+ * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ], true );
  * ```
  */
 export class EdgeLoop {

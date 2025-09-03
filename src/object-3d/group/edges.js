@@ -8,7 +8,7 @@ import { GUI } from "lil-gui";
 import { deleteFolder } from "../../main/gui.js";
 
 /**
- * @param {Array<Edge|EdgeLoop|EdgeLoopStack>} edges - Edges / Edge loops / Edge loop stacks
+ * @param {Array<Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath>} edges - Edges / Edge loops / Edge loop stacks / Curve paths
  * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}

@@ -11,6 +11,8 @@ import { createBaseGroup } from "./object-3d/group/base.js";
 import { createAllEdges } from "./cross-section/edges.js";
 import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
+import { getCentroids } from "./cross-section/points.js";
+import { createLinePath } from "./cross-section/line-path.js";
 import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
 import { ControlPoint3 } from "./curve/control-point-3.js";
 import { ControlPoint2 } from "./curve/control-point-2.js";
@@ -54,6 +56,11 @@ async function init() {
     // edges = createAllEdges(nPolygonIndices);
     // edges = createAllEdgeLoops(nPolygonIndices);
     edges = createAllEdgeLoopStacks(nPolygonIndices);
+    edges = edges.map((e) => {
+      const points = e.getPoints(positions);
+      const centroids = getCentroids(points);
+      return createLinePath(centroids);
+    });
     const edgesGroup = createEdgesGroup(edges, positions, ms);
     setEdgesGroupGUI(gui, edgesGroup, false);
     scene.add(edgesGroup);

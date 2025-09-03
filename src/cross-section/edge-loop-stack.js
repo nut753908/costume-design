@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { getPoint } from "./vertices.js";
+import { getPoint } from "./points.js";
 
 /**
  * An edge loop stack of geometry.
@@ -19,7 +19,7 @@ export class EdgeLoopStack {
    */
   constructor(vertices = [], closed = false) {
     /**
-     * The vertices within an edge loop.
+     * The vertices within an edge loop stack.
      *
      * @type {Array<Array<number>>}
      */
@@ -37,11 +37,10 @@ export class EdgeLoopStack {
    * Get the points.
    *
    * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
-   * @returns {Array<THREE.Vector3>} The points.
+   * @returns {Array<Array<THREE.Vector3>>} The points.
    */
   getPoints(positions) {
     return this.vertices.map((list) => list.map((v) => getPoint(positions, v)));
-    // return this.vertices.flat().map((v) => getPoint(positions, v));
   }
 
   /**
