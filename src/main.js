@@ -66,7 +66,7 @@ async function init() {
     scene.add(edgesGroup);
 
     console.log(edges);
-    console.log(edges.map((v) => v.getPoints(positions)));
+    console.log(edges.map((e) => e.getPoints(positions)));
   });
 
   // c = new ControlPoint3();

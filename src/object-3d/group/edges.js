@@ -24,7 +24,7 @@ export function createEdgesGroup(edges, positions, ms) {
 /**
  * @param {GUI} gui
  * @param {THREE.Group} group - The edges group.
- * @param {boolean} visible
+ * @param {boolean} [visible=false]
  */
 export function setEdgesGroupGUI(gui, group, visible = false) {
   deleteFolder(gui, "EdgesGroup");

@@ -6,7 +6,7 @@ import { ControlPoint2 } from "../control-point-2.js";
 /**
  * Use Curve2 to create a circle.
  *
- * @param {number} radius
+ * @param {number} [radius=1]
  * @returns {Curve2}
  */
 function createCircleCurve2(radius = 1) {
@@ -46,9 +46,9 @@ export const smallCircleCurve2 = createCircleCurve2(0.5);
 /**
  * Create a slowly varying Curve2.
  *
- * @param {number} yStart - The starting y value.
- * @param {number} yEnd - The ending y value.
- * @param {number} aspect - The aspect ratio = (x length) / (y length).
+ * @param {number} [yStart=1] - The starting y value.
+ * @param {number} [yEnd=2] - The ending y value.
+ * @param {number} [aspect=3] - The aspect ratio = (x length) / (y length).
  * @returns {Curve2}
  */
 function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3) {
@@ -75,8 +75,8 @@ export const gentlyDescendingCurve2InRadians = createGentlyCurve2(Math.PI, 0);
 /**
  * Create a constant Curve2.
  *
- * @param {number} y - The y value.
- * @param {number} xL - The x length.
+ * @param {number} [y=1] - The y value.
+ * @param {number} [xL=3] - The x length.
  * @returns {Curve2}
  */
 function createConstantCurve2(y = 1, xL = 3) {

@@ -23,9 +23,9 @@ export class ControlPoint2 {
   /**
    * Constructs a new ControlPoint2.
    *
-   * @param {THREE.Vector2} [middlePos] - The position of middle control point.
-   * @param {THREE.Vector2} [leftPos] - The position of leftside control point.
-   * @param {THREE.Vector2} [rightPos] - The position of rightside control point.
+   * @param {THREE.Vector2} [middlePos=(0,0)] - The position of middle control point.
+   * @param {THREE.Vector2} [leftPos=(-1,0)] - The position of leftside control point.
+   * @param {THREE.Vector2} [rightPos=(1,0)] - The position of rightside control point.
    * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "left" and "right" radius.
    * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "left" and "right" angle.
    */
@@ -134,8 +134,8 @@ export class ControlPoint2 {
    * Set GUI.
    *
    * @param {GUI} gui
-   * @param {string} name - The cp folder name used in the GUI.
-   * @param {()=>void} updateCallback - The callback that is invoked after updating cp.
+   * @param {string} [name=this.type] - The cp folder name used in the GUI.
+   * @param {()=>void} [updateCallback=()=>{}] - The callback that is invoked after updating cp.
    */
   setGUI(gui, name = this.type, updateCallback = () => {}) {
     const cp = this;

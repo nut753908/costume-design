@@ -5,8 +5,8 @@ import { createColor } from "../math/color.js";
 
 /**
  * @param {GUI} gui
- * @param {string} name - The folder name.
- * @param {number} colorHex
+ * @param {string} [name="pointsMaterial"] - The folder name.
+ * @param {number} [colorHex=0xffffff]
  * @return {THREE.PointsMaterial}
  */
 export function createPointsMaterial(

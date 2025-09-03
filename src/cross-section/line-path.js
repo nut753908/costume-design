@@ -3,7 +3,7 @@ import * as THREE from "three";
 /**
  * Create a line path.
  *
- * @param {Array<THREE.Vector3>} points
+ * @param {Array<THREE.Vector3>} points - The points.
  * @returns {THREE.CurvePath} A line path.
  */
 export function createLinePath(points) {

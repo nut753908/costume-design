@@ -65,7 +65,7 @@ export class TubeGeometry extends TubeBaseGeometry {
    * @param {Curve2} [xCurvatureC] - The curvature of the cross section in the x direction. Only the y component is used for the curvature.
    * @param {Curve2} [yCurvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
    * @param {Curve2} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
-   * @param {"xy"|"yx"} [curvatureOrder] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
+   * @param {"xy"|"yx"} [curvatureOrder="xy"] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
    */
   constructor(
     axis = constant0Curve3.clone(),

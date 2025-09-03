@@ -5,9 +5,9 @@ import { createColor } from "../math/color.js";
 
 /**
  * @param {GUI} gui
- * @param {string} name - The folder name.
- * @param {number} colorHex
- * @param {number} opacity
+ * @param {string} [name="lineMaterial"] - The folder name.
+ * @param {number} [colorHex=0xffffff]
+ * @param {number} [opacity=1]
  * @return {THREE.LineBasicMaterial}
  */
 export function createLineMaterial(

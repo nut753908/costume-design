@@ -14,9 +14,9 @@ export class Edge {
   /**
    * Constructs a new edge.
    *
-   * @param {number} v1 - The index of the first vertex of the edge.
-   * @param {number} v2 - The index of the second vertex of the edge.
-   * @param {boolean} checked - Whether the edge is checked within the edge loop.
+   * @param {number} [v1=-1] - The index of the first vertex of the edge.
+   * @param {number} [v2=-1] - The index of the second vertex of the edge.
+   * @param {boolean} [checked=false] - Whether the edge is checked within the edge loop.
    */
   constructor(v1 = -1, v2 = -1, checked = false) {
     /**

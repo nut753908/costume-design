@@ -69,7 +69,7 @@ export function loadClosed(gui, closedObj) {
 /**
  * @param {GUI} parent - The parent of the deletion folder.
  * @param {string} _title - The title of the deletion folder.
- * @param {?string} titleStart - The starting string for the title of the deletion folder.
+ * @param {?string} [titleStart=null] - The starting string for the title of the deletion folder.
  */
 export function deleteFolder(parent, _title, titleStart = null) {
   if (_title) {

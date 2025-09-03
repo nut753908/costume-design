@@ -18,7 +18,7 @@ export class Tube {
   /**
    * Constructs a new tube.
    *
-   * @param {Object} parameters - The Parameters for TubeGeometry.
+   * @param {Object} [parameters={}] - The Parameters for TubeGeometry.
    */
   constructor(parameters = {}) {
     /**

@@ -9,10 +9,10 @@ export function createRemainingVerticesMap(nPolygonIndices) {
   nPolygonIndices.forEach((list) => {
     for (let i = 0, l = list.length; i < l; i++) {
       const a = list[i];
-      const b = i !== list.length - 1 ? list[i + 1] : list[0];
+      const b = i + 1 < l ? list[i + 1] : list[0];
       const cList = [];
-      for (let j = i + 2, l2 = i + list.length; j < l2; j++) {
-        cList.push(list[j > list.length - 1 ? j - list.length : j]);
+      for (let j = i + 2, l2 = i + l; j < l2; j++) {
+        cList.push(j < l ? list[j] : list[j - l]);
       }
       [`${a},${b}`, `${b},${a}`].forEach((k) => {
         k in map ? map[k].push(cList) : (map[k] = [cList]);
