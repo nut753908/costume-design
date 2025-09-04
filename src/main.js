@@ -6,6 +6,8 @@ import { createControlsAndGizmo } from "./main/controls.js";
 import { GUI, FunctionController } from "lil-gui";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
+import { createPlaneHelper } from "./object-3d/plane-helper.js";
+import { createArrowHelper } from "./object-3d/arrow-helper.js";
 import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
 import { createAllEdges } from "./cross-section/edges.js";
@@ -45,6 +47,10 @@ async function init() {
   gui = new GUI();
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
+  const planeHelper = createPlaneHelper(gui);
+  const arrowHelper = createArrowHelper(gui);
+  scene.add(planeHelper);
+  scene.add(arrowHelper);
   ms = createMaterials(gui);
 
   await createBaseGroup(ms).then((baseGroup) => {
@@ -73,7 +79,12 @@ async function init() {
 
     // const planes = [...Array(3)].map(() => new FreePlane());
     const planes = edges.map((e) => new VerticalPlane(e));
-    const planesGroup = createPlanesGroup(gui, planes);
+    const planesGroup = createPlanesGroup(
+      gui,
+      planes,
+      planeHelper,
+      arrowHelper
+    );
     scene.add(planesGroup);
   });
 

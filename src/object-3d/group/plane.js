@@ -3,48 +3,68 @@ import * as THREE from "three";
 import { FreePlane } from "../../cross-section/free-plane.js";
 import { VerticalPlane } from "../../cross-section/vertical-plane.js";
 import { deleteFolder } from "../../main/gui.js";
-import { createPlaneHelper } from "../plane-helper.js";
-import { createArrowHelper } from "../arrow-helper.js";
 
 /**
  * @param {GUI} gui
  * @param {FreePlane|VerticalPlane} plane
- * @param {string} name - The folder name.
+ * @param {THREE.PlaneHelper} planeHelper
+ * @param {THREE.ArrowHelper} arrowHelper
+ * @param {string} [name="Plane"] - The folder name.
  * @return {THREE.Group}
  */
-export function createPlaneGroup(gui, plane, name = "Plane") {
-  const group = new THREE.Group();
-
-  deleteFolder(gui, name);
-  const folder = gui.addFolder(name);
-  group.visible = false;
-  folder.add(group, "visible");
-
+export function createPlaneGroup(
+  gui,
+  plane,
+  planeHelper,
+  arrowHelper,
+  name = "Plane"
+) {
   const obj = {
     plane: plane.getPlane(),
     normal: plane.getNormal(),
     point: plane.getPoint(),
   };
 
-  group.add(createPlaneHelper(folder, obj.plane));
-  group.add(createArrowHelper(folder, obj.normal, obj.point));
+  const group = new THREE.Group();
+
+  const _planeHelper = planeHelper.clone();
+  _planeHelper.visible = true;
+  _planeHelper.plane = obj.plane;
+  _planeHelper.size = planeHelper.size;
+  planeHelper._updateSizeCallbacks.push((v) => (_planeHelper.size = v));
+  group.add(_planeHelper);
+
+  const _arrowHelper = arrowHelper.clone();
+  _arrowHelper.visible = true;
+  _arrowHelper.setDirection(obj.normal);
+  _arrowHelper.position.copy(obj.point);
+  arrowHelper._updateLengthCallbacks.push((v) => _arrowHelper.setLength(v));
+  group.add(_arrowHelper);
 
   {
     let nFolder;
     if (plane instanceof FreePlane) {
-      const fpFolder = folder.addFolder("FreePlane");
-      nFolder = fpFolder.addFolder("normal");
+      name += " {FreePlane}";
+      deleteFolder(gui, name);
+      const folder = gui.addFolder(name);
+      group.visible = false;
+      folder.add(group, "visible");
+      nFolder = folder.addFolder("normal");
       nFolder.add(plane.normal, "x").step(0.01).onChange(uN);
       nFolder.add(plane.normal, "y").step(0.01).onChange(uN);
       nFolder.add(plane.normal, "z").step(0.01).onChange(uN);
-      const pFolder = fpFolder.addFolder("point");
+      const pFolder = folder.addFolder("point");
       pFolder.add(plane.point, "x").step(0.01).onChange(uP);
       pFolder.add(plane.point, "y").step(0.01).onChange(uP);
       pFolder.add(plane.point, "z").step(0.01).onChange(uP);
     }
     if (plane instanceof VerticalPlane) {
-      const vpFolder = folder.addFolder("VerticalPlane");
-      vpFolder.add(plane, "u", 0, 1, 0.01).onChange(uU);
+      name += " {VerticalPlane}";
+      deleteFolder(gui, name);
+      const folder = gui.addFolder(name);
+      group.visible = false;
+      folder.add(group, "visible");
+      folder.add(plane, "u", 0, 1, 0.01).onChange(uU);
     }
 
     function uN() /* updateNormal */ {
