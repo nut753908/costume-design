@@ -26,8 +26,8 @@ export function createPlaneGroup(gui, plane, name = "Plane") {
     point: plane.getPoint(),
   };
 
-  group.add(createPlaneHelper(folder, obj.plane, false));
-  group.add(createArrowHelper(folder, obj.normal, obj.point, false));
+  group.add(createPlaneHelper(folder, obj.plane));
+  group.add(createArrowHelper(folder, obj.normal, obj.point));
 
   {
     let nFolder;

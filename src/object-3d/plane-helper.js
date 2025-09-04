@@ -13,7 +13,7 @@ import { deleteFolder } from "../main/gui";
 export function createPlaneHelper(
   gui,
   plane = new THREE.Plane(),
-  isRoot = true
+  isRoot = false
 ) {
   const obj = { hex: createColor(0xffff00) };
   const helper = new THREE.PlaneHelper(plane, 1, obj.hex);

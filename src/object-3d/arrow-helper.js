@@ -15,7 +15,7 @@ export function createArrowHelper(
   gui,
   dir = new THREE.Vector3(0, 0, 1),
   origin = new THREE.Vector3(0, 0, 0),
-  isRoot = true
+  isRoot = false
 ) {
   const obj = { length: 1, hex: createColor(0xffff00) };
   const helper = new THREE.ArrowHelper(dir, origin, obj.length, obj.hex);
