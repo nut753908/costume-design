@@ -14,10 +14,10 @@ import { createArrowHelper } from "../arrow-helper.js";
  */
 export function createPlaneGroup(gui, plane, name = "Plane") {
   const group = new THREE.Group();
-  group.visible = false;
 
   deleteFolder(gui, name);
   const folder = gui.addFolder(name);
+  group.visible = false;
   folder.add(group, "visible");
 
   const obj = {
