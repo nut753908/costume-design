@@ -19,7 +19,10 @@ export class FreePlane extends Plane {
    * @param {THREE.Vector3} [normal=(0,1,0)] - The normal direction of the plane. Must be a unit vector.
    * @param {THREE.Vector3} [point=(0,0,0)] - The reference point on the plane.
    */
-  constructor(normal = new THREE.Vector3(), point = new THREE.Vector3()) {
+  constructor(
+    normal = new THREE.Vector3(0, 1, 0),
+    point = new THREE.Vector3(0, 0, 0)
+  ) {
     super();
 
     /**
