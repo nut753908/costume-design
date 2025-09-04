@@ -30,7 +30,8 @@ export function createPlaneGroup(
 
   const _planeHelper = planeHelper.clone();
   _planeHelper.visible = true;
-  _planeHelper.plane = obj.plane;
+  _planeHelper.normal = obj.normal;
+  _planeHelper.point = obj.point;
   _planeHelper.size = planeHelper.size;
   // These functions are used by createPlaneHelper() in ./src/object-3d/plane-helper.js.
   planeHelper._updateSizeCallbacks.push((v) => (_planeHelper.size = v));
@@ -70,18 +71,22 @@ export function createPlaneGroup(
       plane.normal.normalize();
       obj.plane.copy(plane.getPlane());
       obj.normal.copy(plane.getNormal());
+      group.children[0].normal.copy(obj.normal);
       group.children[1].setDirection(obj.normal);
       nFolder.controllers.forEach((c) => c.updateDisplay());
     }
     function uP() /* updatePoint */ {
       obj.plane.copy(plane.getPlane());
       obj.point.copy(plane.getPoint());
+      group.children[0].point.copy(obj.point);
       group.children[1].position.copy(obj.point);
     }
     function uU() /* updateU */ {
       obj.plane.copy(plane.getPlane());
       obj.normal.copy(plane.getNormal());
       obj.point.copy(plane.getPoint());
+      group.children[0].normal.copy(obj.normal);
+      group.children[0].point.copy(obj.point);
       group.children[1].setDirection(obj.normal);
       group.children[1].position.copy(obj.point);
     }
