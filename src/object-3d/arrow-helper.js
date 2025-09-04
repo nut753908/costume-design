@@ -17,68 +17,41 @@ export function createArrowHelper(
   origin = new THREE.Vector3(0, 0, 0),
   showDirOrigin = true
 ) {
-  const obj = {
-    dir: dir,
-    origin: origin,
-    length: 1,
-    hex: createColor(0xffff00),
-  };
-  const helper = new THREE.ArrowHelper(
-    obj.dir,
-    obj.origin,
-    obj.length,
-    obj.hex
-  );
+  const obj = { length: 1, hex: createColor(0xffff00) };
+  const helper = new THREE.ArrowHelper(dir, origin, obj.length, obj.hex);
   {
     deleteFolder(gui, "THREE.ArrowHelper");
     const folder = gui.addFolder("THREE.ArrowHelper");
     helper.visible = false;
     folder.add(helper, "visible");
+    let dFolder;
     if (showDirOrigin) {
-      const dFolder = folder.addFolder("dir");
-      dFolder
-        .add(obj.dir, "x")
-        .step(0.01)
-        .onChange(() => {
-          obj.dir.normalize();
-          helper.setDirection(obj.dir);
-          dFolder.controllers.forEach((c) => c.updateDisplay());
-        });
-      dFolder
-        .add(obj.dir, "y")
-        .step(0.01)
-        .onChange(() => {
-          obj.dir.normalize();
-          helper.setDirection(obj.dir);
-          dFolder.controllers.forEach((c) => c.updateDisplay());
-        });
-      dFolder
-        .add(obj.dir, "z")
-        .step(0.01)
-        .onChange(() => {
-          obj.dir.normalize();
-          helper.setDirection(obj.dir);
-          dFolder.controllers.forEach((c) => c.updateDisplay());
-        });
+      dFolder = folder.addFolder("dir");
+      dFolder.add(dir, "x").step(0.01).onChange(uD);
+      dFolder.add(dir, "y").step(0.01).onChange(uD);
+      dFolder.add(dir, "z").step(0.01).onChange(uD);
       const oFolder = folder.addFolder("origin");
-      oFolder
-        .add(obj.origin, "x")
-        .step(0.01)
-        .onChange(() => helper.position.copy(obj.origin));
-      oFolder
-        .add(obj.origin, "y")
-        .step(0.01)
-        .onChange(() => helper.position.copy(obj.origin));
-      oFolder
-        .add(obj.origin, "z")
-        .step(0.01)
-        .onChange(() => helper.position.copy(obj.origin));
+      oFolder.add(origin, "x").step(0.01).onChange(uO);
+      oFolder.add(origin, "y").step(0.01).onChange(uO);
+      oFolder.add(origin, "z").step(0.01).onChange(uO);
     }
-    folder
-      .add(obj, "length")
-      .step(0.01)
-      .onChange((v) => helper.setLength(v));
-    folder.addColor(obj, "hex").onChange((v) => helper.setColor(v));
+    folder.add(obj, "length").step(0.01).onChange(uL);
+    folder.addColor(obj, "hex").onChange(uH);
+
+    function uD() /* updateDir */ {
+      dir.normalize();
+      helper.setDirection(dir);
+      dFolder.controllers.forEach((c) => c.updateDisplay());
+    }
+    function uO() /* updateOrigin */ {
+      helper.position.copy(origin);
+    }
+    function uL() /* updateLength */ {
+      helper.setLength(obj.length);
+    }
+    function uH() /* updateHex */ {
+      helper.setColor(obj.hex);
+    }
   }
   return helper;
 }

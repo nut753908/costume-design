@@ -12,20 +12,19 @@ export function createAxesHelper(gui) {
   {
     const folder = gui.addFolder("THREE.AxesHelper").close();
     folder.add(helper, "visible");
-    folder
-      .add(obj, "size")
-      .step(0.01)
-      .onChange(() => {
-        const vertices = [
-          [0, 0, 0, obj.size, 0, 0],
-          [0, 0, 0, 0, obj.size, 0],
-          [0, 0, 0, 0, 0, obj.size],
-        ].flat();
-        helper.geometry.setAttribute(
-          "position",
-          new THREE.Float32BufferAttribute(vertices, 3)
-        );
-      });
+    folder.add(obj, "size").step(0.01).onChange(uS);
+
+    function uS() /* updateSize */ {
+      const vertices = [
+        [0, 0, 0, obj.size, 0, 0],
+        [0, 0, 0, 0, obj.size, 0],
+        [0, 0, 0, 0, 0, obj.size],
+      ].flat();
+      helper.geometry.setAttribute(
+        "position",
+        new THREE.Float32BufferAttribute(vertices, 3)
+      );
+    }
   }
   return helper;
 }

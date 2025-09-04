@@ -22,36 +22,25 @@ export function createPlaneHelper(
     const folder = gui.addFolder("THREE.PlaneHelper");
     helper.visible = false;
     folder.add(helper, "visible");
+    let nFolder;
     if (showPlaneParams) {
-      const nFolder = folder.addFolder("normal");
-      nFolder
-        .add(plane.normal, "x")
-        .step(0.01)
-        .onChange(() => {
-          plane.normal.normalize();
-          nFolder.controllers.forEach((c) => c.updateDisplay());
-        });
-      nFolder
-        .add(plane.normal, "y")
-        .step(0.01)
-        .onChange(() => {
-          plane.normal.normalize();
-          nFolder.controllers.forEach((c) => c.updateDisplay());
-        });
-      nFolder
-        .add(plane.normal, "z")
-        .step(0.01)
-        .onChange(() => {
-          plane.normal.normalize();
-          nFolder.controllers.forEach((c) => c.updateDisplay());
-        });
+      nFolder = folder.addFolder("normal");
+      nFolder.add(plane.normal, "x").step(0.01).onChange(uN);
+      nFolder.add(plane.normal, "y").step(0.01).onChange(uN);
+      nFolder.add(plane.normal, "z").step(0.01).onChange(uN);
       folder.add(plane, "constant").step(0.01);
     }
     folder.add(helper, "size").step(0.01);
-    folder.addColor(obj, "hex").onChange((v) => {
-      helper.material.color.set(v);
-      helper.children[0].material.color.set(v);
-    });
+    folder.addColor(obj, "hex").onChange(uH);
+
+    function uN() /* updateNormal */ {
+      plane.normal.normalize();
+      nFolder.controllers.forEach((c) => c.updateDisplay());
+    }
+    function uH() /* updateHex */ {
+      helper.material.color.set(obj.hex);
+      helper.children[0].material.color.set(obj.hex);
+    }
   }
   return helper;
 }
