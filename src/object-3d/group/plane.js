@@ -13,16 +13,18 @@ import { createArrowHelper } from "../arrow-helper.js";
  * @return {THREE.Group}
  */
 export function createPlaneGroup(gui, plane, name = "Plane") {
+  const group = new THREE.Group();
+  group.visible = false;
+
   deleteFolder(gui, name);
   const folder = gui.addFolder(name);
+  folder.add(group, "visible");
 
   const obj = {
     plane: plane.getPlane(),
     normal: plane.getNormal(),
     point: plane.getPoint(),
   };
-
-  const group = new THREE.Group();
 
   group.add(createPlaneHelper(folder, obj.plane, false));
   group.add(createArrowHelper(folder, obj.normal, obj.point, false));

@@ -7,23 +7,23 @@ import { deleteFolder } from "../main/gui";
 /**
  * @param {GUI} gui
  * @param {THREE.Plane} plane
- * @param {boolean} [showPlaneParams=true]
+ * @param {boolean} [isRoot=true]
  * @return {THREE.PlaneHelper}
  */
 export function createPlaneHelper(
   gui,
   plane = new THREE.Plane(),
-  showPlaneParams = true
+  isRoot = true
 ) {
   const obj = { hex: createColor(0xffff00) };
   const helper = new THREE.PlaneHelper(plane, 1, obj.hex);
   {
     deleteFolder(gui, "THREE.PlaneHelper");
     const folder = gui.addFolder("THREE.PlaneHelper");
-    helper.visible = false;
-    folder.add(helper, "visible");
     let nFolder;
-    if (showPlaneParams) {
+    if (isRoot) {
+      helper.visible = false;
+      folder.add(helper, "visible");
       nFolder = folder.addFolder("normal");
       nFolder.add(plane.normal, "x").step(0.01).onChange(uN);
       nFolder.add(plane.normal, "y").step(0.01).onChange(uN);
