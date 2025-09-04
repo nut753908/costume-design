@@ -3,15 +3,13 @@ import * as THREE from "three";
 import { Plane } from "./plane.js";
 
 /**
- * A plane at infinity. The plane is perpendicular to the line path at position u.
+ * A plane at infinity. The plane is perpendicular to the curve at position u.
  *
  * ```js
  * import { VerticalPlane } from "./src/cross-section/vertical-plane.js";
  * const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 1, 0 ) ];
- * const line = new THREE.LineCurve3( points[0], points[1] );
- * const linePath = new THREE.CurvePath();
- * linePath.add( line );
- * const verticalPlane = new VerticalPlane( linePath, 0 );
+ * const curve = new THREE.CatmullRomCurve3( points );
+ * const verticalPlane = new VerticalPlane( curve, 0 );
  * ```
  *
  * @augments Plane
@@ -20,21 +18,21 @@ export class VerticalPlane extends Plane {
   /**
    * Constructs a new vertical plane.
    *
-   * @param {THREE.CurvePath} linePath - The line path.
-   * @param {number} [u=0] - The position on the line path according to the arc length. Must be in the range [0, 1].
+   * @param {THREE.Curve} curve - The curve.
+   * @param {number} [u=0] - The position on the curve according to the arc length. Must be in the range [0, 1].
    */
-  constructor(linePath = new THREE.CurvePath(), u = 0) {
+  constructor(curve = new THREE.Curve(), u = 0) {
     super();
 
     /**
-     * The line path.
+     * The curve.
      *
-     * @type {THREE.CurvePath}
+     * @type {THREE.Curve}
      */
-    this.linePath = linePath;
+    this.curve = curve;
 
     /**
-     * The position on the line path according to the arc length. Must be in the range [0, 1].
+     * The position on the curve according to the arc length. Must be in the range [0, 1].
      *
      * @type {number}
      */
@@ -47,7 +45,7 @@ export class VerticalPlane extends Plane {
    * @returns {THREE.Vector3}
    */
   getNormal() {
-    return this.linePath.getTangentAt(this.u);
+    return this.curve.getTangentAt(this.u);
   }
 
   /**
@@ -56,7 +54,7 @@ export class VerticalPlane extends Plane {
    * @returns {THREE.Vector3}
    */
   getPoint() {
-    return this.linePath.getPointAt(this.u);
+    return this.curve.getPointAt(this.u);
   }
 
   /**
@@ -75,7 +73,7 @@ export class VerticalPlane extends Plane {
    * @returns {VerticalPlane} A reference to this vertical plane.
    */
   copy(source) {
-    this.linePath.copy(source.linePath);
+    this.curve.copy(source.curve);
     this.u = source.u;
 
     return this;
@@ -89,7 +87,7 @@ export class VerticalPlane extends Plane {
   toJSON() {
     const data = {};
 
-    data.linePath = this.linePath.toJSON();
+    data.curve = this.curve.toJSON();
     data.u = this.u;
 
     return data;
@@ -102,7 +100,7 @@ export class VerticalPlane extends Plane {
    * @return {VerticalPlane} A reference to this vertical plane.
    */
   fromJSON(json) {
-    this.linePath.fromJSON(json.linePath);
+    this.curve.fromJSON(json.curve);
     this.u = json.u;
 
     return this;
