@@ -17,7 +17,7 @@ export function createArrowHelper(
   origin = new THREE.Vector3(0, 0, 0),
   isRoot = false
 ) {
-  const obj = { length: 1, hex: createColor(0xffff00) };
+  const obj = { length: 0.15, hex: createColor(0xffff00) };
   const helper = new THREE.ArrowHelper(dir, origin, obj.length, obj.hex);
   {
     deleteFolder(gui, "THREE.ArrowHelper");

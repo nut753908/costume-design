@@ -16,7 +16,7 @@ export function createPlaneHelper(
   isRoot = false
 ) {
   const obj = { hex: createColor(0xffff00) };
-  const helper = new THREE.PlaneHelper(plane, 1, obj.hex);
+  const helper = new THREE.PlaneHelper(plane, 0.3, obj.hex);
   {
     deleteFolder(gui, "THREE.PlaneHelper");
     const folder = gui.addFolder("THREE.PlaneHelper");
