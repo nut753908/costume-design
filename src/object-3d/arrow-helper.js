@@ -6,18 +6,23 @@ import { closeFolder, deleteFolder } from "../main/gui";
 
 /**
  * @param {GUI} gui
- * @param {THREE.Vector3} [dir=(0,0,1)]
- * @param {THREE.Vector3} [origin=(0,0,0)]
  * @return {THREE.ArrowHelper}
  */
-export function createArrowHelper(
-  gui,
-  dir = new THREE.Vector3(0, 0, 1),
-  origin = new THREE.Vector3(0, 0, 0)
-) {
-  const obj = { length: 0.15, hex: createColor(0xffff00) };
-  const helper = new THREE.ArrowHelper(dir, origin, obj.length, obj.hex);
+export function createArrowHelper(gui) {
+  const obj = {
+    dir: new THREE.Vector3(0, 0, 1),
+    origin: new THREE.Vector3(0, 0, 0),
+    length: 0.15,
+    hex: createColor(0xffff00),
+  };
+  const helper = new THREE.ArrowHelper(
+    obj.dir,
+    obj.origin,
+    obj.length,
+    obj.hex
+  );
   helper.visible = false;
+  // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.js.
   helper._updateLengthCallbacks = [];
   {
     deleteFolder(gui, "THREE.ArrowHelper");
