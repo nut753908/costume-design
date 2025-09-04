@@ -26,6 +26,7 @@ export function createPlaneGroup(
   };
 
   const group = new THREE.Group();
+  group.visible = false;
 
   const _planeHelper = planeHelper.clone();
   _planeHelper.visible = true;
@@ -48,7 +49,6 @@ export function createPlaneGroup(
     if (plane instanceof VerticalPlane) name += " {VerticalPlane}";
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
-    group.visible = false;
     folder.add(group, "visible");
 
     let nFolder;
