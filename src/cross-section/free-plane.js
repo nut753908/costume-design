@@ -11,6 +11,8 @@ import { Plane } from "./plane.js";
  * const point = new THREE.Vector3( 0, 0, 0 );
  * const freePlane = new FreePlane( normal, point );
  * ```
+ *
+ * @augments Plane
  */
 export class FreePlane extends Plane {
   /**

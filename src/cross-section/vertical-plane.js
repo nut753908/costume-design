@@ -13,6 +13,8 @@ import { Plane } from "./plane.js";
  * linePath.add( line );
  * const verticalPlane = new VerticalPlane( linePath, 0 );
  * ```
+ *
+ * @augments Plane
  */
 export class VerticalPlane extends Plane {
   /**
