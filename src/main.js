@@ -68,14 +68,17 @@ async function init() {
     edges = edges.map((e) => {
       const points = e.getPoints(positions);
       const centroids = getCentroids(points);
-      return createLinePath(centroids);
+      // return createLinePath(centroids);
+      return new THREE.CatmullRomCurve3(centroids);
     });
     const edgesGroup = createEdgesGroup(edges, positions, ms);
     setEdgesGroupGUI(gui, edgesGroup, false);
     scene.add(edgesGroup);
 
     console.log(edges);
-    console.log(edges.map((e) => e.getPoints(positions)));
+    // console.log(edges.map((e) => e.getPoints(positions)));
+    // console.log(edges.map((e) => e.getPoints()));
+    console.log(edges.map((e) => e.getPoints(5 * e.points.length)));
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());

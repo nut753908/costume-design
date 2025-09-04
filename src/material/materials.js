@@ -20,6 +20,7 @@ export function createMaterials(gui) {
 
   const edgeFolder = folder.addFolder("edge").close();
   const edge = {
+    points: createPointsMaterial(edgeFolder, "points", 0x000000),
     line: createLineMaterial(edgeFolder, "line", 0x000000),
   };
 
