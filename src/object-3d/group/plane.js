@@ -42,13 +42,15 @@ export function createPlaneGroup(
   group.add(_arrowHelper);
 
   {
+    if (plane instanceof FreePlane) name += " {FreePlane}";
+    if (plane instanceof VerticalPlane) name += " {VerticalPlane}";
+    deleteFolder(gui, name);
+    const folder = gui.addFolder(name);
+    group.visible = false;
+    folder.add(group, "visible");
+
     let nFolder;
     if (plane instanceof FreePlane) {
-      name += " {FreePlane}";
-      deleteFolder(gui, name);
-      const folder = gui.addFolder(name);
-      group.visible = false;
-      folder.add(group, "visible");
       nFolder = folder.addFolder("normal");
       nFolder.add(plane.normal, "x").step(0.01).onChange(uN);
       nFolder.add(plane.normal, "y").step(0.01).onChange(uN);
@@ -59,11 +61,6 @@ export function createPlaneGroup(
       pFolder.add(plane.point, "z").step(0.01).onChange(uP);
     }
     if (plane instanceof VerticalPlane) {
-      name += " {VerticalPlane}";
-      deleteFolder(gui, name);
-      const folder = gui.addFolder(name);
-      group.visible = false;
-      folder.add(group, "visible");
       folder.add(plane, "u", 0, 1, 0.01).onChange(uU);
     }
 
