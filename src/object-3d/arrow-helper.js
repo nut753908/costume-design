@@ -39,28 +39,40 @@ export function createArrowHelper(
       dFolder
         .add(obj.dir, "x")
         .step(0.01)
-        .onChange(() => helper.setDirection(obj.dir));
+        .onChange(() => {
+          obj.dir.normalize();
+          helper.setDirection(obj.dir);
+          dFolder.controllers.forEach((c) => c.updateDisplay());
+        });
       dFolder
         .add(obj.dir, "y")
         .step(0.01)
-        .onChange(() => helper.setDirection(obj.dir));
+        .onChange(() => {
+          obj.dir.normalize();
+          helper.setDirection(obj.dir);
+          dFolder.controllers.forEach((c) => c.updateDisplay());
+        });
       dFolder
         .add(obj.dir, "z")
         .step(0.01)
-        .onChange(() => helper.setDirection(obj.dir));
+        .onChange(() => {
+          obj.dir.normalize();
+          helper.setDirection(obj.dir);
+          dFolder.controllers.forEach((c) => c.updateDisplay());
+        });
       const oFolder = folder.addFolder("origin");
       oFolder
         .add(obj.origin, "x")
         .step(0.01)
-        .onChange((v) => (helper.position.x = v));
+        .onChange(() => helper.position.copy(obj.origin));
       oFolder
         .add(obj.origin, "y")
         .step(0.01)
-        .onChange((v) => (helper.position.y = v));
+        .onChange(() => helper.position.copy(obj.origin));
       oFolder
         .add(obj.origin, "z")
         .step(0.01)
-        .onChange((v) => (helper.position.z = v));
+        .onChange(() => helper.position.copy(obj.origin));
     }
     folder
       .add(obj, "length")

@@ -24,10 +24,28 @@ export function createPlaneHelper(
     folder.add(helper, "visible");
     if (showPlaneParams) {
       const nFolder = folder.addFolder("normal");
-      nFolder.add(helper.plane.normal, "x").step(0.01);
-      nFolder.add(helper.plane.normal, "y").step(0.01);
-      nFolder.add(helper.plane.normal, "z").step(0.01);
-      folder.add(helper.plane, "constant").step(0.01);
+      nFolder
+        .add(plane.normal, "x")
+        .step(0.01)
+        .onChange(() => {
+          plane.normal.normalize();
+          nFolder.controllers.forEach((c) => c.updateDisplay());
+        });
+      nFolder
+        .add(plane.normal, "y")
+        .step(0.01)
+        .onChange(() => {
+          plane.normal.normalize();
+          nFolder.controllers.forEach((c) => c.updateDisplay());
+        });
+      nFolder
+        .add(plane.normal, "z")
+        .step(0.01)
+        .onChange(() => {
+          plane.normal.normalize();
+          nFolder.controllers.forEach((c) => c.updateDisplay());
+        });
+      folder.add(plane, "constant").step(0.01);
     }
     folder.add(helper, "size").step(0.01);
     folder.addColor(obj, "hex").onChange((v) => {
