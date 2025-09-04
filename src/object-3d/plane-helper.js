@@ -4,6 +4,7 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 
+// TODO: use reference point
 /**
  * @param {GUI} gui
  * @return {THREE.PlaneHelper}

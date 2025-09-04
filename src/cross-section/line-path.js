@@ -1,5 +1,6 @@
 import * as THREE from "three";
 
+// TODO: add spline path
 /**
  * Create a line path.
  *

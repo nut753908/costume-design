@@ -77,6 +77,7 @@ async function init() {
     console.log(edges);
     console.log(edges.map((e) => e.getPoints(positions)));
 
+    // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
     const planes = edges.map((e) => new VerticalPlane(e));
     const planesGroup = createPlanesGroup(
