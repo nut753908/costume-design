@@ -8,12 +8,11 @@ import { createPlaneGroup } from "./plane.js";
 /**
  * @param {GUI} gui
  * @param {Array<FreePlane|VerticalPlane>} planes
- * @param {string} name - The folder name.
  * @return {THREE.Group}
  */
-export function createPlanesGroup(gui, planes, name = "Planes") {
-  deleteFolder(gui, name);
-  const folder = gui.addFolder(name);
+export function createPlanesGroup(gui, planes) {
+  deleteFolder(gui, "Planes");
+  const folder = gui.addFolder("Planes");
 
   const group = new THREE.Group();
 
