@@ -24,12 +24,12 @@ export class Plane {
   }
 
   /**
-   * Get the reference position on the plane.
+   * Get the reference point on the plane.
    *
    * @returns {THREE.Vector3}
    */
-  getPosition() {
-    console.warn("Plane: .getPosition() not implemented.");
+  getPoint() {
+    console.warn("Plane: .getPoint() not implemented.");
   }
 
   /**
@@ -59,7 +59,7 @@ export class Plane {
    */
   getPlane() {
     const normal = this.getNormal();
-    const position = this.getPosition();
-    return new THREE.Plane(normal, normal.dot(position));
+    const point = this.getPoint();
+    return new THREE.Plane().setFromNormalAndCoplanarPoint(normal, point);
   }
 }

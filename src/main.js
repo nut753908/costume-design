@@ -6,6 +6,8 @@ import { createControlsAndGizmo } from "./main/controls.js";
 import { GUI, FunctionController } from "lil-gui";
 import { createScene } from "./object-3d/scene.js";
 import { createAxesHelper } from "./object-3d/axes-helper.js";
+import { createPlaneHelper } from "./object-3d/plane-helper.js";
+import { createArrowHelper } from "./object-3d/arrow-helper.js";
 import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
 import { createAllEdges } from "./cross-section/edges.js";
@@ -14,6 +16,9 @@ import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { getCentroids } from "./cross-section/points.js";
 import { createLinePath } from "./cross-section/line-path.js";
 import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
+import { FreePlane } from "./cross-section/free-plane.js";
+import { VerticalPlane } from "./cross-section/vertical-plane.js";
+import { createPlanesGroup } from "./object-3d/group/planes.js";
 import { ControlPoint3 } from "./curve/control-point-3.js";
 import { ControlPoint2 } from "./curve/control-point-2.js";
 import { createControlPointGroup } from "./object-3d/group/control-point.js";
@@ -42,6 +47,10 @@ async function init() {
   gui = new GUI();
   scene = createScene(gui);
   scene.add(createAxesHelper(gui));
+  const planeHelper = createPlaneHelper(gui);
+  const arrowHelper = createArrowHelper(gui);
+  scene.add(planeHelper);
+  scene.add(arrowHelper);
   ms = createMaterials(gui);
 
   await createBaseGroup(ms).then((baseGroup) => {
@@ -67,6 +76,16 @@ async function init() {
 
     console.log(edges);
     console.log(edges.map((e) => e.getPoints(positions)));
+
+    // const planes = [...Array(3)].map(() => new FreePlane());
+    const planes = edges.map((e) => new VerticalPlane(e));
+    const planesGroup = createPlanesGroup(
+      gui,
+      planes,
+      planeHelper,
+      arrowHelper
+    );
+    scene.add(planesGroup);
   });
 
   // c = new ControlPoint3();

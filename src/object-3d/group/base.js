@@ -4,7 +4,7 @@ import { loadBaseGeometry } from "../../geometry/base.js";
 
 /**
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {?THREE.Group}
+ * @return {Promise<?THREE.Group>}
  */
 export async function createBaseGroup(ms) {
   const group = new THREE.Group();
