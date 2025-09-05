@@ -29,7 +29,7 @@ export function createEdgesGroup(edges, positions, ms) {
 export function setEdgesGroupGUI(gui, group, visible = false) {
   deleteFolder(gui, "EdgesGroup");
   const folder = gui.addFolder("EdgesGroup");
-  closeFolder(folder);
+  // closeFolder(folder);
   const gFolder = folder.addFolder("visible");
   group.children.forEach((g, i) => {
     g.visible = visible;

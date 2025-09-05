@@ -65,31 +65,31 @@ async function init() {
     // edges = createAllEdges(nPolygonIndices);
     // edges = createAllEdgeLoops(nPolygonIndices);
     edges = createAllEdgeLoopStacks(nPolygonIndices);
-    edges = edges.map((e) => {
-      const points = e.getPoints(positions);
-      const centroids = getCentroids(points);
-      // return createLinePath(centroids);
-      return new THREE.CatmullRomCurve3(centroids);
-    });
+    // edges = edges.map((e) => {
+    //   const points = e.getPoints(positions);
+    //   const centroids = getCentroids(points);
+    //   // return createLinePath(centroids);
+    //   return new THREE.CatmullRomCurve3(centroids);
+    // });
     const edgesGroup = createEdgesGroup(edges, positions, ms);
     setEdgesGroupGUI(gui, edgesGroup, false);
     scene.add(edgesGroup);
 
     console.log(edges);
-    // console.log(edges.map((e) => e.getPoints(positions)));
+    console.log(edges.map((e) => e.getPoints(positions)));
     // console.log(edges.map((e) => e.getPoints()));
-    console.log(edges.map((e) => e.getPoints(5 * e.points.length)));
+    // console.log(edges.map((e) => e.getPoints(5 * e.points.length)));
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
-    const planes = edges.map((e) => new VerticalPlane(e));
-    const planesGroup = createPlanesGroup(
-      gui,
-      planes,
-      planeHelper,
-      arrowHelper
-    );
-    scene.add(planesGroup);
+    // const planes = edges.map((e) => new VerticalPlane(e));
+    // const planesGroup = createPlanesGroup(
+    //   gui,
+    //   planes,
+    //   planeHelper,
+    //   arrowHelper
+    // );
+    // scene.add(planesGroup);
   });
 
   // c = new ControlPoint3();
@@ -100,9 +100,9 @@ async function init() {
   // group = createCurveGroup(c, ms);
   c = new Tube();
   group = createTubeGroup(c, ms);
-  group.children[0].visible = false; // debug code
-  setTubeGroupGUI(gui, group); // Tube only.
-  c.setGUI(gui);
+  group.children.forEach((g) => (g.visible = false)); // debug code
+  // setTubeGroupGUI(gui, group); // Tube only.
+  // c.setGUI(gui);
   scene.add(group);
 
   save();
@@ -132,8 +132,8 @@ function loadLastUndo() {
   // group = createControlPointGroup(c, ms);
   // group = createCurveGroup(c, ms);
   group = createTubeGroup(c, ms);
-  setTubeGroupGUI(gui, group); // Tube only.
-  c.setGUI(gui);
+  // setTubeGroupGUI(gui, group); // Tube only.
+  // c.setGUI(gui);
   scene.add(group);
 
   gui.load(obj.gui);
