@@ -14,7 +14,7 @@ import { createAllEdges } from "./cross-section/edges.js";
 import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createBaseCenterlines } from "./cross-section/centerline.js";
-import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
+import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
 import { createPlanesGroup } from "./object-3d/group/planes.js";
@@ -60,21 +60,21 @@ async function init() {
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute("position");
 
-    let edges;
-    // edges = createAllEdges(nPolygonIndices);
-    // edges = createAllEdgeLoops(nPolygonIndices);
-    // edges = createAllEdgeLoopStacks(nPolygonIndices);
-    edges = createBaseCenterlines(nPolygonIndices, positions);
-    const edgesGroup = createEdgesGroup(edges, positions, ms);
-    setEdgesGroupGUI(gui, edgesGroup, false);
-    scene.add(edgesGroup);
+    let lines;
+    // lines = createAllEdges(nPolygonIndices);
+    // lines = createAllEdgeLoops(nPolygonIndices);
+    // lines = createAllEdgeLoopStacks(nPolygonIndices);
+    lines = createBaseCenterlines(nPolygonIndices, positions);
+    const linesGroup = createLinesGroup(lines, positions, ms);
+    setLinesGroupGUI(gui, linesGroup, false);
+    scene.add(linesGroup);
 
-    // console.log(edges);
-    // console.log(edges.map((e) => e.getPoints(positions)));
+    // console.log(lines);
+    // console.log(lines.map((v) => v.getPoints(positions)));
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
-    // const planes = edges.map((e) => new VerticalPlane(e));
+    // const planes = lines.map((v) => new VerticalPlane(v));
     // const planesGroup = createPlanesGroup(
     //   gui,
     //   planes,
