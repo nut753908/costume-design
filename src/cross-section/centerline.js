@@ -13,7 +13,7 @@ import { objectMap } from "../main/utils";
  */
 export function createBaseCenterlines(nPolygonIndices, positions) {
   const stacks = createAllEdgeLoopStacks(nPolygonIndices);
-  if (stacks.length !== 56) return [];
+  if (stacks.length !== 56) return {};
   const list = stacks.map((s) => getCentroids(s.getPoints(positions)));
   // These index references can be found in the comments of "./edge-loop-stacks.js".
   const obj = {
