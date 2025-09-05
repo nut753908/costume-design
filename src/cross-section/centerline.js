@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { createAllEdgeLoopStacks } from "./edge-loop-stacks";
 import { getCentroids } from "./points";
+import { objectMap } from "../math/utils";
 import { createLinePath } from "./line-path";
 
 /**
@@ -42,8 +43,6 @@ export function createBaseCenterlines(nPolygonIndices, positions) {
       .add(obj.rightLeg.slice(-1)[0])
       .divideScalar(8)
   );
-  return Object.fromEntries(
-    // Object.entries(obj).map(([k, v]) => [k, createLinePath(v)])
-    Object.entries(obj).map(([k, v]) => [k, new THREE.CatmullRomCurve3(v)])
-  );
+  // return objectMap(obj, createLinePath);
+  return objectMap(obj, (v) => new THREE.CatmullRomCurve3(v));
 }

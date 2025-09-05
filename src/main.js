@@ -15,6 +15,7 @@ import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createBaseCenterlines } from "./cross-section/centerline.js";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
+import { objectMap } from "./math/utils.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
 import { createPlanesGroup } from "./object-3d/group/planes.js";
@@ -74,9 +75,7 @@ async function init() {
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
-    const planes = Object.fromEntries(
-      Object.entries(lines).map(([k, v]) => [k, new VerticalPlane(v)])
-    );
+    const planes = objectMap(lines, (v) => new VerticalPlane(v));
     const planesGroup = createPlanesGroup(
       gui,
       planes,
