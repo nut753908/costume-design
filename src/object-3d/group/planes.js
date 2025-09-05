@@ -7,7 +7,7 @@ import { createPlaneGroup } from "./plane.js";
 
 /**
  * @param {GUI} gui
- * @param {{[k:string]:FreePlane|VerticalPlane}} planes
+ * @param {{[k:number|string]:FreePlane|VerticalPlane}} planes
  * @param {THREE.PlaneHelper} planeHelper
  * @param {THREE.ArrowHelper} arrowHelper
  * @return {THREE.Group}

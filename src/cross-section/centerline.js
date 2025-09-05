@@ -9,7 +9,7 @@ import { objectMap } from "../math/utils";
  *
  * @param {Array<Array<number>>} nPolygonIndices - The base n polygon indices.
  * @param {THREE.BufferAttribute} positions - The results of the base geometry.getAttribute("position").
- * @returns {{[k:string]:THREE.CatmullRomCurve3}} The base centerlines.
+ * @returns {{[k:string]:THREE.CurvePath|THREE.CatmullRomCurve3}} The base centerlines.
  */
 export function createBaseCenterlines(nPolygonIndices, positions) {
   const stacks = createAllEdgeLoopStacks(nPolygonIndices);
