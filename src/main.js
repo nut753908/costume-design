@@ -50,8 +50,7 @@ async function init() {
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute("position");
 
-    let lines;
-    lines = createBaseCenterlines(nPolygonIndices, positions);
+    const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
     setLinesGroupGUI(gui, linesGroup, false);
     scene.add(linesGroup);
