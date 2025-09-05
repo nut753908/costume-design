@@ -21,15 +21,9 @@ import { GUI } from "lil-gui";
 export function saveGui(gui) {
   const guiObj = gui.save();
   const folders = {};
-  [
-    "THREE.Scene",
-    "THREE.AxesHelper",
-    "PlaneHelper",
-    "THREE.ArrowHelper",
-    "THREE.Material",
-    "LinesGroup",
-    "TubeGroup",
-  ].forEach((k) => (folders[k] = guiObj.folders[k]));
+  ["(fixed)", "LinesGroup", "TubeGroup"].forEach(
+    (k) => (folders[k] = guiObj.folders[k])
+  );
   guiObj.folders = folders;
   return guiObj;
 }

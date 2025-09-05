@@ -33,13 +33,14 @@ async function init() {
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
   gui = new GUI();
-  scene = createScene(gui);
-  scene.add(createAxesHelper(gui));
-  const planeHelper = createPlaneHelper(gui);
-  const arrowHelper = createArrowHelper(gui);
+  const fixedFolder = gui.addFolder("(fixed)");
+  scene = createScene(fixedFolder);
+  scene.add(createAxesHelper(fixedFolder));
+  const planeHelper = createPlaneHelper(fixedFolder);
+  const arrowHelper = createArrowHelper(fixedFolder);
   scene.add(planeHelper);
   scene.add(arrowHelper);
-  ms = createMaterials(gui);
+  ms = createMaterials(fixedFolder);
 
   await createBaseGroup(ms).then((baseGroup) => {
     if (!baseGroup) return;
