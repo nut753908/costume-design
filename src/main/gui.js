@@ -21,7 +21,7 @@ import { GUI } from "lil-gui";
 export function saveGui(gui) {
   const guiObj = gui.save();
   const folders = {};
-  ["(fixed)", "LinesGroup", "TubeGroup"].forEach(
+  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach(
     (k) => (folders[k] = guiObj.folders[k])
   );
   guiObj.folders = folders;

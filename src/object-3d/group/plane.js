@@ -17,7 +17,7 @@ export function createPlaneGroup(
   plane,
   planeHelper,
   arrowHelper,
-  name = "Plane"
+  name = "PlaneGroup"
 ) {
   const obj = {
     plane: plane.getPlane(),

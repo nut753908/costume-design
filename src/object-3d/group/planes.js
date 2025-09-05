@@ -13,8 +13,8 @@ import { createPlaneGroup } from "./plane.js";
  * @return {THREE.Group}
  */
 export function createPlanesGroup(gui, planes, planeHelper, arrowHelper) {
-  deleteFolder(gui, "Planes");
-  const folder = gui.addFolder("Planes");
+  deleteFolder(gui, "PlanesGroup");
+  const folder = gui.addFolder("PlanesGroup");
 
   const group = new THREE.Group();
 
