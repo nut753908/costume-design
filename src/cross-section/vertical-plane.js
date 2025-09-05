@@ -1,3 +1,5 @@
+// TODO: test constructor(), toJSON(), fromJSON()
+
 import * as THREE from "three";
 
 import { Plane } from "./plane.js";
@@ -18,16 +20,18 @@ export class VerticalPlane extends Plane {
   /**
    * Constructs a new vertical plane.
    *
-   * @param {THREE.Curve} curve - The curve.
+   * @param {THREE.CurvePath|THREE.CatmullRomCurve3} curve - The curve.
    * @param {number} [u=0] - The position on the curve according to the arc length. Must be in the range [0, 1].
    */
-  constructor(curve = new THREE.Curve(), u = 0) {
+  constructor(curve = new THREE.CurvePath(), u = 0) {
     super();
+
+    this.type = "VerticalPlane";
 
     /**
      * The curve.
      *
-     * @type {THREE.Curve}
+     * @type {THREE.CurvePath|THREE.CatmullRomCurve3}
      */
     this.curve = curve;
 
@@ -89,6 +93,7 @@ export class VerticalPlane extends Plane {
 
     data.curve = this.curve.toJSON();
     data.u = this.u;
+    data.type = this.type;
 
     return data;
   }
@@ -100,7 +105,16 @@ export class VerticalPlane extends Plane {
    * @return {VerticalPlane} A reference to this vertical plane.
    */
   fromJSON(json) {
-    this.curve.fromJSON(json.curve);
+    if (json.curve.type === "CurvePath") {
+      this.curve = new THREE.CurvePath().fromJSON(json.curve);
+    } else if (json.curve.type === "CatmullRomCurve3") {
+      this.curve = new THREE.CatmullRomCurve3().fromJSON(json.curve);
+    } else {
+      console.error(`\
+!(json.curve.type === "CurvePath") && !(json.curve.type === "CatmullRomCurve3")
+- v: ${JSON.stringify(v)}
+`);
+    }
     this.u = json.u;
 
     return this;
