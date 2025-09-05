@@ -8,10 +8,12 @@ import { EdgeLoopStack } from "../../cross-section/edge-loop-stack.js";
  * @param {Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3} edge - An edge / An edge loop / An edge loop stack / A line path / A spline curve
  * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
+ * @param {string} name - The group name.
  * @return {THREE.Group}
  */
-export function createEdgeGroup(edge, positions, ms) {
+export function createEdgeGroup(edge, positions, ms, name) {
   const group = new THREE.Group();
+  group.name = name;
 
   let points = null;
   if (edge instanceof Edge) {

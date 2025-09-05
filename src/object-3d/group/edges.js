@@ -8,7 +8,7 @@ import { GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "../../main/gui.js";
 
 /**
- * @param {Array<Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3>} edges - Edges / Edge loops / Edge loop stacks / Line paths / Spline curves
+ * @param {{[k:number|string]:Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3}} edges - Edges / Edge loops / Edge loop stacks / Line paths / Spline curves
  * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
  * @return {THREE.Group}
@@ -16,7 +16,9 @@ import { closeFolder, deleteFolder } from "../../main/gui.js";
 export function createEdgesGroup(edges, positions, ms) {
   const group = new THREE.Group();
 
-  edges.forEach((edge) => group.add(createEdgeGroup(edge, positions, ms)));
+  Object.entries(edges).forEach(([k, v]) =>
+    group.add(createEdgeGroup(v, positions, ms, k))
+  );
 
   return group;
 }
@@ -31,8 +33,8 @@ export function setEdgesGroupGUI(gui, group, visible = false) {
   const folder = gui.addFolder("EdgesGroup");
   // closeFolder(folder);
   const gFolder = folder.addFolder("visible");
-  group.children.forEach((g, i) => {
+  group.children.forEach((g) => {
     g.visible = visible;
-    gFolder.add(g, "visible").name(`${i}`);
+    gFolder.add(g, "visible").name(g.name);
   });
 }

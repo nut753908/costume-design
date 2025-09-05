@@ -13,8 +13,7 @@ import { createBaseGroup } from "./object-3d/group/base.js";
 import { createAllEdges } from "./cross-section/edges.js";
 import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
-import { getCentroids } from "./cross-section/points.js";
-import { createLinePath } from "./cross-section/line-path.js";
+import { createBaseCenterlines } from "./cross-section/centerline.js";
 import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
@@ -64,21 +63,14 @@ async function init() {
     let edges;
     // edges = createAllEdges(nPolygonIndices);
     // edges = createAllEdgeLoops(nPolygonIndices);
-    edges = createAllEdgeLoopStacks(nPolygonIndices);
-    // edges = edges.map((e) => {
-    //   const points = e.getPoints(positions);
-    //   const centroids = getCentroids(points);
-    //   // return createLinePath(centroids);
-    //   return new THREE.CatmullRomCurve3(centroids);
-    // });
+    // edges = createAllEdgeLoopStacks(nPolygonIndices);
+    edges = createBaseCenterlines(nPolygonIndices, positions);
     const edgesGroup = createEdgesGroup(edges, positions, ms);
     setEdgesGroupGUI(gui, edgesGroup, false);
     scene.add(edgesGroup);
 
-    console.log(edges);
-    console.log(edges.map((e) => e.getPoints(positions)));
-    // console.log(edges.map((e) => e.getPoints()));
-    // console.log(edges.map((e) => e.getPoints(5 * e.points.length)));
+    // console.log(edges);
+    // console.log(edges.map((e) => e.getPoints(positions)));
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());

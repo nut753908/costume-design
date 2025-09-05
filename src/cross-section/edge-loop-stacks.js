@@ -60,14 +60,14 @@ import { findNextEdge } from "./edges.js";
  * stacks[44]: × inside the lower body
  * stacks[45]: × outside of left foot
  * stacks[46]: ○ base of left thumb
- * stacks[47]: ○ left wrist
+ * stacks[47]: △ left wrist
  * stacks[48]: △ left arm (containing /)
  * stacks[49]: × center of the head in z direction
  * stacks[50]: △ back of the head in z direction
  * stacks[51]: × right torso and right leg in x direction
  * stacks[52]: × outside of right foot
  * stacks[53]: ○ base of right thumb
- * stacks[54]: ○ right wrist
+ * stacks[54]: △ right wrist
  * stacks[55]: △ right arm (containing \)
  *
  *
@@ -78,11 +78,9 @@ import { findNextEdge } from "./edges.js";
  *
  * stacks[ 2]: ○ left shoulder (containing /)
  * stacks[ 5]: ○ left arm (containing ／)
- * stacks[47]: ○ left wrist
  *
  * stacks[26]: ○ right shoulder (containing \)
  * stacks[27]: ○ right arm (containing ＼)
- * stacks[54]: ○ right wrist
  *
  * stacks[18]: ○ left thumb
  * stacks[46]: ○ base of left thumb
