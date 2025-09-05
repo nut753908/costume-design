@@ -24,7 +24,7 @@ export function createBaseCenterlines(nPolygonIndices, positions) {
     leftRingFinger: list[16],
     leftLittleFinger: list[17],
     leftLeg: list[6].toReversed().slice(1, -1),
-    leftFoot: list[10],
+    leftFoot: list[10].toReversed(),
     rightArm: list[27].concat(list[26]).slice(0, -1),
     rightThumb: list[38].toReversed().concat(list[53]).slice(0, -1),
     rightIndexFinger: list[34].toReversed(),
@@ -32,7 +32,7 @@ export function createBaseCenterlines(nPolygonIndices, positions) {
     rightRingFinger: list[36].toReversed(),
     rightLittleFinger: list[37].toReversed(),
     rightLeg: list[28].slice(1, -1),
-    rightFoot: list[30].toReversed(),
+    rightFoot: list[30],
   };
   obj.torso.unshift(
     new THREE.Vector3()
