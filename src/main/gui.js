@@ -15,19 +15,17 @@ import { GUI } from "lil-gui";
  */
 
 /**
+ * Save GUI states of only the specified folders.
+ *
  * @param {GUI} gui
  * @returns {Object} guiObj
  */
 export function saveGui(gui) {
   const guiObj = gui.save();
   const folders = {};
-  [
-    "THREE.Scene",
-    "THREE.AxesHelper",
-    "THREE.Material",
-    "EdgesGroup",
-    "TubeGroup",
-  ].forEach((k) => (folders[k] = guiObj.folders[k]));
+  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach(
+    (k) => (folders[k] = guiObj.folders[k])
+  );
   guiObj.folders = folders;
   return guiObj;
 }
@@ -45,6 +43,8 @@ export function saveGui(gui) {
  */
 
 /**
+ * Save closed states recursively.
+ *
  * @param {GUI} gui
  * @returns {Object} closedObj
  */
@@ -58,6 +58,8 @@ export function saveClosed(gui) {
 }
 
 /**
+ * Load closed states recursively.
+ *
  * @param {GUI} gui
  * @param {Object} closedObj
  */
@@ -67,6 +69,8 @@ export function loadClosed(gui, closedObj) {
 }
 
 /**
+ * Delete the child folders from the specified parent folder.
+ *
  * @param {GUI} parent - The parent of the deletion folder.
  * @param {string} _title - The title of the deletion folder.
  * @param {?string} [titleStart=null] - The starting string for the title of the deletion folder.
@@ -84,6 +88,8 @@ export function deleteFolder(parent, _title, titleStart = null) {
 }
 
 /**
+ * Close the folder while avoiding open/close events.
+ *
  * @param {GUI} folder
  */
 export function closeFolder(folder) {

@@ -5,6 +5,113 @@ import { Edge } from "./edge.js";
 import { findNextEdge } from "./edges.js";
 
 /**
+ * conditions:
+ * - `nPolygonIndices` is set from the base geometry
+ * - `if (vertices.length === 1) continue;` exist
+ * - `if (strings.includes(s)) continue;` exist
+ *
+ *
+ * all:
+ *
+ * stacks[ 0]: ○ torso in y direction
+ * stacks[ 1]: △ left shoulder and left arm (containing ／)
+ * stacks[ 2]: ○ left shoulder (containing /)
+ * stacks[ 3]: × neck and left shoulder
+ * stacks[ 4]: × center of head and torso in x direction
+ * stacks[ 5]: ○ left arm (containing ／)
+ * stacks[ 6]: ○ left leg
+ * stacks[ 7]: ○ neck
+ * stacks[ 8]: × neck and right shoulder
+ * stacks[ 9]: △ left foot in y direction
+ * stacks[10]: ○ left foot in z direction
+ * stacks[11]: × left middle finger and left ring finger
+ * stacks[12]: ○ left middle finger
+ * stacks[13]: × left index finger and left middle finger
+ * stacks[14]: ○ left index finger
+ * stacks[15]: × left ring finger and left little finger
+ * stacks[16]: ○ left ring finger
+ * stacks[17]: ○ left little finger
+ * stacks[18]: ○ left thumb
+ * stacks[19]: × ear height in y direction
+ * stacks[20]: × ear height in y direction (doubling)
+ * stacks[21]: △ front of the head in z direction
+ * stacks[22]: △ top of the head in y direction
+ * stacks[23]: × left ear (doubling)
+ * stacks[24]: △ left ear
+ * stacks[25]: △ right shoulder and right arm (containing ＼)
+ * stacks[26]: ○ right shoulder (containing \)
+ * stacks[27]: ○ right arm (containing ＼)
+ * stacks[28]: ○ right leg
+ * stacks[29]: △ right foot in y direction
+ * stacks[30]: ○ right foot in z direction
+ * stacks[31]: × right middle finger and right ring finger
+ * stacks[32]: ○ right middle finger
+ * stacks[33]: × right index finger and right middle finger
+ * stacks[34]: ○ right index finger
+ * stacks[35]: × right ring finger and right little finger
+ * stacks[36]: ○ right ring finger
+ * stacks[37]: ○ right little finger
+ * stacks[38]: ○ right thumb
+ * stacks[39]: × right ear (doubling)
+ * stacks[40]: △ right ear
+ * stacks[41]: × left torso and left leg in x direction
+ * stacks[42]: × center of the body in z direction
+ * stacks[43]: × chest height in y direction
+ * stacks[44]: × inside the lower body
+ * stacks[45]: × outside of left foot
+ * stacks[46]: ○ base of left thumb
+ * stacks[47]: △ left wrist
+ * stacks[48]: △ left arm (containing /)
+ * stacks[49]: × center of the head in z direction
+ * stacks[50]: △ back of the head in z direction
+ * stacks[51]: × right torso and right leg in x direction
+ * stacks[52]: × outside of right foot
+ * stacks[53]: ○ base of right thumb
+ * stacks[54]: △ right wrist
+ * stacks[55]: △ right arm (containing \)
+ *
+ *
+ * combinations in ○ list:
+ *
+ * stacks[ 0]: ○ torso in y direction
+ * stacks[ 7]: ○ neck
+ *
+ * stacks[ 2]: ○ left shoulder (containing /)
+ * stacks[ 5]: ○ left arm (containing ／)
+ *
+ * stacks[26]: ○ right shoulder (containing \)
+ * stacks[27]: ○ right arm (containing ＼)
+ *
+ * stacks[18]: ○ left thumb
+ * stacks[46]: ○ base of left thumb
+ *
+ * stacks[38]: ○ right thumb
+ * stacks[53]: ○ base of right thumb
+ *
+ *
+ * singles in ○ list:
+ *
+ * stacks[ 6]: ○ left leg
+ * stacks[10]: ○ left foot in z direction
+ * stacks[12]: ○ left middle finger
+ * stacks[14]: ○ left index finger
+ * stacks[16]: ○ left ring finger
+ * stacks[17]: ○ left little finger
+ * stacks[28]: ○ right leg
+ * stacks[30]: ○ right foot in z direction
+ * stacks[32]: ○ right middle finger
+ * stacks[34]: ○ right index finger
+ * stacks[36]: ○ right ring finger
+ * stacks[37]: ○ right little finger
+ *
+ *
+ * combinations for torso extension:
+ *
+ * stacks[ 6]: ○ left leg
+ * stacks[28]: ○ right leg
+ */
+
+/**
  * Create all non-overlapping edge loop stacks.
  *
  * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.

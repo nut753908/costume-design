@@ -7,20 +7,21 @@ import { createPlaneGroup } from "./plane.js";
 
 /**
  * @param {GUI} gui
- * @param {Array<FreePlane|VerticalPlane>} planes
+ * @param {{[k:number|string]:FreePlane|VerticalPlane}} planes
  * @param {THREE.PlaneHelper} planeHelper
  * @param {THREE.ArrowHelper} arrowHelper
  * @return {THREE.Group}
  */
 export function createPlanesGroup(gui, planes, planeHelper, arrowHelper) {
-  deleteFolder(gui, "Planes");
-  const folder = gui.addFolder("Planes");
+  deleteFolder(gui, "PlanesGroup");
+  const folder = gui.addFolder("PlanesGroup");
 
   const group = new THREE.Group();
 
-  planes.forEach((plane, i) =>
-    group.add(createPlaneGroup(folder, plane, planeHelper, arrowHelper, `${i}`))
-  );
+  Object.entries(planes).forEach(([k, v], i) => {
+    const name = i !== k ? `[${i}] ${k}` : `[${i}]`;
+    group.add(createPlaneGroup(folder, v, planeHelper, arrowHelper, name));
+  });
 
   return group;
 }

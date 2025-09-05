@@ -10,28 +10,16 @@ import { createPlaneHelper } from "./object-3d/plane-helper.js";
 import { createArrowHelper } from "./object-3d/arrow-helper.js";
 import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
-import { createAllEdges } from "./cross-section/edges.js";
-import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
-import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
-import { getCentroids } from "./cross-section/points.js";
-import { createLinePath } from "./cross-section/line-path.js";
-import { createEdgesGroup, setEdgesGroupGUI } from "./object-3d/group/edges.js";
+import { createBaseCenterlines } from "./cross-section/centerline.js";
+import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
+import { objectMap } from "./main/utils.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
 import { createPlanesGroup } from "./object-3d/group/planes.js";
-import { ControlPoint3 } from "./curve/control-point-3.js";
-import { ControlPoint2 } from "./curve/control-point-2.js";
-import { createControlPointGroup } from "./object-3d/group/control-point.js";
-import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
-import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
-import { createCurveGroup } from "./object-3d/group/curve.js";
-import { Tube } from "./curve/tube.js";
-import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
-import { disposeGroup } from "./main/dispose.js";
 
 let renderer, camera, gizmo, scene;
-let gui, ms, c, group;
+let gui, ms;
 
 let loading = false;
 const undos = [];
@@ -45,13 +33,17 @@ async function init() {
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
   gui = new GUI();
-  scene = createScene(gui);
-  scene.add(createAxesHelper(gui));
-  const planeHelper = createPlaneHelper(gui);
-  const arrowHelper = createArrowHelper(gui);
-  scene.add(planeHelper);
-  scene.add(arrowHelper);
-  ms = createMaterials(gui);
+  let planeHelper, arrowHelper;
+  {
+    const folder = gui.addFolder("(fixed)");
+    scene = createScene(folder);
+    scene.add(createAxesHelper(folder));
+    planeHelper = createPlaneHelper(folder);
+    arrowHelper = createArrowHelper(folder);
+    scene.add(planeHelper);
+    scene.add(arrowHelper);
+    ms = createMaterials(folder);
+  }
 
   await createBaseGroup(ms).then((baseGroup) => {
     if (!baseGroup) return;
@@ -61,28 +53,14 @@ async function init() {
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute("position");
 
-    let edges;
-    // edges = createAllEdges(nPolygonIndices);
-    // edges = createAllEdgeLoops(nPolygonIndices);
-    edges = createAllEdgeLoopStacks(nPolygonIndices);
-    edges = edges.map((e) => {
-      const points = e.getPoints(positions);
-      const centroids = getCentroids(points);
-      // return createLinePath(centroids);
-      return new THREE.CatmullRomCurve3(centroids);
-    });
-    const edgesGroup = createEdgesGroup(edges, positions, ms);
-    setEdgesGroupGUI(gui, edgesGroup, false);
-    scene.add(edgesGroup);
-
-    console.log(edges);
-    // console.log(edges.map((e) => e.getPoints(positions)));
-    // console.log(edges.map((e) => e.getPoints()));
-    console.log(edges.map((e) => e.getPoints(5 * e.points.length)));
+    const lines = createBaseCenterlines(nPolygonIndices, positions);
+    const linesGroup = createLinesGroup(lines, positions, ms);
+    setLinesGroupGUI(gui, linesGroup, false);
+    scene.add(linesGroup);
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
-    const planes = edges.map((e) => new VerticalPlane(e));
+    const planes = objectMap(lines, (v) => new VerticalPlane(v));
     const planesGroup = createPlanesGroup(
       gui,
       planes,
@@ -91,19 +69,6 @@ async function init() {
     );
     scene.add(planesGroup);
   });
-
-  // c = new ControlPoint3();
-  // c = new ControlPoint2();
-  // group = createControlPointGroup(c, ms);
-  // c = screwShapedCurve3.clone();
-  // c = smallCircleCurve2.clone();
-  // group = createCurveGroup(c, ms);
-  c = new Tube();
-  group = createTubeGroup(c, ms);
-  group.children[0].visible = false; // debug code
-  setTubeGroupGUI(gui, group); // Tube only.
-  c.setGUI(gui);
-  scene.add(group);
 
   save();
   gui.onOpenClose(save);
@@ -116,25 +81,14 @@ async function init() {
 function save() {
   if (loading) return; // "loading" is set by loadLastUndo().
 
-  undos.push({ c: c.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
+  undos.push({ gui: saveGui(gui), closed: saveClosed(gui) });
   redos.length = 0;
 }
 
 function loadLastUndo() {
   loading = true;
 
-  scene.remove(group);
-  disposeGroup(group);
-
   const obj = undos[undos.length - 1];
-
-  c.fromJSON(obj.c);
-  // group = createControlPointGroup(c, ms);
-  // group = createCurveGroup(c, ms);
-  group = createTubeGroup(c, ms);
-  setTubeGroupGUI(gui, group); // Tube only.
-  c.setGUI(gui);
-  scene.add(group);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);
