@@ -15,7 +15,7 @@ import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
 import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createBaseCenterlines } from "./cross-section/centerline.js";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
-import { objectMap } from "./math/utils.js";
+import { disposeGroup, objectMap } from "./main/utils.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
 import { createPlanesGroup } from "./object-3d/group/planes.js";
@@ -28,7 +28,6 @@ import { createCurveGroup } from "./object-3d/group/curve.js";
 import { Tube } from "./curve/tube.js";
 import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
-import { disposeGroup } from "./main/dispose.js";
 
 let renderer, camera, gizmo, scene;
 let gui, ms, c, group;

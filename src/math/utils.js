@@ -97,14 +97,3 @@ export function isInvalidIndex(index, min, max) {
   }
   return false;
 }
-
-/**
- * Call the function on every value in the object and create a new object from the results.
- *
- * @param {Object} obj - The object.
- * @param {Function} func - The function.
- * @return {Object} A new Object.
- */
-export function objectMap(obj, func) {
-  return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, func(v)]));
-}
