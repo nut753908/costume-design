@@ -12,22 +12,14 @@ import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
 import { createBaseCenterlines } from "./cross-section/centerline.js";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
-import { disposeGroup, objectMap } from "./main/utils.js";
+import { objectMap } from "./main/utils.js";
 import { FreePlane } from "./cross-section/free-plane.js";
 import { VerticalPlane } from "./cross-section/vertical-plane.js";
 import { createPlanesGroup } from "./object-3d/group/planes.js";
-import { ControlPoint3 } from "./curve/control-point-3.js";
-import { ControlPoint2 } from "./curve/control-point-2.js";
-import { createControlPointGroup } from "./object-3d/group/control-point.js";
-import { screwShapedCurve3 } from "./curve/samples/curve-3.js";
-import { smallCircleCurve2 } from "./curve/samples/curve-2.js";
-import { createCurveGroup } from "./object-3d/group/curve.js";
-import { Tube } from "./curve/tube.js";
-import { createTubeGroup, setTubeGroupGUI } from "./object-3d/group/tube.js";
 import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
 
 let renderer, camera, gizmo, scene;
-let gui, ms, c, group;
+let gui, ms;
 
 let loading = false;
 const undos = [];
@@ -75,19 +67,6 @@ async function init() {
     scene.add(planesGroup);
   });
 
-  // c = new ControlPoint3();
-  // c = new ControlPoint2();
-  // group = createControlPointGroup(c, ms);
-  // c = screwShapedCurve3.clone();
-  // c = smallCircleCurve2.clone();
-  // group = createCurveGroup(c, ms);
-  c = new Tube();
-  group = createTubeGroup(c, ms);
-  group.children.forEach((g) => (g.visible = false)); // debug code
-  // setTubeGroupGUI(gui, group); // Tube only.
-  // c.setGUI(gui);
-  scene.add(group);
-
   save();
   gui.onOpenClose(save);
   gui.onChange((e) => e.controller instanceof FunctionController && save());
@@ -99,25 +78,14 @@ async function init() {
 function save() {
   if (loading) return; // "loading" is set by loadLastUndo().
 
-  undos.push({ c: c.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
+  undos.push({ gui: saveGui(gui), closed: saveClosed(gui) });
   redos.length = 0;
 }
 
 function loadLastUndo() {
   loading = true;
 
-  scene.remove(group);
-  disposeGroup(group);
-
   const obj = undos[undos.length - 1];
-
-  c.fromJSON(obj.c);
-  // group = createControlPointGroup(c, ms);
-  // group = createCurveGroup(c, ms);
-  group = createTubeGroup(c, ms);
-  // setTubeGroupGUI(gui, group); // Tube only.
-  // c.setGUI(gui);
-  scene.add(group);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);
