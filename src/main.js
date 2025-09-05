@@ -74,14 +74,16 @@ async function init() {
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
-    // const planes = lines.map((v) => new VerticalPlane(v));
-    // const planesGroup = createPlanesGroup(
-    //   gui,
-    //   planes,
-    //   planeHelper,
-    //   arrowHelper
-    // );
-    // scene.add(planesGroup);
+    const planes = Object.fromEntries(
+      Object.entries(lines).map(([k, v]) => [k, new VerticalPlane(v)])
+    );
+    const planesGroup = createPlanesGroup(
+      gui,
+      planes,
+      planeHelper,
+      arrowHelper
+    );
+    scene.add(planesGroup);
   });
 
   // c = new ControlPoint3();
