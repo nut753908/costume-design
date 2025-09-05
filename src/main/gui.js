@@ -25,7 +25,7 @@ export function saveGui(gui) {
     "THREE.Scene",
     "THREE.AxesHelper",
     "THREE.Material",
-    "EdgesGroup",
+    "LinesGroup",
     "TubeGroup",
   ].forEach((k) => (folders[k] = guiObj.folders[k]));
   guiObj.folders = folders;
