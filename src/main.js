@@ -10,9 +10,6 @@ import { createPlaneHelper } from "./object-3d/plane-helper.js";
 import { createArrowHelper } from "./object-3d/arrow-helper.js";
 import { createMaterials } from "./material/materials.js";
 import { createBaseGroup } from "./object-3d/group/base.js";
-import { createAllEdges } from "./cross-section/edges.js";
-import { createAllEdgeLoops } from "./cross-section/edge-loops.js";
-import { createAllEdgeLoopStacks } from "./cross-section/edge-loop-stacks.js";
 import { createBaseCenterlines } from "./cross-section/centerline.js";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
 import { disposeGroup, objectMap } from "./main/utils.js";
@@ -61,16 +58,10 @@ async function init() {
     const positions = geometry.getAttribute("position");
 
     let lines;
-    // lines = createAllEdges(nPolygonIndices);
-    // lines = createAllEdgeLoops(nPolygonIndices);
-    // lines = createAllEdgeLoopStacks(nPolygonIndices);
     lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
     setLinesGroupGUI(gui, linesGroup, false);
     scene.add(linesGroup);
-
-    // console.log(lines);
-    // console.log(lines.map((v) => v.getPoints(positions)));
 
     // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
