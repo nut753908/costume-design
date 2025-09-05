@@ -1,4 +1,6 @@
 /**
+ * Dispose groups recursively. Materials are not explicitly disposed of.
+ *
  * @param {THREE.Group}
  */
 export function disposeGroup(group) {
