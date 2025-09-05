@@ -19,7 +19,7 @@ export function createPlanesGroup(gui, planes, planeHelper, arrowHelper) {
   const group = new THREE.Group();
 
   Object.entries(planes).forEach(([k, v], i) => {
-    const name = i !== k ? `${i} ${k}` : `${i}`;
+    const name = i !== k ? `[${i}] ${k}` : `[${i}]`;
     group.add(createPlaneGroup(folder, v, planeHelper, arrowHelper, name));
   });
 
