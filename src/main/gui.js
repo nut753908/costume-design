@@ -24,6 +24,8 @@ export function saveGui(gui) {
   [
     "THREE.Scene",
     "THREE.AxesHelper",
+    "PlaneHelper",
+    "THREE.ArrowHelper",
     "THREE.Material",
     "LinesGroup",
     "TubeGroup",
