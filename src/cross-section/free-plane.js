@@ -1,5 +1,3 @@
-// TODO: test constructor(), toJSON()
-
 import * as THREE from "three";
 
 import { Plane } from "./plane.js";
