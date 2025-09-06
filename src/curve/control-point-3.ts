@@ -1,15 +1,15 @@
 import * as THREE from "three";
 
-import { Spherical } from "../math/spherical.js";
+import { Spherical } from "../math/spherical";
 import { GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui.js";
-import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils.js";
+import { deleteFolder, closeFolder } from "../main/gui";
+import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils";
 
 /**
  * A class representing a 3D control point of curve.
  *
  * ```js
- * import { ControlPoint3 } from "./src/curve/control-point-3.js";
+ * import { ControlPoint3 } from "./src/curve/control-point-3";
  * const cp = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(-1, 0, 0),

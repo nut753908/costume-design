@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { Tube } from "../../curve/tube.js";
-import { createCurveGroup } from "./curve.js";
-import { createEmptyGeometry } from "../../geometry/empty.js";
+import { Tube } from "../../curve/tube";
+import { createCurveGroup } from "./curve";
+import { createEmptyGeometry } from "../../geometry/empty";
 import { GUI } from "lil-gui";
-import { deleteFolder } from "../../main/gui.js";
+import { deleteFolder } from "../../main/gui";
 
 /**
  * @param {Tube} t

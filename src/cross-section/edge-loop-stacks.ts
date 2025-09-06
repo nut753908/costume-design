@@ -1,8 +1,8 @@
-import { EdgeLoopStack } from "./edge-loop-stack.js";
-import { createAllEdgeLoops, createEdgeLoopsMap } from "./edge-loops.js";
-import { createRemainingVerticesMap } from "./vertices.js";
-import { Edge } from "./edge.js";
-import { findNextEdge } from "./edges.js";
+import { EdgeLoopStack } from "./edge-loop-stack";
+import { createAllEdgeLoops, createEdgeLoopsMap } from "./edge-loops";
+import { createRemainingVerticesMap } from "./vertices";
+import { Edge } from "./edge";
+import { findNextEdge } from "./edges";
 
 /**
  * conditions:

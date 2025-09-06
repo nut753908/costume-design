@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
-import { getPoint } from "./points.js";
+import { getPoint } from "./points";
 
 /**
  * An edge of geometry.
  *
  * ```js
- * import { Edge } from "./src/cross-section/edge.js";
+ * import { Edge } from "./src/cross-section/edge";
  * const edge = new Edge( 0, 1 );
  * ```
  */

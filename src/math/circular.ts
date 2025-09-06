@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
-import { atan2In2PI } from "./utils.js";
+import { atan2In2PI } from "./utils";
 
 /**
  * A class representing a circular as 2D Polar coodinate.
  *
  * ```js
- * import { Circular } from "./src/math/circular.js";
+ * import { Circular } from "./src/math/circular";
  * const c = new Circular( 1, 0 );
  * ```
  */

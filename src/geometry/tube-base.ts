@@ -1,19 +1,19 @@
 import * as THREE from "three";
 
-import { constant0Curve3 } from "../curve/samples/curve-3.js";
+import { constant0Curve3 } from "../curve/samples/curve-3";
 import {
   smallCircleCurve2,
   constant1Curve2,
   constant0Curve2,
-} from "../curve/samples/curve-2.js";
+} from "../curve/samples/curve-2";
 
 /**
  * A geometry class for representing a tube.
  *
  * ```js
- * import { constant0Curve3 } from "./src/curve/sample/curve-3.js";
- * import { smallCircleCurve2, constant1Curve2, constant0Curve2 } from "./src/curve/samples/curve-2.js";
- * import { TubeBaseGeometry } from "./src/geometry/tube-base.js";
+ * import { constant0Curve3 } from "./src/curve/sample/curve-3";
+ * import { smallCircleCurve2, constant1Curve2, constant0Curve2 } from "./src/curve/samples/curve-2";
+ * import { TubeBaseGeometry } from "./src/geometry/tube-base";
  *
  * const axis = constant0Curve3.clone();
  * const cross = smallCircleCurve2.clone();

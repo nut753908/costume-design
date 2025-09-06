@@ -42,7 +42,7 @@ export function createPlaneHelper(gui) {
  * (This class is created by copying THREE.PlaneHelper.)
  *
  * ```js
- * import { PlaneHelper } from "./src/object-3d/plane-helper.js";
+ * import { PlaneHelper } from "./src/object-3d/plane-helper";
  * const normal = new THREE.Vector3( 0, 0, 1 );
  * const point = new THREE.Vector3( 0, 0, 0 );
  * const helper = new PlaneHelper( normal, point, 1, 0xffff00 );

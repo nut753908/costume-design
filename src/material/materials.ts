@@ -1,9 +1,9 @@
 import * as THREE from "three";
 
 import { GUI } from "lil-gui";
-import { createPointsMaterial } from "./points.js";
-import { createLineMaterial } from "./line.js";
-import { createToonMaterial } from "./toon.js";
+import { createPointsMaterial } from "./points";
+import { createLineMaterial } from "./line";
+import { createToonMaterial } from "./toon";
 
 /**
  * @param {GUI} gui

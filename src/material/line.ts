@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { GUI } from "lil-gui";
-import { createColor } from "../math/color.js";
+import { createColor } from "../math/color";
 
 /**
  * @param {GUI} gui

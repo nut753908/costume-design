@@ -1,22 +1,22 @@
 import * as THREE from "three";
 
-import { createRenderer, updateRenderer } from "./main/renderer.js";
-import { createCamera, updateCamera } from "./main/camera.js";
-import { createControlsAndGizmo } from "./main/controls.js";
+import { createRenderer, updateRenderer } from "./main/renderer";
+import { createCamera, updateCamera } from "./main/camera";
+import { createControlsAndGizmo } from "./main/controls";
 import { GUI, FunctionController } from "lil-gui";
-import { createScene } from "./object-3d/scene.js";
-import { createAxesHelper } from "./object-3d/axes-helper.js";
-import { createPlaneHelper } from "./object-3d/plane-helper.js";
-import { createArrowHelper } from "./object-3d/arrow-helper.js";
-import { createMaterials } from "./material/materials.js";
-import { createBaseGroup } from "./object-3d/group/base.js";
-import { createBaseCenterlines } from "./cross-section/centerline.js";
-import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines.js";
-import { objectMap } from "./main/utils.js";
-import { FreePlane } from "./cross-section/free-plane.js";
-import { VerticalPlane } from "./cross-section/vertical-plane.js";
-import { createPlanesGroup } from "./object-3d/group/planes.js";
-import { saveGui, saveClosed, loadClosed } from "./main/gui.js";
+import { createScene } from "./object-3d/scene";
+import { createAxesHelper } from "./object-3d/axes-helper";
+import { createPlaneHelper } from "./object-3d/plane-helper";
+import { createArrowHelper } from "./object-3d/arrow-helper";
+import { createMaterials } from "./material/materials";
+import { createBaseGroup } from "./object-3d/group/base";
+import { createBaseCenterlines } from "./cross-section/centerline";
+import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
+import { objectMap } from "./main/utils";
+import { FreePlane } from "./cross-section/free-plane";
+import { VerticalPlane } from "./cross-section/vertical-plane";
+import { createPlanesGroup } from "./object-3d/group/planes";
+import { saveGui, saveClosed, loadClosed } from "./main/gui";
 
 let renderer, camera, gizmo, scene;
 let gui, ms;

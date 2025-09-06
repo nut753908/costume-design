@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls";
 import { ViewportGizmo } from "three-viewport-gizmo";
 
 /**

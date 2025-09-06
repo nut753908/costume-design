@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-import { Edge } from "../../cross-section/edge.js";
-import { EdgeLoop } from "../../cross-section/edge-loop.js";
-import { EdgeLoopStack } from "../../cross-section/edge-loop-stack.js";
+import { Edge } from "../../cross-section/edge";
+import { EdgeLoop } from "../../cross-section/edge-loop";
+import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
 
 /**
  * @param {Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3} line

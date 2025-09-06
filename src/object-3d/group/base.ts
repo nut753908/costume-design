@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { loadBaseGeometry } from "../../geometry/base.js";
+import { loadBaseGeometry } from "../../geometry/base";
 
 /**
  * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.

@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-import { ControlPoint3 } from "../../curve/control-point-3.js";
-import { ControlPoint2 } from "../../curve/control-point-2.js";
-import { createEmptyGeometry } from "../../geometry/empty.js";
+import { ControlPoint3 } from "../../curve/control-point-3";
+import { ControlPoint2 } from "../../curve/control-point-2";
+import { createEmptyGeometry } from "../../geometry/empty";
 
 /**
  * @param {ControlPoint3|ControlPoint2} cp

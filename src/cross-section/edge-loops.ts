@@ -1,6 +1,6 @@
-import { EdgeLoop } from "./edge-loop.js";
-import { createRemainingVerticesMap, findNextVertex } from "./vertices.js";
-import { createAllEdges, createEdgeMap, findNextEdge } from "./edges.js";
+import { EdgeLoop } from "./edge-loop";
+import { createRemainingVerticesMap, findNextVertex } from "./vertices";
+import { createAllEdges, createEdgeMap, findNextEdge } from "./edges";
 
 /**
  * Create all non-overlapping edge loops.

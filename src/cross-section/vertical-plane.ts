@@ -1,12 +1,12 @@
 import * as THREE from "three";
 
-import { Plane } from "./plane.js";
+import { Plane } from "./plane";
 
 /**
  * A plane at infinity. The plane is perpendicular to the curve at position u.
  *
  * ```js
- * import { VerticalPlane } from "./src/cross-section/vertical-plane.js";
+ * import { VerticalPlane } from "./src/cross-section/vertical-plane";
  * const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 1, 0 ) ];
  * const curve = new THREE.CatmullRomCurve3( points );
  * const verticalPlane = new VerticalPlane( curve, 0 );

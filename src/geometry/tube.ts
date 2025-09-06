@@ -1,20 +1,20 @@
-import { TubeBaseGeometry } from "./tube-base.js";
-import { Curve3 } from "../curve/curve-3.js";
-import { Curve2 } from "../curve/curve-2.js";
-import { constant0Curve3 } from "../curve/samples/curve-3.js";
+import { TubeBaseGeometry } from "./tube-base";
+import { Curve3 } from "../curve/curve-3";
+import { Curve2 } from "../curve/curve-2";
+import { constant0Curve3 } from "../curve/samples/curve-3";
 import {
   smallCircleCurve2,
   constant1Curve2,
   constant0Curve2,
-} from "../curve/samples/curve-2.js";
+} from "../curve/samples/curve-2";
 
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *
  * ```js
- * import { constant0Curve3 } from "./src/curve/sample/curve-3.js";
- * import { smallCircleCurve2, constant1Curve2, constant0Curve2 } from "./src/curve/samples/curve-2.js";
- * import { TubeGeometry } from "./src/geometry/tube.js";
+ * import { constant0Curve3 } from "./src/curve/sample/curve-3";
+ * import { smallCircleCurve2, constant1Curve2, constant0Curve2 } from "./src/curve/samples/curve-2";
+ * import { TubeGeometry } from "./src/geometry/tube";
  *
  * const axis = constant0Curve3.clone();
  * const cross = smallCircleCurve2.clone();

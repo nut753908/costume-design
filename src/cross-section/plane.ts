@@ -4,7 +4,7 @@ import * as THREE from "three";
  * A plane at infinity.
  *
  * ```js
- * import { Plane } from "./src/cross-section/plane.js";
+ * import { Plane } from "./src/cross-section/plane";
  * const plane = new Plane();
  * ```
  */

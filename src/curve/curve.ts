@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { ControlPoint3 } from "./control-point-3.js";
-import { ControlPoint2 } from "./control-point-2.js";
+import { ControlPoint3 } from "./control-point-3";
+import { ControlPoint2 } from "./control-point-2";
 import { GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui.js";
-import { isInvalidIndex } from "../math/utils.js";
+import { deleteFolder, closeFolder } from "../main/gui";
+import { isInvalidIndex } from "../math/utils";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.

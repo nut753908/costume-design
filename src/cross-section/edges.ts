@@ -1,4 +1,4 @@
-import { Edge } from "./edge.js";
+import { Edge } from "./edge";
 
 /**
  * Create all non-overlapping edges.

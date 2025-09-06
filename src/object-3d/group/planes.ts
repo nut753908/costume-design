@@ -1,9 +1,9 @@
 import * as THREE from "three";
 
-import { FreePlane } from "../../cross-section/free-plane.js";
-import { VerticalPlane } from "../../cross-section/vertical-plane.js";
-import { deleteFolder } from "../../main/gui.js";
-import { createPlaneGroup } from "./plane.js";
+import { FreePlane } from "../../cross-section/free-plane";
+import { VerticalPlane } from "../../cross-section/vertical-plane";
+import { deleteFolder } from "../../main/gui";
+import { createPlaneGroup } from "./plane";
 
 /**
  * @param {GUI} gui

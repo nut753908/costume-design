@@ -1,16 +1,16 @@
 import * as THREE from "three";
 
-import { TubeGeometry } from "../geometry/tube.js";
-import { deleteFolder } from "../main/gui.js";
-import { Curve } from "./curve.js";
-import { Curve3 } from "./curve-3.js";
-import { Curve2 } from "./curve-2.js";
+import { TubeGeometry } from "../geometry/tube";
+import { deleteFolder } from "../main/gui";
+import { Curve } from "./curve";
+import { Curve3 } from "./curve-3";
+import { Curve2 } from "./curve-2";
 
 /**
  * A class for managing TubeGeometry.
  *
  * ```js
- * import { Tube } from "./src/curve/tube.js";
+ * import { Tube } from "./src/curve/tube";
  * const t = new Tube();
  * ```
  */

@@ -3,15 +3,15 @@
 
 import * as THREE from "three";
 
-import { FreePlane } from "./free-plane.js";
-import { VerticalPlane } from "./vertical-plane.js";
-import { objectMap } from "../main/utils.js";
+import { FreePlane } from "./free-plane";
+import { VerticalPlane } from "./vertical-plane";
+import { objectMap } from "../main/utils";
 
 /**
  * A class for managing the increase/decrease of planes at infinity.
  *
  * ```js
- * import { PlaneManager } from "./src/cross-section/plane-manager.js";
+ * import { PlaneManager } from "./src/cross-section/plane-manager";
  * const planeManager = new PlaneManager();
  * ```
  */

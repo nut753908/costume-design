@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-import { Curve } from "./curve.js";
-import { ControlPoint3 } from "./control-point-3.js";
+import { Curve } from "./curve";
+import { ControlPoint3 } from "./control-point-3";
 
 /**
  * A 3D Cubic Bezier curve path using 3D control points.
  *
  * ```js
- * import { Curve3 } from "./src/curve/curve-3.js";
+ * import { Curve3 } from "./src/curve/curve-3";
  * const c = new Curve3();
  * ```
  *

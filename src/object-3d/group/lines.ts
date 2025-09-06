@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
-import { Edge } from "../../cross-section/edge.js";
-import { EdgeLoop } from "../../cross-section/edge-loop.js";
-import { EdgeLoopStack } from "../../cross-section/edge-loop-stack.js";
-import { createLineGroup } from "./line.js";
+import { Edge } from "../../cross-section/edge";
+import { EdgeLoop } from "../../cross-section/edge-loop";
+import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
+import { createLineGroup } from "./line";
 import { GUI } from "lil-gui";
-import { closeFolder, deleteFolder } from "../../main/gui.js";
+import { closeFolder, deleteFolder } from "../../main/gui";
 
 /**
  * @param {{[k:number|string]:Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3}} lines
