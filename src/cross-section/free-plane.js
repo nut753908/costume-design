@@ -27,6 +27,8 @@ export class FreePlane extends Plane {
   ) {
     super();
 
+    this.type = "FreePlane";
+
     /**
      * The normal direction of the plane. Must be a unit vector.
      *
@@ -92,6 +94,7 @@ export class FreePlane extends Plane {
 
     data.normal = this.normal.toArray();
     data.point = this.point.toArray();
+    data.type = this.type;
 
     return data;
   }

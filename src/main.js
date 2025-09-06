@@ -58,7 +58,6 @@ async function init() {
     setLinesGroupGUI(gui, linesGroup, false);
     scene.add(linesGroup);
 
-    // TODO: add plane manager
     // const planes = [...Array(3)].map(() => new FreePlane());
     const planes = objectMap(lines, (v) => new VerticalPlane(v));
     const planesGroup = createPlanesGroup(
