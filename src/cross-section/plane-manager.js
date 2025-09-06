@@ -19,7 +19,7 @@ export class PlaneManager {
   /**
    * Constructs a new plane manager.
    *
-   * @param {{[k:number|string]:THREE.Curve}} [curves={}] - The curves to create a vertical plane.
+   * @param {{[k:number|string]:THREE.CurvePath|THREE.CatmullRomCurve3}} [curves={}] - The curves to create a vertical plane.
    * @param {Array<FreePlane|VerticalPlane>} [planes=[]] - The planes at infinity.
    */
   constructor(curves = {}, planes = []) {
@@ -28,7 +28,7 @@ export class PlaneManager {
     /**
      * The curves to create a vertical plane.
      *
-     * @type {{[k:number|string]:THREE.Curve}}
+     * @type {{[k:number|string]:THREE.CurvePath|THREE.CatmullRomCurve3}}
      */
     this.curves = curves;
 
