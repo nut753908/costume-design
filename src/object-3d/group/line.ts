@@ -5,13 +5,21 @@ import { EdgeLoop } from "../../cross-section/edge-loop";
 import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
 
 /**
- * @param {Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3} line
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @param {string} name - The group name.
- * @return {THREE.Group}
+ * @param positions - The results of geometry.getAttribute("position").
+ * @param ms - The materials.
+ * @param name - The group name.
  */
-export function createLineGroup(line, positions, ms, name) {
+export function createLineGroup(
+  line:
+    | Edge
+    | EdgeLoop
+    | EdgeLoopStack
+    | THREE.CurvePath<THREE.Vector3>
+    | THREE.CatmullRomCurve3,
+  positions: THREE.BufferAttribute,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  name: string
+): THREE.Group {
   const group = new THREE.Group();
   group.name = name;
 

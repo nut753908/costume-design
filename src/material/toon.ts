@@ -4,20 +4,15 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 
 /**
- * @param {GUI} gui
- * @param {string} [name="toonMaterial"] - The folder name.
- * @param {number} [baseColorHex=0xfcd7e9]
- * @param {number} [shadeColorHex=0xf8c1de]
- * @param {THREE.Side} [side=THREE.FrontSide]
- * @return {THREE.ShaderMaterial}
+ * @param name - The folder name.
  */
 export function createToonMaterial(
-  gui,
+  gui: GUI,
   name = "toonMaterial",
   baseColorHex = 0xfcd7e9,
   shadeColorHex = 0xf8c1de,
-  side = THREE.FrontSide
-) {
+  side: THREE.Side = THREE.FrontSide
+): THREE.ShaderMaterial {
   const toonMaterial = new THREE.ShaderMaterial({
     uniforms: {
       checkShape: { value: false },
@@ -27,8 +22,8 @@ export function createToonMaterial(
       shadeColor: { value: createColor(shadeColorHex) },
     },
     uniformsNeedUpdate: true,
-    vertexShader: document.getElementById("toonVertex").textContent,
-    fragmentShader: document.getElementById("toonFragment").textContent,
+    vertexShader: document.getElementById("toonVertex")?.textContent,
+    fragmentShader: document.getElementById("toonFragment")?.textContent,
     side: side,
   });
   {

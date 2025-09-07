@@ -7,16 +7,21 @@ import { objectMap } from "../main/utils";
 /**
  * Create the base centerlines.
  *
- * @param {Array<Array<number>>} nPolygonIndices - The base n polygon indices.
- * @param {THREE.BufferAttribute} positions - The results of the base geometry.getAttribute("position").
- * @returns {{[k:string]:THREE.CurvePath|THREE.CatmullRomCurve3}} The base centerlines.
+ * @param nPolygonIndices - The base n polygon indices.
+ * @param positions - The results of the base geometry.getAttribute("position").
+ * @return  The base centerlines.
  */
-export function createBaseCenterlines(nPolygonIndices, positions) {
+export function createBaseCenterlines(
+  nPolygonIndices: number[][],
+  positions: THREE.BufferAttribute
+): { [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3 } {
   const stacks = createAllEdgeLoopStacks(nPolygonIndices);
   if (stacks.length !== 56) return {};
-  const list = stacks.map((s) => getCentroids(s.getPoints(positions)));
+  const list: THREE.Vector3[][] = stacks.map((s) =>
+    getCentroids(s.getPoints(positions))
+  );
   // These index references can be found in the comments of "./edge-loop-stacks.js".
-  const obj = {
+  const obj: { [k: string]: THREE.Vector3[] } = {
     torso: list[0].concat(list[7].toReversed()).slice(0, -1),
     leftArm: list[5].toReversed().concat(list[2]).slice(0, -1),
     leftThumb: list[18].concat(list[46].toReversed()).slice(0, -1),
@@ -50,11 +55,13 @@ export function createBaseCenterlines(nPolygonIndices, positions) {
 /**
  * Create a line path.
  *
- * @param {Array<THREE.Vector3>} points - The points.
- * @returns {THREE.CurvePath} A line path.
+ * @param points - The points.
+ * @return  A line path.
  */
-function createLinePath(points) {
-  const linePath = new THREE.CurvePath();
+function createLinePath(
+  points: THREE.Vector3[]
+): THREE.CurvePath<THREE.Vector3> {
+  const linePath = new THREE.CurvePath<THREE.Vector3>();
   for (let i = 0, l = points.length - 1; i < l; i++) {
     const line = new THREE.LineCurve3(points[i], points[i + 1]);
     linePath.add(line);

@@ -6,10 +6,11 @@ import { createLineMaterial } from "./line";
 import { createToonMaterial } from "./toon";
 
 /**
- * @param {GUI} gui
- * @return {{[k1:string]:{[k2:string]:THREE.Material}}} The materials.
+ * @return  The materials.
  */
-export function createMaterials(gui) {
+export function createMaterials(gui: GUI): {
+  [k1: string]: { [k2: string]: THREE.Material };
+} {
   const folder = gui.addFolder("THREE.Material").close();
 
   const baseFolder = folder.addFolder("base").close();

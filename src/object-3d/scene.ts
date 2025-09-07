@@ -3,11 +3,7 @@ import * as THREE from "three";
 import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 
-/**
- * @param {GUI} gui
- * @return {THREE.Scene}
- */
-export function createScene(gui) {
+export function createScene(gui: GUI): THREE.Scene {
   const scene = new THREE.Scene();
   scene.background = createColor(0xffffff);
   {

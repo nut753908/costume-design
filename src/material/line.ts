@@ -4,18 +4,14 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 
 /**
- * @param {GUI} gui
- * @param {string} [name="lineMaterial"] - The folder name.
- * @param {number} [colorHex=0xffffff]
- * @param {number} [opacity=1]
- * @return {THREE.LineBasicMaterial}
+ * @param name - The folder name.
  */
 export function createLineMaterial(
-  gui,
+  gui: GUI,
   name = "lineMaterial",
   colorHex = 0xffffff,
   opacity = 1
-) {
+): THREE.LineBasicMaterial {
   const lineMaterial = new THREE.LineBasicMaterial({
     color: createColor(colorHex),
     transparent: true,

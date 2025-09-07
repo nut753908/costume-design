@@ -6,11 +6,12 @@ import { createEmptyGeometry } from "../../geometry/empty";
 import { createControlPointGroup } from "./control-point";
 
 /**
- * @param {Curve3|Curve2} c
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-export function createCurveGroup(c, ms) {
+export function createCurveGroup(
+  c: Curve3 | Curve2,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   group.add(createCurvesLine(c, ms));
@@ -20,11 +21,12 @@ export function createCurveGroup(c, ms) {
 }
 
 /**
- * @param {Curve3|Curve2} c
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-function createCurvesLine(c, ms) {
+function createCurvesLine(
+  c: Curve3 | Curve2,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Line {
   const geometry = createEmptyGeometry();
 
   const line = new THREE.Line(geometry, ms.curve.line);
@@ -35,16 +37,18 @@ function createCurvesLine(c, ms) {
 }
 
 /**
- * @param {Curve3|Curve2} c
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-function createCpsGroup(c, ms) {
+function createCpsGroup(
+  c: Curve3 | Curve2,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
   (c._updateCpsGroup = () => {
     group.children.forEach((g) => {
+      // FIXME:
       g.children.forEach((v) => v.geometry.dispose());
       g.clear();
     });

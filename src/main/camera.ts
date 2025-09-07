@@ -2,10 +2,7 @@ import * as THREE from "three";
 
 const frustumSize = 2;
 
-/**
- * @return {THREE.OrthographicCamera}
- */
-export function createCamera() {
+export function createCamera(): THREE.OrthographicCamera {
   const aspect = window.innerWidth / window.innerHeight;
   const camera = new THREE.OrthographicCamera(
     -(frustumSize * aspect) / 2,
@@ -19,10 +16,7 @@ export function createCamera() {
   return camera;
 }
 
-/**
- * @param {THREE.Camera} camera
- */
-export function updateCamera(camera) {
+export function updateCamera(camera: THREE.OrthographicCamera) {
   const aspect = window.innerWidth / window.innerHeight;
   camera.left = -(frustumSize * aspect) / 2;
   camera.right = (frustumSize * aspect) / 2;

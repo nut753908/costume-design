@@ -16,48 +16,40 @@ export class Plane {
 
   /**
    * Get the normal direction of the plane.
-   *
-   * @returns {THREE.Vector3}
    */
-  getNormal() {
+  getNormal(): THREE.Vector3 {
     console.warn("Plane: .getNormal() not implemented.");
+    return new THREE.Vector3();
   }
 
   /**
    * Get the reference point on the plane.
-   *
-   * @returns {THREE.Vector3}
    */
-  getPoint() {
+  getPoint(): THREE.Vector3 {
     console.warn("Plane: .getPoint() not implemented.");
+    return new THREE.Vector3();
   }
 
   /**
    * Get the normal direction of the top face.
-   *
-   * @returns {THREE.Vector3}
    */
-  getTopNormal() {
+  getTopNormal(): THREE.Vector3 {
     const normal = this.getNormal();
     return normal.y >= 0 ? normal : normal.clone().negate();
   }
 
   /**
    * Get the normal direction of the bottom face.
-   *
-   * @returns {THREE.Vector3}
    */
-  getBottomNormal() {
+  getBottomNormal(): THREE.Vector3 {
     const normal = this.getNormal();
     return normal.y < 0 ? normal : normal.clone().negate();
   }
 
   /**
    * Get the THREE.Plane instance.
-   *
-   * @returns {THREE.Plane}
    */
-  getPlane() {
+  getPlane(): THREE.Plane {
     const normal = this.getNormal();
     const point = this.getPoint();
     return new THREE.Plane().setFromNormalAndCoplanarPoint(normal, point);

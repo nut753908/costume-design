@@ -15,69 +15,64 @@ import { Plane } from "./plane";
  * @augments Plane
  */
 export class FreePlane extends Plane {
+  type: string;
+
+  /**
+   * The normal direction of the plane. Must be a unit vector.
+   */
+  normal: THREE.Vector3;
+
+  /**
+   * The reference point on the plane.
+   */
+  point: THREE.Vector3;
+
   /**
    * Constructs a new free plane.
    *
-   * @param {THREE.Vector3} [normal=(0,1,0)] - The normal direction of the plane. Must be a unit vector.
-   * @param {THREE.Vector3} [point=(0,0,0)] - The reference point on the plane.
+   * @param normal - {@link FreePlane#normal}
+   * @param point - {@link FreePlane#point}
    */
   constructor(
     normal = new THREE.Vector3(0, 1, 0),
     point = new THREE.Vector3(0, 0, 0)
   ) {
     super();
-
     this.type = "FreePlane";
-
-    /**
-     * The normal direction of the plane. Must be a unit vector.
-     *
-     * @type {THREE.Vector3}
-     */
     this.normal = normal;
-
-    /**
-     * The reference point on the plane.
-     *
-     * @type {THREE.Vector3}
-     */
     this.point = point;
   }
 
   /**
    * Get the normal direction of the plane.
-   *
-   * @returns {THREE.Vector3}
    */
-  getNormal() {
+  getNormal(): THREE.Vector3 {
     return this.normal;
   }
 
   /**
    * Get the reference point on the plane.
-   *
-   * @returns {THREE.Vector3}
    */
-  getPoint() {
+  getPoint(): THREE.Vector3 {
     return this.point;
   }
 
   /**
    * Returns a new free plane with copied values from this instance.
    *
-   * @return {FreePlane} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): FreePlane {
+    return new FreePlane().copy(this);
   }
 
   /**
    * Copies the values of the given free plane to this instance.
    *
-   * @param {FreePlane} source - The free plane to copy.
-   * @returns {FreePlane} A reference to this free plane.
+   * @param source - The free plane to copy.
+   * @return  A reference to this free plane.
    */
-  copy(source) {
+  copy(source: FreePlane): FreePlane {
     this.normal.copy(source.normal);
     this.point.copy(source.point);
 
@@ -87,28 +82,38 @@ export class FreePlane extends Plane {
   /**
    * Serializes the free plane into JSON.
    *
-   * @return {Object} A JSON object representing the serialized free plane.
+   * @return  A JSON object representing the serialized free plane.
    */
-  toJSON() {
-    const data = {};
-
-    data.normal = this.normal.toArray();
-    data.point = this.point.toArray();
-    data.type = this.type;
-
-    return data;
+  toJSON(): FreePlaneJSON {
+    return {
+      normal: this.normal.toArray(),
+      point: this.point.toArray(),
+      type: this.type,
+    };
   }
 
   /**
    * Deserializes the free plane from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized free plane.
-   * @return {FreePlane} A reference to this free plane.
+   * @param json - The JSON holding the serialized free plane.
+   * @return  A reference to this free plane.
    */
-  fromJSON(json) {
+  fromJSON(json: FreePlaneJSON): FreePlane {
     this.normal.fromArray(json.normal);
     this.point.fromArray(json.point);
 
     return this;
   }
+}
+
+/**
+ * The {@link FreePlane} JSON interface.
+ */
+export interface FreePlaneJSON {
+  /** {@link FreePlane#type} */
+  type: string;
+  /** {@link FreePlane#normal} */
+  normal: THREE.Vector3Tuple;
+  /** {@link FreePlane#point} */
+  point: THREE.Vector3Tuple;
 }

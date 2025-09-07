@@ -1,10 +1,8 @@
 import * as THREE from "three";
 
-/**
- * @param {()=>void} animate
- * @return {THREE.WebGLRenderer}
- */
-export function createRenderer(animate) {
+export function createRenderer(
+  animate: XRFrameRequestCallback | null
+): THREE.WebGLRenderer {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -14,9 +12,6 @@ export function createRenderer(animate) {
   return renderer;
 }
 
-/**
- * @param {THREE.WebGLRenderer} renderer
- */
-export function updateRenderer(renderer) {
+export function updateRenderer(renderer: THREE.WebGLRenderer) {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }

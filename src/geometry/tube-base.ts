@@ -7,6 +7,7 @@ import {
   constant0Curve2,
 } from "../curve/samples/curve-2";
 
+// FIXME: after fixing the control points and curves, fix this
 /**
  * A geometry class for representing a tube.
  *
@@ -494,7 +495,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
    * Copies the values of the given tube geometry to this instance.
    *
    * @param {TubeBaseGeometry} source - The tube geometry to copy.
-   * @returns {TubeBaseGeometry} A reference to this tube geometry.
+   * @return {TubeBaseGeometry} A reference to this tube geometry.
    */
   copy(source) {
     super.copy(source);

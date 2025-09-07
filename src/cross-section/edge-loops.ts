@@ -1,15 +1,16 @@
 import { EdgeLoop } from "./edge-loop";
 import { createRemainingVerticesMap, findNextVertex } from "./vertices";
 import { createAllEdges, createEdgeMap, findNextEdge } from "./edges";
+import { Edge } from "./edge";
 
 /**
  * Create all non-overlapping edge loops.
  *
- * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {Array<EdgeLoop>} All non-overlapping edge loops.
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  All non-overlapping edge loops.
  */
-export function createAllEdgeLoops(nPolygonIndices) {
-  const els = []; // egdeLoops
+export function createAllEdgeLoops(nPolygonIndices: number[][]): EdgeLoop[] {
+  const els: EdgeLoop[] = []; // egdeLoops
   const allEdges = createAllEdges(nPolygonIndices);
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const edgeMap = createEdgeMap(allEdges);
@@ -45,8 +46,8 @@ export function createAllEdgeLoops(nPolygonIndices) {
   }
 
   const closedEls1 = els.filter((el) => el.closed); // closedEdgeLoops1
-  const closedEls2 = []; // closedEdgeLoops2
-  const strings = []; // [JSON.stringify(el.vertices.toSorted()) for el in closedEls2]
+  const closedEls2: EdgeLoop[] = []; // closedEdgeLoops2
+  const strings: string[] = []; // [JSON.stringify(el.vertices.toSorted()) for el in closedEls2]
   els
     .filter((el) => !el.closed)
     .forEach((openEl) => {
@@ -62,8 +63,8 @@ export function createAllEdgeLoops(nPolygonIndices) {
         const e2_1 = edgeMap[`${v2},${vs[1]}`]; // edge2_1
         const e1_1 = edgeMap[`${v1},${vs[1]}`]; // edge1_1
         const e2_0 = edgeMap[`${v2},${vs[0]}`]; // edge2_0
-        let e1; // edge1
-        let e2; // edge2
+        let e1: Edge; // edge1
+        let e2: Edge; // edge2
         if (e1_0 && e2_1) {
           e1 = e1_0;
           e2 = e2_1;
@@ -86,7 +87,7 @@ export function createAllEdgeLoops(nPolygonIndices) {
         while (true) {
           const e3 = findNextEdge(remainingVerticesMap, e1, e2); // edge3
           if (e3 === null) break;
-          let v3; // vertex3
+          let v3: number; // vertex3
           if (`${v2},${e3.v1}` in edgeMap) {
             v3 = e3.v1;
           } else if (`${v2},${e3.v2}` in edgeMap) {
@@ -123,11 +124,13 @@ export function createAllEdgeLoops(nPolygonIndices) {
 /**
  * Create the edge loops map.
  *
- * @param {Array<EdgeLoop>} els - Edge loops of the geometry.
- * @returns {{[k:string]:Array<EdgeLoop>}} The edge loops map. The key is a string of pairs v1, v2.
+ * @param els - Edge loops of the geometry.
+ * @return  The edge loops map. The key is a string of pairs v1, v2.
  */
-export function createEdgeLoopsMap(els) {
-  const map = {};
+export function createEdgeLoopsMap(els: EdgeLoop[]): {
+  [k: string]: EdgeLoop[];
+} {
+  const map: { [k: string]: EdgeLoop[] } = {};
   els.forEach((el) => {
     for (let i = 0, l = el.vertices.length - 1; i < l; i++) {
       const v1 = el.vertices[i];

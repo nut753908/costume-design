@@ -3,11 +3,14 @@ import * as THREE from "three";
 /**
  * Get the point.
  *
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {number} index - The index of the vertex.
- * @returns {THREE.Vector3} The point.
+ * @param positions - The results of geometry.getAttribute("position").
+ * @param index - The index of the vertex.
+ * @return  The point.
  */
-export function getPoint(positions, index) {
+export function getPoint(
+  positions: THREE.BufferAttribute,
+  index: number
+): THREE.Vector3 {
   return new THREE.Vector3(
     positions.array[3 * index],
     positions.array[3 * index + 1],
@@ -18,20 +21,20 @@ export function getPoint(positions, index) {
 /**
  * Get the centroids.
  *
- * @param {Array<Array<THREE.Vector3>>} points - The points within an edge loop stack.
- * @returns {Array<THREE.Vector3>} The centroids.
+ * @param points - The points within an edge loop stack.
+ * @return  The centroids.
  */
-export function getCentroids(points) {
+export function getCentroids(points: THREE.Vector3[][]): THREE.Vector3[] {
   return points.map((list) => getCentroid(list));
 }
 
 /**
  * Get the centroid.
  *
- * @param {Array<THREE.Vector3>} points - The points within an edge loop.
- * @returns {THREE.Vector3} The centroid.
+ * @param points - The points within an edge loop.
+ * @return  The centroid.
  */
-function getCentroid(points) {
+function getCentroid(points: THREE.Vector3[]): THREE.Vector3 {
   const centroid = new THREE.Vector3(0, 0, 0);
   points.forEach((p) => centroid.add(p));
   centroid.divideScalar(points.length);

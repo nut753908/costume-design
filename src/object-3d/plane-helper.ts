@@ -4,19 +4,17 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 
-/**
- * @param {GUI} gui
- * @return {THREE.PlaneHelper}
- */
-export function createPlaneHelper(gui) {
+export function createPlaneHelper(gui: GUI): PlaneHelper {
   const obj = {
     normal: new THREE.Vector3(0, 0, 1),
     point: new THREE.Vector3(0, 0, 0),
     size: 0.3,
     hex: createColor(0xffff00),
   };
+  // FIXME:
   const helper = new PlaneHelper(obj.normal, obj.point, obj.size, obj.hex);
   helper.visible = false;
+  // FIXME:
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.js.
   helper._updateSizeCallbacks = [];
   {
@@ -29,6 +27,7 @@ export function createPlaneHelper(gui) {
     function uS() /* updateSize */ {
       helper._updateSizeCallbacks.forEach((c) => c(obj.size));
     }
+    // FIXME:
     function uH() /* updateHex */ {
       helper.material.color.set(obj.hex);
       helper.children[0].material.color.set(obj.hex);
@@ -51,14 +50,24 @@ export function createPlaneHelper(gui) {
  *
  * @augments THREE.PlaneHelper
  */
-class PlaneHelper extends THREE.PlaneHelper {
+export class PlaneHelper extends THREE.PlaneHelper {
+  /**
+   * The normal direction of the plane. Must be a unit vector.
+   */
+  normal: THREE.Vector3;
+
+  /**
+   * The reference point on the plane.
+   */
+  point: THREE.Vector3;
+
   /**
    * Constructs a new plane helper.
    *
-   * @param {THREE.Vector3} [normal=(0,0,1)] - The normal direction of the plane. Must be a unit vector.
-   * @param {THREE.Vector3} [point=(0,0,0)] - The reference point on the plane.
-   * @param {number} [size=1] - The side length of plane helper.
-   * @param {number|THREE.Color|string} [hex=0xffff00] - The helper's color.
+   * @param normal - {@link PlaneHelper#normal}
+   * @param point - {@link PlaneHelper#point}
+   * @param size - {@link THREE.PlaneHelper#size}
+   * @param hex - {@link THREE.PlaneHelper#hex}
    */
   constructor(
     normal = new THREE.Vector3(0, 0, 1),
