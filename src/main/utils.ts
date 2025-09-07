@@ -23,7 +23,5 @@ export function objectMap<Value, NewValue>(
   obj: { [k: string]: Value },
   func: (v: Value) => NewValue
 ): { [k: string]: NewValue } {
-  return Object.fromEntries(
-    Object.entries<Value>(obj).map(([k, v]) => [k, func(v)])
-  );
+  return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, func(v)]));
 }

@@ -194,6 +194,4 @@ export class Tube {
 export interface TubeJSON {
   /** {@link Tube#parameters} */
   parameters: { [k: string]: any }; // FIXME:
-  /** {@link Tube#_updateGeometry} */
-  _updateGeometry: () => void;
 }
