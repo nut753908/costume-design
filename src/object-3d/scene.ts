@@ -1,0 +1,18 @@
+import * as THREE from "three";
+
+import { GUI } from "lil-gui";
+import { createColor } from "../math/color";
+
+/**
+ * @param {GUI} gui
+ * @return {THREE.Scene}
+ */
+export function createScene(gui) {
+  const scene = new THREE.Scene();
+  scene.background = createColor(0xffffff);
+  {
+    const folder = gui.addFolder("THREE.Scene").close();
+    folder.addColor(scene, "background");
+  }
+  return scene;
+}

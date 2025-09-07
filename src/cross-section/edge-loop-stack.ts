@@ -1,0 +1,94 @@
+import * as THREE from "three";
+
+import { getPoint } from "./points";
+
+/**
+ * An edge loop stack of geometry.
+ *
+ * ```js
+ * import { EdgeLoopStack } from "./src/cross-section/edge-loop-stack";
+ * const edgeLoopStack = new EdgeLoopStack( [ [ 0, 1, 2 ], [ 3, 4, 5 ] ], false );
+ * ```
+ */
+export class EdgeLoopStack {
+  /**
+   * Constructs a new edge loop stack.
+   *
+   * @param {Array<Array<number>>} [vertices=[]] - The vertices within an edge loop stack.
+   * @param {boolean} [closed=false] - Whether the edge loop stack is closed.
+   */
+  constructor(vertices = [], closed = false) {
+    /**
+     * The vertices within an edge loop stack.
+     *
+     * @type {Array<Array<number>>}
+     */
+    this.vertices = vertices;
+
+    /**
+     * Whether the edge loop stack is closed.
+     *
+     * @type {boolean}
+     */
+    this.closed = closed;
+  }
+
+  /**
+   * Get the points.
+   *
+   * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
+   * @returns {Array<Array<THREE.Vector3>>} The points.
+   */
+  getPoints(positions) {
+    return this.vertices.map((list) => list.map((v) => getPoint(positions, v)));
+  }
+
+  /**
+   * Returns a new edge loop stack with copied values from this instance.
+   *
+   * @return {EdgeLoopStack} A clone of this instance.
+   */
+  clone() {
+    return new this.constructor().copy(this);
+  }
+
+  /**
+   * Copies the values of the given edge loop stack to this instance.
+   *
+   * @param {EdgeLoopStack} source - The edge loop stack to copy.
+   * @returns {EdgeLoopStack} A reference to this edge loop stack.
+   */
+  copy(source) {
+    this.vertices = source.vertices.map((list) => Array.from(list));
+    this.closed = source.closed;
+
+    return this;
+  }
+
+  /**
+   * Serializes the edge loop stack into JSON.
+   *
+   * @return {Object} A JSON object representing the serialized edge loop stack.
+   */
+  toJSON() {
+    const data = {};
+
+    data.vertices = this.vertices.map((list) => Array.from(list));
+    data.closed = this.closed;
+
+    return data;
+  }
+
+  /**
+   * Deserializes the edge loop stack from the given JSON.
+   *
+   * @param {Object} json - The JSON holding the serialized edge loop stack.
+   * @return {EdgeLoopStack} A reference to this edge loop stack.
+   */
+  fromJSON(json) {
+    this.vertices = json.vertices.map((list) => Array.from(list));
+    this.closed = json.closed;
+
+    return this;
+  }
+}

@@ -1,0 +1,23 @@
+import * as THREE from "three";
+
+import { ControlPoint3 } from "../../curve/control-point-3";
+import { ControlPoint2 } from "../../curve/control-point-2";
+import { createEmptyGeometry } from "../../geometry/empty";
+
+/**
+ * @param {ControlPoint3|ControlPoint2} cp
+ * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
+ * @return {THREE.Group}
+ */
+export function createControlPointGroup(cp, ms) {
+  const group = new THREE.Group();
+
+  const geometry = createEmptyGeometry();
+
+  group.add(new THREE.Points(geometry, ms.cp.points));
+  group.add(new THREE.Line(geometry, ms.cp.line));
+
+  cp.createGeometry(group);
+
+  return group;
+}
