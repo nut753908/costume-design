@@ -113,7 +113,7 @@ function loadLastUndo() {
   loading = false;
 }
 
-function onWindowKeydown(e) {
+function onWindowKeydown(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) {
     if (e.key === "z") {
       if (undos.length > 1) {
