@@ -5,9 +5,12 @@ import * as THREE from "three";
  */
 export function disposeGroup(group: THREE.Group | THREE.Object3D) {
   group.children.forEach((g) => {
-    // FIXME:
-    if (g.dispose) g.dispose();
-    if (g.geometry && g.geometry.dispose) g.geometry.dispose();
+    if ("dispose" in g && g.dispose instanceof Function) {
+      g.dispose();
+    }
+    if ("geometry" in g && g.geometry instanceof THREE.BufferGeometry) {
+      g.geometry.dispose();
+    }
     disposeGroup(g);
   });
 }
