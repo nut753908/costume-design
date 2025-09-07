@@ -8,6 +8,7 @@ import {
   constant0Curve2,
 } from "../curve/samples/curve-2";
 
+// FIXME: after fixing the control points and curves, fix this
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *

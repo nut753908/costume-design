@@ -2,30 +2,28 @@ import * as THREE from "three";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-/**
- * @return {Promise<?THREE.BufferGeometry>}
- */
-export async function loadBaseGeometry() {
-  let loader = new GLTFLoader();
-  const gltf = await loader
+export async function loadBaseGeometry(): Promise<THREE.BufferGeometry | null> {
+  const gltfLoader = new GLTFLoader();
+  const fileLoader = new THREE.FileLoader();
+
+  const gltf = await gltfLoader
     .loadAsync("../../models/base1-22.glb")
     .catch((error) => console.error(error));
   if (!gltf) return null;
 
-  loader = new THREE.FileLoader();
-  const indices = await loader
+  const indices = await fileLoader
     .setResponseType("json")
     .loadAsync("../../models/base1-22-n-polygon-indices.txt")
     .catch((error) => console.error(error));
   if (!indices) return null;
 
-  loader = new THREE.FileLoader();
-  const positions = await loader
+  const positions = await fileLoader
     .setResponseType("json")
     .loadAsync("../../models/base1-22-n-polygon-positions.txt")
     .catch((error) => console.error(error));
   if (!positions) return null;
 
+  // FIXME:
   const geometry = gltf.scene.children[0].geometry;
   geometry.nPolygonIndices = correctNPolygonIndices(
     positions,
@@ -38,14 +36,18 @@ export async function loadBaseGeometry() {
 /**
  * Create the correct n polygon indices.
  *
- * @param {Array<Array<number>>} nPolygonPositions - The n polygon positions.
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {Array<Array<number>>} The correct n polygon indices.
+ * @param nPolygonPositions - The n polygon positions.
+ * @param positions - The results of geometry.getAttribute("position").
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  The correct n polygon indices.
  */
-function correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices) {
+function correctNPolygonIndices(
+  nPolygonPositions: number[][],
+  positions: THREE.BufferAttribute,
+  nPolygonIndices: number[][]
+): number[][] {
   const EPS = Number.EPSILON;
-  const map = Array(nPolygonPositions.length);
+  const map: (number | undefined)[] = Array(nPolygonPositions.length);
   for (let i = 0, l1 = nPolygonPositions.length; i < l1; i++) {
     for (let j = 0, l2 = positions.count * 3; j < l2; j += 3) {
       if (
@@ -60,5 +62,5 @@ function correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices) {
   }
   return nPolygonIndices
     .map((list) => list.map((v) => map[v]))
-    .filter((list) => !list.includes(undefined));
+    .filter((list) => !list.includes(undefined)) as number[][];
 }

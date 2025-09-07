@@ -7,11 +7,12 @@ import { GUI } from "lil-gui";
 import { deleteFolder } from "../../main/gui";
 
 /**
- * @param {Tube} t
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-export function createTubeGroup(t, ms) {
+export function createTubeGroup(
+  t: Tube,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   const p = t.parameters;
@@ -30,11 +31,12 @@ export function createTubeGroup(t, ms) {
 }
 
 /**
- * @param {Tube} t
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-function createTubeGroupWithNoCurves(t, ms) {
+function createTubeGroupWithNoCurves(
+  t: Tube,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   const geometry = createEmptyGeometry();
@@ -48,10 +50,9 @@ function createTubeGroupWithNoCurves(t, ms) {
 }
 
 /**
- * @param {GUI} gui
- * @param {THREE.Group} group - The tube group.
+ * @param group - The tube group.
  */
-export function setTubeGroupGUI(gui, group) {
+export function setTubeGroupGUI(gui: GUI, group: THREE.Group) {
   deleteFolder(gui, "TubeGroup");
   const folder = gui.addFolder("TubeGroup");
   const gFolder = folder.addFolder("visible");

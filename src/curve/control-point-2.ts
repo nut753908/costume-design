@@ -1,16 +1,17 @@
 import * as THREE from "three";
 
-import { Circular } from "../math/circular";
-import { GUI } from "lil-gui";
+import { Circular, CircularJSON } from "../math/circular";
+import { Controller, GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { rotate180 } from "../math/utils";
 
+// FIXME: add an abstract class.
 /**
  * A class representing a 2D control point of curve.
  *
  * ```js
  * import { ControlPoint2 } from "./src/curve/control-point-2";
- * const cp = new ControlPoint2(
+ * const controlPoint2 = new ControlPoint2(
  *   new THREE.Vector2(0, 0),
  *   new THREE.Vector2(-1, 0),
  *   new THREE.Vector2(1, 0),
@@ -20,14 +21,68 @@ import { rotate180 } from "../math/utils";
  * ```
  */
 export class ControlPoint2 {
+  type: string;
+
+  /**
+   * The position of middle control point.
+   */
+  middlePos: THREE.Vector2;
+
+  /**
+   * The position of leftside control point.
+   */
+  leftPos: THREE.Vector2;
+
+  /**
+   * The position of leftside control point.
+   */
+  rightPos: THREE.Vector2;
+
+  /**
+   * Whether to synchronize the "left" and "right" radius.
+   */
+  isSyncRadius: boolean;
+
+  /**
+   * Whether to synchronize the "left" and "right" angle.
+   */
+  isSyncAngle: boolean;
+
+  /**
+   * This is "leftPos - middlePos" and its type is THREE.'V'ector2.
+   */
+  leftV: THREE.Vector2;
+
+  /**
+   * This is "leftPos - middlePos" and its type is 'C'ircular.
+   */
+  leftC: Circular;
+
+  /**
+   * This is "rightPos - middlePos" and its type is THREE.'V'ector2.
+   */
+  rightV: THREE.Vector2;
+
+  /**
+   * This is "rightPos - middlePos" and its type is 'C'ircular.
+   */
+  rightC: Circular;
+
+  /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/curve/control-point-2.js.
+   * Set it in advance using createGeometry() in ./src/curve/control-point-2.js.
+   */
+  _updateGeometry: () => void;
+
   /**
    * Constructs a new ControlPoint2.
    *
-   * @param {THREE.Vector2} [middlePos=(0,0)] - The position of middle control point.
-   * @param {THREE.Vector2} [leftPos=(-1,0)] - The position of leftside control point.
-   * @param {THREE.Vector2} [rightPos=(1,0)] - The position of rightside control point.
-   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "left" and "right" radius.
-   * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "left" and "right" angle.
+   * @param middlePos - {@link ControlPoint2#middlePos}
+   * @param leftPos - {@link ControlPoint2#leftPos}
+   * @param rightPos - {@link ControlPoint2#rightPos}
+   * @param isSyncRadius - {@link ControlPoint2#isSyncRadius}
+   * @param isSyncAngle - {@link ControlPoint2#isSyncAngle}
    */
   constructor(
     middlePos = new THREE.Vector2(0, 0),
@@ -37,85 +92,22 @@ export class ControlPoint2 {
     isSyncAngle = true
   ) {
     this.type = "ControlPoint2";
-
-    /**
-     * The position of middle control point.
-     *
-     * @type {THREE.Vector2}
-     */
     this.middlePos = middlePos;
-
-    /**
-     * The position of leftside control point.
-     *
-     * @type {THREE.Vector2}
-     */
-    this.initLeft(leftPos);
-
-    /**
-     * The position of rightside control point.
-     *
-     * @type {THREE.Vector2}
-     */
-    this.initRight(rightPos);
-
-    /**
-     * Whether to synchronize the "left" and "right" radius.
-     *
-     * @type {boolean}
-     */
+    this.leftPos = leftPos;
+    this.rightPos = rightPos;
     this.isSyncRadius = isSyncRadius;
-
-    /**
-     * Whether to synchronize the "left" and "right" angle.
-     *
-     * @type {boolean}
-     */
     this.isSyncAngle = isSyncAngle;
-
-    /**
-     * Secret field.
-     * This function is used by setGUI() in ./src/curve/control-point-2.js.
-     * Set it in advance using createGeometry() in ./src/curve/control-point-2.js.
-     *
-     * @type {()=>void}
-     */
+    this.leftV = leftPos.clone().sub(this.middlePos);
+    this.leftC = new Circular().setFromVector2(this.leftV);
+    this.rightV = rightPos.clone().sub(this.middlePos);
+    this.rightC = new Circular().setFromVector2(this.rightV);
     this._updateGeometry = () => {};
   }
 
   /**
-   * Initialize "left".
-   * "leftV" is "leftPos - middlePos" and its type is THREE.'V'ector2.
-   * "leftC" is "leftPos - middlePos" and its type is 'C'ircular.
-   * Call it only once in this constructor.
-   *
-   * @param {THREE.Vector2} leftPos - The position of leftside control point.
-   */
-  initLeft(leftPos) {
-    this.leftPos = leftPos;
-    this.leftV = leftPos.clone().sub(this.middlePos);
-    this.leftC = new Circular().setFromVector2(this.leftV);
-  }
-  /**
-   * Initialize "right".
-   * "rightV" is "rightPos - middlePos" and its type is THREE.'V'ector2.
-   * "rightC" is "rightPos - middlePos" and its type is 'C'ircular.
-   * Call it only once in this constructor.
-   *
-   * @param {THREE.Vector2} rightPos - The position of rightside control point.
-   */
-  initRight(rightPos) {
-    this.rightPos = rightPos;
-    this.rightV = rightPos.clone().sub(this.middlePos);
-    this.rightC = new Circular().setFromVector2(this.rightV);
-  }
-
-  /**
    * Create geometry.
-   *
-   * @param {THREE.Group} group
    */
-  createGeometry(group) {
+  createGeometry(group: THREE.Group) {
     const cp = this;
 
     // This function is used by setGUI() in ./src/curve/control-point-2.js.
@@ -124,6 +116,7 @@ export class ControlPoint2 {
       geometry.setFromPoints(cp.getPoints());
 
       group.children.forEach((v) => {
+        // FIXME:
         v.geometry.dispose();
         v.geometry = geometry;
       });
@@ -133,14 +126,13 @@ export class ControlPoint2 {
   /**
    * Set GUI.
    *
-   * @param {GUI} gui
-   * @param {string} [name=this.type] - The cp folder name used in the GUI.
-   * @param {()=>void} [updateCallback=()=>{}] - The callback that is invoked after updating cp.
+   * @param name - The cp folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating cp.
    */
-  setGUI(gui, name = this.type, updateCallback = () => {}) {
+  setGUI(gui: GUI, name = this.type, updateCallback = () => {}) {
     const cp = this;
 
-    let _tmp;
+    let _tmp: Controller;
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
@@ -162,7 +154,7 @@ export class ControlPoint2 {
     _tmp = lFolder.add(cp.rightC, "angle").step(1);
     _tmp.name("right.angle").onChange(uRC);
 
-    const leftRightControllers = [
+    const leftRightControllers: Controller[] = [
       ...folder.controllers,
       ...lFolder.controllers,
     ].filter(
@@ -185,9 +177,11 @@ export class ControlPoint2 {
       updateFrom("rightC");
     }
     /**
-     * @param {"middlePos"|"leftPos"|"rightPos"|"leftC"|"rightC"} key - A key to pass to this.updateFrom.
+     * @param key - A key to pass to this.updateFrom.
      */
-    function updateFrom(key) {
+    function updateFrom(
+      key: "middlePos" | "leftPos" | "rightPos" | "leftC" | "rightC"
+    ) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-2.js.
       leftRightControllers.forEach((c) => c.updateDisplay());
@@ -197,10 +191,8 @@ export class ControlPoint2 {
 
   /**
    * Get points.
-   *
-   * @returns {Array<THREE.Vector2>}
    */
-  getPoints() {
+  getPoints(): [THREE.Vector2, THREE.Vector2, THREE.Vector2] {
     return [this.leftPos, this.middlePos, this.rightPos];
   }
 
@@ -278,19 +270,19 @@ export class ControlPoint2 {
   /**
    * Returns a new ControlPoint2 with copied values from this instance.
    *
-   * @returns {ControlPoint2} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): ControlPoint2 {
+    return new ControlPoint2().copy(this);
   }
 
   /**
    * Copies the values of the given ControlPoint2 to this instance.
    *
-   * @param {ControlPoint2} source - The ControlPoint2 to copy.
-   * @returns {ControlPoint2} A reference to this ControlPoint2.
+   * @param source - The ControlPoint2 to copy.
+   * @return  A reference to this ControlPoint2.
    */
-  copy(source) {
+  copy(source: ControlPoint2): ControlPoint2 {
     this.middlePos.copy(source.middlePos);
     this.leftPos.copy(source.leftPos);
     this.rightPos.copy(source.rightPos);
@@ -307,31 +299,30 @@ export class ControlPoint2 {
   /**
    * Serializes the ControlPoint2 into JSON.
    *
-   * @return {Object} A JSON object representing the serialized ControlPoint2.
+   * @return  A JSON object representing the serialized ControlPoint2.
    */
-  toJSON() {
-    const data = {};
-
-    data.middlePos = this.middlePos.toArray();
-    data.leftPos = this.leftPos.toArray();
-    data.rightPos = this.rightPos.toArray();
-    data.isSyncRadius = this.isSyncRadius;
-    data.isSyncAngle = this.isSyncAngle;
-    data.leftV = this.leftV.toArray();
-    data.leftC = this.leftC.toJSON();
-    data.rightV = this.rightV.toArray();
-    data.rightC = this.rightC.toJSON();
-
-    return data;
+  toJSON(): ControlPoint2JSON {
+    return {
+      type: this.type,
+      middlePos: this.middlePos.toArray(),
+      leftPos: this.leftPos.toArray(),
+      rightPos: this.rightPos.toArray(),
+      isSyncRadius: this.isSyncRadius,
+      isSyncAngle: this.isSyncAngle,
+      leftV: this.leftV.toArray(),
+      leftC: this.leftC.toJSON(),
+      rightV: this.rightV.toArray(),
+      rightC: this.rightC.toJSON(),
+    };
   }
 
   /**
    * Deserializes the ControlPoint2 from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized ControlPoint2.
-   * @return {ControlPoint2} A reference to this ControlPoint2.
+   * @param json - The JSON holding the serialized ControlPoint2.
+   * @return  A reference to this ControlPoint2.
    */
-  fromJSON(json) {
+  fromJSON(json: ControlPoint2JSON): ControlPoint2 {
     this.middlePos.fromArray(json.middlePos);
     this.leftPos.fromArray(json.leftPos);
     this.rightPos.fromArray(json.rightPos);
@@ -344,4 +335,30 @@ export class ControlPoint2 {
 
     return this;
   }
+}
+
+/**
+ * The {@link ControlPoint2} JSON interface.
+ */
+export interface ControlPoint2JSON {
+  /** {@link ControlPoint2#type} */
+  type: string;
+  /** {@link ControlPoint2#middlePos} */
+  middlePos: THREE.Vector2Tuple;
+  /** {@link ControlPoint2#leftPos} */
+  leftPos: THREE.Vector2Tuple;
+  /** {@link ControlPoint2#rightPos} */
+  rightPos: THREE.Vector2Tuple;
+  /** {@link ControlPoint2#isSyncRadius} */
+  isSyncRadius: boolean;
+  /** {@link ControlPoint2#isSyncAngle} */
+  isSyncAngle: boolean;
+  /** {@link ControlPoint2#leftV} */
+  leftV: THREE.Vector2Tuple;
+  /** {@link ControlPoint2#leftC} */
+  leftC: CircularJSON;
+  /** {@link ControlPoint2#rightV} */
+  rightV: THREE.Vector2Tuple;
+  /** {@link ControlPoint2#rightC} */
+  rightC: CircularJSON;
 }

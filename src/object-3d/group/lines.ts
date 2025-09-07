@@ -8,12 +8,21 @@ import { GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "../../main/gui";
 
 /**
- * @param {{[k:number|string]:Edge|EdgeLoop|EdgeLoopStack|THREE.CurvePath|THREE.CatmullRomCurve3}} lines
- * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param positions - The results of geometry.getAttribute("position").
+ * @param ms - The materials.
  */
-export function createLinesGroup(lines, positions, ms) {
+export function createLinesGroup(
+  lines: {
+    [k: number | string]:
+      | Edge
+      | EdgeLoop
+      | EdgeLoopStack
+      | THREE.CurvePath<THREE.Vector3>
+      | THREE.CatmullRomCurve3;
+  },
+  positions: THREE.BufferAttribute,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   Object.entries(lines).forEach(([k, v]) =>
@@ -24,11 +33,13 @@ export function createLinesGroup(lines, positions, ms) {
 }
 
 /**
- * @param {GUI} gui
- * @param {THREE.Group} group - The lines group.
- * @param {boolean} [visible=false]
+ * @param group - The lines group.
  */
-export function setLinesGroupGUI(gui, group, visible = false) {
+export function setLinesGroupGUI(
+  gui: GUI,
+  group: THREE.Group,
+  visible = false
+) {
   deleteFolder(gui, "LinesGroup");
   const folder = gui.addFolder("LinesGroup");
   // closeFolder(folder);

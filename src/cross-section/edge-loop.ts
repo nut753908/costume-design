@@ -12,53 +12,52 @@ import { getPoint } from "./points";
  */
 export class EdgeLoop {
   /**
+   * The vertices within an edge loop.
+   */
+  vertices: number[];
+
+  /**
+   * Whether the edge loop is closed.
+   */
+  closed: boolean;
+
+  /**
    * Constructs a new edge loop.
    *
-   * @param {Array<number>} [vertices=[]] - The vertices within an edge loop.
-   * @param {boolean} [closed=false] - Whether the edge loop is closed.
+   * @param vertices - {@link EdgeLoop#vertices}
+   * @param closed - {@link EdgeLoop#closed}
    */
-  constructor(vertices = [], closed = false) {
-    /**
-     * The vertices within an edge loop.
-     *
-     * @type {Array<number>}
-     */
+  constructor(vertices: number[] = [], closed = false) {
     this.vertices = vertices;
-
-    /**
-     * Whether the edge loop is closed.
-     *
-     * @type {boolean}
-     */
     this.closed = closed;
   }
 
   /**
    * Get the points.
    *
-   * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
-   * @returns {Array<THREE.Vector3>} The points.
+   * @param positions - The results of geometry.getAttribute("position").
+   * @return  The points.
    */
-  getPoints(positions) {
+  getPoints(positions: THREE.BufferAttribute): THREE.Vector3[] {
     return this.vertices.map((v) => getPoint(positions, v));
   }
 
   /**
    * Returns a new edge loop with copied values from this instance.
    *
-   * @return {EdgeLoop} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): EdgeLoop {
+    return new EdgeLoop().copy(this);
   }
 
   /**
    * Copies the values of the given edge loop to this instance.
    *
-   * @param {EdgeLoop} source - The edge loop to copy.
-   * @returns {EdgeLoop} A reference to this edge loop.
+   * @param source - The edge loop to copy.
+   * @return  A reference to this edge loop.
    */
-  copy(source) {
+  copy(source: EdgeLoop): EdgeLoop {
     this.vertices = Array.from(source.vertices);
     this.closed = source.closed;
 
@@ -68,27 +67,35 @@ export class EdgeLoop {
   /**
    * Serializes the edge loop into JSON.
    *
-   * @return {Object} A JSON object representing the serialized edge loop.
+   * @return  A JSON object representing the serialized edge loop.
    */
-  toJSON() {
-    const data = {};
-
-    data.vertices = Array.from(this.vertices);
-    data.closed = this.closed;
-
-    return data;
+  toJSON(): EdgeLoopJSON {
+    return {
+      vertices: Array.from(this.vertices),
+      closed: this.closed,
+    };
   }
 
   /**
    * Deserializes the edge loop from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized edge loop.
-   * @return {EdgeLoop} A reference to this edge loop.
+   * @param json - The JSON holding the serialized edge loop.
+   * @return  A reference to this edge loop.
    */
-  fromJSON(json) {
+  fromJSON(json: EdgeLoopJSON): EdgeLoop {
     this.vertices = Array.from(json.vertices);
     this.closed = json.closed;
 
     return this;
   }
+}
+
+/**
+ * The {@link EdgeLoop} JSON interface.
+ */
+export interface EdgeLoopJSON {
+  /** {@link EdgeLoop#vertices} */
+  vertices: number[];
+  /** {@link EdgeLoop#closed} */
+  closed: boolean;
 }

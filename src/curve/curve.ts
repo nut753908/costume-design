@@ -10,63 +10,67 @@ import { isInvalidIndex } from "../math/utils";
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
  * This is an abstract class for Curve3/Curve2.
  *
- * @augments THREE.CurvePath
+ * @augments THREE.CurvePath<TVector>
  */
-export class Curve extends THREE.CurvePath {
+// FIXME:
+export class Curve<
+  TVector extends THREE.Vector3 | THREE.Vector2
+> extends THREE.CurvePath<TVector> {
+  type: string;
+
+  /**
+   * The 3D/2D control points.
+   */
+  cps: ControlPoint3[] | ControlPoint2[];
+
+  /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/curve/curve.js.
+   * Set it in advance using createGeometry() in ./src/curve/curve.js.
+   */
+  _updateGeometry: () => void;
+
+  /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/curve/curve.js.
+   * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+   */
+  _updateCpsGroup: () => void;
+
   /**
    * Constructs a new Curve.
    *
-   * @param {Array<ControlPoint3>|Array<ControlPoint2>} [cps=[]] - The 3D/2D control points.
+   * @param cps - The 3D/2D control points.
    */
-  constructor(cps = []) {
+  constructor(cps: ControlPoint3[] | ControlPoint2[] = []) {
     super();
-
     this.type = "Curve";
-
-    /**
-     * The 3D/2D control points.
-     *
-     * @type {Array<ControlPoint3>|Array<ControlPoint2>}
-     */
     this.cps = cps;
-
-    /**
-     * Secret field.
-     * This function is used by setGUI() in ./src/curve/curve.js.
-     * Set it in advance using createGeometry() in ./src/curve/curve.js.
-     *
-     * @type {()=>void}
-     */
     this._updateGeometry = () => {};
-
-    /**
-     * Secret field.
-     * This function is used by setGUI() in ./src/curve/curve.js.
-     * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
-     *
-     * @type {()=>void}
-     */
     this._updateCpsGroup = () => {};
-
     this.updateCurves();
   }
 
   /**
    * Get the class of this.curves[*].
    *
-   * @returns {Function} Either CubicBezierCurve3 or CubicBezierCurve.
+   * @return  Either CubicBezierCurve3 or CubicBezierCurve.
    */
-  get curveClass() {
+  // FIXME:
+  get curveClass(): Function {
     console.warn("Curve: .curveClass not implemented.");
+    return () => {}; // FIXME:
   }
 
   /**
    * Get the class of this.cps[*].
    *
-   * @returns {Function} Either ControlPoint3 or ControlPoint2.
+   * @return  Either ControlPoint3 or ControlPoint2.
    */
-  get cpClass() {
+  // FIXME:
+  get cpClass(): Function {
     console.warn("Curve: .cpClass not implemented.");
+    return () => {}; // FIXME:
   }
 
   /**
@@ -75,6 +79,7 @@ export class Curve extends THREE.CurvePath {
   updateCurves() {
     this.curves = [];
     for (let i = 0, l = this.cps.length - 1; i < l; i++) {
+      // FIXME:
       const curve = new this.curveClass(
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
@@ -88,15 +93,14 @@ export class Curve extends THREE.CurvePath {
 
   /**
    * Create geometry.
-   *
-   * @param {THREE.Line} line
    */
-  createGeometry(line) {
+  createGeometry(line: THREE.Line) {
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.js.
     (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
+      // FIXME:
       geometry.setFromPoints(c.getPoints());
 
       line.geometry.dispose();
@@ -107,12 +111,16 @@ export class Curve extends THREE.CurvePath {
   /**
    * Set GUI.
    *
-   * @param {GUI} gui
-   * @param {string} [name=this.type] - The curve folder name used in the GUI.
-   * @param {()=>void} [updateCallback=()=>{}] - The callback that is invoked after updating curve.
-   * @param {boolean} [isClose=false] - Whether to close the folder.
+   * @param name - The curve folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating curve.
+   * @param isClose - Whether to close the folder.
    */
-  setGUI(gui, name = this.type, updateCallback = () => {}, isClose = false) {
+  setGUI(
+    gui: GUI,
+    name = this.type,
+    updateCallback = () => {},
+    isClose = false
+  ) {
     const c = this;
 
     const obj = {
@@ -182,6 +190,7 @@ export class Curve extends THREE.CurvePath {
   /**
    * Add cp to the beginning of this.cps.
    */
+  // FIXME:
   addCpToFirst() {
     if (this.cps.length !== 0) {
       this.cps.unshift(this.cps[0].clone()); // Copy first cp.
@@ -193,6 +202,7 @@ export class Curve extends THREE.CurvePath {
   /**
    * Add cp to the end of this.cps.
    */
+  // FIXME:
   addCpToLast() {
     if (this.cps.length !== 0) {
       this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
@@ -204,9 +214,10 @@ export class Curve extends THREE.CurvePath {
   /**
    * Interpolate cp2 using cp1 and cp3. This method also affects cp1 and cp3.
    *
-   * @param {number} index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
+   * @param index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
    */
-  interpolateCp(index) {
+  // FIXME:
+  interpolateCp(index: number) {
     if (isInvalidIndex(index, 1, this.cps.length - 1)) return;
     this.cps.splice(index, 0, this.cps[index].clone());
     const cp1 = this.cps[index - 1];
@@ -237,47 +248,42 @@ export class Curve extends THREE.CurvePath {
   /**
    * Remove this.cps[index].
    *
-   * @param {number} index - The index of this.cps.
+   * @param index - The index of this.cps.
    */
-  removeCp(index) {
+  removeCp(index: number) {
     if (isInvalidIndex(index, 0, this.cps.length - 1)) return;
     this.cps.splice(index, 1);
   }
 
   /**
    * Get the index list of interpolateCp(index).
-   *
-   * @returns {Array<number>}
    */
-  get iIndexList() {
+  get iIndexList(): number[] {
     return this.rIndexList.slice(1);
   }
 
   /**
    * Get the GUI-safe version of iIndexList.
-   *
-   * @returns {Array<number>}
    */
-  get safeRIndexList() {
+  get safeRIndexList(): number[] {
     return this.cps.length >= 3 ? this.rIndexList : [];
   }
 
   /**
    * Get the index list of removeCp(index).
-   *
-   * @returns {Array<number>}
    */
-  get rIndexList() {
+  get rIndexList(): number[] {
     return [...Array(this.cps.length).keys()];
   }
 
   /**
    * Copies the values of the given Curve to this instance.
    *
-   * @param {Curve} source - The Curve to copy.
-   * @returns {Curve} A reference to this Curve.
+   * @param source - The Curve to copy.
+   * @return  A reference to this Curve.
    */
-  copy(source) {
+  // FIXME:
+  copy(source: Curve<TVector>): Curve<TVector> {
     super.copy(source);
 
     this.cps = [];
@@ -295,9 +301,10 @@ export class Curve extends THREE.CurvePath {
   /**
    * Serializes the Curve into JSON.
    *
-   * @return {Object} A JSON object representing the serialized Curve.
+   * @return  A JSON object representing the serialized Curve.
    */
-  toJSON() {
+  // FIXME:
+  toJSON(): CurveJSON {
     const data = super.toJSON();
 
     data.cps = [];
@@ -313,10 +320,11 @@ export class Curve extends THREE.CurvePath {
   /**
    * Deserializes the Curve from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized Curve.
-   * @return {Curve} A reference to this Curve.
+   * @param json - The JSON holding the serialized Curve.
+   * @return  A reference to this Curve.
    */
-  fromJSON(json) {
+  // FIXME:
+  fromJSON(json: CurveJSON): Curve<TVector> {
     super.fromJSON(json);
 
     this.cps = [];
@@ -330,4 +338,14 @@ export class Curve extends THREE.CurvePath {
 
     return this;
   }
+}
+
+/**
+ * The {@link Curve} JSON interface.
+ */
+export interface CurveJSON {
+  /** {@link Curve#curves} */
+  curves: THREE.CurvePath<THREE.Vector3 | THREE.Vector2>; // FIXME:
+  /** {@link Curve#cps} */
+  cps: number;
 }

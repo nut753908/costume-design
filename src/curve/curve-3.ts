@@ -8,18 +8,20 @@ import { ControlPoint3 } from "./control-point-3";
  *
  * ```js
  * import { Curve3 } from "./src/curve/curve-3";
- * const c = new Curve3();
+ * const curve3 = new Curve3();
  * ```
  *
- * @augments Curve
+ * @augments Curve<THREE.Vector3>
  */
-export class Curve3 extends Curve {
+export class Curve3 extends Curve<THREE.Vector3> {
+  type: string;
+
   /**
    * Constructs a new Curve3.
    *
-   * @param {Array<ControlPoint3>} [cps=[]] - The 3D control points.
+   * @param cps - The 3D control points.
    */
-  constructor(cps = []) {
+  constructor(cps: ControlPoint3[] = []) {
     super(cps);
 
     this.type = "Curve3";
@@ -27,19 +29,15 @@ export class Curve3 extends Curve {
 
   /**
    * Get the class of this.curves[*].
-   *
-   * @returns {Function}
    */
-  get curveClass() {
+  get curveClass(): Function {
     return THREE.CubicBezierCurve3;
   }
 
   /**
    * Get the class of this.cps[*].
-   *
-   * @returns {Function}
    */
-  get cpClass() {
+  get cpClass(): Function {
     return ControlPoint3;
   }
 }

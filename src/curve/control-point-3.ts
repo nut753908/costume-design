@@ -1,16 +1,17 @@
 import * as THREE from "three";
 
-import { Spherical } from "../math/spherical";
-import { GUI } from "lil-gui";
+import { Spherical, SphericalJSON } from "../math/spherical";
+import { Controller, GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils";
 
+// FIXME: add an abstract class.
 /**
  * A class representing a 3D control point of curve.
  *
  * ```js
  * import { ControlPoint3 } from "./src/curve/control-point-3";
- * const cp = new ControlPoint3(
+ * const controlPoint3 = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(-1, 0, 0),
  *   new THREE.Vector3(1, 0, 0),
@@ -20,14 +21,84 @@ import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils";
  * ```
  */
 export class ControlPoint3 {
+  type: string;
+
+  /**
+   * The position of middle control point.
+   */
+  middlePos: THREE.Vector3;
+
+  /**
+   * The position of leftside control point.
+   */
+  leftPos: THREE.Vector3;
+
+  /**
+   * The position of rightside control point.
+   */
+  rightPos: THREE.Vector3;
+
+  /**
+   * Whether to synchronize the "left" and "right" radius.
+   */
+  isSyncRadius: boolean;
+
+  /**
+   * Whether to synchronize the "left" and "right" angle.
+   */
+  isSyncAngle: boolean;
+
+  /**
+   * This is "leftPos - middlePos" and its type is THREE.'V'ector3.
+   */
+  leftV: THREE.Vector3;
+
+  /**
+   * This is "leftPos - middlePos" and its type is 'S'pherical.
+   */
+  leftS: Spherical;
+
+  /**
+   * This represents each angle of "leftV" as THREE.Vector3.
+   *   ".x" is the angle around the x axis.
+   *   ".y" is the angle around the y axis.
+   *   ".z" is the angle around the z axis.
+   */
+  leftA: THREE.Vector3;
+
+  /**
+   * This is "rightPos - middlePos" and its type is THREE.'V'ector3.
+   */
+  rightV: THREE.Vector3;
+
+  /**
+   * This is "rightPos - middlePos" and its type is 'S'pherical.
+   */
+  rightS: Spherical;
+
+  /**
+   * This represents each angle of "rightV" as THREE.Vector3.
+   *   ".x" is the angle around the x axis.
+   *   ".y" is the angle around the y axis.
+   *   ".z" is the angle around the z axis.
+   */
+  rightA: THREE.Vector3;
+
+  /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/curve/control-point-3.js.
+   * Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
+   */
+  _updateGeometry: () => void;
+
   /**
    * Constructs a new ControlPoint3.
    *
-   * @param {THREE.Vector3} [middlePos=(0,0,0)] - The position of middle control point.
-   * @param {THREE.Vector3} [leftPos=(-1,0,0)] - The position of leftside control point.
-   * @param {THREE.Vector3} [rightPos=(1,0,0)] - The position of rightside control point.
-   * @param {boolean} [isSyncRadius=true] - Whether to synchronize the "left" and "right" radius.
-   * @param {boolean} [isSyncAngle=true] - Whether to synchronize the "left" and "right" angle.
+   * @param middlePos - {@link ControlPoint3#middlePos}
+   * @param leftPos - {@link ControlPoint3#leftPos}
+   * @param rightPos - {@link ControlPoint3#rightPos}
+   * @param isSyncRadius - {@link ControlPoint3#isSyncRadius}
+   * @param isSyncAngle - {@link ControlPoint3#isSyncAngle}
    */
   constructor(
     middlePos = new THREE.Vector3(0, 0, 0),
@@ -37,95 +108,24 @@ export class ControlPoint3 {
     isSyncAngle = true
   ) {
     this.type = "ControlPoint3";
-
-    /**
-     * The position of middle control point.
-     *
-     * @type {THREE.Vector3}
-     */
     this.middlePos = middlePos;
-
-    /**
-     * The position of leftside control point.
-     *
-     * @type {THREE.Vector3}
-     */
-    this.initLeft(leftPos);
-
-    /**
-     * The position of rightside control point.
-     *
-     * @type {THREE.Vector3}
-     */
-    this.initRight(rightPos);
-
-    /**
-     * Whether to synchronize the "left" and "right" radius.
-     *
-     * @type {boolean}
-     */
+    this.leftPos = leftPos;
+    this.rightPos = rightPos;
     this.isSyncRadius = isSyncRadius;
-
-    /**
-     * Whether to synchronize the "left" and "right" angle.
-     *
-     * @type {boolean}
-     */
     this.isSyncAngle = isSyncAngle;
-
-    /**
-     * Secret field.
-     * This function is used by setGUI() in ./src/curve/control-point-3.js.
-     * Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
-     *
-     * @type {()=>void}
-     */
+    this.leftV = leftPos.clone().sub(this.middlePos);
+    this.leftS = new Spherical().setFromVector3(this.leftV);
+    this.leftA = this.getA(this.leftV);
+    this.rightV = rightPos.clone().sub(this.middlePos);
+    this.rightS = new Spherical().setFromVector3(this.rightV);
+    this.rightA = this.getA(this.rightV);
     this._updateGeometry = () => {};
   }
 
   /**
-   * Initialize "left".
-   * "leftV" is "leftPos - middlePos" and its type is THREE.'V'ector3.
-   * "leftS" is "leftPos - middlePos" and its type is 'S'pherical.
-   * "leftA" represents each angle of "leftV" as THREE.Vector3.
-   *   "leftA.x" is the angle around the x axis.
-   *   "leftA.y" is the angle around the y axis.
-   *   "leftA.z" is the angle around the z axis.
-   * Call it only once in this constructor.
-   *
-   * @param {THREE.Vector3} leftPos - The position of leftside control point.
-   */
-  initLeft(leftPos) {
-    this.leftPos = leftPos;
-    this.leftV = leftPos.clone().sub(this.middlePos);
-    this.leftS = new Spherical().setFromVector3(this.leftV);
-    this.leftA = this.getA(this.leftV);
-  }
-  /**
-   * Initialize "right".
-   * "rightV" is "rightPos - middlePos" and its type is THREE.'V'ector3.
-   * "rightS" is "rightPos - middlePos" and its type is 'S'pherical.
-   * "rightA" represents each angle of "rightV" as THREE.Vector3.
-   *   "rightA.x" is the angle around the x axis.
-   *   "rightA.y" is the angle around the y axis.
-   *   "rightA.z" is the angle around the z axis.
-   * Call it only once in this constructor.
-   *
-   * @param {THREE.Vector3} rightPos - The position of rightside control point.
-   */
-  initRight(rightPos) {
-    this.rightPos = rightPos;
-    this.rightV = rightPos.clone().sub(this.middlePos);
-    this.rightS = new Spherical().setFromVector3(this.rightV);
-    this.rightA = this.getA(this.rightV);
-  }
-
-  /**
    * Create geometry.
-   *
-   * @param {THREE.Group} group
    */
-  createGeometry(group) {
+  createGeometry(group: THREE.Group) {
     const cp = this;
 
     // This function is used by setGUI() in ./src/curve/control-point-3.js.
@@ -134,6 +134,7 @@ export class ControlPoint3 {
       geometry.setFromPoints(cp.getPoints());
 
       group.children.forEach((v) => {
+        // FIXME:
         v.geometry.dispose();
         v.geometry = geometry;
       });
@@ -143,14 +144,13 @@ export class ControlPoint3 {
   /**
    * Set GUI.
    *
-   * @param {GUI} gui
-   * @param {string} [name=this.type] - The cp folder name used in the GUI.
-   * @param {()=>void} [updateCallback=()=>{}] - The callback that is invoked after updating cp.
+   * @param name - The cp folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating cp.
    */
-  setGUI(gui, name = this.type, updateCallback = () => {}) {
+  setGUI(gui: GUI, name = this.type, updateCallback = () => {}) {
     const cp = this;
 
-    let _tmp;
+    let _tmp: Controller;
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(cp.middlePos, "x").step(0.01).name("middle.x").onChange(uMP);
@@ -177,7 +177,7 @@ export class ControlPoint3 {
     lFolder.add(cp.rightA, "y").step(1).name("right.Ay").onChange(uRAy);
     lFolder.add(cp.rightA, "z").step(1).name("right.Az").onChange(uRAz);
 
-    const leftRightControllers = [
+    const leftRightControllers: Controller[] = [
       ...folder.controllers,
       ...lFolder.controllers,
     ].filter(
@@ -218,9 +218,22 @@ export class ControlPoint3 {
       updateFrom("rightAz");
     }
     /**
-     * @param {"middlePos"|"leftPos"|"rightPos"|"leftS"|"leftAx"|"leftAy"|"leftAz"|"rightS"|"rightAx"|"rightAy"|"rightAz"} key - A key to pass to this.updateFrom.
+     * @param key - A key to pass to this.updateFrom.
      */
-    function updateFrom(key) {
+    function updateFrom(
+      key:
+        | "middlePos"
+        | "leftPos"
+        | "rightPos"
+        | "leftS"
+        | "leftAx"
+        | "leftAy"
+        | "leftAz"
+        | "rightS"
+        | "rightAx"
+        | "rightAy"
+        | "rightAz"
+    ) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-3.js.
       leftRightControllers.forEach((c) => c.updateDisplay());
@@ -230,10 +243,8 @@ export class ControlPoint3 {
 
   /**
    * Get points.
-   *
-   * @returns {Array<THREE.Vector3>}
    */
-  getPoints() {
+  getPoints(): [THREE.Vector3, THREE.Vector3, THREE.Vector3] {
     return [this.leftPos, this.middlePos, this.rightPos];
   }
 
@@ -403,11 +414,8 @@ export class ControlPoint3 {
    * z:
    *   The angle of v around the z (front) axis.
    *   This angle is right-handed and starts at positive x.
-   *
-   * @param {THREE.Vector3} v
-   * @returns {THREE.Vector3}
    */
-  getA(v) {
+  getA(v: THREE.Vector3): THREE.Vector3 {
     return new THREE.Vector3(
       THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
       THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
@@ -418,19 +426,19 @@ export class ControlPoint3 {
   /**
    * Returns a new ControlPoint3 with copied values from this instance.
    *
-   * @returns {ControlPoint3} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): ControlPoint3 {
+    return new ControlPoint3().copy(this);
   }
 
   /**
    * Copies the values of the given ControlPoint3 to this instance.
    *
-   * @param {ControlPoint3} source - The ControlPoint3 to copy.
-   * @returns {ControlPoint3} A reference to this ControlPoint3.
+   * @param source - The ControlPoint3 to copy.
+   * @return  A reference to this ControlPoint3.
    */
-  copy(source) {
+  copy(source: ControlPoint3): ControlPoint3 {
     this.middlePos.copy(source.middlePos);
     this.leftPos.copy(source.leftPos);
     this.rightPos.copy(source.rightPos);
@@ -449,33 +457,32 @@ export class ControlPoint3 {
   /**
    * Serializes the ControlPoint3 into JSON.
    *
-   * @return {Object} A JSON object representing the serialized ControlPoint3.
+   * @return  A JSON object representing the serialized ControlPoint3.
    */
-  toJSON() {
-    const data = {};
-
-    data.middlePos = this.middlePos.toArray();
-    data.leftPos = this.leftPos.toArray();
-    data.rightPos = this.rightPos.toArray();
-    data.isSyncRadius = this.isSyncRadius;
-    data.isSyncAngle = this.isSyncAngle;
-    data.leftV = this.leftV.toArray();
-    data.leftS = this.leftS.toJSON();
-    data.leftA = this.leftA.toArray();
-    data.rightV = this.rightV.toArray();
-    data.rightS = this.rightS.toJSON();
-    data.rightA = this.rightA.toArray();
-
-    return data;
+  toJSON(): ControlPoint3JSON {
+    return {
+      type: this.type,
+      middlePos: this.middlePos.toArray(),
+      leftPos: this.leftPos.toArray(),
+      rightPos: this.rightPos.toArray(),
+      isSyncRadius: this.isSyncRadius,
+      isSyncAngle: this.isSyncAngle,
+      leftV: this.leftV.toArray(),
+      leftS: this.leftS.toJSON(),
+      leftA: this.leftA.toArray(),
+      rightV: this.rightV.toArray(),
+      rightS: this.rightS.toJSON(),
+      rightA: this.rightA.toArray(),
+    };
   }
 
   /**
    * Deserializes the ControlPoint3 from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized ControlPoint3.
-   * @return {ControlPoint3} A reference to this ControlPoint3.
+   * @param json - The JSON holding the serialized ControlPoint3.
+   * @return  A reference to this ControlPoint3.
    */
-  fromJSON(json) {
+  fromJSON(json: ControlPoint3JSON): ControlPoint3 {
     this.middlePos.fromArray(json.middlePos);
     this.leftPos.fromArray(json.leftPos);
     this.rightPos.fromArray(json.rightPos);
@@ -490,4 +497,34 @@ export class ControlPoint3 {
 
     return this;
   }
+}
+
+/**
+ * The {@link ControlPoint3} JSON interface.
+ */
+export interface ControlPoint3JSON {
+  /** {@link ControlPoint3#type} */
+  type: string;
+  /** {@link ControlPoint3#middlePos} */
+  middlePos: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#leftPos} */
+  leftPos: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#rightPos} */
+  rightPos: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#isSyncRadius} */
+  isSyncRadius: boolean;
+  /** {@link ControlPoint3#isSyncAngle} */
+  isSyncAngle: boolean;
+  /** {@link ControlPoint3#leftV} */
+  leftV: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#leftS} */
+  leftS: SphericalJSON;
+  /** {@link ControlPoint3#leftA} */
+  leftA: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#rightV} */
+  rightV: THREE.Vector3Tuple;
+  /** {@link ControlPoint3#rightS} */
+  rightS: SphericalJSON;
+  /** {@link ControlPoint3#rightA} */
+  rightA: THREE.Vector3Tuple;
 }

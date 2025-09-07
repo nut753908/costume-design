@@ -3,10 +3,11 @@ import * as THREE from "three";
 import { loadBaseGeometry } from "../../geometry/base";
 
 /**
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {Promise<?THREE.Group>}
+ * @param ms - The materials.
  */
-export async function createBaseGroup(ms) {
+export async function createBaseGroup(ms: {
+  [k1: string]: { [k2: string]: THREE.Material };
+}): Promise<THREE.Group | null> {
   const group = new THREE.Group();
 
   const geometry = await loadBaseGeometry();

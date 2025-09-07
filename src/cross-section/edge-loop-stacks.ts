@@ -114,12 +114,14 @@ import { findNextEdge } from "./edges";
 /**
  * Create all non-overlapping edge loop stacks.
  *
- * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {Array<EdgeLoopStack>} All non-overlapping edge loop stacks.
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  All non-overlapping edge loop stacks.
  */
-export function createAllEdgeLoopStacks(nPolygonIndices) {
-  const stacks = []; // edgeLoopStacks
-  const strings = []; // [JSON.stringify(stack.vertices.toSorted()) for stack in stacks]
+export function createAllEdgeLoopStacks(
+  nPolygonIndices: number[][]
+): EdgeLoopStack[] {
+  const stacks: EdgeLoopStack[] = []; // edgeLoopStacks
+  const strings: string[] = []; // [JSON.stringify(stack.vertices.toSorted()) for stack in stacks]
   const allEls = createAllEdgeLoops(nPolygonIndices);
   const remainingVerticesMap = createRemainingVerticesMap(nPolygonIndices);
   const elsMap = createEdgeLoopsMap(allEls);
@@ -132,7 +134,7 @@ export function createAllEdgeLoopStacks(nPolygonIndices) {
         el.vertices[j],
         el.vertices[j !== l2 - 1 ? j + 1 : 0]
       ); // firstEdge
-      let secondE = null; // secondEdge
+      let secondE: Edge | null = null; // secondEdge
       let opened = true;
       for (let n = 0; n < 2; n++) {
         let e1 = secondE; // edge1

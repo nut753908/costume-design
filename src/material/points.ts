@@ -4,16 +4,13 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 
 /**
- * @param {GUI} gui
- * @param {string} [name="pointsMaterial"] - The folder name.
- * @param {number} [colorHex=0xffffff]
- * @return {THREE.PointsMaterial}
+ * @param name - The folder name.
  */
 export function createPointsMaterial(
-  gui,
+  gui: GUI,
   name = "pointsMaterial",
   colorHex = 0xffffff
-) {
+): THREE.PointsMaterial {
   const pointsMaterial = new THREE.PointsMaterial({
     color: createColor(colorHex),
     size: 5,

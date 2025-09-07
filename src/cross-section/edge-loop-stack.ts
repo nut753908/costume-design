@@ -12,53 +12,52 @@ import { getPoint } from "./points";
  */
 export class EdgeLoopStack {
   /**
+   * The vertices within an edge loop stack.
+   */
+  vertices: number[][];
+
+  /**
+   * Whether the edge loop stack is closed.
+   */
+  closed: boolean;
+
+  /**
    * Constructs a new edge loop stack.
    *
-   * @param {Array<Array<number>>} [vertices=[]] - The vertices within an edge loop stack.
-   * @param {boolean} [closed=false] - Whether the edge loop stack is closed.
+   * @param vertices - {@link EdgeLoopStack#vertices}
+   * @param closed - {@link EdgeLoopStack#closed}
    */
-  constructor(vertices = [], closed = false) {
-    /**
-     * The vertices within an edge loop stack.
-     *
-     * @type {Array<Array<number>>}
-     */
+  constructor(vertices: number[][] = [], closed = false) {
     this.vertices = vertices;
-
-    /**
-     * Whether the edge loop stack is closed.
-     *
-     * @type {boolean}
-     */
     this.closed = closed;
   }
 
   /**
    * Get the points.
    *
-   * @param {THREE.BufferAttribute} positions - The results of geometry.getAttribute("position").
-   * @returns {Array<Array<THREE.Vector3>>} The points.
+   * @param positions - The results of geometry.getAttribute("position").
+   * @return  The points.
    */
-  getPoints(positions) {
+  getPoints(positions: THREE.BufferAttribute): THREE.Vector3[][] {
     return this.vertices.map((list) => list.map((v) => getPoint(positions, v)));
   }
 
   /**
    * Returns a new edge loop stack with copied values from this instance.
    *
-   * @return {EdgeLoopStack} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): EdgeLoopStack {
+    return new EdgeLoopStack().copy(this);
   }
 
   /**
    * Copies the values of the given edge loop stack to this instance.
    *
-   * @param {EdgeLoopStack} source - The edge loop stack to copy.
-   * @returns {EdgeLoopStack} A reference to this edge loop stack.
+   * @param source - The edge loop stack to copy.
+   * @return  A reference to this edge loop stack.
    */
-  copy(source) {
+  copy(source: EdgeLoopStack): EdgeLoopStack {
     this.vertices = source.vertices.map((list) => Array.from(list));
     this.closed = source.closed;
 
@@ -68,27 +67,35 @@ export class EdgeLoopStack {
   /**
    * Serializes the edge loop stack into JSON.
    *
-   * @return {Object} A JSON object representing the serialized edge loop stack.
+   * @return  A JSON object representing the serialized edge loop stack.
    */
-  toJSON() {
-    const data = {};
-
-    data.vertices = this.vertices.map((list) => Array.from(list));
-    data.closed = this.closed;
-
-    return data;
+  toJSON(): EdgeLoopStackJSON {
+    return {
+      vertices: this.vertices.map((list) => Array.from(list)),
+      closed: this.closed,
+    };
   }
 
   /**
    * Deserializes the edge loop stack from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized edge loop stack.
-   * @return {EdgeLoopStack} A reference to this edge loop stack.
+   * @param json - The JSON holding the serialized edge loop stack.
+   * @return  A reference to this edge loop stack.
    */
-  fromJSON(json) {
+  fromJSON(json: EdgeLoopStackJSON): EdgeLoopStack {
     this.vertices = json.vertices.map((list) => Array.from(list));
     this.closed = json.closed;
 
     return this;
   }
+}
+
+/**
+ * The {@link EdgeLoopStack} JSON interface.
+ */
+export interface EdgeLoopStackJSON {
+  /** {@link EdgeLoopStack#vertices} */
+  vertices: number[][];
+  /** {@link EdgeLoopStack#closed} */
+  closed: boolean;
 }

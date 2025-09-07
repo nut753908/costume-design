@@ -4,11 +4,7 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 
-/**
- * @param {GUI} gui
- * @return {THREE.ArrowHelper}
- */
-export function createArrowHelper(gui) {
+export function createArrowHelper(gui: GUI): THREE.ArrowHelper {
   const obj = {
     dir: new THREE.Vector3(0, 0, 1),
     origin: new THREE.Vector3(0, 0, 0),
@@ -22,6 +18,7 @@ export function createArrowHelper(gui) {
     obj.hex
   );
   helper.visible = false;
+  // FIXME:
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.js.
   helper._updateLengthCallbacks = [];
   {

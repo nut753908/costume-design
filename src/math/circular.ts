@@ -7,58 +7,50 @@ import { atan2In2PI } from "./utils";
  *
  * ```js
  * import { Circular } from "./src/math/circular";
- * const c = new Circular( 1, 0 );
+ * const circular = new Circular( 1, 0 );
  * ```
  */
 export class Circular {
   /**
+   * The radius of circular ([0,]).
+   */
+  radius: number;
+
+  /**
+   * The angle of circular in degrees ([0, 360]).
+   * The angle starts at positive x and increases counterclockwise in x-y plane.
+   * In this case, positive z points forward.
+   */
+  angle: number;
+
+  /**
    * Constructs a new circular.
    *
-   * @param {number} [radius=1] - The radius of circular. [0,]
-   * @param {number} [angle=0] - The angle of circular in degrees. [0, 360]
+   * @param radius - {@link Circular#radius}
+   * @param angle - {@link Circular#angle}
    */
   constructor(radius = 1, angle = 0) {
-    /**
-     * The radius of circular. [0,]
-     *
-     * @type {number}
-     */
     this.radius = radius;
-
-    /**
-     * The angle of circular in degrees. [0, 360]
-     * The angle starts at positive x and increases counterclockwise in x-y plane.
-     * In this case, positive z points forward.
-     *
-     * @type {number}
-     */
     this.angle = angle;
   }
 
   /**
    * Get the x value as Cartesian coordinate.
-   *
-   * @returns {number}
    */
-  get x() {
+  get x(): number {
     return this.radius * Math.cos(THREE.MathUtils.degToRad(this.angle));
   }
   /**
    * Get the y value as Cartesian coordinate.
-   *
-   * @returns {number}
    */
-  get y() {
+  get y(): number {
     return this.radius * Math.sin(THREE.MathUtils.degToRad(this.angle));
   }
 
   /**
    * Set radius and angle from THREE.Vector2 v.
-   *
-   * @param {THREE.Vector2} v
-   * @returns {Circular}
    */
-  setFromVector2(v) {
+  setFromVector2(v: THREE.Vector2): Circular {
     this.radius = Math.sqrt(v.x ** 2 + v.y ** 2);
     this.angle = THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x));
 
@@ -68,19 +60,19 @@ export class Circular {
   /**
    * Returns a new circular with copied values from this instance.
    *
-   * @returns {Circular} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): Circular {
+    return new Circular().copy(this);
   }
 
   /**
    * Copies the values of the given circular to this instance.
    *
-   * @param {Circular} other - The circular to copy.
-   * @returns {Circular} A reference to this circular.
+   * @param other - The circular to copy.
+   * @return  A reference to this circular.
    */
-  copy(other) {
+  copy(other: Circular): Circular {
     this.radius = other.radius;
     this.angle = other.angle;
 
@@ -90,27 +82,35 @@ export class Circular {
   /**
    * Serializes the circular into JSON.
    *
-   * @return {Object} A JSON object representing the serialized circular.
+   * @return  A JSON object representing the serialized circular.
    */
-  toJSON() {
-    const data = {};
-
-    data.radius = this.radius;
-    data.angle = this.angle;
-
-    return data;
+  toJSON(): CircularJSON {
+    return {
+      radius: this.radius,
+      angle: this.angle,
+    };
   }
 
   /**
    * Deserializes the circular from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized circular.
-   * @return {Circular} A reference to this circular.
+   * @param json - The JSON holding the serialized circular.
+   * @return  A reference to this circular.
    */
-  fromJSON(json) {
+  fromJSON(json: CircularJSON): Circular {
     this.radius = json.radius;
     this.angle = json.angle;
 
     return this;
   }
+}
+
+/**
+ * The {@link Circular} JSON interface.
+ */
+export interface CircularJSON {
+  /** {@link Circular#radius} */
+  radius: number;
+  /** {@link Circular#angle} */
+  angle: number;
 }

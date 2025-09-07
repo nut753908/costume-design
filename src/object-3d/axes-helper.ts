@@ -2,11 +2,7 @@ import * as THREE from "three";
 
 import { GUI } from "lil-gui";
 
-/**
- * @param {GUI} gui
- * @return {THREE.AxesHelper}
- */
-export function createAxesHelper(gui) {
+export function createAxesHelper(gui: GUI): THREE.AxesHelper {
   const obj = { size: 1 };
   const helper = new THREE.AxesHelper(obj.size);
   {

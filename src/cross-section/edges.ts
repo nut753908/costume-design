@@ -3,11 +3,11 @@ import { Edge } from "./edge";
 /**
  * Create all non-overlapping edges.
  *
- * @param {Array<Array<number>>} nPolygonIndices - The n polygon indices.
- * @returns {Array<Edge>} All non-overlapping edges.
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  All non-overlapping edges.
  */
-export function createAllEdges(nPolygonIndices) {
-  const edges = [];
+export function createAllEdges(nPolygonIndices: number[][]): Edge[] {
+  const edges: string[] = [];
   nPolygonIndices.forEach((list) => {
     for (let i = 0, l = list.length; i < l; i++) {
       const a = list[i];
@@ -25,11 +25,11 @@ export function createAllEdges(nPolygonIndices) {
 /**
  * Create the edge map.
  *
- * @param {Array<Edge>} edges - Edges of the geometry.
- * @returns {{[k:string]:Edge}} The edge map. The key is a string of pairs v1, v2.
+ * @param edges - Edges of the geometry.
+ * @return  The edge map. The key is a string of pairs v1, v2.
  */
-export function createEdgeMap(edges) {
-  const map = {};
+export function createEdgeMap(edges: Edge[]): { [k: string]: Edge } {
+  const map: { [k: string]: Edge } = {};
   edges.forEach((e) => {
     map[`${e.v1},${e.v2}`] = e;
     map[`${e.v2},${e.v1}`] = e;
@@ -40,12 +40,16 @@ export function createEdgeMap(edges) {
 /**
  * Find the next edge in the direction e1 -> e2.
  *
- * @param {{[k:string]:Array<Array<number>>}} map - The remaining vertices map. The key is a string of two vertices.
- * @param {?Edge} e1 - The first edge.
- * @param {?Edge} e2 - The second edge.
- * @returns {?Edge} The next edge.
+ * @param map - The remaining vertices map. The key is a string of two vertices.
+ * @param e1 - The first edge.
+ * @param e2 - The second edge.
+ * @return  The next edge.
  */
-export function findNextEdge(map, e1, e2) {
+export function findNextEdge(
+  map: { [k: string]: number[][] },
+  e1: Edge | null,
+  e2: Edge | null
+): Edge | null {
   if (e2 === null) {
     console.error("e2 === null");
     return null;

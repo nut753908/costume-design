@@ -5,7 +5,7 @@ import * as THREE from "three";
  *
  * ```js
  * import { Spherical } from "./src/math/spherical";
- * const s = new Spherical( 1, 0, 0 );
+ * const spherical = new Spherical( 1, 0, 0 );
  * ```
  *
  * @augments THREE.Spherical
@@ -14,9 +14,9 @@ export class Spherical extends THREE.Spherical {
   /**
    * Constructs a new spherical.
    *
-   * @param {number} [radius=1] - The radius, or the Euclidean distance (straight-line distance) from the point to the origin.
-   * @param {number} [phi=0] - The polar angle in radians from the y (up) axis.
-   * @param {number} [theta=0] - The equator/azimuthal angle in radians around the y (up) axis.
+   * @param radius - {@link THREE.Spherical#radius}
+   * @param phi - {@link THREE.Spherical#phi}
+   * @param theta - {@link THREE.Spherical#theta}
    */
   constructor(radius = 1, phi = 0, theta = 0) {
     super(radius, phi, theta);
@@ -25,27 +25,37 @@ export class Spherical extends THREE.Spherical {
   /**
    * Serializes the spherical into JSON.
    *
-   * @return {Object} A JSON object representing the serialized spherical.
+   * @return  A JSON object representing the serialized spherical.
    */
-  toJSON() {
-    const data = {};
-
-    data.radius = this.radius;
-    data.phi = this.phi;
-    data.theta = this.theta;
-
-    return data;
+  toJSON(): SphericalJSON {
+    return {
+      radius: this.radius,
+      phi: this.phi,
+      theta: this.theta,
+    };
   }
 
   /**
    * Deserializes the spherical from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized spherical.
-   * @return {Spherical} A reference to this spherical.
+   * @param json - The JSON holding the serialized spherical.
+   * @return  A reference to this spherical.
    */
-  fromJSON(json) {
+  fromJSON(json: SphericalJSON): Spherical {
     this.set(json.radius, json.phi, json.theta);
 
     return this;
   }
+}
+
+/**
+ * The {@link THREE.Spherical} JSON interface.
+ */
+export interface SphericalJSON {
+  /** {@link THREE.Spherical#radius} */
+  radius: number;
+  /** {@link THREE.Spherical#phi} */
+  phi: number;
+  /** {@link THREE.Spherical#theta} */
+  theta: number;
 }

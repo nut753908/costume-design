@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { TubeGeometry } from "../geometry/tube";
+import { GUI } from "lil-gui";
 import { deleteFolder } from "../main/gui";
 import { Curve } from "./curve";
 import { Curve3 } from "./curve-3";
@@ -11,39 +12,39 @@ import { Curve2 } from "./curve-2";
  *
  * ```js
  * import { Tube } from "./src/curve/tube";
- * const t = new Tube();
+ * const tube = new Tube();
  * ```
  */
 export class Tube {
   /**
+   * The Parameters for TubeGeometry.
+   */
+  parameters: { [k: string]: any }; // FIXME:
+
+  /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/curve/tube.js.
+   * Set it in advance using createGeometry() in ./src/curve/tube.js.
+   */
+  _updateGeometry: () => void;
+
+  /**
    * Constructs a new tube.
    *
-   * @param {Object} [parameters={}] - The Parameters for TubeGeometry.
+   * @param parameters - The Parameters for TubeGeometry.
    */
   constructor(parameters = {}) {
-    /**
-     * The Parameters for TubeGeometry.
-     *
-     * @type {Object}
-     */
     this.parameters = parameters;
-
-    /**
-     * Secret field.
-     * This function is used by setGUI() in ./src/curve/tube.js.
-     * Set it in advance using createGeometry() in ./src/curve/tube.js.
-     *
-     * @type {()=>void}
-     */
     this._updateGeometry = () => {};
   }
 
   /**
    * Create geometry.
    *
-   * @param {THREE.Group} group
+   * @param group
    */
-  createGeometry(group) {
+  // FIXME:
+  createGeometry(group: THREE.Group) {
     const t = this;
     const p = t.parameters;
 
@@ -84,10 +85,8 @@ export class Tube {
 
   /**
    * Set GUI.
-   *
-   * @param {GUI} gui
    */
-  setGUI(gui) {
+  setGUI(gui: GUI) {
     const t = this;
     const p = t.parameters;
 
@@ -119,19 +118,19 @@ export class Tube {
   /**
    * Returns a new tube with copied values from this instance.
    *
-   * @return {Tube} A clone of this instance.
+   * @return  A clone of this instance.
    */
-  clone() {
-    return new this.constructor().copy(this);
+  clone(): Tube {
+    return new Tube().copy(this);
   }
 
   /**
    * Copies the values of the given tube to this instance.
    *
-   * @param {Tube} source - The tube to copy.
-   * @returns {Tube} A reference to this tube.
+   * @param source - The tube to copy.
+   * @return  A reference to this tube.
    */
-  copy(source) {
+  copy(source: Tube): Tube {
     this.parameters = Object.assign({}, source.parameters);
 
     Object.entries(source.parameters).forEach(([k, v]) => {
@@ -144,9 +143,10 @@ export class Tube {
   /**
    * Serializes the tube into JSON.
    *
-   * @return {Object} A JSON object representing the serialized tube.
+   * @return  A JSON object representing the serialized tube.
    */
-  toJSON() {
+  // FIXME:
+  toJSON(): TubeJSON {
     const data = Object.assign({}, this.parameters);
 
     Object.entries(this.parameters).forEach(([k, v]) => {
@@ -159,10 +159,11 @@ export class Tube {
   /**
    * Deserializes the tube from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized tube.
-   * @return {Tube} A reference to this tube.
+   * @param json - The JSON holding the serialized tube.
+   * @return  A reference to this tube.
    */
-  fromJSON(json) {
+  // FIXME:
+  fromJSON(json: TubeJSON): Tube {
     const p = this.parameters;
 
     p.axis = (p.axis ?? new Curve3()).fromJSON(json.axis);
@@ -185,4 +186,12 @@ export class Tube {
 
     return this;
   }
+}
+
+/**
+ * The {@link Tube} JSON interface.
+ */
+export interface TubeJSON {
+  /** {@link Tube#parameters} */
+  parameters: { [k: string]: any }; // FIXME:
 }

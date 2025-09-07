@@ -1,24 +1,20 @@
 import * as THREE from "three";
 
+import { GUI } from "lil-gui";
 import { FreePlane } from "../../cross-section/free-plane";
 import { VerticalPlane } from "../../cross-section/vertical-plane";
 import { deleteFolder } from "../../main/gui";
 
 /**
- * @param {GUI} gui
- * @param {FreePlane|VerticalPlane} plane
- * @param {THREE.PlaneHelper} planeHelper
- * @param {THREE.ArrowHelper} arrowHelper
- * @param {string} [name="Plane"] - The folder name.
- * @return {THREE.Group}
+ * @param name - The folder name.
  */
 export function createPlaneGroup(
-  gui,
-  plane,
-  planeHelper,
-  arrowHelper,
+  gui: GUI,
+  plane: FreePlane | VerticalPlane,
+  planeHelper: THREE.PlaneHelper, // TODO: later, change the type from THREE.PlaneHelper to PlaneHelper.
+  arrowHelper: THREE.ArrowHelper,
   name = "PlaneGroup"
-) {
+): THREE.Group {
   const obj = {
     plane: plane.getPlane(),
     normal: plane.getNormal(),
@@ -28,6 +24,7 @@ export function createPlaneGroup(
   const group = new THREE.Group();
   group.visible = false;
 
+  // FIXME:
   const _planeHelper = planeHelper.clone();
   _planeHelper.visible = true;
   _planeHelper.normal = obj.normal;
@@ -37,6 +34,7 @@ export function createPlaneGroup(
   planeHelper._updateSizeCallbacks.push((v) => (_planeHelper.size = v));
   group.add(_planeHelper);
 
+  // FIXME:
   const _arrowHelper = arrowHelper.clone();
   _arrowHelper.visible = true;
   _arrowHelper.setDirection(obj.normal);
@@ -52,7 +50,7 @@ export function createPlaneGroup(
     const folder = gui.addFolder(name);
     folder.add(group, "visible");
 
-    let nFolder;
+    let nFolder: GUI;
     if (plane instanceof FreePlane) {
       nFolder = folder.addFolder("normal");
       nFolder.add(plane.normal, "x").step(0.01).onChange(uN);
@@ -67,6 +65,7 @@ export function createPlaneGroup(
       folder.add(plane, "u", 0, 1, 0.01).onChange(uU);
     }
 
+    // FIXME:
     function uN() /* updateNormal */ {
       plane.normal.normalize();
       obj.plane.copy(plane.getPlane());
@@ -75,12 +74,14 @@ export function createPlaneGroup(
       group.children[1].setDirection(obj.normal);
       nFolder.controllers.forEach((c) => c.updateDisplay());
     }
+    // FIXME:
     function uP() /* updatePoint */ {
       obj.plane.copy(plane.getPlane());
       obj.point.copy(plane.getPoint());
       group.children[0].point.copy(obj.point);
       group.children[1].position.copy(obj.point);
     }
+    // FIXME:
     function uU() /* updateU */ {
       obj.plane.copy(plane.getPlane());
       obj.normal.copy(plane.getNormal());

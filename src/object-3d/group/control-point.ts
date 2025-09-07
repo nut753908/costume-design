@@ -5,11 +5,12 @@ import { ControlPoint2 } from "../../curve/control-point-2";
 import { createEmptyGeometry } from "../../geometry/empty";
 
 /**
- * @param {ControlPoint3|ControlPoint2} cp
- * @param {{[k1:string]:{[k2:string]:THREE.Material}}} ms - The materials.
- * @return {THREE.Group}
+ * @param ms - The materials.
  */
-export function createControlPointGroup(cp, ms) {
+export function createControlPointGroup(
+  cp: ControlPoint3 | ControlPoint2,
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+): THREE.Group {
   const group = new THREE.Group();
 
   const geometry = createEmptyGeometry();

@@ -5,11 +5,8 @@ import { ControlPoint2 } from "../control-point-2";
 
 /**
  * Use Curve2 to create a circle.
- *
- * @param {number} [radius=1]
- * @returns {Curve2}
  */
-function createCircleCurve2(radius = 1) {
+function createCircleCurve2(radius = 1): Curve2 {
   const K = (4 * (Math.sqrt(2) - 1)) / 3;
   const mulKR = K * radius; // Multiple K by the radius.
   return new Curve2([
@@ -46,12 +43,11 @@ export const smallCircleCurve2 = createCircleCurve2(0.5);
 /**
  * Create a slowly varying Curve2.
  *
- * @param {number} [yStart=1] - The starting y value.
- * @param {number} [yEnd=2] - The ending y value.
- * @param {number} [aspect=3] - The aspect ratio = (x length) / (y length).
- * @returns {Curve2}
+ * @param yStart - The starting y value.
+ * @param yEnd - The ending y value.
+ * @param aspect - The aspect ratio = (x length) / (y length).
  */
-function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3) {
+function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3): Curve2 {
   const yL = Math.abs(yStart - yEnd); // The y length.
   const xL = aspect * yL; // The x length.
   return new Curve2([
@@ -75,11 +71,10 @@ export const gentlyDescendingCurve2InRadians = createGentlyCurve2(Math.PI, 0);
 /**
  * Create a constant Curve2.
  *
- * @param {number} [y=1] - The y value.
- * @param {number} [xL=3] - The x length.
- * @returns {Curve2}
+ * @param y - The y value.
+ * @param xL - The x length.
  */
-function createConstantCurve2(y = 1, xL = 3) {
+function createConstantCurve2(y = 1, xL = 3): Curve2 {
   const hL = Math.floor(xL / 3); // The handle length.
   return new Curve2([
     new ControlPoint2(
