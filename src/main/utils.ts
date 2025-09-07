@@ -5,9 +5,12 @@ import * as THREE from "three";
  */
 export function disposeGroup(group: THREE.Group | THREE.Object3D) {
   group.children.forEach((g) => {
-    // FIXME:
-    if (g.dispose) g.dispose();
-    if (g.geometry && g.geometry.dispose) g.geometry.dispose();
+    if ("dispose" in g && g.dispose instanceof Function) {
+      g.dispose();
+    }
+    if ("geometry" in g && g.geometry instanceof THREE.BufferGeometry) {
+      g.geometry.dispose();
+    }
     disposeGroup(g);
   });
 }
@@ -19,9 +22,9 @@ export function disposeGroup(group: THREE.Group | THREE.Object3D) {
  * @param func - The function.
  * @return  A new Object.
  */
-export function objectMap<Value, NewValue>(
-  obj: { [k: string]: Value },
-  func: (v: Value) => NewValue
-): { [k: string]: NewValue } {
+export function objectMap<V, NewV>(
+  obj: { [k: string]: V },
+  func: (v: V) => NewV
+): { [k: string]: NewV } {
   return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, func(v)]));
 }

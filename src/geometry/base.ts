@@ -2,36 +2,51 @@ import * as THREE from "three";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-export async function loadBaseGeometry(): Promise<THREE.BufferGeometry | null> {
-  const gltfLoader = new GLTFLoader();
+export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndices | null> {
   const fileLoader = new THREE.FileLoader();
+  const gltfLoader = new GLTFLoader();
+
+  const positionsTxt = await fileLoader
+    .loadAsync("../../models/base1-22-n-polygon-positions.txt")
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+  if (positionsTxt === null) return null;
+  if (typeof positionsTxt !== "string") return null;
+
+  const indicesTxt = await fileLoader
+    .loadAsync("../../models/base1-22-n-polygon-indices.txt")
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+  if (indicesTxt === null) return null;
+  if (typeof indicesTxt !== "string") return null;
 
   const gltf = await gltfLoader
     .loadAsync("../../models/base1-22.glb")
-    .catch((error) => console.error(error));
-  if (!gltf) return null;
+    .catch((error) => {
+      console.error(error);
+      return null;
+    });
+  if (gltf === null) return null;
+  if (!("geometry" in gltf.scene.children[0])) return null;
 
-  const indices = await fileLoader
-    .setResponseType("json")
-    .loadAsync("../../models/base1-22-n-polygon-indices.txt")
-    .catch((error) => console.error(error));
-  if (!indices) return null;
-
-  const positions = await fileLoader
-    .setResponseType("json")
-    .loadAsync("../../models/base1-22-n-polygon-positions.txt")
-    .catch((error) => console.error(error));
-  if (!positions) return null;
-
-  // FIXME:
-  const geometry = gltf.scene.children[0].geometry;
+  const positions: number[][] = JSON.parse(positionsTxt);
+  const indices: number[][] = JSON.parse(indicesTxt);
+  const geometry = gltf.scene.children[0]
+    .geometry as BufferGeometryWithNPolygonIndices;
   geometry.nPolygonIndices = correctNPolygonIndices(
     positions,
-    geometry.getAttribute("position"),
+    geometry.getAttribute("position") as THREE.Float32BufferAttribute,
     indices
   );
   return geometry;
 }
+
+export type BufferGeometryWithNPolygonIndices = THREE.BufferGeometry &
+  Record<"nPolygonIndices", number[][]>;
 
 /**
  * Create the correct n polygon indices.

@@ -50,7 +50,6 @@ export function loadClosed(gui: GUI, closedObj: closedJSON) {
  * @param _title - The title of the deletion folder.
  * @param titleStart - The starting string for the title of the deletion folder.
  */
-// FIXME:
 export function deleteFolder(
   parent: GUI,
   _title: string | null,
@@ -58,11 +57,11 @@ export function deleteFolder(
 ) {
   if (_title) {
     Array.from(parent.children)
-      .filter((v) => v._title === _title)
+      .filter((v) => "_title" in v && v._title === _title)
       .forEach((v) => v.destroy());
   } else if (titleStart) {
     Array.from(parent.children)
-      .filter((v) => v._title?.startsWith(titleStart))
+      .filter((v) => "_title" in v && v._title.startsWith(titleStart))
       .forEach((v) => v.destroy());
   }
 }

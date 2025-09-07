@@ -48,8 +48,11 @@ function createCpsGroup(
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
   (c._updateCpsGroup = () => {
     group.children.forEach((g) => {
-      // FIXME:
-      g.children.forEach((v) => v.geometry.dispose());
+      g.children.forEach((v) => {
+        if ("geometry" in v && v.geometry instanceof THREE.BufferGeometry) {
+          v.geometry.dispose();
+        }
+      });
       g.clear();
     });
     group.clear();

@@ -134,9 +134,10 @@ export class ControlPoint3 {
       geometry.setFromPoints(cp.getPoints());
 
       group.children.forEach((v) => {
-        // FIXME:
-        v.geometry.dispose();
-        v.geometry = geometry;
+        if ("geometry" in v && v.geometry instanceof THREE.BufferGeometry) {
+          v.geometry.dispose();
+          v.geometry = geometry;
+        }
       });
     })();
   }

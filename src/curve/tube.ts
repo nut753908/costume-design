@@ -43,7 +43,6 @@ export class Tube {
    *
    * @param group
    */
-  // FIXME:
   createGeometry(group: THREE.Group) {
     const t = this;
     const p = t.parameters;
@@ -73,13 +72,24 @@ export class Tube {
             )
           : new TubeGeometry();
 
-      Object.assign(p, geometry.parameters);
+      if ("parameters" in geometry) {
+        Object.assign(p, geometry.parameters);
+      }
 
-      group.children[0].geometry.dispose();
-      group.children[1].geometry.dispose();
-
-      group.children[0].geometry = new THREE.WireframeGeometry(geometry);
-      group.children[1].geometry = geometry;
+      if (
+        "geometry" in group.children[0] &&
+        group.children[0].geometry instanceof THREE.BufferGeometry
+      ) {
+        group.children[0].geometry.dispose();
+        group.children[0].geometry = new THREE.WireframeGeometry(geometry);
+      }
+      if (
+        "geometry" in group.children[1] &&
+        group.children[1].geometry instanceof THREE.BufferGeometry
+      ) {
+        group.children[1].geometry.dispose();
+        group.children[1].geometry = geometry;
+      }
     })();
   }
 

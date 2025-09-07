@@ -18,6 +18,7 @@ import { createAxesHelper } from "./object-3d/axes-helper";
 import { createArrowHelper } from "./object-3d/arrow-helper";
 import { createMaterials } from "./material/materials";
 import { createBaseGroup } from "./object-3d/group/base";
+import { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createBaseCenterlines } from "./cross-section/centerline";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import { objectMap } from "./main/utils";
@@ -62,10 +63,13 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    // FIXME:
-    const geometry = baseGroup.children[0].geometry;
+    if (!("geometry" in baseGroup.children[0])) return;
+    const geometry = baseGroup.children[0]
+      .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = geometry.nPolygonIndices;
-    const positions = geometry.getAttribute("position");
+    const positions = geometry.getAttribute(
+      "position"
+    ) as THREE.Float32BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
@@ -109,26 +113,24 @@ function loadLastUndo() {
   loading = false;
 }
 
-function onWindowKeydown(e) {
+function onWindowKeydown(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) {
     if (e.key === "z") {
-      if (undos.length > 1) {
-        const obj = undos.pop();
-        if (obj !== undefined) {
-          redos.push(obj); // Ctrl+Z (Undo)
-          loadLastUndo();
-        }
-      }
       e.preventDefault();
+      // Ctrl+Z (Undo)
+      if (undos.length <= 1) return;
+      const obj = undos.pop();
+      if (obj === undefined) return;
+      redos.push(obj);
+      loadLastUndo();
     } else if (e.key === "Z" || e.key === "y") {
-      if (redos.length > 0) {
-        const obj = redos.pop();
-        if (obj !== undefined) {
-          undos.push(obj); // Ctrl+Shift+Z or Ctrl+Y (Redo)
-          loadLastUndo();
-        }
-      }
       e.preventDefault();
+      // Ctrl+Shift+Z or Ctrl+Y (Redo)
+      if (redos.length === 0) return;
+      const obj = redos.pop();
+      if (obj === undefined) return;
+      undos.push(obj);
+      loadLastUndo();
     }
   }
 }
