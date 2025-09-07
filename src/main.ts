@@ -18,6 +18,7 @@ import { createAxesHelper } from "./object-3d/axes-helper";
 import { createArrowHelper } from "./object-3d/arrow-helper";
 import { createMaterials } from "./material/materials";
 import { createBaseGroup } from "./object-3d/group/base";
+import { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createBaseCenterlines } from "./cross-section/centerline";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import { objectMap } from "./main/utils";
@@ -62,10 +63,13 @@ async function init() {
     if (!baseGroup) return;
     scene.add(baseGroup);
 
-    // FIXME:
-    const geometry = baseGroup.children[0].geometry;
+    if (!("geometry" in baseGroup.children[0])) return;
+    const geometry = baseGroup.children[0]
+      .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = geometry.nPolygonIndices;
-    const positions = geometry.getAttribute("position");
+    const positions = geometry.getAttribute(
+      "position"
+    ) as THREE.Float32BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
