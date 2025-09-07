@@ -116,23 +116,21 @@ function loadLastUndo() {
 function onWindowKeydown(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) {
     if (e.key === "z") {
-      if (undos.length > 1) {
-        const obj = undos.pop();
-        if (obj !== undefined) {
-          redos.push(obj); // Ctrl+Z (Undo)
-          loadLastUndo();
-        }
-      }
       e.preventDefault();
+      // Ctrl+Z (Undo)
+      if (undos.length <= 1) return;
+      const obj = undos.pop();
+      if (obj === undefined) return;
+      redos.push(obj);
+      loadLastUndo();
     } else if (e.key === "Z" || e.key === "y") {
-      if (redos.length > 0) {
-        const obj = redos.pop();
-        if (obj !== undefined) {
-          undos.push(obj); // Ctrl+Shift+Z or Ctrl+Y (Redo)
-          loadLastUndo();
-        }
-      }
       e.preventDefault();
+      // Ctrl+Shift+Z or Ctrl+Y (Redo)
+      if (redos.length === 0) return;
+      const obj = redos.pop();
+      if (obj === undefined) return;
+      undos.push(obj);
+      loadLastUndo();
     }
   }
 }
