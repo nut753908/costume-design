@@ -86,9 +86,9 @@ export class FreePlane extends Plane {
    */
   toJSON(): FreePlaneJSON {
     return {
+      type: this.type,
       normal: this.normal.toArray(),
       point: this.point.toArray(),
-      type: this.type,
     };
   }
 
