@@ -22,7 +22,7 @@ export class PlaneManager {
   curves: {
     [k: number | string]:
       | THREE.CurvePath<THREE.Vector3>
-      | THREE.CatmullRomCurve3; // FIXME:
+      | THREE.CatmullRomCurve3;
   };
 
   /**
