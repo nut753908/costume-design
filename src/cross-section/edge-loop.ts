@@ -57,7 +57,7 @@ export class EdgeLoop {
    * @param source - The edge loop to copy.
    * @return  A reference to this edge loop.
    */
-  copy(source: EdgeLoop): EdgeLoop {
+  copy(source: EdgeLoop): this {
     this.vertices = Array.from(source.vertices);
     this.closed = source.closed;
 
@@ -82,7 +82,7 @@ export class EdgeLoop {
    * @param json - The JSON holding the serialized edge loop.
    * @return  A reference to this edge loop.
    */
-  fromJSON(json: EdgeLoopJSON): EdgeLoop {
+  fromJSON(json: EdgeLoopJSON): this {
     this.vertices = Array.from(json.vertices);
     this.closed = json.closed;
 

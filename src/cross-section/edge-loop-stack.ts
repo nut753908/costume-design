@@ -57,7 +57,7 @@ export class EdgeLoopStack {
    * @param source - The edge loop stack to copy.
    * @return  A reference to this edge loop stack.
    */
-  copy(source: EdgeLoopStack): EdgeLoopStack {
+  copy(source: EdgeLoopStack): this {
     this.vertices = source.vertices.map((list) => Array.from(list));
     this.closed = source.closed;
 
@@ -82,7 +82,7 @@ export class EdgeLoopStack {
    * @param json - The JSON holding the serialized edge loop stack.
    * @return  A reference to this edge loop stack.
    */
-  fromJSON(json: EdgeLoopStackJSON): EdgeLoopStack {
+  fromJSON(json: EdgeLoopStackJSON): this {
     this.vertices = json.vertices.map((list) => Array.from(list));
     this.closed = json.closed;
 

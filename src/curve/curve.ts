@@ -267,8 +267,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * @param source - The Curve to copy.
    * @return  A reference to this Curve.
    */
-  // FIXME:
-  copy(source: Curve<T>): Curve<T> {
+  copy(source: Curve<T>): this {
     super.copy(source);
     this.cps = source.cps.map((cp) => cp.clone());
     this.updateCurves();
@@ -294,8 +293,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * @param json - The JSON holding the serialized Curve.
    * @return  A reference to this Curve.
    */
-  // FIXME:
-  fromJSON(json: CurveJSON<T>): Curve<T> {
+  fromJSON(json: CurveJSON<T>): this {
     super.fromJSON(json);
     this.cps = json.cps.map((cp) => new this.cpClass().fromJSON(cp));
     this.updateCurves();

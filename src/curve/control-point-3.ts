@@ -377,7 +377,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
    * @param source - The ControlPoint3 to copy.
    * @return  A reference to this ControlPoint3.
    */
-  copy(source: ControlPoint3): ControlPoint3 {
+  copy(source: ControlPoint3): this {
     this.middlePos.copy(source.middlePos);
     this.leftPos.copy(source.leftPos);
     this.rightPos.copy(source.rightPos);
@@ -421,7 +421,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
    * @param json - The JSON holding the serialized ControlPoint3.
    * @return  A reference to this ControlPoint3.
    */
-  fromJSON(json: ControlPoint3JSON): ControlPoint3 {
+  fromJSON(json: ControlPoint3JSON): this {
     this.middlePos.fromArray(json.middlePos);
     this.leftPos.fromArray(json.leftPos);
     this.rightPos.fromArray(json.rightPos);
