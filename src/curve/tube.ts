@@ -47,6 +47,7 @@ export class Tube {
    * @param group
    */
   createGeometry(group: THREE.Group) {
+    // NOTE: `const t = this; const p = t.parameters;` is removed for `npm run lint`.
     const p = this.parameters;
 
     // This function is used by setGUI() in ./src/curve/tube.ts.
