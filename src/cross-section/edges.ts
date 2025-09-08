@@ -48,7 +48,7 @@ export function createEdgeMap(edges: Edge[]): { [k: string]: Edge } {
 export function findNextEdge(
   map: { [k: string]: number[][] },
   e1: Edge | null,
-  e2: Edge | null
+  e2: Edge | null,
 ): Edge | null {
   if (e2 === null) {
     console.error("e2 === null");

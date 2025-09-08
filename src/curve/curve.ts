@@ -55,7 +55,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     v0: TypeMap[T]["vector"],
     v1: TypeMap[T]["vector"],
     v2: TypeMap[T]["vector"],
-    v3: TypeMap[T]["vector"]
+    v3: TypeMap[T]["vector"],
   ) => TypeMap[T]["curve"];
 
   /**
@@ -73,7 +73,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
         this.cps[i + 1].leftPos.clone(),
-        this.cps[i + 1].middlePos.clone()
+        this.cps[i + 1].middlePos.clone(),
       );
       this.curves.push(curve);
     }
@@ -90,7 +90,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        c.getPoints() as THREE.Vector3[] | THREE.Vector2[]
+        c.getPoints() as THREE.Vector3[] | THREE.Vector2[],
       );
 
       line.geometry.dispose();
@@ -109,7 +109,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     gui: GUI,
     name = this.type,
     updateCallback = () => {},
-    isClose = false
+    isClose = false,
   ) {
     const c = this;
 

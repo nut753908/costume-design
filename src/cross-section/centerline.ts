@@ -13,12 +13,12 @@ import { objectMap } from "../main/utils";
  */
 export function createBaseCenterlines(
   nPolygonIndices: number[][],
-  positions: THREE.BufferAttribute
+  positions: THREE.BufferAttribute,
 ): { [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3 } {
   const stacks = createAllEdgeLoopStacks(nPolygonIndices);
   if (stacks.length !== 56) return {};
   const list: THREE.Vector3[][] = stacks.map((s) =>
-    getCentroids(s.getPoints(positions))
+    getCentroids(s.getPoints(positions)),
   );
   // These index references can be found in the comments of "./edge-loop-stacks.ts".
   const obj: { [k: string]: THREE.Vector3[] } = {
@@ -46,7 +46,7 @@ export function createBaseCenterlines(
       .multiplyScalar(6)
       .add(obj.leftLeg.slice(-1)[0])
       .add(obj.rightLeg.slice(-1)[0])
-      .divideScalar(8)
+      .divideScalar(8),
   );
   // return objectMap(obj, createLinePath);
   return objectMap(obj, (v) => new THREE.CatmullRomCurve3(v));
@@ -59,7 +59,7 @@ export function createBaseCenterlines(
  * @return  A line path.
  */
 function createLinePath(
-  points: THREE.Vector3[]
+  points: THREE.Vector3[],
 ): THREE.CurvePath<THREE.Vector3> {
   const linePath = new THREE.CurvePath<THREE.Vector3>();
   for (let i = 0, l = points.length - 1; i < l; i++) {

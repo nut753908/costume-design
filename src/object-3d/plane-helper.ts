@@ -15,7 +15,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     obj.normal,
     obj.point,
     obj.size,
-    obj.color
+    obj.color,
   ) as PlaneHelperWithCallbacks;
   helper.visible = false;
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.ts.
@@ -75,7 +75,7 @@ export class PlaneHelper extends THREE.PlaneHelper {
     normal = new THREE.Vector3(0, 0, 1),
     point = new THREE.Vector3(0, 0, 0),
     size = 1,
-    color: number | THREE.Color | string = 0xffff00
+    color: number | THREE.Color | string = 0xffff00,
   ) {
     super(new THREE.Plane(), size, 0xffff00);
     this.setColor(color);

@@ -35,7 +35,7 @@ export function createRemainingVerticesMap(nPolygonIndices: number[][]): {
 export function findNextVertex(
   map: { [k: string]: number[][] },
   v1: number,
-  v2: number
+  v2: number,
 ): number | null {
   const vs0 = map[`${v1},${v2}`]; // [a,c]
   if (vs0.length !== 2) return null;

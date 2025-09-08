@@ -11,7 +11,7 @@ export function createToonMaterial(
   name = "toonMaterial",
   baseColorHex = 0xfcd7e9,
   shadeColorHex = 0xf8c1de,
-  side: THREE.Side = THREE.FrontSide
+  side: THREE.Side = THREE.FrontSide,
 ): THREE.ShaderMaterial {
   const toonMaterial = new THREE.ShaderMaterial({
     uniforms: {

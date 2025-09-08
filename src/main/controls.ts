@@ -5,7 +5,7 @@ import { ViewportGizmo } from "three-viewport-gizmo";
 
 export function createControlsAndGizmo(
   camera: THREE.OrthographicCamera | THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer
+  renderer: THREE.WebGLRenderer,
 ): { controls: OrbitControls; gizmo: ViewportGizmo } {
   const controls = new OrbitControls(camera, renderer.domElement);
 

@@ -68,7 +68,7 @@ export function rotate180(angle: number): number {
 export function isInvalidIndex(
   index: number,
   min: number,
-  max: number
+  max: number,
 ): boolean {
   if (!Number.isInteger(index)) {
     console.error(`the index(${index}) is not integer.`);
