@@ -9,12 +9,12 @@ import * as THREE from "three";
  */
 export function getPoint(
   positions: THREE.BufferAttribute,
-  index: number,
+  index: number
 ): THREE.Vector3 {
   return new THREE.Vector3(
     positions.array[3 * index],
     positions.array[3 * index + 1],
-    positions.array[3 * index + 2],
+    positions.array[3 * index + 2]
   );
 }
 

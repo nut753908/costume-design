@@ -1,17 +1,16 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { Tube } from "../../curve/tube";
-import { createCurveGroup } from "./curve";
+import type { Tube } from "../../curve/tube";
 import { createEmptyGeometry } from "../../geometry/empty";
-import { GUI } from "lil-gui";
 import { deleteFolder } from "../../main/gui";
+import { createCurveGroup } from "./curve";
 
 /**
  * @param ms - The materials.
  */
 export function createTubeGroup(
   t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
 ): THREE.Group {
   const group = new THREE.Group();
 
@@ -35,7 +34,7 @@ export function createTubeGroup(
  */
 function createTubeGroupWithNoCurves(
   t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
 ): THREE.Group {
   const group = new THREE.Group();
 

@@ -1,36 +1,35 @@
-import * as THREE from "three";
-
-import { ViewportGizmo } from "three-viewport-gizmo";
-import {
-  saveGui,
-  saveClosed,
-  loadClosed,
-  guiJSON,
-  closedJSON,
-} from "./main/gui";
-import { createRenderer, updateRenderer } from "./main/renderer";
-import { createCamera, updateCamera } from "./main/camera";
-import { createControlsAndGizmo } from "./main/controls";
-import { GUI, FunctionController } from "lil-gui";
-import {
-  createPlaneHelper,
-  PlaneHelperWithCallbacks,
-} from "./object-3d/plane-helper";
-import {
-  ArrowHelperWithCallbacks,
-  createArrowHelper,
-} from "./object-3d/arrow-helper";
-import { createScene } from "./object-3d/scene";
-import { createAxesHelper } from "./object-3d/axes-helper";
-import { createMaterials } from "./material/materials";
-import { createBaseGroup } from "./object-3d/group/base";
-import { BufferGeometryWithNPolygonIndices } from "./geometry/base";
+import { FunctionController, GUI } from "lil-gui";
+import type * as THREE from "three";
+import type { ViewportGizmo } from "three-viewport-gizmo";
 import { createBaseCenterlines } from "./cross-section/centerline";
-import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
-import { objectMap } from "./main/utils";
 import { FreePlane } from "./cross-section/free-plane";
 import { VerticalPlane } from "./cross-section/vertical-plane";
+import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
+import { createCamera, updateCamera } from "./main/camera";
+import { createControlsAndGizmo } from "./main/controls";
+import {
+  type closedJSON,
+  type guiJSON,
+  loadClosed,
+  saveClosed,
+  saveGui,
+} from "./main/gui";
+import { createRenderer, updateRenderer } from "./main/renderer";
+import { objectMap } from "./main/utils";
+import { createMaterials } from "./material/materials";
+import {
+  type ArrowHelperWithCallbacks,
+  createArrowHelper,
+} from "./object-3d/arrow-helper";
+import { createAxesHelper } from "./object-3d/axes-helper";
+import { createBaseGroup } from "./object-3d/group/base";
+import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import { createPlanesGroup } from "./object-3d/group/planes";
+import {
+  createPlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "./object-3d/plane-helper";
+import { createScene } from "./object-3d/scene";
 
 let renderer: THREE.WebGLRenderer;
 let camera: THREE.OrthographicCamera;
@@ -74,7 +73,7 @@ async function init() {
       .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute(
-      "position",
+      "position"
     ) as THREE.Float32BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
@@ -88,7 +87,7 @@ async function init() {
       gui,
       planes,
       planeHelper,
-      arrowHelper,
+      arrowHelper
     );
     scene.add(planesGroup);
   });

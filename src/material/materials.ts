@@ -1,8 +1,7 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { GUI } from "lil-gui";
-import { createPointsMaterial } from "./points";
 import { createLineMaterial } from "./line";
+import { createPointsMaterial } from "./points";
 import { createToonMaterial } from "./toon";
 
 /**
@@ -44,7 +43,7 @@ export function createMaterials(gui: GUI): {
       "toon",
       0xfcd7e9,
       0xf8c1de,
-      THREE.DoubleSide,
+      THREE.DoubleSide
     ),
   };
 

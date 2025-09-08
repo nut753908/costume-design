@@ -1,10 +1,9 @@
+import type { Controller, GUI } from "lil-gui";
 import * as THREE from "three";
-
+import { closeFolder, deleteFolder } from "../main/gui";
+import { Spherical, type SphericalJSON } from "../math/spherical";
+import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "../math/utils";
 import { ControlPoint } from "./control-point";
-import { Spherical, SphericalJSON } from "../math/spherical";
-import { Controller, GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui";
-import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils";
 
 /**
  * A class representing a 3D control point of curve.
@@ -75,7 +74,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
     leftPos = new THREE.Vector3(-1, 0, 0),
     rightPos = new THREE.Vector3(1, 0, 0),
     isSyncRadius = true,
-    isSyncAngle = true,
+    isSyncAngle = true
   ) {
     super(middlePos, leftPos, rightPos, isSyncRadius, isSyncAngle);
     this.type = "ControlPoint3";
@@ -127,7 +126,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
       ...folder.controllers,
       ...lFolder.controllers,
     ].filter(
-      (c) => c._name.startsWith("left.") || c._name.startsWith("right."),
+      (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
     function uMP() /* updateFromMiddlePos */ {
@@ -178,7 +177,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
         | "rightS"
         | "rightAx"
         | "rightAy"
-        | "rightAz",
+        | "rightAz"
     ) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point.ts.
@@ -358,7 +357,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
     return new THREE.Vector3(
       THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
       THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
-      THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x)),
+      THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
     );
   }
 

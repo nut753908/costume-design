@@ -1,6 +1,5 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { GUI } from "lil-gui";
 
 export function createAxesHelper(gui: GUI): THREE.AxesHelper {
   const obj = { size: 1 };
@@ -18,7 +17,7 @@ export function createAxesHelper(gui: GUI): THREE.AxesHelper {
       ].flat();
       helper.geometry.setAttribute(
         "position",
-        new THREE.Float32BufferAttribute(vertices, 3),
+        new THREE.Float32BufferAttribute(vertices, 3)
       );
     }
   }

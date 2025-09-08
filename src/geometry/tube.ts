@@ -1,15 +1,14 @@
-import * as THREE from "three";
-
-import { TubeBaseGeometry } from "./tube-base";
-import { Curve3 } from "../curve/curve-3";
+import type * as THREE from "three";
+import type { CurveJSON } from "../curve/curve";
 import { Curve2 } from "../curve/curve-2";
-import { constant0Curve3 } from "../curve/samples/curve-3";
+import { Curve3 } from "../curve/curve-3";
 import {
-  smallCircleCurve2,
-  constant1Curve2,
   constant0Curve2,
+  constant1Curve2,
+  smallCircleCurve2,
 } from "../curve/samples/curve-2";
-import { CurveJSON } from "../curve/curve";
+import { constant0Curve3 } from "../curve/samples/curve-3";
+import { TubeBaseGeometry } from "./tube-base";
 
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
@@ -87,7 +86,7 @@ export class TubeGeometry extends TubeBaseGeometry {
     xCurvatureC: Curve2 = constant0Curve2.clone(),
     yCurvatureC: Curve2 = constant0Curve2.clone(),
     tiltC: Curve2 = constant0Curve2.clone(),
-    curvatureOrder: "xy" | "yx" = "xy",
+    curvatureOrder: "xy" | "yx" = "xy"
   ) {
     super(
       axis,
@@ -106,7 +105,7 @@ export class TubeGeometry extends TubeBaseGeometry {
       xCurvatureC,
       yCurvatureC,
       tiltC,
-      curvatureOrder,
+      curvatureOrder
     );
     this.type = "TubeGeometry";
   }
@@ -136,7 +135,7 @@ export class TubeGeometry extends TubeBaseGeometry {
       new Curve2().fromJSON(data.xCurvatureC),
       new Curve2().fromJSON(data.yCurvatureC),
       new Curve2().fromJSON(data.tiltC),
-      data.curvatureOrder,
+      data.curvatureOrder
     );
   }
 }

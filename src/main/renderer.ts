@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 export function createRenderer(
-  animate: XRFrameRequestCallback | null,
+  animate: XRFrameRequestCallback | null
 ): THREE.WebGLRenderer {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);

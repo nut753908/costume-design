@@ -35,7 +35,7 @@ export class FreePlane extends Plane {
    */
   constructor(
     normal = new THREE.Vector3(0, 1, 0),
-    point = new THREE.Vector3(0, 0, 0),
+    point = new THREE.Vector3(0, 0, 0)
   ) {
     super();
     this.type = "FreePlane";

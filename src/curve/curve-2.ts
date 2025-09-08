@@ -1,7 +1,6 @@
 import * as THREE from "three";
-
-import { Curve } from "./curve";
 import { ControlPoint2 } from "./control-point-2";
+import { Curve } from "./curve";
 
 /**
  * A 2D Cubic Bezier curve path using 2D control points.
@@ -33,7 +32,7 @@ export class Curve2 extends Curve<2> {
     v0: THREE.Vector2,
     v1: THREE.Vector2,
     v2: THREE.Vector2,
-    v3: THREE.Vector2,
+    v3: THREE.Vector2
   ) => THREE.CubicBezierCurve {
     return THREE.CubicBezierCurve;
   }

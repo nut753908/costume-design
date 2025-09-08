@@ -1,8 +1,7 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { GUI } from "lil-gui";
-import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
+import { createColor } from "../math/color";
 
 export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
   const obj = {
@@ -15,7 +14,7 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
     obj.dir,
     obj.origin,
     obj.length,
-    obj.color,
+    obj.color
   ) as ArrowHelperWithCallbacks;
   helper.visible = false;
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.ts.

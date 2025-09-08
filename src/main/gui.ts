@@ -1,4 +1,4 @@
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 
 export interface guiJSON {
   controllers: { [_name: string]: any };
@@ -12,7 +12,7 @@ export function saveGui(gui: GUI): guiJSON {
   const guiObj = gui.save() as guiJSON;
   const folders: guiJSON["folders"] = {};
   ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach(
-    (k) => (folders[k] = guiObj.folders[k]),
+    (k) => (folders[k] = guiObj.folders[k])
   );
   guiObj.folders = folders;
   return guiObj;
@@ -53,7 +53,7 @@ export function loadClosed(gui: GUI, closedObj: closedJSON) {
 export function deleteFolder(
   parent: GUI,
   _title: string | null,
-  titleStart: string | null = null,
+  titleStart: string | null = null
 ) {
   if (_title) {
     Array.from(parent.children)

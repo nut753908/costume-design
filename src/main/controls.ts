@@ -1,11 +1,11 @@
-import * as THREE from "three";
+import type * as THREE from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ViewportGizmo } from "three-viewport-gizmo";
 
 export function createControlsAndGizmo(
   camera: THREE.OrthographicCamera | THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer,
+  renderer: THREE.WebGLRenderer
 ): { controls: OrbitControls; gizmo: ViewportGizmo } {
   const controls = new OrbitControls(camera, renderer.domElement);
 

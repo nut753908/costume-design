@@ -1,7 +1,7 @@
+import type { Edge } from "./edge";
 import { EdgeLoop } from "./edge-loop";
-import { createRemainingVerticesMap, findNextVertex } from "./vertices";
 import { createAllEdges, createEdgeMap, findNextEdge } from "./edges";
-import { Edge } from "./edge";
+import { createRemainingVerticesMap, findNextVertex } from "./vertices";
 
 /**
  * Create all non-overlapping edge loops.

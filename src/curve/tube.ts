@@ -1,15 +1,14 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
 import {
   defaultTubeGeometryParameters,
   TubeGeometry,
-  TubeGeometryParameters,
-  TubeGeometryParametersJSON,
+  type TubeGeometryParameters,
+  type TubeGeometryParametersJSON,
 } from "../geometry/tube";
-import { GUI } from "lil-gui";
 import { deleteFolder } from "../main/gui";
-import { Curve3 } from "./curve-3";
 import { Curve2 } from "./curve-2";
+import { Curve3 } from "./curve-3";
 
 /**
  * A class for managing TubeGeometry.
@@ -48,6 +47,7 @@ export class Tube {
    * @param group
    */
   createGeometry(group: THREE.Group) {
+    // biome-ignore lint: noUselessThisAlias => to leave t(=this) alive.
     const t = this;
     const p = t.parameters;
 
@@ -70,7 +70,7 @@ export class Tube {
         p.xCurvatureC,
         p.yCurvatureC,
         p.tiltC,
-        p.curvatureOrder,
+        p.curvatureOrder
       );
 
       if ("parameters" in geometry) {

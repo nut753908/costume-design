@@ -1,18 +1,17 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { GUI } from "lil-gui";
-import { FreePlane } from "../../cross-section/free-plane";
-import { VerticalPlane } from "../../cross-section/vertical-plane";
-import { PlaneHelperWithCallbacks } from "../plane-helper";
-import { ArrowHelperWithCallbacks } from "../arrow-helper";
+import type { FreePlane } from "../../cross-section/free-plane";
+import type { VerticalPlane } from "../../cross-section/vertical-plane";
 import { deleteFolder } from "../../main/gui";
+import type { ArrowHelperWithCallbacks } from "../arrow-helper";
+import type { PlaneHelperWithCallbacks } from "../plane-helper";
 import { createPlaneGroup } from "./plane";
 
 export function createPlanesGroup(
   gui: GUI,
   planes: { [k: number | string]: FreePlane | VerticalPlane },
   planeHelper: PlaneHelperWithCallbacks,
-  arrowHelper: ArrowHelperWithCallbacks,
+  arrowHelper: ArrowHelperWithCallbacks
 ): THREE.Group {
   deleteFolder(gui, "PlanesGroup");
   const folder = gui.addFolder("PlanesGroup");

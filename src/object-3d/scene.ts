@@ -1,6 +1,5 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 
 export function createScene(gui: GUI): THREE.Scene {

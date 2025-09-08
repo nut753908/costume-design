@@ -1,8 +1,8 @@
+import { Edge } from "./edge";
 import { EdgeLoopStack } from "./edge-loop-stack";
 import { createAllEdgeLoops, createEdgeLoopsMap } from "./edge-loops";
-import { createRemainingVerticesMap } from "./vertices";
-import { Edge } from "./edge";
 import { findNextEdge } from "./edges";
+import { createRemainingVerticesMap } from "./vertices";
 
 /**
  * conditions:
@@ -118,7 +118,7 @@ import { findNextEdge } from "./edges";
  * @return  All non-overlapping edge loop stacks.
  */
 export function createAllEdgeLoopStacks(
-  nPolygonIndices: number[][],
+  nPolygonIndices: number[][]
 ): EdgeLoopStack[] {
   const stacks: EdgeLoopStack[] = []; // edgeLoopStacks
   const strings: string[] = []; // [JSON.stringify(stack.vertices.toSorted()) for stack in stacks]
@@ -132,7 +132,7 @@ export function createAllEdgeLoopStacks(
       const vertices = [el.vertices];
       const firstE = new Edge(
         el.vertices[j],
-        el.vertices[j !== l2 - 1 ? j + 1 : 0],
+        el.vertices[j !== l2 - 1 ? j + 1 : 0]
       ); // firstEdge
       let secondE: Edge | null = null; // secondEdge
       let opened = true;
@@ -152,7 +152,7 @@ export function createAllEdgeLoopStacks(
           const els = elsMap[`${e3.v1},${e3.v2}`]; // edgeLoops
           if (els === undefined) break;
           const el2 = els.find(
-            (v) => v.closed && el.vertices.length === v.vertices.length,
+            (v) => v.closed && el.vertices.length === v.vertices.length
           ); // edgeLoop2
           if (el2 === undefined) break;
           if (n === 0) vertices.push(el2.vertices);

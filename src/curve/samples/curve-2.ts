@@ -1,7 +1,6 @@
 import * as THREE from "three";
-
-import { Curve2 } from "../curve-2";
 import { ControlPoint2 } from "../control-point-2";
+import { Curve2 } from "../curve-2";
 
 /**
  * Use Curve2 to create a circle.
@@ -13,27 +12,27 @@ function createCircleCurve2(radius = 1): Curve2 {
     new ControlPoint2(
       new THREE.Vector2(0, -radius),
       new THREE.Vector2(-mulKR, -radius),
-      new THREE.Vector2(mulKR, -radius),
+      new THREE.Vector2(mulKR, -radius)
     ),
     new ControlPoint2(
       new THREE.Vector2(radius, 0),
       new THREE.Vector2(radius, -mulKR),
-      new THREE.Vector2(radius, mulKR),
+      new THREE.Vector2(radius, mulKR)
     ),
     new ControlPoint2(
       new THREE.Vector2(0, radius),
       new THREE.Vector2(mulKR, radius),
-      new THREE.Vector2(-mulKR, radius),
+      new THREE.Vector2(-mulKR, radius)
     ),
     new ControlPoint2(
       new THREE.Vector2(-radius, 0),
       new THREE.Vector2(-radius, mulKR),
-      new THREE.Vector2(-radius, -mulKR),
+      new THREE.Vector2(-radius, -mulKR)
     ),
     new ControlPoint2(
       new THREE.Vector2(0, -radius),
       new THREE.Vector2(-mulKR, -radius),
-      new THREE.Vector2(mulKR, -radius),
+      new THREE.Vector2(mulKR, -radius)
     ),
   ]);
 }
@@ -54,12 +53,12 @@ function createGentlyCurve2(yStart = 1, yEnd = 2, aspect = 3): Curve2 {
     new ControlPoint2(
       new THREE.Vector2(0, yStart),
       new THREE.Vector2(-yL, yStart),
-      new THREE.Vector2(yL, yStart),
+      new THREE.Vector2(yL, yStart)
     ),
     new ControlPoint2(
       new THREE.Vector2(xL, yEnd),
       new THREE.Vector2(-yL + xL, yEnd),
-      new THREE.Vector2(yL + xL, yEnd),
+      new THREE.Vector2(yL + xL, yEnd)
     ),
   ]);
 }
@@ -80,12 +79,12 @@ function createConstantCurve2(y = 1, xL = 3): Curve2 {
     new ControlPoint2(
       new THREE.Vector2(0, y),
       new THREE.Vector2(-hL, y),
-      new THREE.Vector2(hL, y),
+      new THREE.Vector2(hL, y)
     ),
     new ControlPoint2(
       new THREE.Vector2(xL, y),
       new THREE.Vector2(xL - hL, y),
-      new THREE.Vector2(xL + hL, y),
+      new THREE.Vector2(xL + hL, y)
     ),
   ]);
 }

@@ -10,7 +10,7 @@ export function createCamera(): THREE.OrthographicCamera {
     frustumSize / 2,
     -frustumSize / 2,
     0.1,
-    1000,
+    1000
   );
   camera.position.z = 500;
   return camera;

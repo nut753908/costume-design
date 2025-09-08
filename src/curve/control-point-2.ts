@@ -1,10 +1,9 @@
+import type { Controller, GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { ControlPoint } from "./control-point";
-import { Circular, CircularJSON } from "../math/circular";
-import { Controller, GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui";
+import { closeFolder, deleteFolder } from "../main/gui";
+import { Circular, type CircularJSON } from "../math/circular";
 import { rotate180 } from "../math/utils";
+import { ControlPoint } from "./control-point";
 
 /**
  * A class representing a 2D control point of curve.
@@ -57,7 +56,7 @@ export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
     leftPos = new THREE.Vector2(-1, 0),
     rightPos = new THREE.Vector2(1, 0),
     isSyncRadius = true,
-    isSyncAngle = true,
+    isSyncAngle = true
   ) {
     super(middlePos, leftPos, rightPos, isSyncRadius, isSyncAngle);
     this.type = "ControlPoint2";
@@ -102,7 +101,7 @@ export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
       ...folder.controllers,
       ...lFolder.controllers,
     ].filter(
-      (c) => c._name.startsWith("left.") || c._name.startsWith("right."),
+      (c) => c._name.startsWith("left.") || c._name.startsWith("right.")
     );
 
     function uMP() /* updateFromMiddlePos */ {
@@ -124,7 +123,7 @@ export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
      * @param key - A key to pass to this.updateFrom.
      */
     function updateFrom(
-      key: "middlePos" | "leftPos" | "rightPos" | "leftC" | "rightC",
+      key: "middlePos" | "leftPos" | "rightPos" | "leftC" | "rightC"
     ) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-2.ts.

@@ -1,11 +1,10 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { ControlPoint3, ControlPoint3JSON } from "./control-point-3";
-import { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
-import { GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui";
+import { closeFolder, deleteFolder } from "../main/gui";
 import { isInvalidIndex } from "../math/utils";
 import { mean } from "../math/vector";
+import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
+import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
@@ -55,7 +54,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     v0: TypeMap[T]["vector"],
     v1: TypeMap[T]["vector"],
     v2: TypeMap[T]["vector"],
-    v3: TypeMap[T]["vector"],
+    v3: TypeMap[T]["vector"]
   ) => TypeMap[T]["curve"];
 
   /**
@@ -73,7 +72,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
         this.cps[i + 1].leftPos.clone(),
-        this.cps[i + 1].middlePos.clone(),
+        this.cps[i + 1].middlePos.clone()
       );
       this.curves.push(curve);
     }
@@ -84,13 +83,14 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * Create geometry.
    */
   createGeometry(line: THREE.Line) {
+    // biome-ignore lint: noUselessThisAlias => to leave c(=this) alive.
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.ts.
     (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        c.getPoints() as THREE.Vector3[] | THREE.Vector2[],
+        c.getPoints() as THREE.Vector3[] | THREE.Vector2[]
       );
 
       line.geometry.dispose();
@@ -109,7 +109,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     gui: GUI,
     name = this.type,
     updateCallback = () => {},
-    isClose = false,
+    isClose = false
   ) {
     const c = this;
 

@@ -1,11 +1,10 @@
 import * as THREE from "three";
-
-import { constant0Curve3 } from "../curve/samples/curve-3";
 import {
-  smallCircleCurve2,
-  constant1Curve2,
   constant0Curve2,
+  constant1Curve2,
+  smallCircleCurve2,
 } from "../curve/samples/curve-2";
+import { constant0Curve3 } from "../curve/samples/curve-3";
 
 /**
  * A geometry class for representing a tube.
@@ -73,7 +72,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     xCurvatureC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
     yCurvatureC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
     tiltC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
-    curvatureOrder: "xy" | "yx" = "xy",
+    curvatureOrder: "xy" | "yx" = "xy"
   ) {
     super();
     this.type = "TubeBaseGeometry";
@@ -121,7 +120,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     const normal = new THREE.Vector3();
     const uv = new THREE.Vector2();
     let AP = new THREE.Vector3();
-    let _P = new THREE.Vector2();
+    const _P = new THREE.Vector2();
 
     let scale;
     let xScale;
@@ -146,7 +145,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     this.setIndex(indices);
     this.setAttribute(
       "position",
-      new THREE.Float32BufferAttribute(vertices, 3),
+      new THREE.Float32BufferAttribute(vertices, 3)
     );
     this.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
     this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
@@ -263,7 +262,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       function applyXCurvatureToCB(
         xCurvature: number,
         CPy: number,
-        CB: THREE.Vector2,
+        CB: THREE.Vector2
       ) {
         if (xCurvature === 0) return;
         const theta = CPy * xCurvature;
@@ -278,7 +277,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       function applyYCurvatureToCB(
         yCurvature: number,
         CPx: number,
-        CB: THREE.Vector2,
+        CB: THREE.Vector2
       ) {
         if (yCurvature === 0) return;
         const theta = CPx * yCurvature;
@@ -699,7 +698,7 @@ class Curve2 extends THREE.Curve<THREE.Vector2> {
   }
   computeFrenetFrames(
     segments: number,
-    closed = false,
+    closed = false
   ): {
     tangents: THREE.Vector3[];
     normals: THREE.Vector3[];
@@ -743,7 +742,7 @@ class Curve2 extends THREE.Curve<THREE.Vector2> {
       if (vec.length() > Number.EPSILON) {
         vec.normalize();
         const theta = Math.acos(
-          THREE.MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1),
+          THREE.MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1)
         );
         normals[i].applyMatrix4(mat.makeRotationAxis(vec, theta));
       }
@@ -751,7 +750,7 @@ class Curve2 extends THREE.Curve<THREE.Vector2> {
     }
     if (closed === true) {
       let theta = Math.acos(
-        THREE.MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1),
+        THREE.MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1)
       );
       theta /= segments;
       if (

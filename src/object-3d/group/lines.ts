@@ -1,11 +1,10 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
-import { Edge } from "../../cross-section/edge";
-import { EdgeLoop } from "../../cross-section/edge-loop";
-import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
-import { createLineGroup } from "./line";
-import { GUI } from "lil-gui";
+import type { Edge } from "../../cross-section/edge";
+import type { EdgeLoop } from "../../cross-section/edge-loop";
+import type { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
 import { closeFolder, deleteFolder } from "../../main/gui";
+import { createLineGroup } from "./line";
 
 /**
  * @param positions - The results of geometry.getAttribute("position").
@@ -21,12 +20,12 @@ export function createLinesGroup(
       | THREE.CatmullRomCurve3;
   },
   positions: THREE.BufferAttribute,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
 ): THREE.Group {
   const group = new THREE.Group();
 
   Object.entries(lines).forEach(([k, v]) =>
-    group.add(createLineGroup(v, positions, ms, k)),
+    group.add(createLineGroup(v, positions, ms, k))
   );
 
   return group;
@@ -38,7 +37,7 @@ export function createLinesGroup(
 export function setLinesGroupGUI(
   gui: GUI,
   group: THREE.Group,
-  visible = false,
+  visible = false
 ) {
   deleteFolder(gui, "LinesGroup");
   const folder = gui.addFolder("LinesGroup");
