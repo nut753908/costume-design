@@ -4,33 +4,35 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 
-export function createPlaneHelper(gui: GUI): PlaneHelper {
+export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   const obj = {
     normal: new THREE.Vector3(0, 0, 1),
     point: new THREE.Vector3(0, 0, 0),
     size: 0.3,
-    hex: createColor(0xffff00),
+    color: createColor(0xffff00),
   };
-  // FIXME:
-  const helper = new PlaneHelper(obj.normal, obj.point, obj.size, obj.hex);
+  const helper = new PlaneHelper(
+    obj.normal,
+    obj.point,
+    obj.size,
+    obj.color
+  ) as PlaneHelperWithCallbacks;
   helper.visible = false;
-  // FIXME:
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.js.
   helper._updateSizeCallbacks = [];
+
   {
     deleteFolder(gui, "PlaneHelper");
     const folder = gui.addFolder("PlaneHelper");
     closeFolder(folder);
     folder.add(obj, "size").step(0.01).onChange(uS);
-    folder.addColor(obj, "hex").onChange(uH);
+    folder.addColor(obj, "color").onChange(uC);
 
     function uS() /* updateSize */ {
       helper._updateSizeCallbacks.forEach((c) => c(obj.size));
     }
-    // FIXME:
-    function uH() /* updateHex */ {
-      helper.material.color.set(obj.hex);
-      helper.children[0].material.color.set(obj.hex);
+    function uC() /* updateColor */ {
+      helper.setColor(obj.color);
     }
   }
   return helper;
@@ -67,18 +69,35 @@ export class PlaneHelper extends THREE.PlaneHelper {
    * @param normal - {@link PlaneHelper#normal}
    * @param point - {@link PlaneHelper#point}
    * @param size - {@link THREE.PlaneHelper#size}
-   * @param hex - {@link THREE.PlaneHelper#hex}
+   * @param color - {@link THREE.PlaneHelper#hex}
    */
   constructor(
     normal = new THREE.Vector3(0, 0, 1),
     point = new THREE.Vector3(0, 0, 0),
     size = 1,
-    hex = 0xffff00
+    color: number | THREE.Color | string = 0xffff00
   ) {
-    super(new THREE.Plane(), size, hex);
-
+    super(new THREE.Plane(), size, 0xffff00);
+    this.setColor(color);
     this.normal = normal;
     this.point = point;
+  }
+
+  /**
+   * Set the color of the helper.
+   *
+   * @param color - The color to set.
+   */
+  setColor(color: number | THREE.Color | string) {
+    if (this.material instanceof THREE.LineBasicMaterial) {
+      this.material.color.set(color);
+    }
+    if (
+      "material" in this.children[0] &&
+      this.children[0].material instanceof THREE.MeshBasicMaterial
+    ) {
+      this.children[0].material.color.set(color);
+    }
   }
 
   updateMatrixWorld() {
@@ -89,3 +108,6 @@ export class PlaneHelper extends THREE.PlaneHelper {
     this.updateWorldMatrix(false, true);
   }
 }
+
+export type PlaneHelperWithCallbacks = PlaneHelper &
+  Record<"_updateSizeCallbacks", ((size: number) => void)[]>;
