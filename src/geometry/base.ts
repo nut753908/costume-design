@@ -40,7 +40,7 @@ export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndi
   geometry.nPolygonIndices = correctNPolygonIndices(
     positions,
     geometry.getAttribute("position") as THREE.Float32BufferAttribute,
-    indices
+    indices,
   );
   return geometry;
 }
@@ -59,7 +59,7 @@ export type BufferGeometryWithNPolygonIndices = THREE.BufferGeometry &
 function correctNPolygonIndices(
   nPolygonPositions: number[][],
   positions: THREE.BufferAttribute,
-  nPolygonIndices: number[][]
+  nPolygonIndices: number[][],
 ): number[][] {
   const EPS = Number.EPSILON;
   const map: (number | undefined)[] = Array(nPolygonPositions.length);

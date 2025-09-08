@@ -44,7 +44,7 @@ export function createMaterials(gui: GUI): {
       "toon",
       0xfcd7e9,
       0xf8c1de,
-      THREE.DoubleSide
+      THREE.DoubleSide,
     ),
   };
 

@@ -12,7 +12,7 @@ export function createPlanesGroup(
   gui: GUI,
   planes: { [k: number | string]: FreePlane | VerticalPlane },
   planeHelper: PlaneHelperWithCallbacks,
-  arrowHelper: ArrowHelperWithCallbacks
+  arrowHelper: ArrowHelperWithCallbacks,
 ): THREE.Group {
   deleteFolder(gui, "PlanesGroup");
   const folder = gui.addFolder("PlanesGroup");

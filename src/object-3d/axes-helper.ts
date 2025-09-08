@@ -18,7 +18,7 @@ export function createAxesHelper(gui: GUI): THREE.AxesHelper {
       ].flat();
       helper.geometry.setAttribute(
         "position",
-        new THREE.Float32BufferAttribute(vertices, 3)
+        new THREE.Float32BufferAttribute(vertices, 3),
       );
     }
   }

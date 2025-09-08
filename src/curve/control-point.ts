@@ -6,7 +6,7 @@ import { GUI } from "lil-gui";
  * Abstract class for ControlPoint{3,2}.
  */
 export abstract class ControlPoint<
-  TVector extends THREE.Vector3 | THREE.Vector2
+  TVector extends THREE.Vector3 | THREE.Vector2,
 > {
   /**
    * The position of middle control point.
@@ -54,7 +54,7 @@ export abstract class ControlPoint<
     leftPos: TVector,
     rightPos: TVector,
     isSyncRadius = true,
-    isSyncAngle = true
+    isSyncAngle = true,
   ) {
     this.middlePos = middlePos;
     this.leftPos = leftPos;
@@ -74,7 +74,7 @@ export abstract class ControlPoint<
     (cp._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        cp.getPoints() as THREE.Vector3[] | THREE.Vector2[]
+        cp.getPoints() as THREE.Vector3[] | THREE.Vector2[],
       );
 
       group.children.forEach((v) => {

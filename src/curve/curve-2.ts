@@ -33,7 +33,7 @@ export class Curve2 extends Curve<2> {
     v0: THREE.Vector2,
     v1: THREE.Vector2,
     v2: THREE.Vector2,
-    v3: THREE.Vector2
+    v3: THREE.Vector2,
   ) => THREE.CubicBezierCurve {
     return THREE.CubicBezierCurve;
   }

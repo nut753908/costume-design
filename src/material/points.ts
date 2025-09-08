@@ -9,7 +9,7 @@ import { createColor } from "../math/color";
 export function createPointsMaterial(
   gui: GUI,
   name = "pointsMaterial",
-  colorHex = 0xffffff
+  colorHex = 0xffffff,
 ): THREE.PointsMaterial {
   const pointsMaterial = new THREE.PointsMaterial({
     color: createColor(colorHex),

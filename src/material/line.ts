@@ -10,7 +10,7 @@ export function createLineMaterial(
   gui: GUI,
   name = "lineMaterial",
   colorHex = 0xffffff,
-  opacity = 1
+  opacity = 1,
 ): THREE.LineBasicMaterial {
   const lineMaterial = new THREE.LineBasicMaterial({
     color: createColor(colorHex),

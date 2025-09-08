@@ -9,7 +9,7 @@ import { createEmptyGeometry } from "../../geometry/empty";
  */
 export function createControlPointGroup(
   cp: ControlPoint3 | ControlPoint2,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+  ms: { [k1: string]: { [k2: string]: THREE.Material } },
 ): THREE.Group {
   const group = new THREE.Group();
 
