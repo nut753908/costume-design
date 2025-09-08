@@ -1,8 +1,7 @@
 import * as THREE from "three";
-
+import { objectMap } from "../main/utils";
 import { createAllEdgeLoopStacks } from "./edge-loop-stacks";
 import { getCentroids } from "./points";
-import { objectMap } from "../main/utils";
 
 /**
  * Create the base centerlines.

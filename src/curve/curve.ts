@@ -1,11 +1,10 @@
-import * as THREE from "three";
-
-import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
-import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
 import type { GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui";
+import * as THREE from "three";
+import { closeFolder, deleteFolder } from "../main/gui";
 import { isInvalidIndex } from "../math/utils";
 import { mean } from "../math/vector";
+import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
+import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
@@ -84,7 +83,6 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * Create geometry.
    */
   createGeometry(line: THREE.Line) {
-
     // This function is used by setGUI() in ./src/curve/curve.ts.
     (this._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();

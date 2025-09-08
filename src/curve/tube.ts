@@ -1,15 +1,14 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
 import {
   defaultTubeGeometryParameters,
   TubeGeometry,
   type TubeGeometryParameters,
   type TubeGeometryParametersJSON,
 } from "../geometry/tube";
-import type { GUI } from "lil-gui";
 import { deleteFolder } from "../main/gui";
-import { Curve3 } from "./curve-3";
 import { Curve2 } from "./curve-2";
+import { Curve3 } from "./curve-3";
 
 /**
  * A class for managing TubeGeometry.

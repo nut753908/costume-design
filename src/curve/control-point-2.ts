@@ -1,10 +1,9 @@
-import * as THREE from "three";
-
-import { ControlPoint } from "./control-point";
-import { Circular, type CircularJSON } from "../math/circular";
 import type { Controller, GUI } from "lil-gui";
-import { deleteFolder, closeFolder } from "../main/gui";
+import * as THREE from "three";
+import { closeFolder, deleteFolder } from "../main/gui";
+import { Circular, type CircularJSON } from "../math/circular";
 import { rotate180 } from "../math/utils";
+import { ControlPoint } from "./control-point";
 
 /**
  * A class representing a 2D control point of curve.

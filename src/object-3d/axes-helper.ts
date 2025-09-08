@@ -1,6 +1,5 @@
-import * as THREE from "three";
-
 import type { GUI } from "lil-gui";
+import * as THREE from "three";
 
 export function createAxesHelper(gui: GUI): THREE.AxesHelper {
   const obj = { size: 1 };

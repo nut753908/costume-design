@@ -2,10 +2,9 @@
 // TODO: add addFreePlane(), addVerticalPlane(curveKey), removePlane(planeIndex), getCurveKeys(), getPlaneIndices()
 
 import * as THREE from "three";
-
+import { objectMap } from "../main/utils";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
-import { objectMap } from "../main/utils";
 
 /**
  * A class for managing the increase/decrease of planes at infinity.

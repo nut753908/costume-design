@@ -1,8 +1,7 @@
-import * as THREE from "three";
-
 import type { GUI } from "lil-gui";
-import { createPointsMaterial } from "./points";
+import * as THREE from "three";
 import { createLineMaterial } from "./line";
+import { createPointsMaterial } from "./points";
 import { createToonMaterial } from "./toon";
 
 /**

@@ -1,36 +1,35 @@
+import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
-
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import {
-  saveGui,
-  saveClosed,
-  loadClosed,
-  type guiJSON,
-  type closedJSON,
-} from "./main/gui";
-import { createRenderer, updateRenderer } from "./main/renderer";
+import { createBaseCenterlines } from "./cross-section/centerline";
+import { FreePlane } from "./cross-section/free-plane";
+import { VerticalPlane } from "./cross-section/vertical-plane";
+import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
-import { GUI, FunctionController } from "lil-gui";
 import {
-  createPlaneHelper,
-  type PlaneHelperWithCallbacks,
-} from "./object-3d/plane-helper";
+  type closedJSON,
+  type guiJSON,
+  loadClosed,
+  saveClosed,
+  saveGui,
+} from "./main/gui";
+import { createRenderer, updateRenderer } from "./main/renderer";
+import { objectMap } from "./main/utils";
+import { createMaterials } from "./material/materials";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,
 } from "./object-3d/arrow-helper";
-import { createScene } from "./object-3d/scene";
 import { createAxesHelper } from "./object-3d/axes-helper";
-import { createMaterials } from "./material/materials";
 import { createBaseGroup } from "./object-3d/group/base";
-import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
-import { createBaseCenterlines } from "./cross-section/centerline";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
-import { objectMap } from "./main/utils";
-import { FreePlane } from "./cross-section/free-plane";
-import { VerticalPlane } from "./cross-section/vertical-plane";
 import { createPlanesGroup } from "./object-3d/group/planes";
+import {
+  createPlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "./object-3d/plane-helper";
+import { createScene } from "./object-3d/scene";
 
 let renderer: THREE.WebGLRenderer;
 let camera: THREE.OrthographicCamera;

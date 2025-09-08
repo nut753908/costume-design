@@ -1,7 +1,6 @@
 import * as THREE from "three";
-
-import { Curve2 } from "../curve-2";
 import { ControlPoint2 } from "../control-point-2";
+import { Curve2 } from "../curve-2";
 
 /**
  * Use Curve2 to create a circle.

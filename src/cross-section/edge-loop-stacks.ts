@@ -1,8 +1,8 @@
+import { Edge } from "./edge";
 import { EdgeLoopStack } from "./edge-loop-stack";
 import { createAllEdgeLoops, createEdgeLoopsMap } from "./edge-loops";
-import { createRemainingVerticesMap } from "./vertices";
-import { Edge } from "./edge";
 import { findNextEdge } from "./edges";
+import { createRemainingVerticesMap } from "./vertices";
 
 /**
  * conditions:

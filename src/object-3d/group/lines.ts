@@ -1,11 +1,10 @@
+import type { GUI } from "lil-gui";
 import * as THREE from "three";
-
 import type { Edge } from "../../cross-section/edge";
 import type { EdgeLoop } from "../../cross-section/edge-loop";
 import type { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
-import { createLineGroup } from "./line";
-import type { GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "../../main/gui";
+import { createLineGroup } from "./line";
 
 /**
  * @param positions - The results of geometry.getAttribute("position").

@@ -1,7 +1,6 @@
 import * as THREE from "three";
-
-import type { Curve3 } from "../../curve/curve-3";
 import type { Curve2 } from "../../curve/curve-2";
+import type { Curve3 } from "../../curve/curve-3";
 import { createEmptyGeometry } from "../../geometry/empty";
 import { createControlPointGroup } from "./control-point";
 

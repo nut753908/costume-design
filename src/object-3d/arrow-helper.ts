@@ -1,8 +1,7 @@
-import * as THREE from "three";
-
 import type { GUI } from "lil-gui";
-import { createColor } from "../math/color";
+import * as THREE from "three";
 import { closeFolder, deleteFolder } from "../main/gui";
+import { createColor } from "../math/color";
 
 export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
   const obj = {
