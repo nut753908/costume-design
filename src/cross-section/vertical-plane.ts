@@ -74,7 +74,7 @@ export class VerticalPlane extends Plane {
    * @param source - The vertical plane to copy.
    * @return  A reference to this vertical plane.
    */
-  copy(source: VerticalPlane): VerticalPlane {
+  copy(source: VerticalPlane): this {
     this.curve.copy(source.curve);
     this.u = source.u;
 
@@ -100,7 +100,7 @@ export class VerticalPlane extends Plane {
    * @param json - The JSON holding the serialized vertical plane.
    * @return  A reference to this vertical plane.
    */
-  fromJSON(json: VerticalPlaneJSON): VerticalPlane {
+  fromJSON(json: VerticalPlaneJSON): this {
     if (json.curve.type === "CurvePath") {
       this.curve = new THREE.CurvePath<THREE.Vector3>().fromJSON(
         json.curve as THREE.CurvePathJSON

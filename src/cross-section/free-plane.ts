@@ -72,7 +72,7 @@ export class FreePlane extends Plane {
    * @param source - The free plane to copy.
    * @return  A reference to this free plane.
    */
-  copy(source: FreePlane): FreePlane {
+  copy(source: FreePlane): this {
     this.normal.copy(source.normal);
     this.point.copy(source.point);
 
@@ -98,7 +98,7 @@ export class FreePlane extends Plane {
    * @param json - The JSON holding the serialized free plane.
    * @return  A reference to this free plane.
    */
-  fromJSON(json: FreePlaneJSON): FreePlane {
+  fromJSON(json: FreePlaneJSON): this {
     this.normal.fromArray(json.normal);
     this.point.fromArray(json.point);
 

@@ -11,9 +11,9 @@ import { ControlPoint3 } from "./control-point-3";
  * const curve3 = new Curve3();
  * ```
  *
- * @augments Curve<THREE.Vector3>
+ * @augments Curve<3>
  */
-export class Curve3 extends Curve<THREE.Vector3> {
+export class Curve3 extends Curve<3> {
   type: string;
 
   /**
@@ -23,21 +23,25 @@ export class Curve3 extends Curve<THREE.Vector3> {
    */
   constructor(cps: ControlPoint3[] = []) {
     super(cps);
-
     this.type = "Curve3";
   }
 
   /**
    * Get the class of this.curves[*].
    */
-  get curveClass(): Function {
+  get curveClass(): new (
+    v0: THREE.Vector3,
+    v1: THREE.Vector3,
+    v2: THREE.Vector3,
+    v3: THREE.Vector3
+  ) => THREE.CubicBezierCurve3 {
     return THREE.CubicBezierCurve3;
   }
 
   /**
    * Get the class of this.cps[*].
    */
-  get cpClass(): Function {
+  get cpClass(): new () => ControlPoint3 {
     return ControlPoint3;
   }
 }

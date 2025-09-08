@@ -140,7 +140,7 @@ export class Tube {
    * @param source - The tube to copy.
    * @return  A reference to this tube.
    */
-  copy(source: Tube): Tube {
+  copy(source: Tube): this {
     this.parameters = Object.assign({}, source.parameters);
 
     Object.entries(source.parameters).forEach(([k, v]) => {
@@ -173,7 +173,7 @@ export class Tube {
    * @return  A reference to this tube.
    */
   // FIXME:
-  fromJSON(json: TubeJSON): Tube {
+  fromJSON(json: TubeJSON): this {
     const p = this.parameters;
 
     p.axis = (p.axis ?? new Curve3()).fromJSON(json.axis);

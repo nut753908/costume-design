@@ -77,7 +77,7 @@ export class Edge {
    * @param source - The edge to copy.
    * @return  A reference to this edge.
    */
-  copy(source: Edge): Edge {
+  copy(source: Edge): this {
     this.v1 = source.v1;
     this.v2 = source.v2;
     this.checked = source.checked;
@@ -104,7 +104,7 @@ export class Edge {
    * @param json - The JSON holding the serialized edge.
    * @return  A reference to this edge.
    */
-  fromJSON(json: EdgeJSON): Edge {
+  fromJSON(json: EdgeJSON): this {
     this.v1 = json.v1;
     this.v2 = json.v2;
     this.checked = json.checked;
