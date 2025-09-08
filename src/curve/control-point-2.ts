@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
+import { ControlPoint } from "./control-point";
 import { Circular, CircularJSON } from "../math/circular";
 import { Controller, GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { rotate180 } from "../math/utils";
 
-// FIXME: add an abstract class.
 /**
  * A class representing a 2D control point of curve.
  *
@@ -20,33 +20,8 @@ import { rotate180 } from "../math/utils";
  * );
  * ```
  */
-export class ControlPoint2 {
+export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
   type: string;
-
-  /**
-   * The position of middle control point.
-   */
-  middlePos: THREE.Vector2;
-
-  /**
-   * The position of leftside control point.
-   */
-  leftPos: THREE.Vector2;
-
-  /**
-   * The position of leftside control point.
-   */
-  rightPos: THREE.Vector2;
-
-  /**
-   * Whether to synchronize the "left" and "right" radius.
-   */
-  isSyncRadius: boolean;
-
-  /**
-   * Whether to synchronize the "left" and "right" angle.
-   */
-  isSyncAngle: boolean;
 
   /**
    * This is "leftPos - middlePos" and its type is THREE.'V'ector2.
@@ -69,20 +44,13 @@ export class ControlPoint2 {
   rightC: Circular;
 
   /**
-   * Secret field.
-   * This function is used by setGUI() in ./src/curve/control-point-2.js.
-   * Set it in advance using createGeometry() in ./src/curve/control-point-2.js.
-   */
-  _updateGeometry: () => void;
-
-  /**
    * Constructs a new ControlPoint2.
    *
-   * @param middlePos - {@link ControlPoint2#middlePos}
-   * @param leftPos - {@link ControlPoint2#leftPos}
-   * @param rightPos - {@link ControlPoint2#rightPos}
-   * @param isSyncRadius - {@link ControlPoint2#isSyncRadius}
-   * @param isSyncAngle - {@link ControlPoint2#isSyncAngle}
+   * @param middlePos - {@link ControlPoint#middlePos}
+   * @param leftPos - {@link ControlPoint#leftPos}
+   * @param rightPos - {@link ControlPoint#rightPos}
+   * @param isSyncRadius - {@link ControlPoint#isSyncRadius}
+   * @param isSyncAngle - {@link ControlPoint#isSyncAngle}
    */
   constructor(
     middlePos = new THREE.Vector2(0, 0),
@@ -91,37 +59,12 @@ export class ControlPoint2 {
     isSyncRadius = true,
     isSyncAngle = true
   ) {
+    super(middlePos, leftPos, rightPos, isSyncRadius, isSyncAngle);
     this.type = "ControlPoint2";
-    this.middlePos = middlePos;
-    this.leftPos = leftPos;
-    this.rightPos = rightPos;
-    this.isSyncRadius = isSyncRadius;
-    this.isSyncAngle = isSyncAngle;
-    this.leftV = leftPos.clone().sub(this.middlePos);
+    this.leftV = leftPos.clone().sub(middlePos);
     this.leftC = new Circular().setFromVector2(this.leftV);
-    this.rightV = rightPos.clone().sub(this.middlePos);
+    this.rightV = rightPos.clone().sub(middlePos);
     this.rightC = new Circular().setFromVector2(this.rightV);
-    this._updateGeometry = () => {};
-  }
-
-  /**
-   * Create geometry.
-   */
-  createGeometry(group: THREE.Group) {
-    const cp = this;
-
-    // This function is used by setGUI() in ./src/curve/control-point-2.js.
-    (cp._updateGeometry = () => {
-      const geometry = new THREE.BufferGeometry();
-      geometry.setFromPoints(cp.getPoints());
-
-      group.children.forEach((v) => {
-        if ("geometry" in v && v.geometry instanceof THREE.BufferGeometry) {
-          v.geometry.dispose();
-          v.geometry = geometry;
-        }
-      });
-    })();
   }
 
   /**
@@ -188,13 +131,6 @@ export class ControlPoint2 {
       leftRightControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
-  }
-
-  /**
-   * Get points.
-   */
-  getPoints(): [THREE.Vector2, THREE.Vector2, THREE.Vector2] {
-    return [this.leftPos, this.middlePos, this.rightPos];
   }
 
   updateFrom = {
@@ -304,12 +240,12 @@ export class ControlPoint2 {
    */
   toJSON(): ControlPoint2JSON {
     return {
-      type: this.type,
       middlePos: this.middlePos.toArray(),
       leftPos: this.leftPos.toArray(),
       rightPos: this.rightPos.toArray(),
       isSyncRadius: this.isSyncRadius,
       isSyncAngle: this.isSyncAngle,
+      type: this.type,
       leftV: this.leftV.toArray(),
       leftC: this.leftC.toJSON(),
       rightV: this.rightV.toArray(),
@@ -342,18 +278,18 @@ export class ControlPoint2 {
  * The {@link ControlPoint2} JSON interface.
  */
 export interface ControlPoint2JSON {
+  /** {@link ControlPoint#middlePos} */
+  middlePos: THREE.Vector2Tuple;
+  /** {@link ControlPoint#leftPos} */
+  leftPos: THREE.Vector2Tuple;
+  /** {@link ControlPoint#rightPos} */
+  rightPos: THREE.Vector2Tuple;
+  /** {@link ControlPoint#isSyncRadius} */
+  isSyncRadius: boolean;
+  /** {@link ControlPoint#isSyncAngle} */
+  isSyncAngle: boolean;
   /** {@link ControlPoint2#type} */
   type: string;
-  /** {@link ControlPoint2#middlePos} */
-  middlePos: THREE.Vector2Tuple;
-  /** {@link ControlPoint2#leftPos} */
-  leftPos: THREE.Vector2Tuple;
-  /** {@link ControlPoint2#rightPos} */
-  rightPos: THREE.Vector2Tuple;
-  /** {@link ControlPoint2#isSyncRadius} */
-  isSyncRadius: boolean;
-  /** {@link ControlPoint2#isSyncAngle} */
-  isSyncAngle: boolean;
   /** {@link ControlPoint2#leftV} */
   leftV: THREE.Vector2Tuple;
   /** {@link ControlPoint2#leftC} */
