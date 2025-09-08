@@ -10,7 +10,7 @@ import { createCurveGroup } from "./curve";
  */
 export function createTubeGroup(
   t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
 ): THREE.Group {
   const group = new THREE.Group();
 
@@ -34,7 +34,7 @@ export function createTubeGroup(
  */
 function createTubeGroupWithNoCurves(
   t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: { [k1: string]: { [k2: string]: THREE.Material } }
 ): THREE.Group {
   const group = new THREE.Group();
 

@@ -73,7 +73,7 @@ async function init() {
       .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = geometry.nPolygonIndices;
     const positions = geometry.getAttribute(
-      "position",
+      "position"
     ) as THREE.Float32BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
@@ -87,7 +87,7 @@ async function init() {
       gui,
       planes,
       planeHelper,
-      arrowHelper,
+      arrowHelper
     );
     scene.add(planesGroup);
   });

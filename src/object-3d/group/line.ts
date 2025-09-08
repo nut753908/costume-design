@@ -18,7 +18,7 @@ export function createLineGroup(
     | THREE.CatmullRomCurve3,
   positions: THREE.BufferAttribute,
   ms: { [k1: string]: { [k2: string]: THREE.Material } },
-  name: string,
+  name: string
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = name;

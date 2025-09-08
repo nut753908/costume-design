@@ -24,7 +24,7 @@ export function disposeGroup(group: THREE.Group | THREE.Object3D) {
  */
 export function objectMap<V, NewV>(
   obj: { [k: string]: V },
-  func: (v: V) => NewV,
+  func: (v: V) => NewV
 ): { [k: string]: NewV } {
   return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, func(v)]));
 }

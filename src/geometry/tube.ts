@@ -86,7 +86,7 @@ export class TubeGeometry extends TubeBaseGeometry {
     xCurvatureC: Curve2 = constant0Curve2.clone(),
     yCurvatureC: Curve2 = constant0Curve2.clone(),
     tiltC: Curve2 = constant0Curve2.clone(),
-    curvatureOrder: "xy" | "yx" = "xy",
+    curvatureOrder: "xy" | "yx" = "xy"
   ) {
     super(
       axis,
@@ -105,7 +105,7 @@ export class TubeGeometry extends TubeBaseGeometry {
       xCurvatureC,
       yCurvatureC,
       tiltC,
-      curvatureOrder,
+      curvatureOrder
     );
     this.type = "TubeGeometry";
   }
@@ -135,7 +135,7 @@ export class TubeGeometry extends TubeBaseGeometry {
       new Curve2().fromJSON(data.xCurvatureC),
       new Curve2().fromJSON(data.yCurvatureC),
       new Curve2().fromJSON(data.tiltC),
-      data.curvatureOrder,
+      data.curvatureOrder
     );
   }
 }

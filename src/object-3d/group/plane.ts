@@ -14,7 +14,7 @@ export function createPlaneGroup(
   plane: FreePlane | VerticalPlane,
   planeHelper: PlaneHelperWithCallbacks,
   arrowHelper: ArrowHelperWithCallbacks,
-  name = "PlaneGroup",
+  name = "PlaneGroup"
 ): THREE.Group {
   const obj = {
     plane: plane.getPlane(),

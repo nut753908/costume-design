@@ -68,7 +68,7 @@ export class Tube {
         p.xCurvatureC,
         p.yCurvatureC,
         p.tiltC,
-        p.curvatureOrder,
+        p.curvatureOrder
       );
 
       if ("parameters" in geometry) {

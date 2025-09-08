@@ -53,7 +53,7 @@ export abstract class ControlPoint<
     leftPos: TVector,
     rightPos: TVector,
     isSyncRadius = true,
-    isSyncAngle = true,
+    isSyncAngle = true
   ) {
     this.middlePos = middlePos;
     this.leftPos = leftPos;
@@ -71,7 +71,7 @@ export abstract class ControlPoint<
     (this._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        this.getPoints() as THREE.Vector3[] | THREE.Vector2[],
+        this.getPoints() as THREE.Vector3[] | THREE.Vector2[]
       );
 
       group.children.forEach((v) => {

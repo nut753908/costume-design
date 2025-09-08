@@ -37,7 +37,7 @@ export class VerticalPlane extends Plane {
     curve:
       | THREE.CurvePath<THREE.Vector3>
       | THREE.CatmullRomCurve3 = new THREE.CurvePath(),
-    u = 0,
+    u = 0
   ) {
     super();
     this.type = "VerticalPlane";
@@ -103,11 +103,11 @@ export class VerticalPlane extends Plane {
   fromJSON(json: VerticalPlaneJSON): this {
     if (json.curve.type === "CurvePath") {
       this.curve = new THREE.CurvePath<THREE.Vector3>().fromJSON(
-        json.curve as THREE.CurvePathJSON,
+        json.curve as THREE.CurvePathJSON
       );
     } else if (json.curve.type === "CatmullRomCurve3") {
       this.curve = new THREE.CatmullRomCurve3().fromJSON(
-        json.curve as THREE.CurveJSON,
+        json.curve as THREE.CurveJSON
       );
     } else {
       console.error(`\

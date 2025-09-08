@@ -41,7 +41,7 @@ export class PlaneManager {
         | THREE.CurvePath<THREE.Vector3>
         | THREE.CatmullRomCurve3;
     } = {},
-    planes: (FreePlane | VerticalPlane)[] = [],
+    planes: (FreePlane | VerticalPlane)[] = []
   ) {
     this.curves = curves;
     this.planes = planes;
@@ -91,7 +91,7 @@ export class PlaneManager {
     this.curves = objectMap(json.curves, (v) => {
       if (v.type === "CurvePath") {
         return new THREE.CurvePath<THREE.Vector3>().fromJSON(
-          v as THREE.CurvePathJSON,
+          v as THREE.CurvePathJSON
         );
       } else if (v.type === "CatmullRomCurve3") {
         return new THREE.CatmullRomCurve3().fromJSON(v as THREE.CurveJSON);
