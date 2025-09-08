@@ -12,10 +12,16 @@ import { createRenderer, updateRenderer } from "./main/renderer";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
 import { GUI, FunctionController } from "lil-gui";
-import { createPlaneHelper, PlaneHelper } from "./object-3d/plane-helper";
+import {
+  createPlaneHelper,
+  PlaneHelperWithCallbacks,
+} from "./object-3d/plane-helper";
+import {
+  ArrowHelperWithCallbacks,
+  createArrowHelper,
+} from "./object-3d/arrow-helper";
 import { createScene } from "./object-3d/scene";
 import { createAxesHelper } from "./object-3d/axes-helper";
-import { createArrowHelper } from "./object-3d/arrow-helper";
 import { createMaterials } from "./material/materials";
 import { createBaseGroup } from "./object-3d/group/base";
 import { BufferGeometryWithNPolygonIndices } from "./geometry/base";
@@ -46,8 +52,8 @@ async function init() {
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
   gui = new GUI();
-  let planeHelper: PlaneHelper;
-  let arrowHelper: THREE.ArrowHelper;
+  let planeHelper: PlaneHelperWithCallbacks;
+  let arrowHelper: ArrowHelperWithCallbacks;
   {
     const folder = gui.addFolder("(fixed)");
     scene = createScene(folder);

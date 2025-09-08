@@ -3,14 +3,16 @@ import * as THREE from "three";
 import { GUI } from "lil-gui";
 import { FreePlane } from "../../cross-section/free-plane";
 import { VerticalPlane } from "../../cross-section/vertical-plane";
+import { PlaneHelperWithCallbacks } from "../plane-helper";
+import { ArrowHelperWithCallbacks } from "../arrow-helper";
 import { deleteFolder } from "../../main/gui";
 import { createPlaneGroup } from "./plane";
 
 export function createPlanesGroup(
   gui: GUI,
   planes: { [k: number | string]: FreePlane | VerticalPlane },
-  planeHelper: THREE.PlaneHelper, // TODO: later, change the type from THREE.PlaneHelper to PlaneHelper.
-  arrowHelper: THREE.ArrowHelper
+  planeHelper: PlaneHelperWithCallbacks,
+  arrowHelper: ArrowHelperWithCallbacks
 ): THREE.Group {
   deleteFolder(gui, "PlanesGroup");
   const folder = gui.addFolder("PlanesGroup");

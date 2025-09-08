@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { GUI } from "lil-gui";
 import { FreePlane } from "../../cross-section/free-plane";
 import { VerticalPlane } from "../../cross-section/vertical-plane";
+import { PlaneHelper, PlaneHelperWithCallbacks } from "../plane-helper";
+import { ArrowHelperWithCallbacks } from "../arrow-helper";
 import { deleteFolder } from "../../main/gui";
 
 /**
@@ -11,8 +13,8 @@ import { deleteFolder } from "../../main/gui";
 export function createPlaneGroup(
   gui: GUI,
   plane: FreePlane | VerticalPlane,
-  planeHelper: THREE.PlaneHelper, // TODO: later, change the type from THREE.PlaneHelper to PlaneHelper.
-  arrowHelper: THREE.ArrowHelper,
+  planeHelper: PlaneHelperWithCallbacks,
+  arrowHelper: ArrowHelperWithCallbacks,
   name = "PlaneGroup"
 ): THREE.Group {
   const obj = {
@@ -24,7 +26,6 @@ export function createPlaneGroup(
   const group = new THREE.Group();
   group.visible = false;
 
-  // FIXME:
   const _planeHelper = planeHelper.clone();
   _planeHelper.visible = true;
   _planeHelper.normal = obj.normal;
@@ -34,7 +35,6 @@ export function createPlaneGroup(
   planeHelper._updateSizeCallbacks.push((v) => (_planeHelper.size = v));
   group.add(_planeHelper);
 
-  // FIXME:
   const _arrowHelper = arrowHelper.clone();
   _arrowHelper.visible = true;
   _arrowHelper.setDirection(obj.normal);
@@ -65,31 +65,43 @@ export function createPlaneGroup(
       folder.add(plane, "u", 0, 1, 0.01).onChange(uU);
     }
 
-    // FIXME:
     function uN() /* updateNormal */ {
+      if (!(plane instanceof FreePlane)) return;
       plane.normal.normalize();
       obj.plane.copy(plane.getPlane());
       obj.normal.copy(plane.getNormal());
-      group.children[0].normal.copy(obj.normal);
-      group.children[1].setDirection(obj.normal);
+      if (group.children[0] instanceof PlaneHelper) {
+        group.children[0].normal.copy(obj.normal);
+      }
+      if (group.children[1] instanceof THREE.ArrowHelper) {
+        group.children[1].setDirection(obj.normal);
+      }
       nFolder.controllers.forEach((c) => c.updateDisplay());
     }
-    // FIXME:
     function uP() /* updatePoint */ {
+      if (!(plane instanceof FreePlane)) return;
       obj.plane.copy(plane.getPlane());
       obj.point.copy(plane.getPoint());
-      group.children[0].point.copy(obj.point);
-      group.children[1].position.copy(obj.point);
+      if (group.children[0] instanceof PlaneHelper) {
+        group.children[0].point.copy(obj.point);
+      }
+      if (group.children[1] instanceof THREE.ArrowHelper) {
+        group.children[1].position.copy(obj.point);
+      }
     }
-    // FIXME:
     function uU() /* updateU */ {
+      if (!(plane instanceof VerticalPlane)) return;
       obj.plane.copy(plane.getPlane());
       obj.normal.copy(plane.getNormal());
       obj.point.copy(plane.getPoint());
-      group.children[0].normal.copy(obj.normal);
-      group.children[0].point.copy(obj.point);
-      group.children[1].setDirection(obj.normal);
-      group.children[1].position.copy(obj.point);
+      if (group.children[0] instanceof PlaneHelper) {
+        group.children[0].normal.copy(obj.normal);
+        group.children[0].point.copy(obj.point);
+      }
+      if (group.children[1] instanceof THREE.ArrowHelper) {
+        group.children[1].setDirection(obj.normal);
+        group.children[1].position.copy(obj.point);
+      }
     }
   }
 

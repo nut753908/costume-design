@@ -4,21 +4,20 @@ import { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 
-export function createArrowHelper(gui: GUI): THREE.ArrowHelper {
+export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
   const obj = {
     dir: new THREE.Vector3(0, 0, 1),
     origin: new THREE.Vector3(0, 0, 0),
     length: 0.15,
-    hex: createColor(0xffff00),
+    color: createColor(0xffff00),
   };
   const helper = new THREE.ArrowHelper(
     obj.dir,
     obj.origin,
     obj.length,
-    obj.hex
-  );
+    obj.color
+  ) as ArrowHelperWithCallbacks;
   helper.visible = false;
-  // FIXME:
   // These function are set in createPlaneGroup() in ./src/object-3d/group/plane.js.
   helper._updateLengthCallbacks = [];
   {
@@ -26,14 +25,17 @@ export function createArrowHelper(gui: GUI): THREE.ArrowHelper {
     const folder = gui.addFolder("THREE.ArrowHelper");
     closeFolder(folder);
     folder.add(obj, "length").step(0.01).onChange(uL);
-    folder.addColor(obj, "hex").onChange(uH);
+    folder.addColor(obj, "color").onChange(uC);
 
     function uL() /* updateLength */ {
       helper._updateLengthCallbacks.forEach((c) => c(obj.length));
     }
-    function uH() /* updateHex */ {
-      helper.setColor(obj.hex);
+    function uC() /* updateColor */ {
+      helper.setColor(obj.color);
     }
   }
   return helper;
 }
+
+export type ArrowHelperWithCallbacks = THREE.ArrowHelper &
+  Record<"_updateLengthCallbacks", ((length: number) => void)[]>;
