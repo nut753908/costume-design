@@ -7,7 +7,6 @@ import {
   constant0Curve2,
 } from "../curve/samples/curve-2";
 
-// FIXME: after fixing the control points and curves, fix this
 /**
  * A geometry class for representing a tube.
  *
@@ -33,30 +32,33 @@ import {
  * @augments THREE.BufferGeometry
  */
 export class TubeBaseGeometry extends THREE.BufferGeometry {
+  type: string;
+  parameters: TubeBaseGeometryParameters;
+
   /**
    * Constructs a new tube geometry.
    *
-   * @param {THREE.Curve<THREE.Vector3>} [axis] - A 3D axial curve that passes through the center of the tube.
-   * @param {THREE.Curve<THREE.Vector2>} [cross] - A 2D cross-sectional curve perpendicular to the axis.
-   * @param {number} [axisSegments=4] - The number of faces along the axis.
-   * @param {number} [crossSegments=8] - The number of faces on the cross section.
-   * @param {number} [scaleN=1] - The cross section scale ratio.
-   * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
-   * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
-   * @param {number} [xCurvatureN=0] - The curvature of the cross section in the x direction.
-   * @param {number} [yCurvatureN=0] - The curvature of the cross section in the y direction.
-   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
-   * @param {THREE.Curve<THREE.Vector2>} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
-   * @param {THREE.Curve<THREE.Vector2>} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
-   * @param {THREE.Curve<THREE.Vector2>} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
-   * @param {THREE.Curve<THREE.Vector2>} [xCurvatureC] - The curvature of the cross section in the x direction. Only the y component is used for the curvature.
-   * @param {THREE.Curve<THREE.Vector2>} [yCurvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
-   * @param {THREE.Curve<THREE.Vector2>} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
-   * @param {"xy"|"yx"} [curvatureOrder="xy"] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
+   * @param axis - {@link TubeBaseGeometryParameters#axis}
+   * @param cross - {@link TubeBaseGeometryParameters#cross}
+   * @param axisSegments - {@link TubeBaseGeometryParameters#axisSegments}
+   * @param crossSegments - {@link TubeBaseGeometryParameters#crossSegments}
+   * @param scaleN - {@link TubeBaseGeometryParameters#scaleN}
+   * @param xScaleN - {@link TubeBaseGeometryParameters#xScaleN}
+   * @param yScaleN - {@link TubeBaseGeometryParameters#yScaleN}
+   * @param xCurvatureN - {@link TubeBaseGeometryParameters#xCurvatureN}
+   * @param yCurvatureN - {@link TubeBaseGeometryParameters#yCurvatureN}
+   * @param tiltN - {@link TubeBaseGeometryParameters#tiltN}
+   * @param scaleC - {@link TubeBaseGeometryParameters#scaleC}
+   * @param xScaleC - {@link TubeBaseGeometryParameters#xScaleC}
+   * @param yScaleC - {@link TubeBaseGeometryParameters#yScaleC}
+   * @param xCurvatureC - {@link TubeBaseGeometryParameters#xCurvatureC}
+   * @param yCurvatureC - {@link TubeBaseGeometryParameters#yCurvatureC}
+   * @param tiltC - {@link TubeBaseGeometryParameters#tiltC}
+   * @param curvatureOrder - {@link TubeBaseGeometryParameters#curvatureOrder}
    */
   constructor(
-    axis = constant0Curve3.clone(),
-    cross = smallCircleCurve2.clone(),
+    axis: THREE.Curve<THREE.Vector3> = constant0Curve3.clone(),
+    cross: THREE.Curve<THREE.Vector2> = smallCircleCurve2.clone(),
     axisSegments = 4,
     crossSegments = 8,
     scaleN = 1,
@@ -65,24 +67,21 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     xCurvatureN = 0,
     yCurvatureN = 0,
     tiltN = 0,
-    scaleC = constant1Curve2.clone(),
-    xScaleC = constant1Curve2.clone(),
-    yScaleC = constant1Curve2.clone(),
-    xCurvatureC = constant0Curve2.clone(),
-    yCurvatureC = constant0Curve2.clone(),
-    tiltC = constant0Curve2.clone(),
-    curvatureOrder = "xy"
+    scaleC: THREE.Curve<THREE.Vector2> = constant1Curve2.clone(),
+    xScaleC: THREE.Curve<THREE.Vector2> = constant1Curve2.clone(),
+    yScaleC: THREE.Curve<THREE.Vector2> = constant1Curve2.clone(),
+    xCurvatureC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
+    yCurvatureC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
+    tiltC: THREE.Curve<THREE.Vector2> = constant0Curve2.clone(),
+    curvatureOrder: "xy" | "yx" = "xy"
   ) {
     super();
-
     this.type = "TubeBaseGeometry";
 
     /**
      * Holds the constructor parameters that have been
      * used to generate the geometry. Any modification
      * after instantiation does not change the geometry.
-     *
-     * @type {Object}
      */
     this.parameters = {
       axis: axis,
@@ -104,8 +103,11 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       curvatureOrder: curvatureOrder,
     };
 
-    cross.getTangentAt = function (u, optionalTarget) {
-      const t = this.getUtoTmapping(u);
+    cross.getTangentAt = function (
+      u: number,
+      optionalTarget: THREE.Vector3
+    ): THREE.Vector3 {
+      const t = this.getUtoTmapping(u, 0);
       const p = this.getTangent(t, optionalTarget);
       return new THREE.Vector3(p.x, p.y, 0); // Change from Vector2 to Vector3 before computeFrenetFrames().
     };
@@ -118,7 +120,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     const center = new THREE.Vector2(0, 0);
 
-    const CPsA = []; // A: After
+    const CPsA: THREE.Vector2[] = []; // A: After
 
     // helper variable
 
@@ -137,10 +139,10 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     // buffer
 
-    const vertices = [];
-    const normals = [];
-    const uvs = [];
-    const indices = [];
+    const vertices: number[] = [];
+    const normals: number[] = [];
+    const uvs: number[] = [];
+    const indices: number[] = [];
 
     // create buffer data
 
@@ -238,11 +240,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
       /**
        * Apply the xCurvature to CP(Cross Point).
-       *
-       * @param {number} xCurvature
-       * @param {THREE.Vector2} CP
        */
-      function applyXCurvatureToCP(xCurvature, CP) {
+      function applyXCurvatureToCP(xCurvature: number, CP: THREE.Vector2) {
         if (xCurvature === 0) return;
         const r = 1 / xCurvature;
         const rMinuxX = r - CP.x;
@@ -253,11 +252,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
       /**
        * Apply the yCurvature to CP(Cross Point).
-       *
-       * @param {number} yCurvature
-       * @param {THREE.Vector2} CP
        */
-      function applyYCurvatureToCP(yCurvature, CP) {
+      function applyYCurvatureToCP(yCurvature: number, CP: THREE.Vector2) {
         if (yCurvature === 0) return;
         const r = 1 / yCurvature;
         const rMinuxY = r - CP.y;
@@ -269,11 +265,13 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       /**
        * Apply the xCurvature to CB(Cross Binormal).
        *
-       * @param {number} xCurvature
-       * @param {number} CPy - The y value of CP(Cross Point) before appling the tilt.
-       * @param {THREE.Vector2} CB
+       * @param CPy - The y value of CP(Cross Point) before appling the tilt.
        */
-      function applyXCurvatureToCB(xCurvature, CPy, CB) {
+      function applyXCurvatureToCB(
+        xCurvature: number,
+        CPy: number,
+        CB: THREE.Vector2
+      ) {
         if (xCurvature === 0) return;
         const theta = CPy * xCurvature;
         CB.rotateAround(center, -theta);
@@ -282,11 +280,13 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       /**
        * Apply the yCurvature to CB(Cross Binormal).
        *
-       * @param {number} yCurvature
-       * @param {number} CPx - The x value of CP(Cross Point) before appling the tilt.
-       * @param {THREE.Vector2} CB
+       * @param CPx - The x value of CP(Cross Point) before appling the tilt.
        */
-      function applyYCurvatureToCB(yCurvature, CPx, CB) {
+      function applyYCurvatureToCB(
+        yCurvature: number,
+        CPx: number,
+        CB: THREE.Vector2
+      ) {
         if (yCurvature === 0) return;
         const theta = CPx * yCurvature;
         CB.rotateAround(center, theta);
@@ -494,17 +494,30 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
   /**
    * Copies the values of the given tube geometry to this instance.
    *
-   * @param {TubeBaseGeometry} source - The tube geometry to copy.
-   * @return {TubeBaseGeometry} A reference to this tube geometry.
+   * @param source - The tube geometry to copy.
+   * @return  A reference to this tube geometry.
    */
-  copy(source) {
+  copy(source: TubeBaseGeometry): this {
     super.copy(source);
-
-    this.parameters = Object.assign({}, source.parameters);
-
-    Object.entries(source.parameters).forEach(([k, v]) => {
-      if (v instanceof THREE.Curve) this.parameters[k] = v.clone();
-    });
+    this.parameters = {
+      axis: source.parameters.axis.clone(),
+      cross: source.parameters.cross.clone(),
+      axisSegments: source.parameters.axisSegments,
+      crossSegments: source.parameters.crossSegments,
+      scaleN: source.parameters.scaleN,
+      xScaleN: source.parameters.xScaleN,
+      yScaleN: source.parameters.yScaleN,
+      xCurvatureN: source.parameters.xCurvatureN,
+      yCurvatureN: source.parameters.yCurvatureN,
+      tiltN: source.parameters.tiltN,
+      scaleC: source.parameters.scaleC.clone(),
+      xScaleC: source.parameters.xScaleC.clone(),
+      yScaleC: source.parameters.yScaleC.clone(),
+      xCurvatureC: source.parameters.xCurvatureC.clone(),
+      yCurvatureC: source.parameters.yCurvatureC.clone(),
+      tiltC: source.parameters.tiltC.clone(),
+      curvatureOrder: source.parameters.curvatureOrder,
+    };
 
     return this;
   }
@@ -512,15 +525,165 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
   /**
    * Serializes the tube geometry into JSON.
    *
-   * @return {Object} A JSON object representing the serialized tube geometry.
+   * @return  A JSON object representing the serialized tube geometry.
    */
-  toJSON() {
-    const data = super.toJSON();
-
-    Object.entries(this.parameters).forEach(([k, v]) => {
-      if (v instanceof THREE.Curve) data[k] = v.toJSON();
-    });
-
-    return data;
+  toJSON(): TubeBaseGeometryJSON {
+    return {
+      ...super.toJSON(),
+      axis: this.parameters.axis.toJSON(),
+      cross: this.parameters.cross.toJSON(),
+      axisSegments: this.parameters.axisSegments,
+      crossSegments: this.parameters.crossSegments,
+      scaleN: this.parameters.scaleN,
+      xScaleN: this.parameters.xScaleN,
+      yScaleN: this.parameters.yScaleN,
+      xCurvatureN: this.parameters.xCurvatureN,
+      yCurvatureN: this.parameters.yCurvatureN,
+      tiltN: this.parameters.tiltN,
+      scaleC: this.parameters.scaleC.toJSON(),
+      xScaleC: this.parameters.xScaleC.toJSON(),
+      yScaleC: this.parameters.yScaleC.toJSON(),
+      xCurvatureC: this.parameters.xCurvatureC.toJSON(),
+      yCurvatureC: this.parameters.yCurvatureC.toJSON(),
+      tiltC: this.parameters.tiltC.toJSON(),
+      curvatureOrder: this.parameters.curvatureOrder,
+    };
   }
+}
+
+/**
+ * The interface for {@link TubeBaseGeometry} parameters.
+ */
+export interface TubeBaseGeometryParameters {
+  /**
+   * A 3D axial curve that passes through the center of the tube.
+   */
+  axis: THREE.Curve<THREE.Vector3>;
+
+  /**
+   * A 2D cross-sectional curve perpendicular to the axis.
+   */
+  cross: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The number of faces along the axis.
+   */
+  axisSegments: number;
+
+  /**
+   * The number of faces on the cross section.
+   */
+  crossSegments: number;
+
+  /**
+   * The cross section scale ratio.
+   */
+  scaleN: number;
+
+  /**
+   * The cross section scale ratio in the x direction.
+   */
+  xScaleN: number;
+
+  /**
+   * The cross section scale ratio in the y direction.
+   */
+  yScaleN: number;
+
+  /**
+   * The curvature of the cross section in the x direction.
+   */
+  xCurvatureN: number;
+
+  /**
+   * The curvature of the cross section in the y direction.
+   */
+  yCurvatureN: number;
+
+  /**
+   * The circumferential inclination angle of the cross section (in degrees).
+   */
+  tiltN: number;
+
+  /**
+   * The cross section scale ratio.
+   * Only the y component is used for the scale.
+   */
+  scaleC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The cross section scale ratio in the x direction.
+   * Only the y component is used for the scale.
+   */
+  xScaleC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The cross section scale ratio in the y direction.
+   * Only the y component is used for the scale.
+   */
+  yScaleC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The curvature of the cross section in the x direction.
+   * Only the y component is used for the curvature.
+   */
+  xCurvatureC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The curvature of the cross section in the y direction.
+   * Only the y component is used for the curvature.
+   */
+  yCurvatureC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The circumferential inclination angle of the cross section (in degrees).
+   * Only the y component is used for the angle.
+   */
+  tiltC: THREE.Curve<THREE.Vector2>;
+
+  /**
+   * The order in which curvature is applied.
+   * "xy" is x to y. "yx" is y to x.
+   */
+  curvatureOrder: "xy" | "yx";
+}
+
+/**
+ * The {@link TubeBaseGeometry} JSON interface.
+ */
+export interface TubeBaseGeometryJSON extends THREE.BufferGeometryJSON {
+  /** {@link TubeBaseGeometryParameters#axis} */
+  axis: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#cross} */
+  cross: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#axisSegments} */
+  axisSegments: number;
+  /** {@link TubeBaseGeometryParameters#crossSegments} */
+  crossSegments: number;
+  /** {@link TubeBaseGeometryParameters#scaleN} */
+  scaleN: number;
+  /** {@link TubeBaseGeometryParameters#xScaleN} */
+  xScaleN: number;
+  /** {@link TubeBaseGeometryParameters#yScaleN} */
+  yScaleN: number;
+  /** {@link TubeBaseGeometryParameters#xCurvatureN} */
+  xCurvatureN: number;
+  /** {@link TubeBaseGeometryParameters#yCurvatureN} */
+  yCurvatureN: number;
+  /** {@link TubeBaseGeometryParameters#tiltN} */
+  tiltN: number;
+  /** {@link TubeBaseGeometryParameters#scaleC} */
+  scaleC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#xScaleC} */
+  xScaleC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#yScaleC} */
+  yScaleC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#xCurvatureC} */
+  xCurvatureC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#yCurvatureC} */
+  yCurvatureC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#tiltC} */
+  tiltC: THREE.CurveJSON;
+  /** {@link TubeBaseGeometryParameters#curvatureOrder} */
+  curvatureOrder: "xy" | "yx";
 }

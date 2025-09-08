@@ -1,9 +1,12 @@
 import * as THREE from "three";
 
-import { TubeGeometry } from "../geometry/tube";
+import {
+  TubeGeometry,
+  TubeGeometryParameters,
+  TubeGeometryParametersJSON,
+} from "../geometry/tube";
 import { GUI } from "lil-gui";
 import { deleteFolder } from "../main/gui";
-import { Curve } from "./curve";
 import { Curve3 } from "./curve-3";
 import { Curve2 } from "./curve-2";
 
@@ -19,7 +22,7 @@ export class Tube {
   /**
    * The Parameters for TubeGeometry.
    */
-  parameters: { [k: string]: any }; // FIXME:
+  parameters: TubeGeometryParameters | {};
 
   /**
    * Secret field.
@@ -33,7 +36,7 @@ export class Tube {
    *
    * @param parameters - The Parameters for TubeGeometry.
    */
-  constructor(parameters = {}) {
+  constructor(parameters: TubeGeometryParameters | {} = {}) {
     this.parameters = parameters;
     this._updateGeometry = () => {};
   }
@@ -141,11 +144,25 @@ export class Tube {
    * @return  A reference to this tube.
    */
   copy(source: Tube): this {
-    this.parameters = Object.assign({}, source.parameters);
-
-    Object.entries(source.parameters).forEach(([k, v]) => {
-      if (v instanceof Curve) this.parameters[k] = v.clone();
-    });
+    this.parameters = {
+      axis: source.parameters.axis.clone(),
+      cross: source.parameters.cross.clone(),
+      axisSegments: source.parameters.axisSegments,
+      crossSegments: source.parameters.crossSegments,
+      scaleN: source.parameters.scaleN,
+      xScaleN: source.parameters.xScaleN,
+      yScaleN: source.parameters.yScaleN,
+      xCurvatureN: source.parameters.xCurvatureN,
+      yCurvatureN: source.parameters.yCurvatureN,
+      tiltN: source.parameters.tiltN,
+      scaleC: source.parameters.scaleC.clone(),
+      xScaleC: source.parameters.xScaleC.clone(),
+      yScaleC: source.parameters.yScaleC.clone(),
+      xCurvatureC: source.parameters.xCurvatureC.clone(),
+      yCurvatureC: source.parameters.yCurvatureC.clone(),
+      tiltC: source.parameters.tiltC.clone(),
+      curvatureOrder: source.parameters.curvatureOrder,
+    };
 
     return this;
   }
@@ -155,15 +172,26 @@ export class Tube {
    *
    * @return  A JSON object representing the serialized tube.
    */
-  // FIXME:
-  toJSON(): TubeJSON {
-    const data = Object.assign({}, this.parameters);
-
-    Object.entries(this.parameters).forEach(([k, v]) => {
-      if (v instanceof Curve) data[k] = v.toJSON();
-    });
-
-    return data;
+  toJSON(): TubeGeometryParametersJSON {
+    return {
+      axis: this.parameters.axis.toJSON(),
+      cross: this.parameters.cross.toJSON(),
+      axisSegments: this.parameters.axisSegments,
+      crossSegments: this.parameters.crossSegments,
+      scaleN: this.parameters.scaleN,
+      xScaleN: this.parameters.xScaleN,
+      yScaleN: this.parameters.yScaleN,
+      xCurvatureN: this.parameters.xCurvatureN,
+      yCurvatureN: this.parameters.yCurvatureN,
+      tiltN: this.parameters.tiltN,
+      scaleC: this.parameters.scaleC.toJSON(),
+      xScaleC: this.parameters.xScaleC.toJSON(),
+      yScaleC: this.parameters.yScaleC.toJSON(),
+      xCurvatureC: this.parameters.xCurvatureC.toJSON(),
+      yCurvatureC: this.parameters.yCurvatureC.toJSON(),
+      tiltC: this.parameters.tiltC.toJSON(),
+      curvatureOrder: this.parameters.curvatureOrder,
+    };
   }
 
   /**
@@ -172,12 +200,11 @@ export class Tube {
    * @param json - The JSON holding the serialized tube.
    * @return  A reference to this tube.
    */
-  // FIXME:
-  fromJSON(json: TubeJSON): this {
+  fromJSON(json: TubeGeometryParametersJSON): this {
     const p = this.parameters;
 
-    p.axis = (p.axis ?? new Curve3()).fromJSON(json.axis);
-    p.cross = (p.cross ?? new Curve2()).fromJSON(json.cross);
+    p.axis = new Curve3().fromJSON(json.axis);
+    p.cross = new Curve2().fromJSON(json.cross);
     p.axisSegments = json.axisSegments;
     p.crossSegments = json.crossSegments;
     p.scaleN = json.scaleN;
@@ -186,22 +213,14 @@ export class Tube {
     p.xCurvatureN = json.xCurvatureN;
     p.yCurvatureN = json.yCurvatureN;
     p.tiltN = json.tiltN;
-    p.scaleC = (p.scaleC ?? new Curve2()).fromJSON(json.scaleC);
-    p.xScaleC = (p.xScaleC ?? new Curve2()).fromJSON(json.xScaleC);
-    p.yScaleC = (p.yScaleC ?? new Curve2()).fromJSON(json.yScaleC);
-    p.xCurvatureC = (p.xCurvatureC ?? new Curve2()).fromJSON(json.xCurvatureC);
-    p.yCurvatureC = (p.yCurvatureC ?? new Curve2()).fromJSON(json.yCurvatureC);
-    p.tiltC = (p.tiltC ?? new Curve2()).fromJSON(json.tiltC);
+    p.scaleC = new Curve2().fromJSON(json.scaleC);
+    p.xScaleC = new Curve2().fromJSON(json.xScaleC);
+    p.yScaleC = new Curve2().fromJSON(json.yScaleC);
+    p.xCurvatureC = new Curve2().fromJSON(json.xCurvatureC);
+    p.yCurvatureC = new Curve2().fromJSON(json.yCurvatureC);
+    p.tiltC = new Curve2().fromJSON(json.tiltC);
     p.curvatureOrder = json.curvatureOrder;
 
     return this;
   }
-}
-
-/**
- * The {@link Tube} JSON interface.
- */
-export interface TubeJSON {
-  /** {@link Tube#parameters} */
-  parameters: { [k: string]: any }; // FIXME:
 }
