@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 import { TubeBaseGeometry } from "./tube-base";
 import { Curve3 } from "../curve/curve-3";
 import { Curve2 } from "../curve/curve-2";
@@ -7,8 +9,8 @@ import {
   constant1Curve2,
   constant0Curve2,
 } from "../curve/samples/curve-2";
+import { CurveJSON } from "../curve/curve";
 
-// FIXME: after fixing the control points and curves, fix this
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.
  *
@@ -50,27 +52,27 @@ export class TubeGeometry extends TubeBaseGeometry {
    *     yCurvatureC: THREE.Curve<THREE.Vector2> -> Curve2
    *           tiltC: THREE.Curve<THREE.Vector2> -> Curve2
    *
-   * @param {Curve3} [axis] - A 3D axial curve that passes through the center of the tube.
-   * @param {Curve2} [cross] - A 2D cross-sectional curve perpendicular to the axis.
-   * @param {number} [axisSegments=4] - The number of faces along the axis.
-   * @param {number} [crossSegments=8] - The number of faces on the cross section.
-   * @param {number} [scaleN=1] - The cross section scale ratio.
-   * @param {number} [xScaleN=1] - The cross section scale ratio in the x direction.
-   * @param {number} [yScaleN=1] - The cross section scale ratio in the y direction.
-   * @param {number} [xCurvatureN=0] - The curvature of the cross section in the x direction.
-   * @param {number} [yCurvatureN=0] - The curvature of the cross section in the y direction.
-   * @param {number} [tiltN=0] - The circumferential inclination angle of the cross section (in degrees).
-   * @param {Curve2} [scaleC] - The cross section scale ratio. Only the y component is used for the scale.
-   * @param {Curve2} [xScaleC] - The cross section scale ratio in the x direction. Only the y component is used for the scale.
-   * @param {Curve2} [yScaleC] - The cross section scale ratio in the y direction. Only the y component is used for the scale.
-   * @param {Curve2} [xCurvatureC] - The curvature of the cross section in the x direction. Only the y component is used for the curvature.
-   * @param {Curve2} [yCurvatureC] - The curvature of the cross section in the y direction. Only the y component is used for the curvature.
-   * @param {Curve2} [tiltC] - The circumferential inclination angle of the cross section (in degrees). Only the y component is used for the angle.
-   * @param {"xy"|"yx"} [curvatureOrder="xy"] - The order in which curvature is applied. "xy" is x to y. "yx" is y to x.
+   * @param axis - {@link TubeGeometryParameters#axis}
+   * @param cross - {@link TubeGeometryParameters#cross}
+   * @param axisSegments - {@link TubeGeometryParameters#axisSegments}
+   * @param crossSegments - {@link TubeGeometryParameters#axcrossSegmentsis}
+   * @param scaleN - {@link TubeGeometryParameters#scaleN}
+   * @param xScaleN - {@link TubeGeometryParameters#xScaleN}
+   * @param yScaleN - {@link TubeGeometryParameters#yScaleN}
+   * @param xCurvatureN - {@link TubeGeometryParameters#xCurvatureN}
+   * @param yCurvatureN - {@link TubeGeometryParameters#yCurvatureN}
+   * @param tiltN - {@link TubeGeometryParameters#tiltN}
+   * @param scaleC - {@link TubeGeometryParameters#scaleC}
+   * @param xScaleC - {@link TubeGeometryParameters#xScaleC}
+   * @param yScaleC - {@link TubeGeometryParameters#yScaleC}
+   * @param xCurvatureC - {@link TubeGeometryParameters#xCurvatureC}
+   * @param yCurvatureC - {@link TubeGeometryParameters#yCurvatureC}
+   * @param tiltC - {@link TubeGeometryParameters#tiltC}
+   * @param curvatureOrder - {@link TubeGeometryParameters#curvatureOrder}
    */
   constructor(
-    axis = constant0Curve3.clone(),
-    cross = smallCircleCurve2.clone(),
+    axis: Curve3 = constant0Curve3.clone(),
+    cross: Curve2 = smallCircleCurve2.clone(),
     axisSegments = 4,
     crossSegments = 8,
     scaleN = 1,
@@ -79,13 +81,13 @@ export class TubeGeometry extends TubeBaseGeometry {
     xCurvatureN = 0,
     yCurvatureN = 0,
     tiltN = 0,
-    scaleC = constant1Curve2.clone(),
-    xScaleC = constant1Curve2.clone(),
-    yScaleC = constant1Curve2.clone(),
-    xCurvatureC = constant0Curve2.clone(),
-    yCurvatureC = constant0Curve2.clone(),
-    tiltC = constant0Curve2.clone(),
-    curvatureOrder = "xy"
+    scaleC: Curve2 = constant1Curve2.clone(),
+    xScaleC: Curve2 = constant1Curve2.clone(),
+    yScaleC: Curve2 = constant1Curve2.clone(),
+    xCurvatureC: Curve2 = constant0Curve2.clone(),
+    yCurvatureC: Curve2 = constant0Curve2.clone(),
+    tiltC: Curve2 = constant0Curve2.clone(),
+    curvatureOrder: "xy" | "yx" = "xy"
   ) {
     super(
       axis,
@@ -106,7 +108,6 @@ export class TubeGeometry extends TubeBaseGeometry {
       tiltC,
       curvatureOrder
     );
-
     this.type = "TubeGeometry";
   }
 
@@ -114,10 +115,10 @@ export class TubeGeometry extends TubeBaseGeometry {
    * Factory method for creating an instance of this class from the given
    * JSON object.
    *
-   * @param {Object} data - A JSON object representing the serialized tube geometry.
-   * @return {TubeGeometry} A new instance.
+   * @param data - A JSON object representing the serialized tube geometry.
+   * @return  A new instance.
    */
-  static fromJSON(data) {
+  static fromJSON(data: TubeGeometryJSON): TubeGeometry {
     return new TubeGeometry(
       new Curve3().fromJSON(data.axis),
       new Curve2().fromJSON(data.cross),
@@ -139,3 +140,147 @@ export class TubeGeometry extends TubeBaseGeometry {
     );
   }
 }
+
+/**
+ * The interface for {@link TubeGeometry} parameters.
+ */
+export interface TubeGeometryParameters {
+  /**
+   * A 3D axial curve that passes through the center of the tube.
+   */
+  axis: Curve3;
+
+  /**
+   * A 2D cross-sectional curve perpendicular to the axis.
+   */
+  cross: Curve2;
+
+  /**
+   * The number of faces along the axis.
+   */
+  axisSegments: number;
+
+  /**
+   * The number of faces on the cross section.
+   */
+  crossSegments: number;
+
+  /**
+   * The cross section scale ratio.
+   */
+  scaleN: number;
+
+  /**
+   * The cross section scale ratio in the x direction.
+   */
+  xScaleN: number;
+
+  /**
+   * The cross section scale ratio in the y direction.
+   */
+  yScaleN: number;
+
+  /**
+   * The curvature of the cross section in the x direction.
+   */
+  xCurvatureN: number;
+
+  /**
+   * The curvature of the cross section in the y direction.
+   */
+  yCurvatureN: number;
+
+  /**
+   * The circumferential inclination angle of the cross section (in degrees).
+   */
+  tiltN: number;
+
+  /**
+   * The cross section scale ratio.
+   * Only the y component is used for the scale.
+   */
+  scaleC: Curve2;
+
+  /**
+   * The cross section scale ratio in the x direction.
+   * Only the y component is used for the scale.
+   */
+  xScaleC: Curve2;
+
+  /**
+   * The cross section scale ratio in the y direction.
+   * Only the y component is used for the scale.
+   */
+  yScaleC: Curve2;
+
+  /**
+   * The curvature of the cross section in the x direction.
+   * Only the y component is used for the curvature.
+   */
+  xCurvatureC: Curve2;
+
+  /**
+   * The curvature of the cross section in the y direction.
+   * Only the y component is used for the curvature.
+   */
+  yCurvatureC: Curve2;
+
+  /**
+   * The circumferential inclination angle of the cross section (in degrees).
+   * Only the y component is used for the angle.
+   */
+  tiltC: Curve2;
+
+  /**
+   * The order in which curvature is applied.
+   * "xy" is x to y. "yx" is y to x.
+   */
+  curvatureOrder: "xy" | "yx";
+}
+
+/**
+ * The {@link TubeGeometryParameters} JSON interface.
+ */
+export interface TubeGeometryParametersJSON {
+  /** {@link TubeGeometryParameters#axis} */
+  axis: CurveJSON<3>;
+  /** {@link TubeGeometryParameters#cross} */
+  cross: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#axisSegments} */
+  axisSegments: number;
+  /** {@link TubeGeometryParameters#crossSegments} */
+  crossSegments: number;
+  /** {@link TubeGeometryParameters#scaleN} */
+  scaleN: number;
+  /** {@link TubeGeometryParameters#xScaleN} */
+  xScaleN: number;
+  /** {@link TubeGeometryParameters#yScaleN} */
+  yScaleN: number;
+  /** {@link TubeGeometryParameters#xCurvatureN} */
+  xCurvatureN: number;
+  /** {@link TubeGeometryParameters#yCurvatureN} */
+  yCurvatureN: number;
+  /** {@link TubeGeometryParameters#tiltN} */
+  tiltN: number;
+  /** {@link TubeGeometryParameters#scaleC} */
+  scaleC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#xScaleC} */
+  xScaleC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#yScaleC} */
+  yScaleC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#xCurvatureC} */
+  xCurvatureC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#yCurvatureC} */
+  yCurvatureC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#tiltC} */
+  tiltC: CurveJSON<2>;
+  /** {@link TubeGeometryParameters#curvatureOrder} */
+  curvatureOrder: "xy" | "yx";
+}
+
+/**
+ * The {@link TubeGeometry} JSON interface.
+ */
+export interface TubeGeometryJSON
+  extends THREE.BufferGeometryJSON,
+    TubeGeometryParametersJSON {}
