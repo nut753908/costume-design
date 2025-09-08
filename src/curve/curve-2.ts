@@ -11,9 +11,9 @@ import { ControlPoint2 } from "./control-point-2";
  * const curve2 = new Curve2();
  * ```
  *
- * @augments Curve<THREE.Vector2>
+ * @augments Curve<2>
  */
-export class Curve2 extends Curve<THREE.Vector2> {
+export class Curve2 extends Curve<2> {
   type: string;
 
   /**

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import { ControlPoint3 } from "./control-point-3";
-import { ControlPoint2 } from "./control-point-2";
+import { ControlPoint3, ControlPoint3JSON } from "./control-point-3";
+import { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
 import { GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { isInvalidIndex } from "../math/utils";
@@ -12,16 +12,13 @@ import { isInvalidIndex } from "../math/utils";
  *
  * @augments THREE.CurvePath<TVector>
  */
-// FIXME:
-export class Curve<
-  TVector extends THREE.Vector3 | THREE.Vector2
-> extends THREE.CurvePath<TVector> {
-  type: string;
-
+export abstract class Curve<T extends Types> extends THREE.CurvePath<
+  TypeMap[T]["vector"]
+> {
   /**
    * The 3D/2D control points.
    */
-  cps: ControlPoint3[] | ControlPoint2[];
+  cps: TypeMap[T]["cp"][];
 
   /**
    * Secret field.
@@ -42,9 +39,8 @@ export class Curve<
    *
    * @param cps - The 3D/2D control points.
    */
-  constructor(cps: ControlPoint3[] | ControlPoint2[] = []) {
+  constructor(cps: TypeMap[T]["cp"][] = []) {
     super();
-    this.type = "Curve";
     this.cps = cps;
     this._updateGeometry = () => {};
     this._updateCpsGroup = () => {};
@@ -53,25 +49,13 @@ export class Curve<
 
   /**
    * Get the class of this.curves[*].
-   *
-   * @return  Either CubicBezierCurve3 or CubicBezierCurve.
    */
-  // FIXME:
-  get curveClass(): Function {
-    console.warn("Curve: .curveClass not implemented.");
-    return () => {}; // FIXME:
-  }
+  abstract get curveClass(): Function;
 
   /**
    * Get the class of this.cps[*].
-   *
-   * @return  Either ControlPoint3 or ControlPoint2.
    */
-  // FIXME:
-  get cpClass(): Function {
-    console.warn("Curve: .cpClass not implemented.");
-    return () => {}; // FIXME:
-  }
+  abstract get cpClass(): Function;
 
   /**
    * Update curves using this.cps.
@@ -100,8 +84,9 @@ export class Curve<
     // This function is used by setGUI() in ./src/curve/curve.js.
     (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
-      // FIXME:
-      geometry.setFromPoints(c.getPoints());
+      geometry.setFromPoints(
+        c.getPoints() as THREE.Vector3[] | THREE.Vector2[]
+      );
 
       line.geometry.dispose();
       line.geometry = geometry;
@@ -190,11 +175,11 @@ export class Curve<
   /**
    * Add cp to the beginning of this.cps.
    */
-  // FIXME:
   addCpToFirst() {
     if (this.cps.length !== 0) {
       this.cps.unshift(this.cps[0].clone()); // Copy first cp.
     } else {
+      // FIXME:
       this.cps.unshift(new this.cpClass());
     }
   }
@@ -202,11 +187,11 @@ export class Curve<
   /**
    * Add cp to the end of this.cps.
    */
-  // FIXME:
   addCpToLast() {
     if (this.cps.length !== 0) {
       this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
     } else {
+      // FIXME:
       this.cps.push(new this.cpClass());
     }
   }
@@ -216,7 +201,6 @@ export class Curve<
    *
    * @param index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
    */
-  // FIXME:
   interpolateCp(index: number) {
     if (isInvalidIndex(index, 1, this.cps.length - 1)) return;
     this.cps.splice(index, 0, this.cps[index].clone());
@@ -224,6 +208,7 @@ export class Curve<
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
 
+    // FIXME:
     const centerPos = cp1.rightPos.clone().add(cp3.leftPos).divideScalar(2);
     cp1.rightPos = cp1.middlePos.clone().add(cp1.rightPos).divideScalar(2);
     cp3.leftPos = cp3.leftPos.clone().add(cp3.middlePos).divideScalar(2);
@@ -283,16 +268,9 @@ export class Curve<
    * @return  A reference to this Curve.
    */
   // FIXME:
-  copy(source: Curve<TVector>): Curve<TVector> {
+  copy(source: Curve<T>): Curve<T> {
     super.copy(source);
-
-    this.cps = [];
-
-    for (let i = 0, l = source.cps.length; i < l; i++) {
-      const cp = source.cps[i];
-      this.cps.push(cp.clone());
-    }
-
+    this.cps = source.cps.map((cp) => cp.clone());
     this.updateCurves();
 
     return this;
@@ -303,18 +281,11 @@ export class Curve<
    *
    * @return  A JSON object representing the serialized Curve.
    */
-  // FIXME:
-  toJSON(): CurveJSON {
-    const data = super.toJSON();
-
-    data.cps = [];
-
-    for (let i = 0, l = this.cps.length; i < l; i++) {
-      const cp = this.cps[i];
-      data.cps.push(cp.toJSON());
-    }
-
-    return data;
+  toJSON(): CurveJSON<T> {
+    return {
+      ...super.toJSON(),
+      cps: this.cps.map((cp) => cp.toJSON()),
+    };
   }
 
   /**
@@ -324,16 +295,9 @@ export class Curve<
    * @return  A reference to this Curve.
    */
   // FIXME:
-  fromJSON(json: CurveJSON): Curve<TVector> {
+  fromJSON(json: CurveJSON<T>): Curve<T> {
     super.fromJSON(json);
-
-    this.cps = [];
-
-    for (let i = 0, l = json.cps.length; i < l; i++) {
-      const cp = json.cps[i];
-      this.cps.push(new this.cpClass().fromJSON(cp));
-    }
-
+    this.cps = json.cps.map((cp) => new this.cpClass().fromJSON(cp));
     this.updateCurves();
 
     return this;
@@ -343,9 +307,21 @@ export class Curve<
 /**
  * The {@link Curve} JSON interface.
  */
-export interface CurveJSON {
-  /** {@link Curve#curves} */
-  curves: THREE.CurvePath<THREE.Vector3 | THREE.Vector2>; // FIXME:
+export interface CurveJSON<T extends Types> extends THREE.CurvePathJSON {
   /** {@link Curve#cps} */
-  cps: number;
+  cps: TypeMap[T]["cpJSON"][];
 }
+
+type TypeMap = {
+  3: {
+    vector: THREE.Vector3;
+    cp: ControlPoint3;
+    cpJSON: ControlPoint3JSON;
+  };
+  2: {
+    vector: THREE.Vector2;
+    cp: ControlPoint2;
+    cpJSON: ControlPoint2JSON;
+  };
+};
+type Types = keyof TypeMap;
