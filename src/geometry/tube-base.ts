@@ -108,8 +108,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       u: number,
       optionalTarget: THREE.Vector3
     ): THREE.Vector3 {
-      const t = this.getUtoTmapping(u, 0);
-      const p = this.getTangent(t, optionalTarget);
+      const t = cross.getUtoTmapping(u, 0);
+      const p = cross.getTangent(t, optionalTarget);
       return new THREE.Vector3(p.x, p.y, 0); // Change from Vector2 to Vector3 before computeFrenetFrames().
     };
 
