@@ -3,10 +3,10 @@ import * as THREE from "three";
 import {
   defaultTubeGeometryParameters,
   TubeGeometry,
-  TubeGeometryParameters,
-  TubeGeometryParametersJSON,
+  type TubeGeometryParameters,
+  type TubeGeometryParametersJSON,
 } from "../geometry/tube";
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { deleteFolder } from "../main/gui";
 import { Curve3 } from "./curve-3";
 import { Curve2 } from "./curve-2";
@@ -48,11 +48,10 @@ export class Tube {
    * @param group
    */
   createGeometry(group: THREE.Group) {
-    const t = this;
-    const p = t.parameters;
+    const p = this.parameters;
 
     // This function is used by setGUI() in ./src/curve/tube.ts.
-    (t._updateGeometry = () => {
+    (this._updateGeometry = () => {
       const geometry = new TubeGeometry(
         p.axis,
         p.cross,

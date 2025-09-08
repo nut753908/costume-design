@@ -1,12 +1,12 @@
-import * as THREE from "three";
+import type * as THREE from "three";
 
-import { ViewportGizmo } from "three-viewport-gizmo";
+import type { ViewportGizmo } from "three-viewport-gizmo";
 import {
   saveGui,
   saveClosed,
   loadClosed,
-  guiJSON,
-  closedJSON,
+  type guiJSON,
+  type closedJSON,
 } from "./main/gui";
 import { createRenderer, updateRenderer } from "./main/renderer";
 import { createCamera, updateCamera } from "./main/camera";
@@ -14,17 +14,17 @@ import { createControlsAndGizmo } from "./main/controls";
 import { GUI, FunctionController } from "lil-gui";
 import {
   createPlaneHelper,
-  PlaneHelperWithCallbacks,
+  type PlaneHelperWithCallbacks,
 } from "./object-3d/plane-helper";
 import {
-  ArrowHelperWithCallbacks,
+  type ArrowHelperWithCallbacks,
   createArrowHelper,
 } from "./object-3d/arrow-helper";
 import { createScene } from "./object-3d/scene";
 import { createAxesHelper } from "./object-3d/axes-helper";
 import { createMaterials } from "./material/materials";
 import { createBaseGroup } from "./object-3d/group/base";
-import { BufferGeometryWithNPolygonIndices } from "./geometry/base";
+import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createBaseCenterlines } from "./cross-section/centerline";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import { objectMap } from "./main/utils";

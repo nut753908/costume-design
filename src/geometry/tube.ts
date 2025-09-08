@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import type * as THREE from "three";
 
 import { TubeBaseGeometry } from "./tube-base";
 import { Curve3 } from "../curve/curve-3";
@@ -9,7 +9,7 @@ import {
   constant1Curve2,
   constant0Curve2,
 } from "../curve/samples/curve-2";
-import { CurveJSON } from "../curve/curve";
+import type { CurveJSON } from "../curve/curve";
 
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.

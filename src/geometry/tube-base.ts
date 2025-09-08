@@ -121,7 +121,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     const normal = new THREE.Vector3();
     const uv = new THREE.Vector2();
     let AP = new THREE.Vector3();
-    let _P = new THREE.Vector2();
+    const _P = new THREE.Vector2();
 
     let scale;
     let xScale;

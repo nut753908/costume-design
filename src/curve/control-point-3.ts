@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
 import { ControlPoint } from "./control-point";
-import { Spherical, SphericalJSON } from "../math/spherical";
-import { Controller, GUI } from "lil-gui";
+import { Spherical, type SphericalJSON } from "../math/spherical";
+import type { Controller, GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { safeAcos, atan2In2PI, reverseInPI, rotatePI } from "../math/utils";
 

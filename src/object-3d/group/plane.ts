@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { FreePlane } from "../../cross-section/free-plane";
 import { VerticalPlane } from "../../cross-section/vertical-plane";
-import { PlaneHelper, PlaneHelperWithCallbacks } from "../plane-helper";
-import { ArrowHelperWithCallbacks } from "../arrow-helper";
+import { PlaneHelper, type PlaneHelperWithCallbacks } from "../plane-helper";
+import type { ArrowHelperWithCallbacks } from "../arrow-helper";
 import { deleteFolder } from "../../main/gui";
 
 /**

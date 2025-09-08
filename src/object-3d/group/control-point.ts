@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import { ControlPoint3 } from "../../curve/control-point-3";
-import { ControlPoint2 } from "../../curve/control-point-2";
+import type { ControlPoint3 } from "../../curve/control-point-3";
+import type { ControlPoint2 } from "../../curve/control-point-2";
 import { createEmptyGeometry } from "../../geometry/empty";
 
 /**

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { createColor } from "../math/color";
 import { closeFolder, deleteFolder } from "../main/gui";
 

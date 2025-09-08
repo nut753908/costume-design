@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-import { ControlPoint3, ControlPoint3JSON } from "./control-point-3";
-import { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
-import { GUI } from "lil-gui";
+import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
+import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
+import type { GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { isInvalidIndex } from "../math/utils";
 import { mean } from "../math/vector";
@@ -84,13 +84,12 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * Create geometry.
    */
   createGeometry(line: THREE.Line) {
-    const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.ts.
-    (c._updateGeometry = () => {
+    (this._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        c.getPoints() as THREE.Vector3[] | THREE.Vector2[],
+        this.getPoints() as THREE.Vector3[] | THREE.Vector2[],
       );
 
       line.geometry.dispose();

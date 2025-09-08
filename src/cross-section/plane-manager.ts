@@ -3,8 +3,8 @@
 
 import * as THREE from "three";
 
-import { FreePlane, FreePlaneJSON } from "./free-plane";
-import { VerticalPlane, VerticalPlaneJSON } from "./vertical-plane";
+import { FreePlane, type FreePlaneJSON } from "./free-plane";
+import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
 import { objectMap } from "../main/utils";
 
 /**

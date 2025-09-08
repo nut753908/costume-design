@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 
 /**
  * Abstract class for ControlPoint{3,2}.
@@ -68,13 +68,12 @@ export abstract class ControlPoint<
    * Create geometry.
    */
   createGeometry(group: THREE.Group) {
-    const cp = this;
 
     // This function is used by setGUI() in ./src/curve/control-point-{3,2}.ts.
-    (cp._updateGeometry = () => {
+    (this._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        cp.getPoints() as THREE.Vector3[] | THREE.Vector2[],
+        this.getPoints() as THREE.Vector3[] | THREE.Vector2[],
       );
 
       group.children.forEach((v) => {

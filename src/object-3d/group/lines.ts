@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { Edge } from "../../cross-section/edge";
-import { EdgeLoop } from "../../cross-section/edge-loop";
-import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
+import type { Edge } from "../../cross-section/edge";
+import type { EdgeLoop } from "../../cross-section/edge-loop";
+import type { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
 import { createLineGroup } from "./line";
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "../../main/gui";
 
 /**

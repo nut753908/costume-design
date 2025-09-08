@@ -1,4 +1,4 @@
-import { GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 
 export interface guiJSON {
   controllers: { [_name: string]: any };
