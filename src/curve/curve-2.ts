@@ -23,21 +23,25 @@ export class Curve2 extends Curve<2> {
    */
   constructor(cps: ControlPoint2[] = []) {
     super(cps);
-
     this.type = "Curve2";
   }
 
   /**
    * Get the class of this.curves[*].
    */
-  get curveClass(): Function {
+  get curveClass(): new (
+    v0: THREE.Vector2,
+    v1: THREE.Vector2,
+    v2: THREE.Vector2,
+    v3: THREE.Vector2
+  ) => THREE.CubicBezierCurve {
     return THREE.CubicBezierCurve;
   }
 
   /**
    * Get the class of this.cps[*].
    */
-  get cpClass(): Function {
+  get cpClass(): new () => ControlPoint2 {
     return ControlPoint2;
   }
 }

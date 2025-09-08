@@ -5,6 +5,7 @@ import { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
 import { GUI } from "lil-gui";
 import { deleteFolder, closeFolder } from "../main/gui";
 import { isInvalidIndex } from "../math/utils";
+import { mean } from "../math/vector";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
@@ -50,12 +51,17 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
   /**
    * Get the class of this.curves[*].
    */
-  abstract get curveClass(): Function;
+  abstract get curveClass(): new (
+    v0: TypeMap[T]["vector"],
+    v1: TypeMap[T]["vector"],
+    v2: TypeMap[T]["vector"],
+    v3: TypeMap[T]["vector"]
+  ) => TypeMap[T]["curve"];
 
   /**
    * Get the class of this.cps[*].
    */
-  abstract get cpClass(): Function;
+  abstract get cpClass(): new () => TypeMap[T]["cp"];
 
   /**
    * Update curves using this.cps.
@@ -63,7 +69,6 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
   updateCurves() {
     this.curves = [];
     for (let i = 0, l = this.cps.length - 1; i < l; i++) {
-      // FIXME:
       const curve = new this.curveClass(
         this.cps[i].middlePos.clone(),
         this.cps[i].rightPos.clone(),
@@ -179,7 +184,6 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     if (this.cps.length !== 0) {
       this.cps.unshift(this.cps[0].clone()); // Copy first cp.
     } else {
-      // FIXME:
       this.cps.unshift(new this.cpClass());
     }
   }
@@ -191,7 +195,6 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     if (this.cps.length !== 0) {
       this.cps.push(this.cps[this.cps.length - 1].clone()); // Copy last cp.
     } else {
-      // FIXME:
       this.cps.push(new this.cpClass());
     }
   }
@@ -208,13 +211,12 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
 
-    // FIXME:
-    const centerPos = cp1.rightPos.clone().add(cp3.leftPos).divideScalar(2);
-    cp1.rightPos = cp1.middlePos.clone().add(cp1.rightPos).divideScalar(2);
-    cp3.leftPos = cp3.leftPos.clone().add(cp3.middlePos).divideScalar(2);
-    cp2.leftPos = cp1.rightPos.clone().add(centerPos).divideScalar(2);
-    cp2.rightPos = centerPos.clone().add(cp3.leftPos).divideScalar(2);
-    cp2.middlePos = cp2.leftPos.clone().add(cp2.rightPos).divideScalar(2);
+    const centerPos = mean<TypeMap[T]["vector"]>(cp1.rightPos, cp3.leftPos);
+    cp1.rightPos = mean<TypeMap[T]["vector"]>(cp1.middlePos, cp1.rightPos);
+    cp3.leftPos = mean<TypeMap[T]["vector"]>(cp3.leftPos, cp3.middlePos);
+    cp2.leftPos = mean<TypeMap[T]["vector"]>(cp1.rightPos, centerPos);
+    cp2.rightPos = mean<TypeMap[T]["vector"]>(centerPos, cp3.leftPos);
+    cp2.middlePos = mean<TypeMap[T]["vector"]>(cp2.leftPos, cp2.rightPos);
 
     cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
@@ -295,7 +297,14 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    */
   fromJSON(json: CurveJSON<T>): this {
     super.fromJSON(json);
-    this.cps = json.cps.map((cp) => new this.cpClass().fromJSON(cp));
+    this.cps = json.cps.map((cp) => {
+      const cpClass = new this.cpClass();
+      if (cpClass instanceof ControlPoint3) {
+        return cpClass.fromJSON(cp as ControlPoint3JSON);
+      } else {
+        return cpClass.fromJSON(cp as ControlPoint2JSON);
+      }
+    });
     this.updateCurves();
 
     return this;
@@ -313,11 +322,13 @@ export interface CurveJSON<T extends Types> extends THREE.CurvePathJSON {
 type TypeMap = {
   3: {
     vector: THREE.Vector3;
+    curve: THREE.CubicBezierCurve3;
     cp: ControlPoint3;
     cpJSON: ControlPoint3JSON;
   };
   2: {
     vector: THREE.Vector2;
+    curve: THREE.CubicBezierCurve;
     cp: ControlPoint2;
     cpJSON: ControlPoint2JSON;
   };
