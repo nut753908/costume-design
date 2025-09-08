@@ -650,9 +650,9 @@ export interface TubeBaseGeometryParameters {
 }
 
 /**
- * The {@link TubeBaseGeometry} JSON interface.
+ * The {@link TubeBaseGeometryParameters} JSON interface.
  */
-export interface TubeBaseGeometryJSON extends THREE.BufferGeometryJSON {
+export interface TubeBaseGeometryParametersJSON {
   /** {@link TubeBaseGeometryParameters#axis} */
   axis: THREE.CurveJSON;
   /** {@link TubeBaseGeometryParameters#cross} */
@@ -688,3 +688,10 @@ export interface TubeBaseGeometryJSON extends THREE.BufferGeometryJSON {
   /** {@link TubeBaseGeometryParameters#curvatureOrder} */
   curvatureOrder: "xy" | "yx";
 }
+
+/**
+ * The {@link TubeGeometry} JSON interface.
+ */
+export interface TubeBaseGeometryJSON
+  extends THREE.BufferGeometryJSON,
+    TubeBaseGeometryParametersJSON {}
