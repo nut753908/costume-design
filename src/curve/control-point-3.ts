@@ -181,7 +181,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
         | "rightAz"
     ) {
       cp.updateFrom[key]();
-      cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point.js.
+      cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point.ts.
       leftRightControllers.forEach((c) => c.updateDisplay());
       updateCallback();
     }
