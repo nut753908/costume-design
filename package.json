@@ -13,6 +13,7 @@
     "three-viewport-gizmo": "^2.2.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.2.3",
     "@types/three": "^0.180.0",
     "lil-gui": "^0.20.0",
     "typescript": "~5.8.3",
