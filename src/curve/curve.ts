@@ -83,12 +83,14 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * Create geometry.
    */
   createGeometry(line: THREE.Line) {
-    // NOTE: `const cp = this;` is removed for `npm run lint`.
+    // biome-ignore lint: noUselessThisAlias => to leave c(=this) alive.
+    const c = this;
+
     // This function is used by setGUI() in ./src/curve/curve.ts.
-    (this._updateGeometry = () => {
+    (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
-        this.getPoints() as THREE.Vector3[] | THREE.Vector2[]
+        c.getPoints() as THREE.Vector3[] | THREE.Vector2[]
       );
 
       line.geometry.dispose();
