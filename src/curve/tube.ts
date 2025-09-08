@@ -22,7 +22,7 @@ export class Tube {
   /**
    * The Parameters for TubeGeometry.
    */
-  parameters: TubeGeometryParameters | {};
+  parameters: TubeGeometryParameters;
 
   /**
    * Secret field.
@@ -36,6 +36,7 @@ export class Tube {
    *
    * @param parameters - The Parameters for TubeGeometry.
    */
+  // FIXME:
   constructor(parameters: TubeGeometryParameters | {} = {}) {
     this.parameters = parameters;
     this._updateGeometry = () => {};

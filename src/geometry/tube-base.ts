@@ -103,6 +103,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
       curvatureOrder: curvatureOrder,
     };
 
+    // FIXME:
     cross.getTangentAt = function (
       u: number,
       optionalTarget: THREE.Vector3
