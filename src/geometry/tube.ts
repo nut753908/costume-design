@@ -238,6 +238,26 @@ export interface TubeGeometryParameters {
   curvatureOrder: "xy" | "yx";
 }
 
+export const defaultTubeGeometryParameters: TubeGeometryParameters = {
+  axis: constant0Curve3.clone(),
+  cross: smallCircleCurve2.clone(),
+  axisSegments: 4,
+  crossSegments: 8,
+  scaleN: 1,
+  xScaleN: 1,
+  yScaleN: 1,
+  xCurvatureN: 0,
+  yCurvatureN: 0,
+  tiltN: 0,
+  scaleC: constant1Curve2.clone(),
+  xScaleC: constant1Curve2.clone(),
+  yScaleC: constant1Curve2.clone(),
+  xCurvatureC: constant0Curve2.clone(),
+  yCurvatureC: constant0Curve2.clone(),
+  tiltC: constant0Curve2.clone(),
+  curvatureOrder: "xy",
+};
+
 /**
  * The {@link TubeGeometryParameters} JSON interface.
  */

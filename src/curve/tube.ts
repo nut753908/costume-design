@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import {
+  defaultTubeGeometryParameters,
   TubeGeometry,
   TubeGeometryParameters,
   TubeGeometryParametersJSON,
@@ -20,7 +21,7 @@ import { Curve2 } from "./curve-2";
  */
 export class Tube {
   /**
-   * The Parameters for TubeGeometry.
+   * The TubeGeometry parameters.
    */
   parameters: TubeGeometryParameters;
 
@@ -34,10 +35,9 @@ export class Tube {
   /**
    * Constructs a new tube.
    *
-   * @param parameters - The Parameters for TubeGeometry.
+   * @param parameters - The TubeGeometry parameters.
    */
-  // FIXME:
-  constructor(parameters: TubeGeometryParameters | {} = {}) {
+  constructor(parameters = defaultTubeGeometryParameters) {
     this.parameters = parameters;
     this._updateGeometry = () => {};
   }
@@ -53,28 +53,25 @@ export class Tube {
 
     // This function is used by setGUI() in ./src/curve/tube.js.
     (t._updateGeometry = () => {
-      const geometry =
-        Object.keys(p).length !== 0
-          ? new TubeGeometry(
-              p.axis,
-              p.cross,
-              p.axisSegments,
-              p.crossSegments,
-              p.scaleN,
-              p.xScaleN,
-              p.yScaleN,
-              p.xCurvatureN,
-              p.yCurvatureN,
-              p.tiltN,
-              p.scaleC,
-              p.xScaleC,
-              p.yScaleC,
-              p.xCurvatureC,
-              p.yCurvatureC,
-              p.tiltC,
-              p.curvatureOrder
-            )
-          : new TubeGeometry();
+      const geometry = new TubeGeometry(
+        p.axis,
+        p.cross,
+        p.axisSegments,
+        p.crossSegments,
+        p.scaleN,
+        p.xScaleN,
+        p.yScaleN,
+        p.xCurvatureN,
+        p.yCurvatureN,
+        p.tiltN,
+        p.scaleC,
+        p.xScaleC,
+        p.yScaleC,
+        p.xCurvatureC,
+        p.yCurvatureC,
+        p.tiltC,
+        p.curvatureOrder
+      );
 
       if ("parameters" in geometry) {
         Object.assign(p, geometry.parameters);
