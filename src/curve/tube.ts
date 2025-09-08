@@ -27,8 +27,8 @@ export class Tube {
 
   /**
    * Secret field.
-   * This function is used by setGUI() in ./src/curve/tube.js.
-   * Set it in advance using createGeometry() in ./src/curve/tube.js.
+   * This function is used by setGUI() in ./src/curve/tube.ts.
+   * Set it in advance using createGeometry() in ./src/curve/tube.ts.
    */
   _updateGeometry: () => void;
 
@@ -51,7 +51,7 @@ export class Tube {
     const t = this;
     const p = t.parameters;
 
-    // This function is used by setGUI() in ./src/curve/tube.js.
+    // This function is used by setGUI() in ./src/curve/tube.ts.
     (t._updateGeometry = () => {
       const geometry = new TubeGeometry(
         p.axis,
@@ -122,7 +122,7 @@ export class Tube {
     folder.add(p, "curvatureOrder", ["xy", "yx"]).onChange(update);
 
     function update() {
-      t._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/tube.js.
+      t._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/tube.ts.
     }
   }
 

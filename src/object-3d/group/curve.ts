@@ -45,7 +45,7 @@ function createCpsGroup(
 ): THREE.Group {
   const group = new THREE.Group();
 
-  // This function is used by createGeometry() in ./src/curve/curve-{3,2}.js.
+  // This function is used by createGeometry() in ./src/curve/curve-{3,2}.ts.
   (c._updateCpsGroup = () => {
     group.children.forEach((g) => {
       g.children.forEach((v) => {

@@ -23,15 +23,15 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
 
   /**
    * Secret field.
-   * This function is used by setGUI() in ./src/curve/curve.js.
-   * Set it in advance using createGeometry() in ./src/curve/curve.js.
+   * This function is used by setGUI() in ./src/curve/curve.ts.
+   * Set it in advance using createGeometry() in ./src/curve/curve.ts.
    */
   _updateGeometry: () => void;
 
   /**
    * Secret field.
-   * This function is used by setGUI() in ./src/curve/curve.js.
-   * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+   * This function is used by setGUI() in ./src/curve/curve.ts.
+   * Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.ts.
    */
   _updateCpsGroup: () => void;
 
@@ -86,7 +86,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
   createGeometry(line: THREE.Line) {
     const c = this;
 
-    // This function is used by setGUI() in ./src/curve/curve.js.
+    // This function is used by setGUI() in ./src/curve/curve.ts.
     (c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
@@ -148,17 +148,17 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     if (isClose) closeFolder(folder);
 
     function updateIfCpsLengthChanges() {
-      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.js.
+      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./src/object-3d/group/curve.ts.
       updateEnabled();
       updateOptions();
       updateCpsFolder();
       c.updateCurves();
-      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.ts.
       updateCallback();
     }
     function updateFromCp() {
       c.updateCurves();
-      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.js.
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/curve.ts.
       updateCallback();
     }
     function updateEnabled() {
