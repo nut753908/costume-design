@@ -108,15 +108,13 @@ describe("Circle", () => {
   test("clone()", () => {
     const c1 = new Circular(2, 90);
     const c2 = c1.clone();
-    expect(c1.radius).toBe(c2.radius);
-    expect(c1.angle).toBe(c2.angle);
+    expect(c1).toEqual(c2);
   });
 
   test("copy()", () => {
     const c1 = new Circular(2, 90);
     const c2 = new Circular().copy(c1);
-    expect(c1.radius).toBe(c2.radius);
-    expect(c1.angle).toBe(c2.angle);
+    expect(c1).toEqual(c2);
   });
 
   test("toJSON()", () => {
@@ -128,7 +126,6 @@ describe("Circle", () => {
   test("fromJSON()", () => {
     const c1 = new Circular().fromJSON({ radius: 2, angle: 90 });
     const c2 = new Circular(2, 90);
-    expect(c1.radius).toBe(c2.radius);
-    expect(c1.angle).toBe(c2.angle);
+    expect(c1).toEqual(c2);
   });
 });

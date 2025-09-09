@@ -31,8 +31,6 @@ describe("Spherical", () => {
       theta: Math.PI,
     });
     const s2 = new Spherical(2, Math.PI / 2, Math.PI);
-    expect(s1.radius).toBe(s2.radius);
-    expect(s1.phi).toBe(s2.phi);
-    expect(s1.theta).toBe(s2.theta);
+    expect(s1).toEqual(s2);
   });
 });
