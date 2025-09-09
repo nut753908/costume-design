@@ -56,7 +56,7 @@ function createCpsGroup(
     });
     group.clear();
 
-    c.cps.forEach((cp) => group.add(createControlPointGroup(cp, ms)));
+    c.cps.map((cp) => group.add(createControlPointGroup(cp, ms)));
   })();
 
   return group;

@@ -27,7 +27,7 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
     folder.addColor(obj, "color").onChange(uC);
 
     function uL() /* updateLength */ {
-      helper._updateLengthCallbacks.forEach((c) => c(obj.length));
+      helper._updateLengthCallbacks.map((c) => c(obj.length));
     }
     function uC() /* updateColor */ {
       helper.setColor(obj.color);

@@ -24,7 +24,7 @@ export function createLinesGroup(
 ): THREE.Group {
   const group = new THREE.Group();
 
-  Object.entries(lines).forEach(([k, v]) =>
+  Object.entries(lines).map(([k, v]) =>
     group.add(createLineGroup(v, positions, ms, k))
   );
 

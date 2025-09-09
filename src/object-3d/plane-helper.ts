@@ -28,7 +28,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     folder.addColor(obj, "color").onChange(uC);
 
     function uS() /* updateSize */ {
-      helper._updateSizeCallbacks.forEach((c) => c(obj.size));
+      helper._updateSizeCallbacks.map((c) => c(obj.size));
     }
     function uC() /* updateColor */ {
       helper.setColor(obj.color);

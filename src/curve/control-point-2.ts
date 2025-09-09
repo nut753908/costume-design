@@ -127,7 +127,7 @@ export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
     ) {
       cp.updateFrom[key]();
       cp._updateGeometry(); // Set it in advance using createGeometry() in ./src/curve/control-point-2.ts.
-      leftRightControllers.forEach((c) => c.updateDisplay());
+      leftRightControllers.map((c) => c.updateDisplay());
       updateCallback();
     }
   }

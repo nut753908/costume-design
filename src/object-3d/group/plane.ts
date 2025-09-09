@@ -75,7 +75,7 @@ export function createPlaneGroup(
       if (group.children[1] instanceof THREE.ArrowHelper) {
         group.children[1].setDirection(obj.normal);
       }
-      nFolder.controllers.forEach((c) => c.updateDisplay());
+      nFolder.controllers.map((c) => c.updateDisplay());
     }
     function uP() /* updatePoint */ {
       if (!(plane instanceof FreePlane)) return;
