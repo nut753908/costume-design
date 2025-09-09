@@ -47,7 +47,7 @@ export class Tube {
    * @param group
    */
   createGeometry(group: THREE.Group) {
-    // biome-ignore lint: noUselessThisAlias => to leave t(=this) alive.
+    // biome-ignore lint/complexity/noUselessThisAlias: to leave t(=this) alive.
     const t = this;
     const p = t.parameters;
 

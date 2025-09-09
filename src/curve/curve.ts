@@ -83,7 +83,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * Create geometry.
    */
   createGeometry(line: THREE.Line) {
-    // biome-ignore lint: noUselessThisAlias => to leave c(=this) alive.
+    // biome-ignore lint/complexity/noUselessThisAlias: to leave c(=this) alive.
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.ts.
