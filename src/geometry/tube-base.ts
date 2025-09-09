@@ -103,9 +103,7 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     };
 
     const axisFrames = axis.computeFrenetFrames(axisSegments, false);
-    const crossFrames = new Curve2()
-      .copy(cross)
-      .computeFrenetFrames(crossSegments, false);
+    const crossFrames = computeFrenetFrames(cross, crossSegments, false);
 
     const CPs = cross.getSpacedPoints(crossSegments);
     const CBs = crossFrames.binormals.map((b) => new THREE.Vector2(b.x, b.y));
@@ -122,12 +120,12 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     let AP = new THREE.Vector3();
     const _P = new THREE.Vector2();
 
-    let scale;
-    let xScale;
-    let yScale;
-    let xCurvature;
-    let yCurvature;
-    let tilt;
+    let scale: number;
+    let xScale: number;
+    let yScale: number;
+    let xCurvature: number;
+    let yCurvature: number;
+    let tilt: number;
 
     // buffer
 
@@ -287,7 +285,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     function calculateCBzAndSetNormals() {
       const l = axis.getLength() / axisSegments; // l: axis length devided by axisSegments
-      let c, r; // c: cross vector, r: CBz
+      let c: THREE.Vector3; // cross vector
+      let r: number; // CBz
 
       for (let i = 0; i <= axisSegments; i++) {
         const AT = axisFrames.tangents[i];
@@ -688,85 +687,86 @@ export interface TubeBaseGeometryJSON
     TubeBaseGeometryParametersJSON {}
 
 /**
- * Vector2 curve class for correct calculation of computeFrenetFrames().
+ * Generates the Frenet Frames. Requires a curve definition in 3D space. Used
+ * in geometries like {@link THREE.TubeGeometry} or {@link THREE.ExtrudeGeometry}.
+ *
  * This is copied from {@link THREE.Curve#computeFrenetFrames}.
+ * This is to correctly calculate computeFrenetFrames() for {@link THREE.Curve<THREE.Vector2>}.
  * Blank lines and comments are removed.
+ *
+ * @param segments - The number of segments.
+ * @param closed - Whether the curve is closed or not.
+ * @return  The Frenet Frames.
  */
-class Curve2 extends THREE.Curve<THREE.Vector2> {
-  constructor() {
-    super();
+function computeFrenetFrames(
+  curve: THREE.Curve<THREE.Vector2>,
+  segments: number,
+  closed = false
+): {
+  tangents: THREE.Vector3[];
+  normals: THREE.Vector3[];
+  binormals: THREE.Vector3[];
+} {
+  const normal = new THREE.Vector3();
+  const tangents = [];
+  const normals = [];
+  const binormals = [];
+  const vec = new THREE.Vector3();
+  const mat = new THREE.Matrix4();
+  for (let i = 0; i <= segments; i++) {
+    const u = i / segments;
+    const tangent = curve.getTangentAt(u, new THREE.Vector2());
+    tangents[i] = new THREE.Vector3(tangent.x, tangent.y, 0); // NOTE: Change Vector2 to Vector3.
   }
-  computeFrenetFrames(
-    segments: number,
-    closed = false
-  ): {
-    tangents: THREE.Vector3[];
-    normals: THREE.Vector3[];
-    binormals: THREE.Vector3[];
-  } {
-    const normal = new THREE.Vector3();
-    const tangents = [];
-    const normals = [];
-    const binormals = [];
-    const vec = new THREE.Vector3();
-    const mat = new THREE.Matrix4();
-    for (let i = 0; i <= segments; i++) {
-      const u = i / segments;
-      const tangent = this.getTangentAt(u, new THREE.Vector2());
-      tangents[i] = new THREE.Vector3(tangent.x, tangent.y, 0); // NOTE: Change Vector2 to Vector3.
+  normals[0] = new THREE.Vector3();
+  binormals[0] = new THREE.Vector3();
+  let min = Number.MAX_VALUE;
+  const tx = Math.abs(tangents[0].x);
+  const ty = Math.abs(tangents[0].y);
+  const tz = Math.abs(tangents[0].z);
+  if (tx <= min) {
+    min = tx;
+    normal.set(1, 0, 0);
+  }
+  if (ty <= min) {
+    min = ty;
+    normal.set(0, 1, 0);
+  }
+  if (tz <= min) {
+    normal.set(0, 0, 1);
+  }
+  vec.crossVectors(tangents[0], normal).normalize();
+  normals[0].crossVectors(tangents[0], vec);
+  binormals[0].crossVectors(tangents[0], normals[0]);
+  for (let i = 1; i <= segments; i++) {
+    normals[i] = normals[i - 1].clone();
+    binormals[i] = binormals[i - 1].clone();
+    vec.crossVectors(tangents[i - 1], tangents[i]);
+    if (vec.length() > Number.EPSILON) {
+      vec.normalize();
+      const theta = Math.acos(
+        THREE.MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1)
+      );
+      normals[i].applyMatrix4(mat.makeRotationAxis(vec, theta));
     }
-    normals[0] = new THREE.Vector3();
-    binormals[0] = new THREE.Vector3();
-    let min = Number.MAX_VALUE;
-    const tx = Math.abs(tangents[0].x);
-    const ty = Math.abs(tangents[0].y);
-    const tz = Math.abs(tangents[0].z);
-    if (tx <= min) {
-      min = tx;
-      normal.set(1, 0, 0);
+    binormals[i].crossVectors(tangents[i], normals[i]);
+  }
+  if (closed === true) {
+    let theta = Math.acos(
+      THREE.MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1)
+    );
+    theta /= segments;
+    if (tangents[0].dot(vec.crossVectors(normals[0], normals[segments])) > 0) {
+      theta = -theta;
     }
-    if (ty <= min) {
-      min = ty;
-      normal.set(0, 1, 0);
-    }
-    if (tz <= min) {
-      normal.set(0, 0, 1);
-    }
-    vec.crossVectors(tangents[0], normal).normalize();
-    normals[0].crossVectors(tangents[0], vec);
-    binormals[0].crossVectors(tangents[0], normals[0]);
     for (let i = 1; i <= segments; i++) {
-      normals[i] = normals[i - 1].clone();
-      binormals[i] = binormals[i - 1].clone();
-      vec.crossVectors(tangents[i - 1], tangents[i]);
-      if (vec.length() > Number.EPSILON) {
-        vec.normalize();
-        const theta = Math.acos(
-          THREE.MathUtils.clamp(tangents[i - 1].dot(tangents[i]), -1, 1)
-        );
-        normals[i].applyMatrix4(mat.makeRotationAxis(vec, theta));
-      }
+      normals[i].applyMatrix4(mat.makeRotationAxis(tangents[i], theta * i));
       binormals[i].crossVectors(tangents[i], normals[i]);
     }
-    if (closed === true) {
-      let theta = Math.acos(
-        THREE.MathUtils.clamp(normals[0].dot(normals[segments]), -1, 1)
-      );
-      theta /= segments;
-      if (
-        tangents[0].dot(vec.crossVectors(normals[0], normals[segments])) > 0
-      ) {
-        theta = -theta;
-      }
-      for (let i = 1; i <= segments; i++) {
-        normals[i].applyMatrix4(mat.makeRotationAxis(tangents[i], theta * i));
-        binormals[i].crossVectors(tangents[i], normals[i]);
-      }
-    }
-    return {
-      tangents: tangents,
-      normals: normals,
-      binormals: binormals,
-    };
   }
+  return {
+    tangents: tangents,
+    normals: normals,
+    binormals: binormals,
+  };
 }

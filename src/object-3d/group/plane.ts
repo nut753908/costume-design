@@ -31,7 +31,9 @@ export function createPlaneGroup(
   _planeHelper.point = obj.point;
   _planeHelper.size = planeHelper.size;
   // These functions are used by createPlaneHelper() in ./src/object-3d/plane-helper.ts.
-  planeHelper._updateSizeCallbacks.push((v) => (_planeHelper.size = v));
+  planeHelper._updateSizeCallbacks.push((v) => {
+    _planeHelper.size = v;
+  });
   group.add(_planeHelper);
 
   const _arrowHelper = arrowHelper.clone();
@@ -75,7 +77,7 @@ export function createPlaneGroup(
       if (group.children[1] instanceof THREE.ArrowHelper) {
         group.children[1].setDirection(obj.normal);
       }
-      nFolder.controllers.forEach((c) => c.updateDisplay());
+      nFolder.controllers.map((c) => c.updateDisplay());
     }
     function uP() /* updatePoint */ {
       if (!(plane instanceof FreePlane)) return;

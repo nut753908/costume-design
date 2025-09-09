@@ -17,7 +17,11 @@ export function createRemainingVerticesMap(nPolygonIndices: number[][]): {
         cList.push(j < l ? list[j] : list[j - l]);
       }
       [`${a},${b}`, `${b},${a}`].forEach((k) => {
-        k in map ? map[k].push(cList) : (map[k] = [cList]);
+        if (k in map) {
+          map[k].push(cList);
+        } else {
+          map[k] = [cList];
+        }
       });
     }
   });

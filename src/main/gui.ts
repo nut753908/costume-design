@@ -1,7 +1,7 @@
 import type { GUI } from "lil-gui";
 
 export interface guiJSON {
-  controllers: { [_name: string]: any };
+  controllers: { [_name: string]: boolean | string | number };
   folders: { [_title: string]: guiJSON };
 }
 
@@ -11,9 +11,9 @@ export interface guiJSON {
 export function saveGui(gui: GUI): guiJSON {
   const guiObj = gui.save() as guiJSON;
   const folders: guiJSON["folders"] = {};
-  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach(
-    (k) => (folders[k] = guiObj.folders[k])
-  );
+  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach((k) => {
+    folders[k] = guiObj.folders[k];
+  });
   guiObj.folders = folders;
   return guiObj;
 }
@@ -28,7 +28,9 @@ export interface closedJSON {
  */
 export function saveClosed(gui: GUI): closedJSON {
   const folders: closedJSON["folders"] = {};
-  gui.folders.forEach((f) => (folders[f._title] = saveClosed(f)));
+  gui.folders.forEach((f) => {
+    folders[f._title] = saveClosed(f);
+  });
   return {
     _closed: gui._closed,
     folders: folders,
@@ -58,11 +60,11 @@ export function deleteFolder(
   if (_title) {
     Array.from(parent.children)
       .filter((v) => "_title" in v && v._title === _title)
-      .forEach((v) => v.destroy());
+      .map((v) => v.destroy());
   } else if (titleStart) {
     Array.from(parent.children)
       .filter((v) => "_title" in v && v._title.startsWith(titleStart))
-      .forEach((v) => v.destroy());
+      .map((v) => v.destroy());
   }
 }
 

@@ -136,14 +136,22 @@ export function createEdgeLoopsMap(els: EdgeLoop[]): {
       const v1 = el.vertices[i];
       const v2 = el.vertices[i + 1];
       [`${v1},${v2}`, `${v2},${v1}`].forEach((k) => {
-        k in map ? map[k].push(el) : (map[k] = [el]);
+        if (k in map) {
+          map[k].push(el);
+        } else {
+          map[k] = [el];
+        }
       });
     }
     if (el.closed) {
       const v1 = el.vertices[el.vertices.length - 1];
       const v2 = el.vertices[0];
       [`${v1},${v2}`, `${v2},${v1}`].forEach((k) => {
-        k in map ? map[k].push(el) : (map[k] = [el]);
+        if (k in map) {
+          map[k].push(el);
+        } else {
+          map[k] = [el];
+        }
       });
     }
   });

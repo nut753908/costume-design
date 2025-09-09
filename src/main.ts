@@ -2,6 +2,7 @@ import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
 import { createBaseCenterlines } from "./cross-section/centerline";
+// biome-ignore lint/correctness/noUnusedImports: keep FreePlane for later use.
 import { FreePlane } from "./cross-section/free-plane";
 import { VerticalPlane } from "./cross-section/vertical-plane";
 import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";

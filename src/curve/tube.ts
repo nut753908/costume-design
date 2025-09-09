@@ -47,12 +47,12 @@ export class Tube {
    * @param group
    */
   createGeometry(group: THREE.Group) {
-    // biome-ignore lint: noUselessThisAlias => to leave t(=this) alive.
+    // biome-ignore lint/complexity/noUselessThisAlias: to leave t(=this) alive.
     const t = this;
     const p = t.parameters;
 
     // This function is used by setGUI() in ./src/curve/tube.ts.
-    (t._updateGeometry = () => {
+    t._updateGeometry = () => {
       const geometry = new TubeGeometry(
         p.axis,
         p.cross,
@@ -91,7 +91,8 @@ export class Tube {
         group.children[1].geometry.dispose();
         group.children[1].geometry = geometry;
       }
-    })();
+    };
+    t._updateGeometry();
   }
 
   /**
