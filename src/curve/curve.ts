@@ -10,7 +10,7 @@ import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
  * This is an abstract class for Curve3/Curve2.
  *
- * @augments THREE.CurvePath<TVector>
+ * @augments THREE.CurvePath<TypeMap[T]["vector"]>
  */
 export abstract class Curve<T extends Types> extends THREE.CurvePath<
   TypeMap[T]["vector"]
