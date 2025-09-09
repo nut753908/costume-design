@@ -35,6 +35,9 @@ describe("Circle", () => {
         [1, 0, 1],
         [2, 0, 2],
         [3, 0, 3],
+        [1, 90, 0],
+        [2, 90, 0],
+        [3, 90, 0],
       ])("radius:%i, angle:%i, x:%d", (radius, angle, x) => {
         const c = new Circular(radius, angle);
         expect(c.x).toBeCloseTo(x);
@@ -57,6 +60,9 @@ describe("Circle", () => {
 
     describe("when the radius increases by 1", () => {
       test.each([
+        [1, 0, 0],
+        [2, 0, 0],
+        [3, 0, 0],
         [1, 90, 1],
         [2, 90, 2],
         [3, 90, 3],
