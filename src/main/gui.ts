@@ -1,7 +1,7 @@
 import type { GUI } from "lil-gui";
 
 export interface guiJSON {
-  controllers: { [_name: string]: any };
+  controllers: { [_name: string]: boolean | string | number };
   folders: { [_title: string]: guiJSON };
 }
 

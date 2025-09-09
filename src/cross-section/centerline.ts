@@ -47,7 +47,7 @@ export function createBaseCenterlines(
       .add(obj.rightLeg.slice(-1)[0])
       .divideScalar(8)
   );
-  // return objectMap(obj, createLinePath);
+  // return objectMap(obj, _createLinePath);
   return objectMap(obj, (v) => new THREE.CatmullRomCurve3(v));
 }
 
@@ -57,7 +57,7 @@ export function createBaseCenterlines(
  * @param points - The points.
  * @return  A line path.
  */
-function createLinePath(
+function _createLinePath(
   points: THREE.Vector3[]
 ): THREE.CurvePath<THREE.Vector3> {
   const linePath = new THREE.CurvePath<THREE.Vector3>();

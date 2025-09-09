@@ -5,11 +5,6 @@ import * as THREE from "three";
  */
 export abstract class Plane {
   /**
-   * Constructs a new plane.
-   */
-  constructor() {}
-
-  /**
    * Get the normal direction of the plane.
    */
   abstract getNormal(): THREE.Vector3;

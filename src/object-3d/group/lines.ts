@@ -3,6 +3,7 @@ import * as THREE from "three";
 import type { Edge } from "../../cross-section/edge";
 import type { EdgeLoop } from "../../cross-section/edge-loop";
 import type { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
+// biome-ignore lint/correctness/noUnusedImports: keep closeFolder for later use.
 import { closeFolder, deleteFolder } from "../../main/gui";
 import { createLineGroup } from "./line";
 
