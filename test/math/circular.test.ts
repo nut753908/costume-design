@@ -1,6 +1,5 @@
-import * as THREE from "three";
-
 import { Circular } from "src/math/circular";
+import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
 describe("Circle", () => {
