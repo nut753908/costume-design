@@ -122,12 +122,12 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
     let AP = new THREE.Vector3();
     const _P = new THREE.Vector2();
 
-    let scale;
-    let xScale;
-    let yScale;
-    let xCurvature;
-    let yCurvature;
-    let tilt;
+    let scale: number;
+    let xScale: number;
+    let yScale: number;
+    let xCurvature: number;
+    let yCurvature: number;
+    let tilt: number;
 
     // buffer
 
@@ -287,7 +287,8 @@ export class TubeBaseGeometry extends THREE.BufferGeometry {
 
     function calculateCBzAndSetNormals() {
       const l = axis.getLength() / axisSegments; // l: axis length devided by axisSegments
-      let c, r; // c: cross vector, r: CBz
+      let c: THREE.Vector3; // cross vector
+      let r: number; // CBz
 
       for (let i = 0; i <= axisSegments; i++) {
         const AT = axisFrames.tangents[i];

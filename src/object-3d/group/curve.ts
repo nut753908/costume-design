@@ -45,7 +45,7 @@ function createCpsGroup(
   const group = new THREE.Group();
 
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.ts.
-  (c._updateCpsGroup = () => {
+  c._updateCpsGroup = () => {
     group.children.forEach((g) => {
       g.children.forEach((v) => {
         if ("geometry" in v && v.geometry instanceof THREE.BufferGeometry) {
@@ -57,7 +57,8 @@ function createCpsGroup(
     group.clear();
 
     c.cps.map((cp) => group.add(createControlPointGroup(cp, ms)));
-  })();
+  };
+  c._updateCpsGroup();
 
   return group;
 }

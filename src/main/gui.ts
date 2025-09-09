@@ -11,9 +11,9 @@ export interface guiJSON {
 export function saveGui(gui: GUI): guiJSON {
   const guiObj = gui.save() as guiJSON;
   const folders: guiJSON["folders"] = {};
-  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].map(
-    (k) => (folders[k] = guiObj.folders[k])
-  );
+  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach((k) => {
+    folders[k] = guiObj.folders[k];
+  });
   guiObj.folders = folders;
   return guiObj;
 }
@@ -28,7 +28,9 @@ export interface closedJSON {
  */
 export function saveClosed(gui: GUI): closedJSON {
   const folders: closedJSON["folders"] = {};
-  gui.folders.map((f) => (folders[f._title] = saveClosed(f)));
+  gui.folders.forEach((f) => {
+    folders[f._title] = saveClosed(f);
+  });
   return {
     _closed: gui._closed,
     folders: folders,

@@ -71,7 +71,7 @@ export abstract class ControlPoint<
     const cp = this;
 
     // This function is used by setGUI() in ./src/curve/control-point-{3,2}.ts.
-    (cp._updateGeometry = () => {
+    cp._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
         cp.getPoints() as THREE.Vector3[] | THREE.Vector2[]
@@ -83,7 +83,8 @@ export abstract class ControlPoint<
           v.geometry = geometry;
         }
       });
-    })();
+    };
+    cp._updateGeometry();
   }
 
   /**

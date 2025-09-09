@@ -87,7 +87,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     const c = this;
 
     // This function is used by setGUI() in ./src/curve/curve.ts.
-    (c._updateGeometry = () => {
+    c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
         c.getPoints() as THREE.Vector3[] | THREE.Vector2[]
@@ -95,7 +95,8 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
 
       line.geometry.dispose();
       line.geometry = geometry;
-    })();
+    };
+    c._updateGeometry();
   }
 
   /**
