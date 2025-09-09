@@ -4,7 +4,7 @@
     "module": "esnext",
     "lib": ["esnext", "dom"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "baseUrl": "./",
     "moduleResolution": "node",
     "esModuleInterop": true,
