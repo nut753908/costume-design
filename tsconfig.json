@@ -4,7 +4,8 @@
     "module": "esnext",
     "lib": ["esnext", "dom"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
+    "baseUrl": "./",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,7 +13,7 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.ts"],
   "exclude": ["dist", "node_modules"],
   "compileOnSave": false
 }
