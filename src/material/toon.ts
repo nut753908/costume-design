@@ -21,8 +21,12 @@ export function createToonMaterial(
       shadeColor: { value: createColor(shadeColorHex) },
     },
     uniformsNeedUpdate: true,
-    vertexShader: document.getElementById("toonVertex")?.textContent,
-    fragmentShader: document.getElementById("toonFragment")?.textContent,
+    vertexShader: document.getElementById("toonVertex")?.textContent as
+      | string
+      | undefined,
+    fragmentShader: document.getElementById("toonFragment")?.textContent as
+      | string
+      | undefined,
     side: side,
   });
   {
