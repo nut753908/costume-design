@@ -124,7 +124,7 @@ describe("isInvalidIndex()", () => {
     "index:%d, min:%d, max:%d, expected:%o",
     (index, min, max, expected, msg) => {
       if (msg !== undefined) {
-        spy = spy.mockImplementationOnce((v) => expect(v).toBe(msg));
+        spy.mockImplementationOnce((v) => expect(v).toBe(msg));
       }
       expect(isInvalidIndex(index, min, max)).toBe(expected);
       expect(spy).toHaveBeenCalledTimes(expected ? 1 : 0);
