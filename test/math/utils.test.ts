@@ -7,7 +7,15 @@ import {
   safeAcos,
   safeAsin,
 } from "src/math/utils";
-import { describe, expect, test, vi } from "vitest";
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  type MockInstance,
+  test,
+  vi,
+} from "vitest";
 
 describe("safeAsin()", () => {
   test.each([
@@ -95,18 +103,31 @@ describe("rotate180()", () => {
 });
 
 describe("isInvalidIndex()", () => {
-  test.each([
-    [1.1, 0, 2, true],
-    [1, 0.1, 2, true],
-    [1, 0, 2.1, true],
-    [-1, 0, 2, true],
-    [0, 0, 2, false],
-    [1, 0, 2, false],
-    [2, 0, 2, false],
-    [3, 0, 2, true],
-  ])("index:%d, min:%d, max:%d, expected:%o", (index, min, max, expected) => {
-    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(isInvalidIndex(index, min, max)).toBe(expected);
-    expect(spy).toHaveBeenCalledTimes(expected ? 1 : 0);
+  let spy: MockInstance;
+
+  beforeEach(() => {
+    spy = vi.spyOn(console, "error");
   });
+
+  afterEach(() => spy.mockReset());
+
+  test.each([
+    [1.1, 0, 2, true, "the index(1.1) is not integer."],
+    [1, 0.1, 2, true, "the min(0.1) is not integer."],
+    [1, 0, 2.1, true, "the max(2.1) is not integer."],
+    [-1, 0, 2, true, "the index(-1) is out of range [0,2]."],
+    [0, 0, 2, false, undefined],
+    [1, 0, 2, false, undefined],
+    [2, 0, 2, false, undefined],
+    [3, 0, 2, true, "the index(3) is out of range [0,2]."],
+  ])(
+    "index:%d, min:%d, max:%d, expected:%o",
+    (index, min, max, expected, msg) => {
+      if (msg !== undefined) {
+        spy = spy.mockImplementationOnce((v) => expect(v).toBe(msg));
+      }
+      expect(isInvalidIndex(index, min, max)).toBe(expected);
+      expect(spy).toHaveBeenCalledTimes(expected ? 1 : 0);
+    }
+  );
 });

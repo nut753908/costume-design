@@ -4,13 +4,13 @@ import { describe, expect, test } from "vitest";
 
 describe("Circle", () => {
   describe("constructor()", () => {
-    test("with no params", () => {
+    test("default params", () => {
       const c = new Circular();
       expect(c.radius).toBe(1);
       expect(c.angle).toBe(0);
     });
 
-    test("with params", () => {
+    test("specified params", () => {
       const c = new Circular(2, 90);
       expect(c.radius).toBe(2);
       expect(c.angle).toBe(90);

@@ -22,6 +22,7 @@
     "@biomejs/biome": "2.2.3",
     "@types/three": "^0.180.0",
     "@vitest/coverage-v8": "^3.2.4",
+    "happy-dom": "^18.0.1",
     "lil-gui": "^0.20.0",
     "typescript": "~5.8.3",
     "vite": "^7.1.2",
