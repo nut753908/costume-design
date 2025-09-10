@@ -2,6 +2,7 @@ import GUI from "lil-gui";
 import { createToonMaterial } from "src/material/toon";
 import * as THREE from "three";
 import {
+  afterEach,
   beforeEach,
   describe,
   expect,
@@ -15,16 +16,19 @@ describe("createToonMaterial()", () => {
     `THREE.Material: parameter '${key}' has value of undefined.`;
 
   let spy: MockInstance;
+
   beforeEach(() => {
     spy = vi
       .spyOn(console, "warn")
-      .mockImplementationOnce((msg) => {
-        expect(msg).toBe(getMsg("vertexShader"));
+      .mockImplementationOnce((v) => {
+        expect(v).toBe(getMsg("vertexShader"));
       })
-      .mockImplementationOnce((msg) => {
-        expect(msg).toBe(getMsg("fragmentShader"));
+      .mockImplementationOnce((v) => {
+        expect(v).toBe(getMsg("fragmentShader"));
       });
   });
+
+  afterEach(() => spy.mockReset());
 
   test("default params", () => {
     let color: THREE.Color;
