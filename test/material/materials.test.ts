@@ -9,25 +9,26 @@ import {
   vi,
 } from "vitest";
 
-const getMsg = (key: string) =>
-  `THREE.Material: parameter '${key}' has value of undefined.`;
-
 let spy: MockInstance;
 
 beforeEach(() => {
   spy = vi
-    .spyOn(console, "warn")
+    .spyOn(document, "getElementById")
     .mockImplementationOnce((v) => {
-      expect(v).toBe(getMsg("vertexShader"));
+      expect(v).toBe("toonVertex");
+      return document.createElement("script");
     })
     .mockImplementationOnce((v) => {
-      expect(v).toBe(getMsg("fragmentShader"));
+      expect(v).toBe("toonFragment");
+      return document.createElement("script");
     })
     .mockImplementationOnce((v) => {
-      expect(v).toBe(getMsg("vertexShader"));
+      expect(v).toBe("toonVertex");
+      return document.createElement("script");
     })
     .mockImplementationOnce((v) => {
-      expect(v).toBe(getMsg("fragmentShader"));
+      expect(v).toBe("toonFragment");
+      return document.createElement("script");
     });
 });
 
