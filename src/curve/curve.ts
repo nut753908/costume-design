@@ -212,12 +212,12 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
 
-    const centerPos = mean<TypeMap[T]["vector"]>(cp1.rightPos, cp3.leftPos);
-    cp1.rightPos = mean<TypeMap[T]["vector"]>(cp1.middlePos, cp1.rightPos);
-    cp3.leftPos = mean<TypeMap[T]["vector"]>(cp3.leftPos, cp3.middlePos);
-    cp2.leftPos = mean<TypeMap[T]["vector"]>(cp1.rightPos, centerPos);
-    cp2.rightPos = mean<TypeMap[T]["vector"]>(centerPos, cp3.leftPos);
-    cp2.middlePos = mean<TypeMap[T]["vector"]>(cp2.leftPos, cp2.rightPos);
+    const centerPos = mean(cp1.rightPos, cp3.leftPos);
+    cp1.rightPos = mean(cp1.middlePos, cp1.rightPos);
+    cp3.leftPos = mean(cp3.leftPos, cp3.middlePos);
+    cp2.leftPos = mean(cp1.rightPos, centerPos);
+    cp2.rightPos = mean(centerPos, cp3.leftPos);
+    cp2.middlePos = mean(cp2.leftPos, cp2.rightPos);
 
     cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
