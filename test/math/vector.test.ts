@@ -1,10 +1,10 @@
 import { mean } from "src/math/vector";
 import * as THREE from "three";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 describe("mean()", () => {
   const spy = vi.spyOn(console, "error").mockImplementation(() => {});
-  afterEach(() => spy.mockClear());
+  beforeEach(() => spy.mockClear());
 
   test("if TVector is THREE.Vector3", () => {
     const v1 = new THREE.Vector3(1, 2, 3);
