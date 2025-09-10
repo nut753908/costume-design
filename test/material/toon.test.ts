@@ -1,9 +1,31 @@
 import GUI from "lil-gui";
 import { createToonMaterial } from "src/material/toon";
 import * as THREE from "three";
-import { describe, expect, test } from "vitest";
+import {
+  beforeEach,
+  describe,
+  expect,
+  type MockInstance,
+  test,
+  vi,
+} from "vitest";
 
 describe("createToonMaterial()", () => {
+  const getMsg = (key: string) =>
+    `THREE.Material: parameter '${key}' has value of undefined.`;
+
+  let spy: MockInstance;
+  beforeEach(() => {
+    spy = vi
+      .spyOn(console, "warn")
+      .mockImplementationOnce((msg) => {
+        expect(msg).toBe(getMsg("vertexShader"));
+      })
+      .mockImplementationOnce((msg) => {
+        expect(msg).toBe(getMsg("fragmentShader"));
+      });
+  });
+
   test("default params", () => {
     let color: THREE.Color;
     const gui = new GUI({ autoPlace: false });
@@ -15,6 +37,7 @@ describe("createToonMaterial()", () => {
     color = m.uniforms.shadeColor.value;
     expect(color.getHex(THREE.LinearSRGBColorSpace)).toBe(0xf8c1de);
     expect(m.side).toBe(THREE.FrontSide);
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 
   test("specified params", () => {
@@ -32,5 +55,6 @@ describe("createToonMaterial()", () => {
     color = m.uniforms.shadeColor.value;
     expect(color.getHex(THREE.LinearSRGBColorSpace)).toBe(shadeColorHex);
     expect(m.side).toBe(side);
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 });
