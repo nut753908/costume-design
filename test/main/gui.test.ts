@@ -29,25 +29,25 @@ test("saveClosed(), loadClosed()", () => {
 describe("deleteFolder()", () => {
   test.each([
     [null, null, 0, 0, 0],
-    ["1", null, 1, 0, 0],
-    [null, "1", 1, 1, 0],
+    ["A", null, 1, 0, 0],
+    [null, "A", 1, 1, 0],
   ])(
-    "_title:%o, titleStart:%o, count1:%i, count12:%i, count21:%i",
-    (_title, titleStart, count1, count12, count21) => {
+    "_title:%o, titleStart:%o, countA:%i, countAB:%i, countBA:%i",
+    (_title, titleStart, countA, countAB, countBA) => {
       const parent = new GUI({ autoPlace: false });
-      const child1 = parent.addFolder("1");
-      const child12 = parent.addFolder("12");
-      const child21 = parent.addFolder("21");
-      const spy1 = vi.spyOn(child1, "destroy");
-      const spy12 = vi.spyOn(child12, "destroy");
-      const spy21 = vi.spyOn(child21, "destroy");
+      const childA = parent.addFolder("A");
+      const childAB = parent.addFolder("AB");
+      const childBA = parent.addFolder("BA");
+      const spyA = vi.spyOn(childA, "destroy");
+      const spyAB = vi.spyOn(childAB, "destroy");
+      const spyBA = vi.spyOn(childBA, "destroy");
       deleteFolder(parent, _title, titleStart);
-      expect(spy1).toHaveBeenCalledTimes(count1);
-      expect(spy12).toHaveBeenCalledTimes(count12);
-      expect(spy21).toHaveBeenCalledTimes(count21);
-      spy1.mockReset();
-      spy12.mockReset();
-      spy21.mockReset();
+      expect(spyA).toHaveBeenCalledTimes(countA);
+      expect(spyAB).toHaveBeenCalledTimes(countAB);
+      expect(spyBA).toHaveBeenCalledTimes(countBA);
+      spyA.mockReset();
+      spyAB.mockReset();
+      spyBA.mockReset();
     }
   );
 });
