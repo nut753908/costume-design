@@ -1,4 +1,25 @@
 import * as THREE from "three";
+import { atan2In2PI } from "./utils";
+
+/**
+ * Get each angle as THREE.Vector3.
+ * x:
+ *   The angle of v around the x (right) axis.
+ *   This angle is right-handed and starts at positive y.
+ * y:
+ *   The angle of v around the y (up) axis.
+ *   This angle is right-handed and starts at positive z.
+ * z:
+ *   The angle of v around the z (front) axis.
+ *   This angle is right-handed and starts at positive x.
+ */
+export function getAngles(v: THREE.Vector3): THREE.Vector3 {
+  return new THREE.Vector3(
+    THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
+    THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
+    THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
+  );
+}
 
 export function mean<TVector extends THREE.Vector3 | THREE.Vector2>(
   v1: TVector,
