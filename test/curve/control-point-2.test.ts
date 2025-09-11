@@ -235,6 +235,19 @@ describe("ControlPoint2", () => {
     expect(JSON.stringify(cp1)).toBe(JSON.stringify(cp2));
   });
 
+  const _json: ControlPoint2JSON = {
+    middlePos: [1, 2],
+    leftPos: [3, 4],
+    rightPos: [5, 6],
+    isSyncRadius: false,
+    isSyncAngle: false,
+    type: "ControlPoint2",
+    leftV: [2, 2],
+    leftC: { radius: 2 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
+    rightV: [4, 4],
+    rightC: { radius: 4 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
+  };
+
   test("toJSON()", () => {
     const cp1 = new ControlPoint2(
       new THREE.Vector2(1, 2),
@@ -244,34 +257,12 @@ describe("ControlPoint2", () => {
       false
     );
     const json1 = cp1.toJSON();
-    const json2: ControlPoint2JSON = {
-      middlePos: [1, 2],
-      leftPos: [3, 4],
-      rightPos: [5, 6],
-      isSyncRadius: false,
-      isSyncAngle: false,
-      type: "ControlPoint2",
-      leftV: [2, 2],
-      leftC: { radius: 2 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
-      rightV: [4, 4],
-      rightC: { radius: 4 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
-    };
+    const json2 = _json;
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
-    const cp1 = new ControlPoint2().fromJSON({
-      middlePos: [1, 2],
-      leftPos: [3, 4],
-      rightPos: [5, 6],
-      isSyncRadius: false,
-      isSyncAngle: false,
-      type: "ControlPoint2",
-      leftV: [2, 2],
-      leftC: { radius: 2 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
-      rightV: [4, 4],
-      rightC: { radius: 4 * Math.SQRT2, angle: 45 }, // Assume there is no rounding error.
-    });
+    const cp1 = new ControlPoint2().fromJSON(_json);
     const cp2 = new ControlPoint2(
       new THREE.Vector2(1, 2),
       new THREE.Vector2(3, 4),
