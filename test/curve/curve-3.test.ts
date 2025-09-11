@@ -79,6 +79,36 @@ describe("Curve3", () => {
     });
   });
 
+  test("interpolateCp()", () => {
+    const c = new Curve3([
+      new ControlPoint3( // cp1
+        new THREE.Vector3(0, 0, 0), // cp1.middlePos
+        new THREE.Vector3(-1, -1, -1), // cp1.leftPos
+        new THREE.Vector3(1, 1, 1), // cp1.rightPos
+        false,
+        false
+      ),
+      new ControlPoint3( // cp3
+        new THREE.Vector3(0, 3, 0), // cp3.middlePos
+        new THREE.Vector3(1, 2, 1), // cp3.leftPos
+        new THREE.Vector3(-1, 4, -1), // cp3.rightPos
+        false,
+        false
+      ),
+    ]); // centerPos: (1, 1.5, 1)
+    c.interpolateCp(1);
+    expect(c.cps.length).toBe(3);
+    expect(c.cps[0].middlePos).toEqual(new THREE.Vector3(0, 0, 0));
+    expect(c.cps[0].leftPos).toEqual(new THREE.Vector3(-1, -1, -1));
+    expect(c.cps[0].rightPos).toEqual(new THREE.Vector3(0.5, 0.5, 0.5));
+    expect(c.cps[1].middlePos).toEqual(new THREE.Vector3(0.75, 1.5, 0.75));
+    expect(c.cps[1].leftPos).toEqual(new THREE.Vector3(0.75, 1, 0.75));
+    expect(c.cps[1].rightPos).toEqual(new THREE.Vector3(0.75, 2, 0.75));
+    expect(c.cps[2].middlePos).toEqual(new THREE.Vector3(0, 3, 0));
+    expect(c.cps[2].leftPos).toEqual(new THREE.Vector3(0.5, 2.5, 0.5));
+    expect(c.cps[2].rightPos).toEqual(new THREE.Vector3(-1, 4, -1));
+  });
+
   describe("removeCp()", () => {
     const cps = [
       new ControlPoint3(new THREE.Vector3(1, 2, 3)),
