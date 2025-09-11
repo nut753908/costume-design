@@ -1,3 +1,4 @@
+import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import type { ControlPoint2 } from "../../curve/control-point-2";
 import type { ControlPoint3 } from "../../curve/control-point-3";
@@ -8,7 +9,7 @@ import { createEmptyGeometry } from "../../geometry/empty";
  */
 export function createControlPointGroup(
   cp: ControlPoint3 | ControlPoint2,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+  ms: Materials
 ): THREE.Group {
   const group = new THREE.Group();
 

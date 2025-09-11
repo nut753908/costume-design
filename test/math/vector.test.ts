@@ -34,7 +34,7 @@ describe("mean()", () => {
   });
 
   test("if TVector is THREE.Vector3 | THREE.Vector2 (invalid type)", () => {
-    spy = spy
+    spy
       .mockImplementationOnce((v) => {
         expect(v).toBe(`\
 !(v1 instanceof THREE.Vector3 && v2 instanceof THREE.Vector3)

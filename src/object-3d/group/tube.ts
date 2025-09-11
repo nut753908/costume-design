@@ -1,4 +1,5 @@
 import type { GUI } from "lil-gui";
+import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import type { Tube } from "../../curve/tube";
 import { createEmptyGeometry } from "../../geometry/empty";
@@ -8,10 +9,7 @@ import { createCurveGroup } from "./curve";
 /**
  * @param ms - The materials.
  */
-export function createTubeGroup(
-  t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
-): THREE.Group {
+export function createTubeGroup(t: Tube, ms: Materials): THREE.Group {
   const group = new THREE.Group();
 
   const p = t.parameters;
@@ -32,10 +30,7 @@ export function createTubeGroup(
 /**
  * @param ms - The materials.
  */
-function createTubeGroupWithNoCurves(
-  t: Tube,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
-): THREE.Group {
+function createTubeGroupWithNoCurves(t: Tube, ms: Materials): THREE.Group {
   const group = new THREE.Group();
 
   const geometry = createEmptyGeometry();

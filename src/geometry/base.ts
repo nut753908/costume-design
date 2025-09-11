@@ -12,7 +12,6 @@ export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndi
       console.error(error);
       return null;
     });
-  if (positionsTxt === null) return null;
   if (typeof positionsTxt !== "string") return null;
 
   const indicesTxt = await fileLoader
@@ -21,7 +20,6 @@ export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndi
       console.error(error);
       return null;
     });
-  if (indicesTxt === null) return null;
   if (typeof indicesTxt !== "string") return null;
 
   const gltf = await gltfLoader

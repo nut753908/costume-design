@@ -1,5 +1,5 @@
+import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-
 import { Edge } from "../../cross-section/edge";
 import { EdgeLoop } from "../../cross-section/edge-loop";
 import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
@@ -17,7 +17,7 @@ export function createLineGroup(
     | THREE.CurvePath<THREE.Vector3>
     | THREE.CatmullRomCurve3,
   positions: THREE.BufferAttribute,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } },
+  ms: Materials,
   name: string
 ): THREE.Group {
   const group = new THREE.Group();

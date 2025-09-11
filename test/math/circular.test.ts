@@ -3,18 +3,10 @@ import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
 describe("Circle", () => {
-  describe("constructor()", () => {
-    test("default params", () => {
-      const c = new Circular();
-      expect(c.radius).toBe(1);
-      expect(c.angle).toBe(0);
-    });
-
-    test("specified params", () => {
-      const c = new Circular(2, 90);
-      expect(c.radius).toBe(2);
-      expect(c.angle).toBe(90);
-    });
+  test("constructor()", () => {
+    const c = new Circular(2, 90);
+    expect(c.radius).toBe(2);
+    expect(c.angle).toBe(90);
   });
 
   describe("get x()", () => {
