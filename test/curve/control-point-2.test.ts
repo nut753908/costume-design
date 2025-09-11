@@ -1,5 +1,6 @@
 import { ControlPoint2 } from "src/curve/control-point-2";
 import { Circular } from "src/math/circular";
+import { rotate180 } from "src/math/utils";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -35,8 +36,8 @@ describe("ControlPoint2", () => {
     );
     cp.middlePos.copy(new THREE.Vector2(7, 8));
     cp.updateFromMiddlePos();
-    expect(cp.leftPos).toEqual(new THREE.Vector2(9, 10));
-    expect(cp.rightPos).toEqual(new THREE.Vector2(11, 12));
+    expect(cp.leftPos).toEqual(new THREE.Vector2(7 + 2, 8 + 2));
+    expect(cp.rightPos).toEqual(new THREE.Vector2(7 + 4, 8 + 4));
   });
 
   test("updateFromLeftPos()", () => {
@@ -83,8 +84,8 @@ describe("ControlPoint2", () => {
     cp.updateFromLeftC();
     expect(cp.leftV.x).toBeCloseTo(6);
     expect(cp.leftV.y).toBeCloseTo(6);
-    expect(cp.leftPos.x).toBeCloseTo(7);
-    expect(cp.leftPos.y).toBeCloseTo(8);
+    expect(cp.leftPos.x).toBeCloseTo(1 + 6);
+    expect(cp.leftPos.y).toBeCloseTo(2 + 6);
     // Skip the this.syncLeftToRight() test.
   });
 
@@ -100,8 +101,8 @@ describe("ControlPoint2", () => {
     cp.updateFromRightC();
     expect(cp.rightV.x).toBeCloseTo(6);
     expect(cp.rightV.y).toBeCloseTo(6);
-    expect(cp.rightPos.x).toBeCloseTo(7);
-    expect(cp.rightPos.y).toBeCloseTo(8);
+    expect(cp.rightPos.x).toBeCloseTo(1 + 6);
+    expect(cp.rightPos.y).toBeCloseTo(2 + 6);
     // Skip the this.syncRightToLeft() test.
   });
 
@@ -112,28 +113,28 @@ describe("ControlPoint2", () => {
         false,
         new Circular(4 * Math.SQRT2, 45),
         new THREE.Vector2(4, 4),
-        new THREE.Vector2(5, 6),
+        new THREE.Vector2(1 + 4, 2 + 4),
       ],
       [
         true,
         false,
         new Circular(2 * Math.SQRT2, 45),
         new THREE.Vector2(2, 2),
-        new THREE.Vector2(3, 4),
+        new THREE.Vector2(1 + 2, 2 + 2),
       ],
       [
         false,
         true,
-        new Circular(4 * Math.SQRT2, 225),
+        new Circular(4 * Math.SQRT2, rotate180(45)),
         new THREE.Vector2(-4, -4),
-        new THREE.Vector2(-3, -2),
+        new THREE.Vector2(1 - 4, 2 - 4),
       ],
       [
         true,
         true,
-        new Circular(2 * Math.SQRT2, 225),
+        new Circular(2 * Math.SQRT2, rotate180(45)),
         new THREE.Vector2(-2, -2),
-        new THREE.Vector2(-1, 0),
+        new THREE.Vector2(1 - 2, 2 - 2),
       ],
     ])(
       "isSyncRadius:%o, isSyncAngle:%o",
@@ -163,28 +164,28 @@ describe("ControlPoint2", () => {
         false,
         new Circular(2 * Math.SQRT2, 45),
         new THREE.Vector2(2, 2),
-        new THREE.Vector2(3, 4),
+        new THREE.Vector2(1 + 2, 2 + 2),
       ],
       [
         true,
         false,
         new Circular(4 * Math.SQRT2, 45),
         new THREE.Vector2(4, 4),
-        new THREE.Vector2(5, 6),
+        new THREE.Vector2(1 + 4, 2 + 4),
       ],
       [
         false,
         true,
-        new Circular(2 * Math.SQRT2, 225),
+        new Circular(2 * Math.SQRT2, rotate180(45)),
         new THREE.Vector2(-2, -2),
-        new THREE.Vector2(-1, 0),
+        new THREE.Vector2(1 - 2, 2 - 2),
       ],
       [
         true,
         true,
-        new Circular(4 * Math.SQRT2, 225),
+        new Circular(4 * Math.SQRT2, rotate180(45)),
         new THREE.Vector2(-4, -4),
-        new THREE.Vector2(-3, -2),
+        new THREE.Vector2(1 - 4, 2 - 4),
       ],
     ])(
       "isSyncRadius:%o, isSyncAngle:%o",
