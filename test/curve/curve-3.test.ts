@@ -83,14 +83,14 @@ describe("Curve3", () => {
   // TODO: add spy
   test("interpolateCp()", () => {
     const c = new Curve3([
-      new ControlPoint3( // cp1
+      new ControlPoint3(
         new THREE.Vector3(0, 0, 0), // cp1.middlePos
         new THREE.Vector3(-1, -1, -1), // cp1.leftPos
         new THREE.Vector3(1, 1, 1), // cp1.rightPos
         false,
         false
       ),
-      new ControlPoint3( // cp3
+      new ControlPoint3(
         new THREE.Vector3(0, 3, 0), // cp3.middlePos
         new THREE.Vector3(1, 2, 1), // cp3.leftPos
         new THREE.Vector3(-1, 4, -1), // cp3.rightPos
