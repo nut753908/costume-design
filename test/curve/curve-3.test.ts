@@ -79,6 +79,8 @@ describe("Curve3", () => {
     });
   });
 
+  // TODO: index: 0, 2
+  // TODO: add spy
   test("interpolateCp()", () => {
     const c = new Curve3([
       new ControlPoint3( // cp1
@@ -109,6 +111,7 @@ describe("Curve3", () => {
     expect(c.cps[2].rightPos).toEqual(new THREE.Vector3(-1, 4, -1));
   });
 
+  // TODO: add spy
   describe("removeCp()", () => {
     const cps = [
       new ControlPoint3(new THREE.Vector3(1, 2, 3)),
