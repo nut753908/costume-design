@@ -1,4 +1,7 @@
-import { ControlPoint3 } from "src/curve/control-point-3";
+import {
+  ControlPoint3,
+  type ControlPoint3JSON,
+} from "src/curve/control-point-3";
 import { Spherical } from "src/math/spherical";
 import { reverseInPI, rotate180, rotatePI } from "src/math/utils";
 import * as THREE from "three";
@@ -451,7 +454,7 @@ describe("ControlPoint3", () => {
       false
     );
     const json1 = cp1.toJSON();
-    const json2 = {
+    const json2: ControlPoint3JSON = {
       middlePos: [1, 2, 3],
       leftPos: [4, 5, 6],
       rightPos: [7, 8, 9],

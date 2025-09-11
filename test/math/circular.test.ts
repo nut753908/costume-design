@@ -1,4 +1,4 @@
-import { Circular } from "src/math/circular";
+import { Circular, type CircularJSON } from "src/math/circular";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -111,7 +111,7 @@ describe("Circle", () => {
 
   test("toJSON()", () => {
     const json1 = new Circular(2, 90).toJSON();
-    const json2 = { radius: 2, angle: 90 };
+    const json2: CircularJSON = { radius: 2, angle: 90 };
     expect(json1).toEqual(json2);
   });
 
