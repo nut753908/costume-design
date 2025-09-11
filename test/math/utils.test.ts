@@ -7,15 +7,7 @@ import {
   safeAcos,
   safeAsin,
 } from "src/math/utils";
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  type MockInstance,
-  test,
-  vi,
-} from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("safeAsin()", () => {
   test.each([
@@ -103,14 +95,6 @@ describe("rotate180()", () => {
 });
 
 describe("isInvalidIndex()", () => {
-  let spy: MockInstance;
-
-  beforeEach(() => {
-    spy = vi.spyOn(console, "error");
-  });
-
-  afterEach(() => spy.mockReset());
-
   test.each([
     [1.1, 0, 2, true, "the index(1.1) is not integer."],
     [1, 0.1, 2, true, "the min(0.1) is not integer."],
@@ -123,11 +107,13 @@ describe("isInvalidIndex()", () => {
   ])(
     "index:%d, min:%d, max:%d, expected:%o",
     (index, min, max, expected, msg) => {
+      const spy = vi.spyOn(console, "error");
       if (msg !== undefined) {
         spy.mockImplementationOnce((v) => expect(v).toBe(msg));
       }
       expect(isInvalidIndex(index, min, max)).toBe(expected);
       expect(spy).toHaveBeenCalledTimes(expected ? 1 : 0);
+      spy.mockReset();
     }
   );
 });
