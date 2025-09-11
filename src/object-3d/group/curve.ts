@@ -1,3 +1,4 @@
+import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import type { Curve2 } from "../../curve/curve-2";
 import type { Curve3 } from "../../curve/curve-3";
@@ -9,7 +10,7 @@ import { createControlPointGroup } from "./control-point";
  */
 export function createCurveGroup(
   c: Curve3 | Curve2,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+  ms: Materials
 ): THREE.Group {
   const group = new THREE.Group();
 
@@ -22,10 +23,7 @@ export function createCurveGroup(
 /**
  * @param ms - The materials.
  */
-function createCurvesLine(
-  c: Curve3 | Curve2,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
-): THREE.Line {
+function createCurvesLine(c: Curve3 | Curve2, ms: Materials): THREE.Line {
   const geometry = createEmptyGeometry();
 
   const line = new THREE.Line(geometry, ms.curve.line);
@@ -38,10 +36,7 @@ function createCurvesLine(
 /**
  * @param ms - The materials.
  */
-function createCpsGroup(
-  c: Curve3 | Curve2,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
-): THREE.Group {
+function createCpsGroup(c: Curve3 | Curve2, ms: Materials): THREE.Group {
   const group = new THREE.Group();
 
   // This function is used by createGeometry() in ./src/curve/curve-{3,2}.ts.

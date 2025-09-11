@@ -7,9 +7,7 @@ import { createToonMaterial } from "./toon";
 /**
  * @return  The materials.
  */
-export function createMaterials(gui: GUI): {
-  [k1: string]: { [k2: string]: THREE.Material };
-} {
+export function createMaterials(gui: GUI): Materials {
   const folder = gui.addFolder("THREE.Material").close();
 
   const baseFolder = folder.addFolder("base").close();
@@ -53,5 +51,27 @@ export function createMaterials(gui: GUI): {
     cp,
     curve,
     tube,
+  };
+}
+
+export interface Materials {
+  base: {
+    line: THREE.LineBasicMaterial;
+    toon: THREE.ShaderMaterial;
+  };
+  line: {
+    points: THREE.PointsMaterial;
+    line: THREE.LineBasicMaterial;
+  };
+  cp: {
+    points: THREE.PointsMaterial;
+    line: THREE.LineBasicMaterial;
+  };
+  curve: {
+    line: THREE.LineBasicMaterial;
+  };
+  tube: {
+    line: THREE.LineBasicMaterial;
+    toon: THREE.ShaderMaterial;
   };
 }

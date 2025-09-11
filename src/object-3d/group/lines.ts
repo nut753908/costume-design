@@ -1,4 +1,5 @@
 import type { GUI } from "lil-gui";
+import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import type { Edge } from "../../cross-section/edge";
 import type { EdgeLoop } from "../../cross-section/edge-loop";
@@ -21,7 +22,7 @@ export function createLinesGroup(
       | THREE.CatmullRomCurve3;
   },
   positions: THREE.BufferAttribute,
-  ms: { [k1: string]: { [k2: string]: THREE.Material } }
+  ms: Materials
 ): THREE.Group {
   const group = new THREE.Group();
 
