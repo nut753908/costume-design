@@ -1,4 +1,4 @@
-import { mean } from "src/math/vector";
+import { getAngles, mean } from "src/math/vector";
 import * as THREE from "three";
 import {
   afterEach,
@@ -9,6 +9,17 @@ import {
   test,
   vi,
 } from "vitest";
+
+describe("getAngles()", () => {
+  test.each([
+    [new THREE.Vector3(1, 1, 1), new THREE.Vector3(45, 45, 45)],
+    [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
+    [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
+    [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
+  ])("v:%o, expected:%o", (v, expected) => {
+    expect(getAngles(v)).toEqual(expected);
+  });
+});
 
 describe("mean()", () => {
   let spy: MockInstance;
