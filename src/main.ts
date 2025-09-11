@@ -17,7 +17,7 @@ import {
 } from "./main/gui";
 import { createRenderer, updateRenderer } from "./main/renderer";
 import { objectMap } from "./main/utils";
-import { createMaterials } from "./material/materials";
+import { createMaterials, type Materials } from "./material/materials";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,
@@ -38,7 +38,7 @@ let gizmo: ViewportGizmo;
 let scene: THREE.Scene;
 
 let gui: GUI;
-let ms: { [k1: string]: { [k2: string]: THREE.Material } };
+let ms: Materials;
 
 let loading = false;
 const undos: { gui: guiJSON; closed: closedJSON }[] = [];
