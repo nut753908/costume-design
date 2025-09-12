@@ -113,7 +113,6 @@ describe("isInvalidIndex()", () => {
       }
       expect(isInvalidIndex(index, min, max)).toBe(expected);
       expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
-      spy.mockReset();
     }
   );
 });

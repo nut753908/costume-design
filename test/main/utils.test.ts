@@ -36,10 +36,7 @@ test("disposeGroup()", () => {
     vi.spyOn(grandchild2.geometry, "dispose"),
   ];
   disposeGroup(parent);
-  spies.forEach((s) => {
-    expect(s).toHaveBeenCalledTimes(1);
-    s.mockReset();
-  });
+  spies.map((s) => expect(s).toHaveBeenCalledTimes(1));
 });
 
 test("objectMap()", () => {

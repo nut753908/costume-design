@@ -45,9 +45,6 @@ describe("deleteFolder()", () => {
       expect(spyA).toHaveBeenCalledTimes(countA);
       expect(spyAB).toHaveBeenCalledTimes(countAB);
       expect(spyBA).toHaveBeenCalledTimes(countBA);
-      spyA.mockReset();
-      spyAB.mockReset();
-      spyBA.mockReset();
     }
   );
 });
@@ -68,6 +65,5 @@ describe("closeFolder()", () => {
     closeFolder(folder);
     expect(folder._closed).toBeTruthy();
     expect(spy).toHaveBeenCalledTimes(0);
-    spy.mockReset();
   });
 });
