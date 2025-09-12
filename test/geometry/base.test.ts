@@ -9,16 +9,16 @@ describe("correctNPolygonIndices()", () => {
       [1, 0, 0], // index: 1
       [0, 0, 1], // index: 2
       [0, 1, 0], // index: 3
-      [-1, 0, 0], // index: 4
+      [-1, 0, 0], // index: 4 (unknown)
     ];
     const nPolygonIndices = [
       [0, 1, 2],
       [0, 1, 3],
       [1, 2, 3],
       [2, 0, 3],
-      [0, 2, 4],
-      [2, 4, 3],
-      [4, 0, 3],
+      [0, 2, 4], // (unknown)
+      [2, 4, 3], // (unknown)
+      [4, 0, 3], // (unknown)
     ];
 
     test("if the order of positions is the same", () => {
@@ -78,10 +78,10 @@ describe("correctNPolygonIndices()", () => {
       [1, 1, 0], // index: 5
       [1, 1, 1], // index: 6
       [0, 1, 1], // index: 7
-      [0, 2, 0], // index: 8
-      [1, 2, 0], // index: 9
-      [1, 2, 1], // index: 10
-      [0, 2, 1], // index: 11
+      [0, 2, 0], // index: 8 (unknown)
+      [1, 2, 0], // index: 9 (unknown)
+      [1, 2, 1], // index: 10 (unknown)
+      [0, 2, 1], // index: 11 (unknown)
     ];
     const nPolygonIndices = [
       [0, 1, 2, 3],
@@ -90,11 +90,11 @@ describe("correctNPolygonIndices()", () => {
       [2, 3, 7, 6],
       [3, 0, 4, 7],
       [4, 5, 6, 7],
-      [4, 5, 9, 8],
-      [5, 6, 10, 9],
-      [6, 7, 11, 10],
-      [7, 4, 8, 11],
-      [8, 9, 10, 11],
+      [4, 5, 9, 8], // (unknown)
+      [5, 6, 10, 9], // (unknown)
+      [6, 7, 11, 10], // (unknown)
+      [7, 4, 8, 11], // (unknown)
+      [8, 9, 10, 11], // (unknown)
     ];
 
     test("if the order of positions is the same", () => {
