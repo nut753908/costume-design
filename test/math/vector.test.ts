@@ -16,7 +16,7 @@ describe("getAngles()", () => {
     [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
     [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
     [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
-  ])("v:%o, expected:%o", (v, expected) => {
+  ])("v:%j, expected:%j", (v, expected) => {
     expect(getAngles(v)).toEqual(expected);
   });
 });
