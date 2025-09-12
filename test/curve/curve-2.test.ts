@@ -2,7 +2,7 @@ import { ControlPoint2 } from "src/curve/control-point-2";
 import type { CurveJSON } from "src/curve/curve";
 import { Curve2 } from "src/curve/curve-2";
 import * as THREE from "three";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("Curve2", () => {
   test("constructor()", () => {
@@ -79,10 +79,8 @@ describe("Curve2", () => {
     });
   });
 
-  // TODO: index: 0, 2
-  // TODO: add spy
-  test("interpolateCp()", () => {
-    const c = new Curve2([
+  describe("interpolateCp()", () => {
+    const cps = [
       new ControlPoint2(
         new THREE.Vector2(0, 0), // cp1.middlePos
         new THREE.Vector2(-1, -1), // cp1.leftPos
@@ -97,21 +95,40 @@ describe("Curve2", () => {
         false,
         false
       ),
-    ]); // centerPos: (1, 1.5)
-    c.interpolateCp(1);
-    expect(c.cps.length).toBe(3);
-    expect(c.cps[0].middlePos).toEqual(new THREE.Vector2(0, 0));
-    expect(c.cps[0].leftPos).toEqual(new THREE.Vector2(-1, -1));
-    expect(c.cps[0].rightPos).toEqual(new THREE.Vector2(0.5, 0.5));
-    expect(c.cps[1].middlePos).toEqual(new THREE.Vector2(0.75, 1.5));
-    expect(c.cps[1].leftPos).toEqual(new THREE.Vector2(0.75, 1));
-    expect(c.cps[1].rightPos).toEqual(new THREE.Vector2(0.75, 2));
-    expect(c.cps[2].middlePos).toEqual(new THREE.Vector2(0, 3));
-    expect(c.cps[2].leftPos).toEqual(new THREE.Vector2(0.5, 2.5));
-    expect(c.cps[2].rightPos).toEqual(new THREE.Vector2(-1, 4));
+    ];
+    test.each([
+      [0, 2, "the index(0) is out of range [1,1]."],
+      [1, 3, undefined],
+      [2, 2, "the index(2) is out of range [1,1]."],
+    ])("preLength:2, index:%i, postLength:%i", (index, postLength, msg) => {
+      const spy = vi.spyOn(console, "error");
+      if (msg !== undefined) {
+        spy.mockImplementationOnce((v) => expect(v).toBe(msg));
+      }
+      const c = new Curve2([cps[0].clone(), cps[1].clone()]);
+      c.interpolateCp(index);
+      expect(c.cps.length).toBe(postLength);
+      if (postLength === 2) {
+        expect(JSON.stringify(c.cps)).toBe(JSON.stringify(cps));
+      }
+      if (postLength === 3) {
+        // centerPos: (1, 1.5)
+        expect(c.cps[0].middlePos).toEqual(cps[0].middlePos);
+        expect(c.cps[0].leftPos).toEqual(cps[0].leftPos);
+        expect(c.cps[0].rightPos).toEqual(new THREE.Vector2(0.5, 0.5)); // Assume there is no rounding error.
+        expect(c.cps[1].middlePos).toEqual(new THREE.Vector2(0.75, 1.5)); // Assume there is no rounding error.
+        expect(c.cps[1].leftPos).toEqual(new THREE.Vector2(0.75, 1)); // Assume there is no rounding error.
+        expect(c.cps[1].rightPos).toEqual(new THREE.Vector2(0.75, 2)); // Assume there is no rounding error.
+        expect(c.cps[2].middlePos).toEqual(new THREE.Vector2(0, 3));
+        expect(c.cps[2].middlePos).toEqual(cps[1].middlePos);
+        expect(c.cps[2].leftPos).toEqual(new THREE.Vector2(0.5, 2.5)); // Assume there is no rounding error.
+        expect(c.cps[2].rightPos).toEqual(cps[1].rightPos);
+      }
+      expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
+      spy.mockReset();
+    });
   });
 
-  // TODO: add spy
   describe("removeCp()", () => {
     const cps = [
       new ControlPoint2(new THREE.Vector2(1, 2)),
@@ -119,17 +136,23 @@ describe("Curve2", () => {
       new ControlPoint2(new THREE.Vector2(5, 6)),
     ];
     test.each([
-      [[0, 1, 2], -1, [0, 1, 2]],
-      [[0, 1, 2], 0, [1, 2]],
-      [[0, 1, 2], 1, [0, 2]],
-      [[0, 1, 2], 2, [0, 1]],
-      [[0, 1, 2], 3, [0, 1, 2]],
+      [[0, 1, 2], -1, [0, 1, 2], "the index(-1) is out of range [0,2]."],
+      [[0, 1, 2], 0, [1, 2], undefined],
+      [[0, 1, 2], 1, [0, 2], undefined],
+      [[0, 1, 2], 2, [0, 1], undefined],
+      [[0, 1, 2], 3, [0, 1, 2], "the index(3) is out of range [0,2]."],
     ])(
       "preIndexList:%j, index:%i, postIndexList:%j",
-      (preIndexList, index, postIndexList) => {
+      (preIndexList, index, postIndexList, msg) => {
+        const spy = vi.spyOn(console, "error");
+        if (msg !== undefined) {
+          spy.mockImplementationOnce((v) => expect(v).toBe(msg));
+        }
         const c = new Curve2(preIndexList.map((i) => cps[i]));
         c.removeCp(index);
         expect(c.cps).toEqual(postIndexList.map((i) => cps[i]));
+        expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
+        spy.mockReset();
       }
     );
   });
@@ -141,8 +164,8 @@ describe("Curve2", () => {
       [2, [1]],
       [3, [1, 2]],
       [4, [1, 2, 3]],
-    ])("cpsLength:%i, expected:%j", (cpsLength, expected) => {
-      const c = new Curve2(Array(cpsLength).fill(new ControlPoint2()));
+    ])("length:%i, expected:%j", (length, expected) => {
+      const c = new Curve2(Array(length).fill(new ControlPoint2()));
       expect(c.iIndexList).toEqual(expected);
     });
   });
@@ -154,8 +177,8 @@ describe("Curve2", () => {
       [2, []],
       [3, [0, 1, 2]],
       [4, [0, 1, 2, 3]],
-    ])("cpsLength:%i, expected:%j", (cpsLength, expected) => {
-      const c = new Curve2(Array(cpsLength).fill(new ControlPoint2()));
+    ])("length:%i, expected:%j", (length, expected) => {
+      const c = new Curve2(Array(length).fill(new ControlPoint2()));
       expect(c.safeRIndexList).toEqual(expected);
     });
   });
@@ -167,8 +190,8 @@ describe("Curve2", () => {
       [2, [0, 1]],
       [3, [0, 1, 2]],
       [4, [0, 1, 2, 3]],
-    ])("cpsLength:%i, expected:%j", (cpsLength, expected) => {
-      const c = new Curve2(Array(cpsLength).fill(new ControlPoint2()));
+    ])("length:%i, expected:%j", (length, expected) => {
+      const c = new Curve2(Array(length).fill(new ControlPoint2()));
       expect(c.rIndexList).toEqual(expected);
     });
   });
