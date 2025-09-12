@@ -75,7 +75,7 @@ export class VerticalPlane extends Plane {
    * @return  A reference to this vertical plane.
    */
   copy(source: VerticalPlane): this {
-    this.curve.copy(source.curve);
+    this.curve = source.curve.clone();
     this.u = source.u;
 
     return this;
