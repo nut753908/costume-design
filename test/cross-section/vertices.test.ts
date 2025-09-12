@@ -2,7 +2,14 @@ import {
   createRemainingVerticesMap,
   findNextVertex,
 } from "src/cross-section/vertices";
-import { beforeEach, describe, expect, MockInstance, test, vi } from "vitest";
+import {
+  beforeEach,
+  describe,
+  expect,
+  type MockInstance,
+  test,
+  vi,
+} from "vitest";
 
 describe("createRemainingVerticesMap()", () => {
   test("triangular pyramid example", () => {
