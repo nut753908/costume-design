@@ -55,6 +55,7 @@ export function findNextEdge(
     return null;
   }
   const vs0 = map[`${e2.v1},${e2.v2}`];
+  if (vs0 === undefined) return null;
   if (vs0.length !== 2) return null;
   if (vs0[0].length !== 2) return null;
   if (vs0[1].length !== 2) return null;
