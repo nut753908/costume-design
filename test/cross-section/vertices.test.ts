@@ -2,7 +2,7 @@ import {
   createRemainingVerticesMap,
   findNextVertex,
 } from "src/cross-section/vertices";
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, MockInstance, test, vi } from "vitest";
 
 describe("createRemainingVerticesMap()", () => {
   test("triangular pyramid example", () => {
@@ -120,6 +120,12 @@ describe("createRemainingVerticesMap()", () => {
 });
 
 describe("findNextVertex()", () => {
+  let spy: MockInstance;
+
+  beforeEach(() => {
+    spy = vi.spyOn(console, "error");
+  });
+
   test("find it once", () => {
     /**
      * flat layout:
@@ -136,6 +142,7 @@ describe("findNextVertex()", () => {
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBe(12);
     expect(findNextVertex(map, 11, 12)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("find it twice", () => {
@@ -157,6 +164,7 @@ describe("findNextVertex()", () => {
     expect(findNextVertex(map, 10, 11)).toBe(12);
     expect(findNextVertex(map, 11, 12)).toBe(13);
     expect(findNextVertex(map, 12, 13)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing top left", () => {
@@ -173,6 +181,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing top left (interpolate with triangles)", () => {
@@ -190,6 +199,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing top right", () => {
@@ -206,6 +216,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing top right (interpolate with triangles)", () => {
@@ -223,6 +234,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing bottom left", () => {
@@ -239,6 +251,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing bottom left (interpolate with triangles)", () => {
@@ -256,6 +269,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing bottom right", () => {
@@ -272,6 +286,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing bottom right (interpolate with triangles)", () => {
@@ -289,6 +304,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing v1 (interpolate with triangles)", () => {
@@ -306,6 +322,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("missing v2 (interpolate with triangles)", () => {
@@ -323,6 +340,7 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("the two vertices are different", () => {
@@ -340,5 +358,6 @@ describe("findNextVertex()", () => {
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
   });
 });
