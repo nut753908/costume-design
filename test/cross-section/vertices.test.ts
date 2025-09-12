@@ -73,7 +73,7 @@ describe("createRemainingVerticesMap()", () => {
   });
 
   test("plane example", () => {
-    // See the plane example in test/geometry/base.test.ts.
+    // See a similar plane example in test/geometry/base.test.ts.
     /**
      * flat layout:
      *   20 21 22
