@@ -2,6 +2,8 @@ import { EdgeLoop } from "src/cross-section/edge-loop";
 import { createEdgeLoopsMap } from "src/cross-section/edge-loops";
 import { expect, test } from "vitest";
 
+test.todo("createAllEdgeLoops()");
+
 test("createEdgeLoopsMap()", () => {
   const els = [
     new EdgeLoop([0, 1, 2, 3], false),
