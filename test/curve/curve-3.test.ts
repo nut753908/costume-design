@@ -83,15 +83,15 @@ describe("Curve3", () => {
     const cps = [
       new ControlPoint3(
         new THREE.Vector3(0, 0, 0), // cp1.middlePos
-        new THREE.Vector3(-1, -1, -1), // cp1.leftPos
-        new THREE.Vector3(1, 1, 1), // cp1.rightPos
+        new THREE.Vector3(-1, 0, 0), // cp1.leftPos
+        new THREE.Vector3(1, 0, 0), // cp1.rightPos
         false,
         false
       ),
       new ControlPoint3(
-        new THREE.Vector3(0, 3, 0), // cp3.middlePos
-        new THREE.Vector3(1, 2, 1), // cp3.leftPos
-        new THREE.Vector3(-1, 4, -1), // cp3.rightPos
+        new THREE.Vector3(2, 2, 0), // cp3.middlePos
+        new THREE.Vector3(2, 1, 0), // cp3.leftPos
+        new THREE.Vector3(2, 3, 0), // cp3.rightPos
         false,
         false
       ),
@@ -112,16 +112,16 @@ describe("Curve3", () => {
         expect(JSON.stringify(c.cps)).toBe(JSON.stringify(cps));
       }
       if (postLength === 3) {
-        // centerPos: (1, 1.5, 1)
-        expect(c.cps[0].middlePos).toEqual(new THREE.Vector3(0, 0, 0));
-        expect(c.cps[0].leftPos).toEqual(new THREE.Vector3(-1, -1, -1));
-        expect(c.cps[0].rightPos).toEqual(new THREE.Vector3(0.5, 0.5, 0.5)); // Assume there is no rounding error.
-        expect(c.cps[1].middlePos).toEqual(new THREE.Vector3(0.75, 1.5, 0.75)); // Assume there is no rounding error.
-        expect(c.cps[1].leftPos).toEqual(new THREE.Vector3(0.75, 1, 0.75)); // Assume there is no rounding error.
-        expect(c.cps[1].rightPos).toEqual(new THREE.Vector3(0.75, 2, 0.75)); // Assume there is no rounding error.
-        expect(c.cps[2].middlePos).toEqual(new THREE.Vector3(0, 3, 0));
-        expect(c.cps[2].leftPos).toEqual(new THREE.Vector3(0.5, 2.5, 0.5)); // Assume there is no rounding error.
-        expect(c.cps[2].rightPos).toEqual(new THREE.Vector3(-1, 4, -1));
+        // centerPos: (1.5, 0.5, 0)
+        expect(c.cps[0].middlePos).toEqual(cps[0].middlePos);
+        expect(c.cps[0].leftPos).toEqual(cps[0].leftPos);
+        expect(c.cps[0].rightPos).toEqual(new THREE.Vector3(0.5, 0, 0)); // Assume there is no rounding error.
+        expect(c.cps[1].middlePos).toEqual(new THREE.Vector3(1.375, 0.625, 0)); // Assume there is no rounding error.
+        expect(c.cps[1].leftPos).toEqual(new THREE.Vector3(1, 0.25, 0)); // Assume there is no rounding error.
+        expect(c.cps[1].rightPos).toEqual(new THREE.Vector3(1.75, 1, 0)); // Assume there is no rounding error.
+        expect(c.cps[2].middlePos).toEqual(cps[1].middlePos);
+        expect(c.cps[2].leftPos).toEqual(new THREE.Vector3(2, 1.5, 0)); // Assume there is no rounding error.
+        expect(c.cps[2].rightPos).toEqual(cps[1].rightPos);
       }
       expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
       spy.mockReset();
