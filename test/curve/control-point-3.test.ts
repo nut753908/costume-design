@@ -1,4 +1,7 @@
-import { ControlPoint3 } from "src/curve/control-point-3";
+import {
+  ControlPoint3,
+  type ControlPoint3JSON,
+} from "src/curve/control-point-3";
 import { Spherical } from "src/math/spherical";
 import { reverseInPI, rotate180, rotatePI } from "src/math/utils";
 import * as THREE from "three";
@@ -442,6 +445,29 @@ describe("ControlPoint3", () => {
     expect(JSON.stringify(cp1)).toBe(JSON.stringify(cp2));
   });
 
+  const _json: ControlPoint3JSON = {
+    middlePos: [1, 2, 3],
+    leftPos: [4, 5, 6],
+    rightPos: [7, 8, 9],
+    isSyncRadius: false,
+    isSyncAngle: false,
+    type: "ControlPoint3",
+    leftV: [3, 3, 3],
+    leftS: {
+      radius: 3 * Math.sqrt(3),
+      phi: Math.atan(Math.SQRT2),
+      theta: Math.PI / 4,
+    }, // Assume there is no rounding error.
+    leftA: [45, 45, 45], // Assume there is no rounding error.
+    rightV: [6, 6, 6],
+    rightS: {
+      radius: 6 * Math.sqrt(3),
+      phi: Math.atan(Math.SQRT2),
+      theta: Math.PI / 4,
+    }, // Assume there is no rounding error.
+    rightA: [45, 45, 45], // Assume there is no rounding error.
+  };
+
   test("toJSON()", () => {
     const cp1 = new ControlPoint3(
       new THREE.Vector3(1, 2, 3),
@@ -451,54 +477,12 @@ describe("ControlPoint3", () => {
       false
     );
     const json1 = cp1.toJSON();
-    const json2 = {
-      middlePos: [1, 2, 3],
-      leftPos: [4, 5, 6],
-      rightPos: [7, 8, 9],
-      isSyncRadius: false,
-      isSyncAngle: false,
-      type: "ControlPoint3",
-      leftV: [3, 3, 3],
-      leftS: {
-        radius: 3 * Math.sqrt(3),
-        phi: Math.atan(Math.SQRT2),
-        theta: Math.PI / 4,
-      }, // Assume there is no rounding error.
-      leftA: [45, 45, 45], // Assume there is no rounding error.
-      rightV: [6, 6, 6],
-      rightS: {
-        radius: 6 * Math.sqrt(3),
-        phi: Math.atan(Math.SQRT2),
-        theta: Math.PI / 4,
-      }, // Assume there is no rounding error.
-      rightA: [45, 45, 45], // Assume there is no rounding error.
-    };
+    const json2 = _json;
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
-    const cp1 = new ControlPoint3().fromJSON({
-      middlePos: [1, 2, 3],
-      leftPos: [4, 5, 6],
-      rightPos: [7, 8, 9],
-      isSyncRadius: false,
-      isSyncAngle: false,
-      type: "ControlPoint3",
-      leftV: [3, 3, 3],
-      leftS: {
-        radius: 3 * Math.sqrt(3),
-        phi: Math.atan(Math.SQRT2),
-        theta: Math.PI / 4,
-      }, // Assume there is no rounding error.
-      leftA: [45, 45, 45], // Assume there is no rounding error.
-      rightV: [6, 6, 6],
-      rightS: {
-        radius: 6 * Math.sqrt(3),
-        phi: Math.atan(Math.SQRT2),
-        theta: Math.PI / 4,
-      }, // Assume there is no rounding error.
-      rightA: [45, 45, 45], // Assume there is no rounding error.
-    });
+    const cp1 = new ControlPoint3().fromJSON(_json);
     const cp2 = new ControlPoint3(
       new THREE.Vector3(1, 2, 3),
       new THREE.Vector3(4, 5, 6),

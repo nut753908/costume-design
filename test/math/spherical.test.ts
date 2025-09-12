@@ -1,4 +1,4 @@
-import { Spherical } from "src/math/spherical";
+import { Spherical, type SphericalJSON } from "src/math/spherical";
 import { describe, expect, test } from "vitest";
 
 describe("Spherical", () => {
@@ -11,7 +11,11 @@ describe("Spherical", () => {
 
   test("toJSON()", () => {
     const json1 = new Spherical(2, Math.PI / 2, Math.PI).toJSON();
-    const json2 = { radius: 2, phi: Math.PI / 2, theta: Math.PI };
+    const json2: SphericalJSON = {
+      radius: 2,
+      phi: Math.PI / 2,
+      theta: Math.PI,
+    };
     expect(json1).toEqual(json2);
   });
 

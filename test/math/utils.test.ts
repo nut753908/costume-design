@@ -112,7 +112,7 @@ describe("isInvalidIndex()", () => {
         spy.mockImplementationOnce((v) => expect(v).toBe(msg));
       }
       expect(isInvalidIndex(index, min, max)).toBe(expected);
-      expect(spy).toHaveBeenCalledTimes(expected ? 1 : 0);
+      expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
       spy.mockReset();
     }
   );
