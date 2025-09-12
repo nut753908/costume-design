@@ -124,7 +124,6 @@ describe("Curve3", () => {
         expect(c.cps[2].rightPos).toEqual(cps[1].rightPos);
       }
       expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
-      spy.mockReset();
     });
   });
 
@@ -151,7 +150,6 @@ describe("Curve3", () => {
         c.removeCp(index);
         expect(c.cps).toEqual(postIndexList.map((i) => cps[i]));
         expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
-        spy.mockReset();
       }
     );
   });

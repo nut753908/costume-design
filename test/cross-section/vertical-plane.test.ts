@@ -5,7 +5,6 @@ import {
 } from "src/cross-section/vertical-plane";
 import * as THREE from "three";
 import {
-  afterEach,
   beforeEach,
   describe,
   expect,
@@ -166,8 +165,6 @@ describe("VerticalPlane", () => {
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
     });
-
-    afterEach(() => spy.mockReset());
 
     test('if (json.curve.type === "CurvePath")', () => {
       const p1 = new VerticalPlane().fromJSON(_jsonForCurvePath);

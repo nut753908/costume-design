@@ -1,7 +1,6 @@
 import { getAngles, mean } from "src/math/vector";
 import * as THREE from "three";
 import {
-  afterEach,
   beforeEach,
   describe,
   expect,
@@ -27,8 +26,6 @@ describe("mean()", () => {
   beforeEach(() => {
     spy = vi.spyOn(console, "error");
   });
-
-  afterEach(() => spy.mockReset());
 
   test("if TVector is THREE.Vector3", () => {
     const v1 = new THREE.Vector3(1, 2, 3);
