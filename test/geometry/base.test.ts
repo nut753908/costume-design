@@ -9,16 +9,12 @@ describe("correctNPolygonIndices()", () => {
       [1, 0, 0], // index: 1
       [0, 0, 1], // index: 2
       [0, 1, 0], // index: 3
-      [-1, 0, 0], // index: 4 (unknown)
     ];
     const nPolygonIndices = [
       [0, 1, 2],
       [0, 1, 3],
       [1, 2, 3],
       [2, 0, 3],
-      [0, 2, 4], // (unknown)
-      [2, 4, 3], // (unknown)
-      [4, 0, 3], // (unknown)
     ];
 
     test("if the order of positions is the same", () => {
@@ -29,7 +25,6 @@ describe("correctNPolygonIndices()", () => {
         [1, 0, 0], // index: 1
         [0, 1, 0], // index: 2
         [0, 0, -1], // index: 3
-        // index: 4 ... Does not exist.
       ].flat();
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
@@ -37,7 +32,6 @@ describe("correctNPolygonIndices()", () => {
         [0, 1, 3],
         [1, 2, 3],
         [2, 0, 3],
-        // Anything that doesn't exist will be deleted.
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -52,7 +46,6 @@ describe("correctNPolygonIndices()", () => {
         [0, 1, 0], // index: 2
         [1, 0, 0], // index: 1
         [0, 0, 0], // index: 0
-        // index: 4 ... Does not exist.
       ].flat();
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
@@ -60,7 +53,6 @@ describe("correctNPolygonIndices()", () => {
         [3, 2, 0],
         [2, 1, 0],
         [1, 3, 0],
-        // Anything that doesn't exist will be deleted.
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -78,10 +70,6 @@ describe("correctNPolygonIndices()", () => {
       [1, 1, 0], // index: 5
       [1, 1, 1], // index: 6
       [0, 1, 1], // index: 7
-      [0, 2, 0], // index: 8 (unknown)
-      [1, 2, 0], // index: 9 (unknown)
-      [1, 2, 1], // index: 10 (unknown)
-      [0, 2, 1], // index: 11 (unknown)
     ];
     const nPolygonIndices = [
       [0, 1, 2, 3],
@@ -90,11 +78,6 @@ describe("correctNPolygonIndices()", () => {
       [2, 3, 7, 6],
       [3, 0, 4, 7],
       [4, 5, 6, 7],
-      [4, 5, 9, 8], // (unknown)
-      [5, 6, 10, 9], // (unknown)
-      [6, 7, 11, 10], // (unknown)
-      [7, 4, 8, 11], // (unknown)
-      [8, 9, 10, 11], // (unknown)
     ];
 
     test("if the order of positions is the same", () => {
@@ -109,7 +92,6 @@ describe("correctNPolygonIndices()", () => {
         [1, 0, -1], // index: 5
         [1, 1, -1], // index: 6
         [0, 1, -1], // index: 7
-        // index: 8,9,10,11 ... Does not exist.
       ].flat();
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
@@ -119,7 +101,6 @@ describe("correctNPolygonIndices()", () => {
         [2, 3, 7, 6],
         [3, 0, 4, 7],
         [4, 5, 6, 7],
-        // Anything that doesn't exist will be deleted.
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -138,7 +119,6 @@ describe("correctNPolygonIndices()", () => {
         [1, 1, 0], // index: 2
         [1, 0, 0], // index: 1
         [0, 0, 0], // index: 0
-        // index: 8,9,10,11 ... Does not exist.
       ].flat();
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
@@ -148,6 +128,91 @@ describe("correctNPolygonIndices()", () => {
         [5, 4, 0, 1],
         [4, 7, 3, 0],
         [3, 2, 1, 0],
+      ];
+      expect(
+        correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
+      ).toEqual(expected);
+    });
+  });
+
+  describe("plane example", () => {
+    /**
+     * flat layout:
+     *  (9)(10)
+     *   6   7   8
+     *   3   4   5
+     *   0   1   2
+     */
+    const nPolygonPositions = [
+      [0, 0, 0], // index: 0
+      [1, 0, 0], // index: 1
+      [2, 0, 0], // index: 2
+      [0, 1, 0], // index: 3
+      [1, 1, 0], // index: 4
+      [2, 1, 0], // index: 5
+      [0, 2, 0], // index: 6
+      [1, 2, 0], // index: 7
+      [2, 2, 0], // index: 8
+      [0, 3, 0], // index: 9 (unknown)
+      [1, 3, 0], // index: 10 (unknown)
+    ];
+    const nPolygonIndices = [
+      [0, 1, 4, 3],
+      [1, 2, 5, 4],
+      [3, 4, 7, 6],
+      [4, 5, 8, 7],
+      [6, 7, 10, 9], // (unknown)
+    ];
+
+    test("if the order of positions is the same", () => {
+      // Blender -> Three.js
+      // (x,y,z) -> (x,z,-y)
+      const array = [
+        [0, 0, 0], // index: 0
+        [1, 0, 0], // index: 1
+        [2, 0, 0], // index: 2
+        [0, 0, -1], // index: 3
+        [1, 0, -1], // index: 4
+        [2, 0, -1], // index: 5
+        [0, 0, -2], // index: 6
+        [1, 0, -2], // index: 7
+        [2, 0, -2], // index: 8
+        // index: 9,10 ... Does not exist.
+      ].flat();
+      const positions = new THREE.Float32BufferAttribute(array, 3);
+      const expected = [
+        [0, 1, 4, 3],
+        [1, 2, 5, 4],
+        [3, 4, 7, 6],
+        [4, 5, 8, 7],
+        // Anything that doesn't exist will be deleted.
+      ];
+      expect(
+        correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
+      ).toEqual(expected);
+    });
+
+    test("if the order of positions is reversed", () => {
+      // Blender -> Three.js
+      // (x,y,z) -> (x,z,-y)
+      const array = [
+        [2, 0, -2], // index: 8
+        [1, 0, -2], // index: 7
+        [0, 0, -2], // index: 6
+        [2, 0, -1], // index: 5
+        [1, 0, -1], // index: 4
+        [0, 0, -1], // index: 3
+        [2, 0, 0], // index: 2
+        [1, 0, 0], // index: 1
+        [0, 0, 0], // index: 0
+        // index: 9,10 ... Does not exist.
+      ].flat();
+      const positions = new THREE.Float32BufferAttribute(array, 3);
+      const expected = [
+        [8, 7, 4, 5],
+        [7, 6, 3, 4],
+        [5, 4, 1, 2],
+        [4, 3, 0, 1],
         // Anything that doesn't exist will be deleted.
       ];
       expect(
