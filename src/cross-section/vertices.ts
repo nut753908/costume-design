@@ -42,6 +42,7 @@ export function findNextVertex(
   v2: number
 ): number | null {
   const vs0 = map[`${v1},${v2}`]; // [a,c]
+  if (vs0 === undefined) return null;
   if (vs0.length !== 2) return null;
   if (vs0[0].length !== 2) return null;
   if (vs0[1].length !== 2) return null;
@@ -54,6 +55,7 @@ export function findNextVertex(
     return null;
   }
   const vs1 = map[`${a},${v2}`];
+  if (vs1 === undefined) return null;
   if (vs1.length !== 2) return null;
   if (vs1[0].length !== 2) return null;
   if (vs1[1].length !== 2) return null;
@@ -78,6 +80,7 @@ export function findNextVertex(
     return null;
   }
   const vs2 = map[`${c},${v2}`];
+  if (vs2 === undefined) return null;
   if (vs2.length !== 2) return null;
   if (vs2[0].length !== 2) return null;
   if (vs2[1].length !== 2) return null;

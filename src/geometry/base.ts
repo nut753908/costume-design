@@ -54,7 +54,7 @@ export type BufferGeometryWithNPolygonIndices = THREE.BufferGeometry &
  * @param nPolygonIndices - The n polygon indices.
  * @return  The correct n polygon indices.
  */
-function correctNPolygonIndices(
+export function correctNPolygonIndices(
   nPolygonPositions: number[][],
   positions: THREE.BufferAttribute,
   nPolygonIndices: number[][]
