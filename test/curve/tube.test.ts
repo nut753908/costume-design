@@ -1,4 +1,8 @@
-import { smallCircleCurve2 } from "src/curve/samples/curve-2";
+import {
+  constant0Curve2,
+  constant1Curve2,
+  smallCircleCurve2,
+} from "src/curve/samples/curve-2";
 import { constant0Curve3 } from "src/curve/samples/curve-3";
 import { Tube } from "src/curve/tube";
 import type {
@@ -21,12 +25,12 @@ describe("Tube", () => {
         xCurvatureN: 1,
         yCurvatureN: 1,
         tiltN: 1,
-        scaleC: smallCircleCurve2.clone(),
-        xScaleC: smallCircleCurve2.clone(),
-        yScaleC: smallCircleCurve2.clone(),
-        xCurvatureC: smallCircleCurve2.clone(),
-        yCurvatureC: smallCircleCurve2.clone(),
-        tiltC: smallCircleCurve2.clone(),
+        scaleC: constant1Curve2.clone(),
+        xScaleC: constant1Curve2.clone(),
+        yScaleC: constant1Curve2.clone(),
+        xCurvatureC: constant0Curve2.clone(),
+        yCurvatureC: constant0Curve2.clone(),
+        tiltC: constant0Curve2.clone(),
         curvatureOrder: "yx",
       };
       const t = new Tube(parameters);
@@ -46,12 +50,12 @@ describe("Tube", () => {
       xCurvatureN: 1,
       yCurvatureN: 1,
       tiltN: 1,
-      scaleC: smallCircleCurve2.clone(),
-      xScaleC: smallCircleCurve2.clone(),
-      yScaleC: smallCircleCurve2.clone(),
-      xCurvatureC: smallCircleCurve2.clone(),
-      yCurvatureC: smallCircleCurve2.clone(),
-      tiltC: smallCircleCurve2.clone(),
+      scaleC: constant1Curve2.clone(),
+      xScaleC: constant1Curve2.clone(),
+      yScaleC: constant1Curve2.clone(),
+      xCurvatureC: constant0Curve2.clone(),
+      yCurvatureC: constant0Curve2.clone(),
+      tiltC: constant0Curve2.clone(),
       curvatureOrder: "yx",
     };
     const t1 = new Tube(parameters);
@@ -71,12 +75,12 @@ describe("Tube", () => {
       xCurvatureN: 1,
       yCurvatureN: 1,
       tiltN: 1,
-      scaleC: smallCircleCurve2.clone(),
-      xScaleC: smallCircleCurve2.clone(),
-      yScaleC: smallCircleCurve2.clone(),
-      xCurvatureC: smallCircleCurve2.clone(),
-      yCurvatureC: smallCircleCurve2.clone(),
-      tiltC: smallCircleCurve2.clone(),
+      scaleC: constant1Curve2.clone(),
+      xScaleC: constant1Curve2.clone(),
+      yScaleC: constant1Curve2.clone(),
+      xCurvatureC: constant0Curve2.clone(),
+      yCurvatureC: constant0Curve2.clone(),
+      tiltC: constant0Curve2.clone(),
       curvatureOrder: "yx",
     };
     const t1 = new Tube(parameters);
@@ -95,12 +99,12 @@ describe("Tube", () => {
     xCurvatureN: 1,
     yCurvatureN: 1,
     tiltN: 1,
-    scaleC: smallCircleCurve2.toJSON(),
-    xScaleC: smallCircleCurve2.toJSON(),
-    yScaleC: smallCircleCurve2.toJSON(),
-    xCurvatureC: smallCircleCurve2.toJSON(),
-    yCurvatureC: smallCircleCurve2.toJSON(),
-    tiltC: smallCircleCurve2.toJSON(),
+    scaleC: constant1Curve2.toJSON(),
+    xScaleC: constant1Curve2.toJSON(),
+    yScaleC: constant1Curve2.toJSON(),
+    xCurvatureC: constant0Curve2.toJSON(),
+    yCurvatureC: constant0Curve2.toJSON(),
+    tiltC: constant0Curve2.toJSON(),
     curvatureOrder: "yx",
   };
 
@@ -116,12 +120,12 @@ describe("Tube", () => {
       xCurvatureN: 1,
       yCurvatureN: 1,
       tiltN: 1,
-      scaleC: smallCircleCurve2.clone(),
-      xScaleC: smallCircleCurve2.clone(),
-      yScaleC: smallCircleCurve2.clone(),
-      xCurvatureC: smallCircleCurve2.clone(),
-      yCurvatureC: smallCircleCurve2.clone(),
-      tiltC: smallCircleCurve2.clone(),
+      scaleC: constant1Curve2.clone(),
+      xScaleC: constant1Curve2.clone(),
+      yScaleC: constant1Curve2.clone(),
+      xCurvatureC: constant0Curve2.clone(),
+      yCurvatureC: constant0Curve2.clone(),
+      tiltC: constant0Curve2.clone(),
       curvatureOrder: "yx",
     };
     const t1 = new Tube(parameters);
@@ -143,12 +147,12 @@ describe("Tube", () => {
       xCurvatureN: 1,
       yCurvatureN: 1,
       tiltN: 1,
-      scaleC: smallCircleCurve2.clone(),
-      xScaleC: smallCircleCurve2.clone(),
-      yScaleC: smallCircleCurve2.clone(),
-      xCurvatureC: smallCircleCurve2.clone(),
-      yCurvatureC: smallCircleCurve2.clone(),
-      tiltC: smallCircleCurve2.clone(),
+      scaleC: constant1Curve2.clone(),
+      xScaleC: constant1Curve2.clone(),
+      yScaleC: constant1Curve2.clone(),
+      xCurvatureC: constant0Curve2.clone(),
+      yCurvatureC: constant0Curve2.clone(),
+      tiltC: constant0Curve2.clone(),
       curvatureOrder: "yx",
     };
     const t2 = new Tube(parameters);
