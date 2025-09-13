@@ -1,9 +1,13 @@
-import { smallCircleCurve2 } from "src/curve/samples/curve-2";
+import { ControlPoint3 } from "src/curve/control-point-3";
+import { Curve3 } from "src/curve/curve-3";
+import { circleCurve2, smallCircleCurve2 } from "src/curve/samples/curve-2";
 import { constant0Curve3 } from "src/curve/samples/curve-3";
 import {
+  computeFrenetFrames,
   TubeBaseGeometry,
   type TubeBaseGeometryJSON,
 } from "src/geometry/tube-base";
+import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
 describe("TubeBaseGeometry", () => {
@@ -182,5 +186,27 @@ describe("TubeBaseGeometry", () => {
     const json2 = _json;
     json2.uuid = json1.uuid;
     expect(json1).toEqual(json2);
+  });
+});
+
+describe("computeFrenetFrames()", () => {
+  test("verify that the returned values ​​of Curve{3,2} are the same", () => {
+    const curve2 = circleCurve2.clone();
+    const curve3 = new Curve3(
+      curve2.cps.map(
+        (cp) =>
+          new ControlPoint3(
+            new THREE.Vector3(cp.middlePos.x, cp.middlePos.y, 0),
+            new THREE.Vector3(cp.leftPos.x, cp.leftPos.y, 0),
+            new THREE.Vector3(cp.rightPos.x, cp.rightPos.y, 0),
+            cp.isSyncRadius,
+            cp.isSyncAngle
+          )
+      )
+    );
+    const segments = 8; // any number
+    const frames3 = curve3.computeFrenetFrames(segments);
+    const frames2 = computeFrenetFrames(curve2, segments);
+    expect(frames3).toEqual(frames2);
   });
 });

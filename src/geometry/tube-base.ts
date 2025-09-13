@@ -698,7 +698,7 @@ export interface TubeBaseGeometryJSON
  * @param closed - Whether the curve is closed or not.
  * @return  The Frenet Frames.
  */
-function computeFrenetFrames(
+export function computeFrenetFrames(
   curve: THREE.Curve<THREE.Vector2>,
   segments: number,
   closed = false
