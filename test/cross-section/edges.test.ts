@@ -140,6 +140,22 @@ describe("findNextEdge()", () => {
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
+  test("missing top left", () => {
+    /**
+     * flat layout:
+     *      21
+     *   10 11
+     *    0  1
+     */
+    const nPolygonIndices = [[0, 1, 11, 10]];
+    const map = createRemainingVerticesMap(nPolygonIndices);
+    const e1 = new Edge(0, 1);
+    const e2 = new Edge(10, 11);
+    const e3 = findNextEdge(map, e1, e2);
+    expect(e3).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
+
   test("missing top left (interpolate with triangles)", () => {
     /**
      * flat layout:
@@ -151,6 +167,22 @@ describe("findNextEdge()", () => {
       [0, 1, 11, 10],
       [10, 11, 21], // interpolate with triangles
     ];
+    const map = createRemainingVerticesMap(nPolygonIndices);
+    const e1 = new Edge(0, 1);
+    const e2 = new Edge(10, 11);
+    const e3 = findNextEdge(map, e1, e2);
+    expect(e3).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
+
+  test("missing middle left", () => {
+    /**
+     * flat layout:
+     *   20 21
+     *      11
+     *    0  1
+     */
+    const nPolygonIndices: number[][] = [];
     const map = createRemainingVerticesMap(nPolygonIndices);
     const e1 = new Edge(0, 1);
     const e2 = new Edge(10, 11);
@@ -175,6 +207,24 @@ describe("findNextEdge()", () => {
     const e2 = new Edge(10, 11);
     const e3 = findNextEdge(map, e1, e2);
     expect(e3).toBeNull();
+    expect(spy).toHaveBeenCalledTimes(0);
+  });
+
+  test("missing bottom left", () => {
+    /**
+     * flat layout:
+     *   20 21
+     *   10 11
+     *       1
+     */
+    const nPolygonIndices = [[10, 11, 21, 20]];
+    const map = createRemainingVerticesMap(nPolygonIndices);
+    const e1 = new Edge(0, 1);
+    const e2 = new Edge(10, 11);
+    const e3 = findNextEdge(map, e1, e2);
+    expect(e3?.equals(new Edge(20, 21))).toBeTruthy();
+    const e4 = findNextEdge(map, e2, e3);
+    expect(e4).toBeNull();
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
