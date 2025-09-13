@@ -201,7 +201,7 @@ describe("findNextVertex()", () => {
     const nPolygonIndices = [
       [0, 1, 11, 10],
       [1, 2, 12, 11],
-      [10, 11, 21],
+      [10, 11, 21], // interpolate with triangles
       [11, 12, 22, 21],
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
@@ -237,7 +237,7 @@ describe("findNextVertex()", () => {
       [0, 1, 11, 10],
       [1, 2, 12, 11],
       [10, 11, 21, 20],
-      [11, 12, 21],
+      [11, 12, 21], // interpolate with triangles
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();
@@ -269,7 +269,7 @@ describe("findNextVertex()", () => {
      *       1  2
      */
     const nPolygonIndices = [
-      [1, 11, 10],
+      [1, 11, 10], // interpolate with triangles
       [1, 2, 12, 11],
       [10, 11, 21, 20],
       [11, 12, 22, 21],
@@ -305,7 +305,7 @@ describe("findNextVertex()", () => {
      */
     const nPolygonIndices = [
       [0, 1, 11, 10],
-      [1, 12, 11],
+      [1, 12, 11], // interpolate with triangles
       [10, 11, 21, 20],
       [11, 12, 22, 21],
     ];
@@ -322,9 +322,9 @@ describe("findNextVertex()", () => {
      *    0  1  2
      */
     const nPolygonIndices = [
-      [0, 1, 11],
+      [0, 1, 11], // interpolate with triangles
       [1, 2, 12, 11],
-      [11, 21, 20],
+      [11, 21, 20], // interpolate with triangles
       [11, 12, 22, 21],
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
@@ -340,10 +340,10 @@ describe("findNextVertex()", () => {
      *    0  1  2
      */
     const nPolygonIndices = [
-      [0, 1, 10],
-      [1, 2, 12],
-      [10, 21, 20],
-      [12, 22, 21],
+      [0, 1, 10], // interpolate with triangles
+      [1, 2, 12], // interpolate with triangles
+      [10, 21, 20], // interpolate with triangles
+      [12, 22, 21], // interpolate with triangles
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     expect(findNextVertex(map, 10, 11)).toBeNull();

@@ -74,7 +74,7 @@ describe("Curve3", () => {
 
     test("else", () => {
       const c = new Curve3();
-      c.addCpToFirst();
+      c.addCpToLast();
       expect(c.cps.length).toBe(1);
     });
   });

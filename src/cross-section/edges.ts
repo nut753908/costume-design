@@ -54,23 +54,17 @@ export function findNextEdge(
     console.error("e2 === null");
     return null;
   }
-  const vs0 = map[`${e2.v1},${e2.v2}`];
-  if (vs0 === undefined) return null;
-  if (vs0.length !== 2) return null;
-  if (vs0[0].length !== 2) return null;
-  if (vs0[1].length !== 2) return null;
-
-  const e3_0 = new Edge(vs0[0][0], vs0[0][1]);
-  const e3_1 = new Edge(vs0[1][0], vs0[1][1]);
-  if (e1 === null) return e3_0;
-  if (e3_0.equals(e1)) return e3_1;
-  if (e3_1.equals(e1)) return e3_0;
-  console.error(`\
-!(e1 === null) && !e3_0.equals(e1) && !e3_1.equals(e1)
-- e1: ${JSON.stringify(e1)}
-- e2: ${JSON.stringify(e2)}
-- e3_0: ${JSON.stringify(e3_0)}
-- e3_1: ${JSON.stringify(e3_1)}
-`);
-  return null;
+  const vs = map[`${e2.v1},${e2.v2}`];
+  if (vs === undefined) return null;
+  const e3_0 =
+    vs.length >= 1 && vs[0].length === 2 ? new Edge(vs[0][0], vs[0][1]) : null;
+  const e3_1 =
+    vs.length >= 2 && vs[1].length === 2 ? new Edge(vs[1][0], vs[1][1]) : null;
+  if (e1 !== null) {
+    if (e3_0?.equals(e1)) return e3_1;
+    if (e3_1?.equals(e1)) return e3_0;
+  }
+  if (e3_0 === null) return e3_1;
+  if (e3_1 === null) return e3_0;
+  return e3_0;
 }
