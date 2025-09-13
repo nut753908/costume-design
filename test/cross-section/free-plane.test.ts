@@ -20,7 +20,7 @@ describe("FreePlane", () => {
     expect(p.getNormal()).toEqual(new THREE.Vector3(1, 0, 0));
   });
 
-  test("getNormal()", () => {
+  test("getPoint()", () => {
     const p = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)

@@ -33,7 +33,7 @@ describe("VerticalPlane", () => {
     expect(p.getNormal()).toEqual(new THREE.Vector3(0, 0, 1));
   });
 
-  test("getNormal()", () => {
+  test("getPoint()", () => {
     const curve = createLinePath([
       new THREE.Vector3(1, 2, 3),
       new THREE.Vector3(1, 2, 4),
