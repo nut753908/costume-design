@@ -60,10 +60,11 @@ export function findNextEdge(
     vs.length >= 1 && vs[0].length === 2 ? new Edge(vs[0][0], vs[0][1]) : null;
   const e3_1 =
     vs.length >= 2 && vs[1].length === 2 ? new Edge(vs[1][0], vs[1][1]) : null;
-  if (e1 === null) return e3_0;
-  if (e3_0?.equals(e1)) return e3_1;
-  if (e3_1?.equals(e1)) return e3_0;
+  if (e1 !== null) {
+    if (e3_0?.equals(e1)) return e3_1;
+    if (e3_1?.equals(e1)) return e3_0;
+  }
   if (e3_0 === null) return e3_1;
   if (e3_1 === null) return e3_0;
-  return null;
+  return e3_0;
 }
