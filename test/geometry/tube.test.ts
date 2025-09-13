@@ -59,17 +59,9 @@ describe("TubeGeometry", () => {
   });
 
   test("clone()", () => {
-    const axis = constant0Curve3.clone();
-    const cross = smallCircleCurve2.clone();
-    const scaleC = constant1Curve2.clone();
-    const xScaleC = constant1Curve2.clone();
-    const yScaleC = constant1Curve2.clone();
-    const xCurvatureC = constant0Curve2.clone();
-    const yCurvatureC = constant0Curve2.clone();
-    const tiltC = constant0Curve2.clone();
     const g1 = new TubeGeometry(
-      axis,
-      cross,
+      constant0Curve3.clone(),
+      smallCircleCurve2.clone(),
       1,
       3,
       2,
@@ -78,12 +70,12 @@ describe("TubeGeometry", () => {
       1,
       1,
       1,
-      scaleC,
-      xScaleC,
-      yScaleC,
-      xCurvatureC,
-      yCurvatureC,
-      tiltC,
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
       "yx"
     );
     const g2 = g1.clone();
@@ -92,17 +84,9 @@ describe("TubeGeometry", () => {
   });
 
   test("copy()", () => {
-    const axis = constant0Curve3.clone();
-    const cross = smallCircleCurve2.clone();
-    const scaleC = constant1Curve2.clone();
-    const xScaleC = constant1Curve2.clone();
-    const yScaleC = constant1Curve2.clone();
-    const xCurvatureC = constant0Curve2.clone();
-    const yCurvatureC = constant0Curve2.clone();
-    const tiltC = constant0Curve2.clone();
     const g1 = new TubeGeometry(
-      axis,
-      cross,
+      constant0Curve3.clone(),
+      smallCircleCurve2.clone(),
       1,
       3,
       2,
@@ -111,12 +95,12 @@ describe("TubeGeometry", () => {
       1,
       1,
       1,
-      scaleC,
-      xScaleC,
-      yScaleC,
-      xCurvatureC,
-      yCurvatureC,
-      tiltC,
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
       "yx"
     );
     const g2 = new TubeGeometry().copy(g1);
@@ -152,17 +136,9 @@ describe("TubeGeometry", () => {
   };
 
   test("toJSON()", () => {
-    const axis = constant0Curve3.clone();
-    const cross = smallCircleCurve2.clone();
-    const scaleC = constant1Curve2.clone();
-    const xScaleC = constant1Curve2.clone();
-    const yScaleC = constant1Curve2.clone();
-    const xCurvatureC = constant0Curve2.clone();
-    const yCurvatureC = constant0Curve2.clone();
-    const tiltC = constant0Curve2.clone();
     const g1 = new TubeGeometry(
-      axis,
-      cross,
+      constant0Curve3.clone(),
+      smallCircleCurve2.clone(),
       1,
       3,
       2,
@@ -171,12 +147,12 @@ describe("TubeGeometry", () => {
       1,
       1,
       1,
-      scaleC,
-      xScaleC,
-      yScaleC,
-      xCurvatureC,
-      yCurvatureC,
-      tiltC,
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
       "yx"
     );
     const json1 = g1.toJSON();
@@ -187,17 +163,9 @@ describe("TubeGeometry", () => {
 
   test("fromJSON()", () => {
     const g1 = TubeGeometry.fromJSON(_json);
-    const axis = constant0Curve3.clone();
-    const cross = smallCircleCurve2.clone();
-    const scaleC = constant1Curve2.clone();
-    const xScaleC = constant1Curve2.clone();
-    const yScaleC = constant1Curve2.clone();
-    const xCurvatureC = constant0Curve2.clone();
-    const yCurvatureC = constant0Curve2.clone();
-    const tiltC = constant0Curve2.clone();
     const g2 = new TubeGeometry(
-      axis,
-      cross,
+      constant0Curve3.clone(),
+      smallCircleCurve2.clone(),
       1,
       3,
       2,
@@ -206,12 +174,12 @@ describe("TubeGeometry", () => {
       1,
       1,
       1,
-      scaleC,
-      xScaleC,
-      yScaleC,
-      xCurvatureC,
-      yCurvatureC,
-      tiltC,
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant1Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
+      constant0Curve2.clone(),
       "yx"
     );
     g2.uuid = g1.uuid;
