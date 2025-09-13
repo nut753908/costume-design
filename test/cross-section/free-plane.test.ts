@@ -28,6 +28,55 @@ describe("FreePlane", () => {
     expect(p.getPoint()).toEqual(new THREE.Vector3(2, 3, 4));
   });
 
+  describe("getTopNormal()", () => {
+    test.each([
+      [
+        /**
+         * when
+         *   x,y,z,w∈N,
+         *   x^2+y^2+z^2=w^2
+         * then
+         *   a,b,c,d∈N,
+         *   x=|a^2+b^2-c^2-d^2|,
+         *   y=2|ac+bd|,
+         *   z=2|ad-bc|,
+         *   w=a^2+b^2+c^2+d^2
+         *
+         * if
+         *   (a,b,c,d)=(1,6,2,3)
+         * then
+         *   (x,y,z,w)=(24,40,18,50)
+         *   (X,Y,Z)=((z/w),(x/w),(y/w))=(0.36,0.48,0.8) (X^2+Y^2+Z^2=1)
+         */
+        new THREE.Vector3(0.36, 0.48, 0.8),
+        new THREE.Vector3(0.36, 0.48, 0.8),
+      ],
+      [
+        new THREE.Vector3(0.36, -0.48, 0.8),
+        new THREE.Vector3(-0.36, 0.48, -0.8),
+      ],
+    ])("normal:%j, expected:%j", (normal, expected) => {
+      const p = new FreePlane(normal, new THREE.Vector3(0, 0, 0));
+      expect(p.getTopNormal()).toEqual(expected);
+    });
+  });
+
+  describe("getBottomNormal()", () => {
+    test.each([
+      [
+        new THREE.Vector3(0.36, 0.48, 0.8),
+        new THREE.Vector3(-0.36, -0.48, -0.8),
+      ],
+      [
+        new THREE.Vector3(0.36, -0.48, 0.8),
+        new THREE.Vector3(0.36, -0.48, 0.8),
+      ],
+    ])("normal:%j, expected:%j", (normal, expected) => {
+      const p = new FreePlane(normal, new THREE.Vector3(0, 0, 0));
+      expect(p.getBottomNormal()).toEqual(expected);
+    });
+  });
+
   test("getPlane()", () => {
     const p = new FreePlane(
       new THREE.Vector3(1, 0, 0),
