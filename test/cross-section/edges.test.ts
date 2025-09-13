@@ -149,7 +149,7 @@ describe("findNextEdge()", () => {
      */
     const nPolygonIndices = [
       [0, 1, 11, 10],
-      [10, 11, 21],
+      [10, 11, 21], // interpolate with triangles
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     const e1 = new Edge(0, 1);
@@ -167,8 +167,8 @@ describe("findNextEdge()", () => {
      *    0  1
      */
     const nPolygonIndices = [
-      [0, 1, 11],
-      [11, 21, 20],
+      [0, 1, 11], // interpolate with triangles
+      [11, 21, 20], // interpolate with triangles
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
     const e1 = new Edge(0, 1);
@@ -186,7 +186,7 @@ describe("findNextEdge()", () => {
      *       1
      */
     const nPolygonIndices = [
-      [1, 11, 10],
+      [1, 11, 10], // interpolate with triangles
       [10, 11, 21, 20],
     ];
     const map = createRemainingVerticesMap(nPolygonIndices);
