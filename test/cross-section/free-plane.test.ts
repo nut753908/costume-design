@@ -46,14 +46,14 @@ describe("FreePlane", () => {
          *   (a,b,c,d)=(1,6,2,3)
          * then
          *   (x,y,z,w)=(24,40,18,50)
-         *   (X,Y,Z)=((z/w),(x/w),(y/w))=(0.36,0.48,0.8) (X^2+Y^2+Z^2=1)
+         *   (X,Y,Z)=((x/w),(y/w),(z/w))=(0.48,0.8,0.36) (X^2+Y^2+Z^2=1)
          */
-        new THREE.Vector3(0.36, 0.48, 0.8),
-        new THREE.Vector3(0.36, 0.48, 0.8),
+        new THREE.Vector3(0.48, 0.8, 0.36),
+        new THREE.Vector3(0.48, 0.8, 0.36),
       ],
       [
-        new THREE.Vector3(0.36, -0.48, 0.8),
-        new THREE.Vector3(-0.36, 0.48, -0.8),
+        new THREE.Vector3(0.48, -0.8, 0.36),
+        new THREE.Vector3(-0.48, 0.8, -0.36),
       ],
     ])("normal:%j, expected:%j", (normal, expected) => {
       const p = new FreePlane(normal, new THREE.Vector3(0, 0, 0));
@@ -64,12 +64,12 @@ describe("FreePlane", () => {
   describe("getBottomNormal()", () => {
     test.each([
       [
-        new THREE.Vector3(0.36, 0.48, 0.8),
-        new THREE.Vector3(-0.36, -0.48, -0.8),
+        new THREE.Vector3(0.48, 0.8, 0.36),
+        new THREE.Vector3(-0.48, -0.8, -0.36),
       ],
       [
-        new THREE.Vector3(0.36, -0.48, 0.8),
-        new THREE.Vector3(0.36, -0.48, 0.8),
+        new THREE.Vector3(0.48, -0.8, 0.36),
+        new THREE.Vector3(0.48, -0.8, 0.36),
       ],
     ])("normal:%j, expected:%j", (normal, expected) => {
       const p = new FreePlane(normal, new THREE.Vector3(0, 0, 0));
