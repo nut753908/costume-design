@@ -62,5 +62,8 @@ export function findNextEdge(
     vs.length >= 2 && vs[1].length === 2 ? new Edge(vs[1][0], vs[1][1]) : null;
   if (e1 === null) return e3_0;
   if (e3_0?.equals(e1)) return e3_1;
-  return e3_0;
+  if (e3_1?.equals(e1)) return e3_0;
+  if (e3_0 === null) return e3_1;
+  if (e3_1 === null) return e3_0;
+  return null;
 }

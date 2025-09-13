@@ -243,7 +243,9 @@ describe("findNextEdge()", () => {
     const e1 = new Edge(0, 1);
     const e2 = new Edge(10, 11);
     const e3 = findNextEdge(map, e1, e2);
-    expect(e3).toBeNull();
+    expect(e3?.equals(new Edge(20, 21))).toBeTruthy();
+    const e4 = findNextEdge(map, e2, e3);
+    expect(e4).toBeNull();
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
