@@ -1,6 +1,6 @@
+import { loadBaseGeometry } from "src/geometry/base";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { loadBaseGeometry } from "../../geometry/base";
 
 /**
  * @param ms - The materials.

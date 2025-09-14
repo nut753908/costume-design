@@ -1,8 +1,8 @@
 import type { GUI } from "lil-gui";
+import { closeFolder, deleteFolder } from "src/main/gui";
+import { isInvalidIndex } from "src/math/utils";
+import { mean } from "src/math/vector";
 import * as THREE from "three";
-import { closeFolder, deleteFolder } from "../main/gui";
-import { isInvalidIndex } from "../math/utils";
-import { mean } from "../math/vector";
 import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
 import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
 

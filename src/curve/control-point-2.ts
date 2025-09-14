@@ -1,8 +1,8 @@
 import type { Controller, GUI } from "lil-gui";
+import { closeFolder, deleteFolder } from "src/main/gui";
+import { Circular, type CircularJSON } from "src/math/circular";
+import { rotate180 } from "src/math/utils";
 import * as THREE from "three";
-import { closeFolder, deleteFolder } from "../main/gui";
-import { Circular, type CircularJSON } from "../math/circular";
-import { rotate180 } from "../math/utils";
 import { ControlPoint } from "./control-point";
 
 /**

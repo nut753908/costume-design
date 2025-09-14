@@ -1,8 +1,8 @@
+import { Edge } from "src/cross-section/edge";
+import { EdgeLoop } from "src/cross-section/edge-loop";
+import { EdgeLoopStack } from "src/cross-section/edge-loop-stack";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { Edge } from "../../cross-section/edge";
-import { EdgeLoop } from "../../cross-section/edge-loop";
-import { EdgeLoopStack } from "../../cross-section/edge-loop-stack";
 
 /**
  * @param positions - The results of geometry.getAttribute("position").

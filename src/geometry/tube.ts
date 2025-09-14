@@ -1,13 +1,13 @@
-import type * as THREE from "three";
-import type { CurveJSON } from "../curve/curve";
-import { Curve2 } from "../curve/curve-2";
-import { Curve3 } from "../curve/curve-3";
+import type { CurveJSON } from "src/curve/curve";
+import { Curve2 } from "src/curve/curve-2";
+import { Curve3 } from "src/curve/curve-3";
 import {
   constant0Curve2,
   constant1Curve2,
   smallCircleCurve2,
-} from "../curve/samples/curve-2";
-import { constant0Curve3 } from "../curve/samples/curve-3";
+} from "src/curve/samples/curve-2";
+import { constant0Curve3 } from "src/curve/samples/curve-3";
+import type * as THREE from "three";
 import { TubeBaseGeometry } from "./tube-base";
 
 /**

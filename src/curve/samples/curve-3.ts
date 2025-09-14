@@ -1,6 +1,6 @@
+import { ControlPoint3 } from "src/curve/control-point-3";
+import { Curve3 } from "src/curve/curve-3";
 import * as THREE from "three";
-import { ControlPoint3 } from "../control-point-3";
-import { Curve3 } from "../curve-3";
 
 export const screwShapedCurve3 = new Curve3([
   new ControlPoint3(

@@ -1,9 +1,9 @@
 import type { GUI } from "lil-gui";
+import type { Tube } from "src/curve/tube";
+import { createEmptyGeometry } from "src/geometry/empty";
+import { deleteFolder } from "src/main/gui";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import type { Tube } from "../../curve/tube";
-import { createEmptyGeometry } from "../../geometry/empty";
-import { deleteFolder } from "../../main/gui";
 import { createCurveGroup } from "./curve";
 
 /**
