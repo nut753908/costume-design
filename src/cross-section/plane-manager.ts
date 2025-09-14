@@ -2,7 +2,6 @@ import type GUI from "lil-gui";
 import * as THREE from "three";
 import { closeFolder, deleteFolder } from "../main/gui";
 import { objectMap } from "../main/utils";
-import { isInvalidIndex } from "../math/utils";
 import type { ArrowHelperWithCallbacks } from "../object-3d/arrow-helper";
 import { createPlanesGroup } from "../object-3d/group/planes";
 import type { PlaneHelperWithCallbacks } from "../object-3d/plane-helper";
@@ -28,7 +27,7 @@ export class PlaneManager {
   /**
    * The planes at infinity.
    */
-  planes: (FreePlane | VerticalPlane)[];
+  planes: { [k: string]: FreePlane | VerticalPlane };
 
   /**
    * Secret field.
@@ -47,7 +46,7 @@ export class PlaneManager {
     curves: {
       [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3;
     } = {},
-    planes: (FreePlane | VerticalPlane)[] = []
+    planes: { [k: string]: FreePlane | VerticalPlane } = {}
   ) {
     this.curves = curves;
     this.planes = planes;
@@ -76,13 +75,7 @@ export class PlaneManager {
         parent.remove(child);
       }
       // TODO: Maintain group visible settings.
-      child = createPlanesGroup(
-        gui,
-        // TODO: Change the planes type from Array to Object.
-        Object.fromEntries(pm.planes.map((p, i) => [i, p])),
-        planeHelper,
-        arrowHelper
-      );
+      child = createPlanesGroup(gui, pm.planes, planeHelper, arrowHelper);
       parent.add(child);
     };
     pm._updatePlanesGroup();
@@ -115,9 +108,9 @@ export class PlaneManager {
         pm.addVerticalPlane(obj.curveKey);
         update();
       },
-      planeIndex: 0,
+      planeKey: pm.planeKeys[0] ?? "",
       removePlane: () => {
-        pm.removePlane(obj.planeIndex);
+        pm.removePlane(obj.planeKey);
         update();
       },
     };
@@ -128,7 +121,7 @@ export class PlaneManager {
     const cAVP = folder.add(obj, "addVerticalPlane");
     const cRP = folder.add(obj, "removePlane");
     let cCK = folder.add(obj, "curveKey").name("addVerticalPlane curveKey");
-    let cPI = folder.add(obj, "planeIndex").name("removePlane index");
+    let cPK = folder.add(obj, "planeKey").name("removePlane planeKey");
     updateEnabled();
     updateOptions();
     if (isClose) closeFolder(folder);
@@ -141,11 +134,11 @@ export class PlaneManager {
     }
     function updateEnabled() {
       pm.curveKeys.includes(obj.curveKey) ? cAVP.enable() : cAVP.disable();
-      pm.planeIndices.includes(obj.planeIndex) ? cRP.enable() : cRP.disable();
+      pm.planeKeys.includes(obj.planeKey) ? cRP.enable() : cRP.disable();
     }
     function updateOptions() {
       cCK = cCK.options(pm.curveKeys).onChange(updateEnabled);
-      cPI = cPI.options(pm.planeIndices).onChange(updateEnabled);
+      cPK = cPK.options(pm.planeKeys).onChange(updateEnabled);
     }
   }
 
@@ -153,7 +146,8 @@ export class PlaneManager {
    * add the free plane to this.planes.
    */
   addFreePlane() {
-    this.planes.push(new FreePlane());
+    const key = `[${this.planeKeys.length}]`;
+    this.planes[key] = new FreePlane();
   }
 
   /**
@@ -164,23 +158,30 @@ export class PlaneManager {
   addVerticalPlane(curveKey: string) {
     if (!this.curveKeys.includes(curveKey)) {
       console.error(`\
-!(curveKey in this.curves)
+if (!this.curveKeys.includes(curveKey))
 - curveKey: ${curveKey}
 - this.curveKeys: ${JSON.stringify(this.curveKeys)}
 `);
       return;
     }
-    this.planes.push(new VerticalPlane(this.curves[curveKey]));
+    const planeKey = `[${this.planeKeys.length}] ${curveKey}`;
+    this.planes[planeKey] = new VerticalPlane(this.curves[curveKey]);
   }
 
   /**
    * remove the plane from this.planes.
    *
-   * @param index - The plane index in this.planes.
+   * @param key - The plane key in this.planes.
    */
-  removePlane(index: number) {
-    if (isInvalidIndex(index, 0, this.planes.length - 1)) return;
-    this.planes.splice(index, 1);
+  removePlane(key: string) {
+    if (!this.planeKeys.includes(key)) {
+      console.error(`\
+if (!this.planeKeys.includes(key))
+- key: ${key}
+- this.planeKeys: ${JSON.stringify(this.planeKeys)}
+`);
+    }
+    delete this.planes[key];
   }
 
   /**
@@ -191,10 +192,10 @@ export class PlaneManager {
   }
 
   /**
-   * Get the plane indices in this.planes.
+   * Get the plane keys in this.planes.
    */
-  get planeIndices(): number[] {
-    return this.planes.map((_, i) => i);
+  get planeKeys(): string[] {
+    return Object.keys(this.planes);
   }
 
   /**
@@ -214,7 +215,7 @@ export class PlaneManager {
    */
   copy(source: PlaneManager): PlaneManager {
     this.curves = objectMap(source.curves, (v) => v.clone());
-    this.planes = source.planes.map((v) => v.clone());
+    this.planes = objectMap(source.planes, (v) => v.clone());
 
     return this;
   }
@@ -227,7 +228,7 @@ export class PlaneManager {
   toJSON(): PlaneManagerJSON {
     return {
       curves: objectMap(this.curves, (v) => v.toJSON()),
-      planes: this.planes.map((v) => v.toJSON()),
+      planes: objectMap(this.planes, (v) => v.toJSON()),
     };
   }
 
@@ -253,7 +254,7 @@ export class PlaneManager {
         return new THREE.CurvePath<THREE.Vector3>();
       }
     });
-    this.planes = json.planes.map((v) => {
+    this.planes = objectMap(json.planes, (v) => {
       if (v.type === "FreePlane") {
         return new FreePlane().fromJSON(v as FreePlaneJSON);
       } else if (v.type === "VerticalPlane") {
@@ -278,5 +279,5 @@ export interface PlaneManagerJSON {
   /** {@link PlaneManager#curves} */
   curves: { [k: string]: THREE.CurvePathJSON | THREE.CurveJSON };
   /** {@link PlaneManager#planes} */
-  planes: (FreePlaneJSON | VerticalPlaneJSON)[];
+  planes: { [k: string]: FreePlaneJSON | VerticalPlaneJSON };
 }
