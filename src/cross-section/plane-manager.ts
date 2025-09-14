@@ -87,18 +87,15 @@ export class PlaneManager {
       parent.add(children[k]);
     });
 
-    // biome-ignore lint/complexity/noUselessThisAlias: to leave pm(=this) alive.
-    const pm = this;
-
     // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
-    pm._addPlaneGroup = (k: string) => {
-      const p = pm.planes[k];
+    this._addPlaneGroup = (k: string) => {
+      const p = this.planes[k];
       children[k] = createPlaneGroup(folder, p, planeHelper, arrowHelper, k);
       parent.add(children[k]);
     };
 
     // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
-    pm._removePlaneGroup = (k: string) => {
+    this._removePlaneGroup = (k: string) => {
       deleteFolder(folder, k);
       parent.remove(children[k]);
       disposeGroup(children[k]);
