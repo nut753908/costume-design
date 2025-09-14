@@ -127,9 +127,7 @@ if (!this.planeKeys.includes(key))
       [["[0] {FreePlane}"]],
       [["[0] {FreePlane}", "[1] {FreePlane}"]],
     ])("planeKeys:%j", (planeKeys) => {
-      const planes: {
-        [k: string]: FreePlane | VerticalPlane;
-      } = {};
+      const planes: { [k: string]: FreePlane | VerticalPlane } = {};
       planeKeys.forEach((k) => {
         planes[k] = new FreePlane();
       });
