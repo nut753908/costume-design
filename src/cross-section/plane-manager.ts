@@ -18,9 +18,7 @@ export class PlaneManager {
    * The curves to create a vertical plane.
    */
   curves: {
-    [k: number | string]:
-      | THREE.CurvePath<THREE.Vector3>
-      | THREE.CatmullRomCurve3;
+    [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3;
   };
 
   /**
@@ -36,9 +34,7 @@ export class PlaneManager {
    */
   constructor(
     curves: {
-      [k: number | string]:
-        | THREE.CurvePath<THREE.Vector3>
-        | THREE.CatmullRomCurve3;
+      [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3;
     } = {},
     planes: (FreePlane | VerticalPlane)[] = []
   ) {
@@ -125,9 +121,7 @@ export class PlaneManager {
  */
 export interface PlaneManagerJSON {
   /** {@link PlaneManager#curves} */
-  curves: {
-    [k: number | string]: THREE.CurvePathJSON | THREE.CurveJSON;
-  };
+  curves: { [k: string]: THREE.CurvePathJSON | THREE.CurveJSON };
   /** {@link PlaneManager#planes} */
   planes: (FreePlaneJSON | VerticalPlaneJSON)[];
 }
