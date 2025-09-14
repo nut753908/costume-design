@@ -125,7 +125,7 @@ if (!this.planeKeys.includes(key))
     test.each([
       [[]],
       [["[0] {FreePlane}"]],
-      [["[0] {FreePlane}", "[1] a {VerticalPlane}"]],
+      [["[0] {FreePlane}", "[1] {FreePlane}"]],
     ])("planeKeys:%j", (planeKeys) => {
       const planes: {
         [k: string]: FreePlane | VerticalPlane;
