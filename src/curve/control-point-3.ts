@@ -1,9 +1,9 @@
 import type { Controller, GUI } from "lil-gui";
+import { closeFolder, deleteFolder } from "src/main/gui";
+import { Spherical, type SphericalJSON } from "src/math/spherical";
+import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "src/math/utils";
 import { getAngles } from "src/math/vector";
 import * as THREE from "three";
-import { closeFolder, deleteFolder } from "../main/gui";
-import { Spherical, type SphericalJSON } from "../math/spherical";
-import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "../math/utils";
 import { ControlPoint } from "./control-point";
 
 /**

@@ -1,10 +1,10 @@
 import type { GUI } from "lil-gui";
+import type { FreePlane } from "src/cross-section/free-plane";
+import type { VerticalPlane } from "src/cross-section/vertical-plane";
+import { deleteFolder } from "src/main/gui";
+import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
+import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
-import type { FreePlane } from "../../cross-section/free-plane";
-import type { VerticalPlane } from "../../cross-section/vertical-plane";
-import { deleteFolder } from "../../main/gui";
-import type { ArrowHelperWithCallbacks } from "../arrow-helper";
-import type { PlaneHelperWithCallbacks } from "../plane-helper";
 import { createPlaneGroup } from "./plane";
 
 export function createPlanesGroup(

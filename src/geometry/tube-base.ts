@@ -1,10 +1,10 @@
-import * as THREE from "three";
 import {
   constant0Curve2,
   constant1Curve2,
   smallCircleCurve2,
-} from "../curve/samples/curve-2";
-import { constant0Curve3 } from "../curve/samples/curve-3";
+} from "src/curve/samples/curve-2";
+import { constant0Curve3 } from "src/curve/samples/curve-3";
+import * as THREE from "three";
 
 /**
  * A geometry class for representing a tube.

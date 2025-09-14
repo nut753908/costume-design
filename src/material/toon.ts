@@ -1,6 +1,6 @@
 import type { GUI } from "lil-gui";
+import { createColor } from "src/math/color";
 import * as THREE from "three";
-import { createColor } from "../math/color";
 
 /**
  * @param name - The folder name.

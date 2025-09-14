@@ -1,7 +1,7 @@
 import type { GUI } from "lil-gui";
+import { closeFolder, deleteFolder } from "src/main/gui";
+import { createColor } from "src/math/color";
 import * as THREE from "three";
-import { closeFolder, deleteFolder } from "../main/gui";
-import { createColor } from "../math/color";
 
 export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   const obj = {

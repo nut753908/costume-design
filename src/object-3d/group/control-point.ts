@@ -1,8 +1,8 @@
+import type { ControlPoint2 } from "src/curve/control-point-2";
+import type { ControlPoint3 } from "src/curve/control-point-3";
+import { createEmptyGeometry } from "src/geometry/empty";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import type { ControlPoint2 } from "../../curve/control-point-2";
-import type { ControlPoint3 } from "../../curve/control-point-3";
-import { createEmptyGeometry } from "../../geometry/empty";
 
 /**
  * @param ms - The materials.

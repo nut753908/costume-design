@@ -1,12 +1,12 @@
 import type { GUI } from "lil-gui";
-import * as THREE from "three";
 import {
   defaultTubeGeometryParameters,
   TubeGeometry,
   type TubeGeometryParameters,
   type TubeGeometryParametersJSON,
-} from "../geometry/tube";
-import { deleteFolder } from "../main/gui";
+} from "src/geometry/tube";
+import { deleteFolder } from "src/main/gui";
+import * as THREE from "three";
 import { Curve2 } from "./curve-2";
 import { Curve3 } from "./curve-3";
 

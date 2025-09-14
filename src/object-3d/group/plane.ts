@@ -1,10 +1,13 @@
 import type { GUI } from "lil-gui";
+import { FreePlane } from "src/cross-section/free-plane";
+import { VerticalPlane } from "src/cross-section/vertical-plane";
+import { deleteFolder } from "src/main/gui";
+import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
+import {
+  PlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "src/object-3d/plane-helper";
 import * as THREE from "three";
-import { FreePlane } from "../../cross-section/free-plane";
-import { VerticalPlane } from "../../cross-section/vertical-plane";
-import { deleteFolder } from "../../main/gui";
-import type { ArrowHelperWithCallbacks } from "../arrow-helper";
-import { PlaneHelper, type PlaneHelperWithCallbacks } from "../plane-helper";
 
 /**
  * @param name - The folder name.
