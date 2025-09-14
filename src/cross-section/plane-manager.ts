@@ -146,7 +146,7 @@ export class PlaneManager {
    * add the free plane to this.planes.
    */
   addFreePlane() {
-    const key = `[${this.planeKeys.length}]`;
+    const key = `[${this.planeKeys.length}] {FreePlane}`;
     this.planes[key] = new FreePlane();
   }
 
@@ -164,7 +164,7 @@ if (!this.curveKeys.includes(curveKey))
 `);
       return;
     }
-    const planeKey = `[${this.planeKeys.length}] ${curveKey}`;
+    const planeKey = `[${this.planeKeys.length}] ${curveKey} {VerticalPlane}`;
     this.planes[planeKey] = new VerticalPlane(this.curves[curveKey]);
   }
 
