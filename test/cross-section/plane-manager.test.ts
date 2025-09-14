@@ -151,7 +151,8 @@ if (!this.planeKeys.includes(key))
     };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = pm1.clone();
-    pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+    pm2._addPlaneGroup = pm1._addPlaneGroup;
+    pm2._removePlaneGroup = pm1._removePlaneGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -170,7 +171,8 @@ if (!this.planeKeys.includes(key))
     };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = new PlaneManager().copy(pm1);
-    pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+    pm2._addPlaneGroup = pm1._addPlaneGroup;
+    pm2._removePlaneGroup = pm1._removePlaneGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -351,7 +353,8 @@ if (!this.planeKeys.includes(key))
       const points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(1, 2, 4)];
       const curves = { a: createLinePath(points) };
       const pm2 = new PlaneManager(curves);
-      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -361,7 +364,8 @@ if (!this.planeKeys.includes(key))
       const points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(1, 2, 4)];
       const curves = { b: new THREE.CatmullRomCurve3(points) };
       const pm2 = new PlaneManager(curves);
-      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -390,7 +394,8 @@ if (!this.planeKeys.includes(key))
         ),
       };
       const pm2 = new PlaneManager({}, planes);
-      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -401,7 +406,8 @@ if (!this.planeKeys.includes(key))
       const curve = new THREE.CatmullRomCurve3(points);
       const planes = { "[1] b {VerticalPlane}": new VerticalPlane(curve, 1) };
       const pm2 = new PlaneManager({}, planes);
-      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

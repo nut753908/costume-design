@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { closeFolder, deleteFolder } from "../main/gui";
 import { disposeGroup, objectMap } from "../main/utils";
 import type { ArrowHelperWithCallbacks } from "../object-3d/arrow-helper";
-import { createPlanesGroup } from "../object-3d/group/planes";
+import { createPlaneGroup } from "../object-3d/group/plane";
 import type { PlaneHelperWithCallbacks } from "../object-3d/plane-helper";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
@@ -36,10 +36,18 @@ export class PlaneManager {
 
   /**
    * Secret field.
-   * This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
+   * This function is used by addFreePlane() in ./src/cross-section/plane-manager.ts.
+   * This function is used by addVerticalPlane() in ./src/cross-section/plane-manager.ts.
    * Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
    */
-  _updatePlanesGroup: () => void;
+  _addPlaneGroup: (k: string) => void;
+
+  /**
+   * Secret field.
+   * This function is used by removePlane() in ./src/cross-section/plane-manager.ts.
+   * Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
+   */
+  _removePlaneGroup: (k: string) => void;
 
   /**
    * Constructs a new plane manager.
@@ -56,7 +64,8 @@ export class PlaneManager {
     this.curves = curves;
     this.planes = planes;
     this.planeNextIndex = this.planeKeys.length;
-    this._updatePlanesGroup = () => {};
+    this._addPlaneGroup = () => {};
+    this._removePlaneGroup = () => {};
   }
 
   /**
@@ -67,22 +76,31 @@ export class PlaneManager {
     planeHelper: PlaneHelperWithCallbacks,
     arrowHelper: ArrowHelperWithCallbacks
   ): THREE.Group {
-    // biome-ignore lint/complexity/noUselessThisAlias: to leave pm(=this) alive.
-    const pm = this;
+    deleteFolder(gui, "PlanesGroup");
+    const folder = gui.addFolder("PlanesGroup");
+
     const parent = new THREE.Group();
-    let child: THREE.Group;
+    const children: { [k: string]: THREE.Group } = {};
+
+    Object.entries(this.planes).forEach(([k, p]) => {
+      children[k] = createPlaneGroup(folder, p, planeHelper, arrowHelper, k);
+      parent.add(children[k]);
+    });
 
     // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
-    pm._updatePlanesGroup = () => {
-      if (child !== undefined) {
-        parent.remove(child);
-        disposeGroup(child);
-      }
-      // TODO: Maintain group visible settings.
-      child = createPlanesGroup(gui, pm.planes, planeHelper, arrowHelper);
-      parent.add(child);
+    this._addPlaneGroup = (k: string) => {
+      const p = this.planes[k];
+      children[k] = createPlaneGroup(folder, p, planeHelper, arrowHelper, k);
+      parent.add(children[k]);
     };
-    pm._updatePlanesGroup();
+
+    // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
+    this._removePlaneGroup = (k: string) => {
+      deleteFolder(folder, k);
+      parent.remove(children[k]);
+      disposeGroup(children[k]);
+      delete children[k];
+    };
 
     return parent;
   }
@@ -134,7 +152,6 @@ export class PlaneManager {
     function update() {
       updateEnabled();
       updateOptions();
-      pm._updatePlanesGroup(); // Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
       updateCallback();
     }
     function updateEnabled() {
@@ -153,6 +170,7 @@ export class PlaneManager {
   addFreePlane() {
     const key = `[${this.planeNextIndex}] {FreePlane}`;
     this.planes[key] = new FreePlane();
+    this._addPlaneGroup(key); // Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
     this.planeNextIndex += 1;
   }
 
@@ -172,6 +190,7 @@ if (!this.curveKeys.includes(curveKey))
     }
     const planeKey = `[${this.planeNextIndex}] ${curveKey} {VerticalPlane}`;
     this.planes[planeKey] = new VerticalPlane(this.curves[curveKey]);
+    this._addPlaneGroup(planeKey); // Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
     this.planeNextIndex += 1;
   }
 
@@ -188,6 +207,7 @@ if (!this.planeKeys.includes(key))
 - this.planeKeys: ${JSON.stringify(this.planeKeys)}
 `);
     }
+    this._removePlaneGroup(key); // Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
     delete this.planes[key];
   }
 
