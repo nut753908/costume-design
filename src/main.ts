@@ -2,7 +2,10 @@ import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
 import { createBaseCenterlines } from "./cross-section/centerline";
-import { PlaneManager } from "./cross-section/plane-manager";
+import {
+  PlaneManager,
+  type PlaneManagerJSON,
+} from "./cross-section/plane-manager";
 import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
@@ -14,6 +17,7 @@ import {
   saveGui,
 } from "./main/gui";
 import { createRenderer, updateRenderer } from "./main/renderer";
+import { disposeGroup } from "./main/utils";
 import { createMaterials, type Materials } from "./material/materials";
 import {
   type ArrowHelperWithCallbacks,
@@ -34,11 +38,16 @@ let gizmo: ViewportGizmo;
 let scene: THREE.Scene;
 
 let gui: GUI;
+let planeHelper: PlaneHelperWithCallbacks;
+let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
+let pm: PlaneManager;
+let planesGroup: THREE.Group;
+
 let loading = false;
-const undos: { gui: guiJSON; closed: closedJSON }[] = [];
-const redos: { gui: guiJSON; closed: closedJSON }[] = [];
+const undos: { pm: PlaneManagerJSON; gui: guiJSON; closed: closedJSON }[] = [];
+const redos: { pm: PlaneManagerJSON; gui: guiJSON; closed: closedJSON }[] = [];
 
 init();
 
@@ -48,8 +57,6 @@ async function init() {
   ({ gizmo } = createControlsAndGizmo(camera, renderer));
 
   gui = new GUI();
-  let planeHelper: PlaneHelperWithCallbacks;
-  let arrowHelper: ArrowHelperWithCallbacks;
   {
     const folder = gui.addFolder("(fixed)");
     scene = createScene(folder);
@@ -78,10 +85,9 @@ async function init() {
     setLinesGroupGUI(gui, linesGroup, false);
     scene.add(linesGroup);
 
-    // TODO: Manage pm with undos/redos.
-    const pm = new PlaneManager(lines);
+    pm = new PlaneManager(lines);
     pm.setGUI(gui);
-    const planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+    planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
     scene.add(planesGroup);
   });
 
@@ -96,14 +102,22 @@ async function init() {
 function save() {
   if (loading) return; // "loading" is set by loadLastUndo().
 
-  undos.push({ gui: saveGui(gui), closed: saveClosed(gui) });
+  undos.push({ pm: pm.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
   redos.length = 0;
 }
 
 function loadLastUndo() {
   loading = true;
 
+  scene.remove(planesGroup);
+  disposeGroup(planesGroup);
+
   const obj = undos[undos.length - 1];
+
+  pm.fromJSON(obj.pm);
+  pm.setGUI(gui);
+  planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+  scene.add(planesGroup);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);
