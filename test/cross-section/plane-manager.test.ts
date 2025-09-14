@@ -205,6 +205,7 @@ if (!this.planeKeys.includes(key))
       },
     },
     planes: {},
+    planeIndex: 0,
   };
   const _jsonForCatmullRomCurve3: PlaneManagerJSON = {
     curves: {
@@ -230,6 +231,7 @@ if (!this.planeKeys.includes(key))
         Record<"tension", number>,
     },
     planes: {},
+    planeIndex: 0,
   };
   const _jsonForCubicBezierCurve3: PlaneManagerJSON = {
     curves: {
@@ -252,6 +254,7 @@ if (!this.planeKeys.includes(key))
         Record<"v3", [number, number, number]>,
     },
     planes: {},
+    planeIndex: 0,
   };
 
   const _jsonForFreePlane: PlaneManagerJSON = {
@@ -263,6 +266,7 @@ if (!this.planeKeys.includes(key))
         point: [2, 3, 4],
       },
     },
+    planeIndex: 1,
   };
   const _jsonForVerticalPlane: PlaneManagerJSON = {
     curves: {},
@@ -292,6 +296,7 @@ if (!this.planeKeys.includes(key))
         u: 1,
       },
     },
+    planeIndex: 1,
   };
   const _jsonForNonExistentPlane: PlaneManagerJSON = {
     curves: {},
@@ -302,6 +307,7 @@ if (!this.planeKeys.includes(key))
         point: [0, 0, 0],
       },
     },
+    planeIndex: 1,
   };
 
   const _json: PlaneManagerJSON = {
@@ -314,6 +320,7 @@ if (!this.planeKeys.includes(key))
       "[1] b {VerticalPlane}":
         _jsonForVerticalPlane.planes["[1] b {VerticalPlane}"],
     },
+    planeIndex: 2,
   };
 
   test("toJSON()", () => {
