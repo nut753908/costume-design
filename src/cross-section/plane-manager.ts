@@ -117,6 +117,7 @@ export class PlaneManager {
       planeKey: pm.planeKeys[0] ?? "",
       removePlane: () => {
         pm.removePlane(obj.planeKey);
+        obj.planeKey = "";
         update();
       },
     };
