@@ -30,9 +30,9 @@ export class PlaneManager {
   planes: { [k: string]: FreePlane | VerticalPlane };
 
   /**
-   * The index of the planes.
+   * The next index of the planes.
    */
-  planeIndex: number;
+  planeNextIndex: number;
 
   /**
    * Secret field.
@@ -55,7 +55,7 @@ export class PlaneManager {
   ) {
     this.curves = curves;
     this.planes = planes;
-    this.planeIndex = this.planeKeys.length;
+    this.planeNextIndex = this.planeKeys.length;
     this._updatePlanesGroup = () => {};
   }
 
@@ -153,9 +153,9 @@ export class PlaneManager {
    * add the free plane to this.planes.
    */
   addFreePlane() {
-    const key = `[${this.planeIndex}] {FreePlane}`;
+    const key = `[${this.planeNextIndex}] {FreePlane}`;
     this.planes[key] = new FreePlane();
-    this.planeIndex += 1;
+    this.planeNextIndex += 1;
   }
 
   /**
@@ -172,9 +172,9 @@ if (!this.curveKeys.includes(curveKey))
 `);
       return;
     }
-    const planeKey = `[${this.planeIndex}] ${curveKey} {VerticalPlane}`;
+    const planeKey = `[${this.planeNextIndex}] ${curveKey} {VerticalPlane}`;
     this.planes[planeKey] = new VerticalPlane(this.curves[curveKey]);
-    this.planeIndex += 1;
+    this.planeNextIndex += 1;
   }
 
   /**
@@ -225,7 +225,7 @@ if (!this.planeKeys.includes(key))
   copy(source: PlaneManager): PlaneManager {
     this.curves = objectMap(source.curves, (v) => v.clone());
     this.planes = objectMap(source.planes, (v) => v.clone());
-    this.planeIndex = source.planeIndex;
+    this.planeNextIndex = source.planeNextIndex;
 
     return this;
   }
@@ -239,7 +239,7 @@ if (!this.planeKeys.includes(key))
     return {
       curves: objectMap(this.curves, (v) => v.toJSON()),
       planes: objectMap(this.planes, (v) => v.toJSON()),
-      planeIndex: this.planeIndex,
+      planeNextIndex: this.planeNextIndex,
     };
   }
 
@@ -278,7 +278,7 @@ if (!this.planeKeys.includes(key))
         return new FreePlane();
       }
     });
-    this.planeIndex = json.planeIndex;
+    this.planeNextIndex = json.planeNextIndex;
 
     return this;
   }
@@ -292,6 +292,6 @@ export interface PlaneManagerJSON {
   curves: { [k: string]: THREE.CurvePathJSON | THREE.CurveJSON };
   /** {@link PlaneManager#planes} */
   planes: { [k: string]: FreePlaneJSON | VerticalPlaneJSON };
-  /** {@link PlaneManager#planeIndex} */
-  planeIndex: number;
+  /** {@link PlaneManager#planeNextIndex} */
+  planeNextIndex: number;
 }
