@@ -1,7 +1,7 @@
 import type GUI from "lil-gui";
 import * as THREE from "three";
 import { closeFolder, deleteFolder } from "../main/gui";
-import { objectMap } from "../main/utils";
+import { disposeGroup, objectMap } from "../main/utils";
 import type { ArrowHelperWithCallbacks } from "../object-3d/arrow-helper";
 import { createPlanesGroup } from "../object-3d/group/planes";
 import type { PlaneHelperWithCallbacks } from "../object-3d/plane-helper";
@@ -75,10 +75,8 @@ export class PlaneManager {
     // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
     pm._updatePlanesGroup = () => {
       if (child !== undefined) {
-        if ("dispose" in child && child.dispose instanceof Function) {
-          child.dispose();
-        }
         parent.remove(child);
+        disposeGroup(child);
       }
       // TODO: Maintain group visible settings.
       child = createPlanesGroup(gui, pm.planes, planeHelper, arrowHelper);
