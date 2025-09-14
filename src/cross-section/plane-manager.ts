@@ -128,7 +128,7 @@ export class PlaneManager {
     const cAVP = folder.add(obj, "addVerticalPlane");
     const cRP = folder.add(obj, "removePlane");
     let cCK = folder.add(obj, "curveKey").name("addVerticalPlane curveKey");
-    let cPK = folder.add(obj, "planeKey").name("removePlane planeKey");
+    let cPK = folder.add(obj, "planeKey").name("removePlane key");
     updateEnabled();
     updateOptions();
     if (isClose) closeFolder(folder);
