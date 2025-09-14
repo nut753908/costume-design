@@ -9,7 +9,7 @@ import { createPlaneGroup } from "./plane";
 
 export function createPlanesGroup(
   gui: GUI,
-  planes: { [k: number | string]: FreePlane | VerticalPlane },
+  planes: { [k: string]: FreePlane | VerticalPlane },
   planeHelper: PlaneHelperWithCallbacks,
   arrowHelper: ArrowHelperWithCallbacks
 ): THREE.Group {
