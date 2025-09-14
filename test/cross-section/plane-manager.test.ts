@@ -138,6 +138,7 @@ describe("PlaneManager", () => {
     ];
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = pm1.clone();
+    pm2._updatePlanesGroup = pm1._updatePlanesGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -153,6 +154,7 @@ describe("PlaneManager", () => {
     ];
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = new PlaneManager().copy(pm1);
+    pm2._updatePlanesGroup = pm1._updatePlanesGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -319,6 +321,7 @@ describe("PlaneManager", () => {
       const points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(1, 2, 4)];
       const curves = { a: createLinePath(points) };
       const pm2 = new PlaneManager(curves);
+      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -328,6 +331,7 @@ describe("PlaneManager", () => {
       const points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(1, 2, 4)];
       const curves = { b: new THREE.CatmullRomCurve3(points) };
       const pm2 = new PlaneManager(curves);
+      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -353,6 +357,7 @@ describe("PlaneManager", () => {
         new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
       ];
       const pm2 = new PlaneManager({}, planes);
+      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -363,6 +368,7 @@ describe("PlaneManager", () => {
       const curve = new THREE.CatmullRomCurve3(points);
       const planes = [new VerticalPlane(curve, 1)];
       const pm2 = new PlaneManager({}, planes);
+      pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

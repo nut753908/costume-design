@@ -1,6 +1,11 @@
-import { isInvalidIndex } from "src/math/utils";
+import type GUI from "lil-gui";
 import * as THREE from "three";
+import { closeFolder, deleteFolder } from "../main/gui";
 import { objectMap } from "../main/utils";
+import { isInvalidIndex } from "../math/utils";
+import type { ArrowHelperWithCallbacks } from "../object-3d/arrow-helper";
+import { createPlanesGroup } from "../object-3d/group/planes";
+import type { PlaneHelperWithCallbacks } from "../object-3d/plane-helper";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
 
@@ -26,6 +31,13 @@ export class PlaneManager {
   planes: (FreePlane | VerticalPlane)[];
 
   /**
+   * Secret field.
+   * This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
+   * Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
+   */
+  _updatePlanesGroup: () => void;
+
+  /**
    * Constructs a new plane manager.
    *
    * @param curves - {@link PlaneManager#curves}
@@ -39,6 +51,102 @@ export class PlaneManager {
   ) {
     this.curves = curves;
     this.planes = planes;
+    this._updatePlanesGroup = () => {};
+  }
+
+  /**
+   * Create the planes group.
+   */
+  createPlanesGroup(
+    gui: GUI,
+    planeHelper: PlaneHelperWithCallbacks,
+    arrowHelper: ArrowHelperWithCallbacks
+  ): THREE.Group {
+    // biome-ignore lint/complexity/noUselessThisAlias: to leave pm(=this) alive.
+    const pm = this;
+    const parent = new THREE.Group();
+    let child: THREE.Group;
+
+    // This function is used by setGUI() in ./src/cross-section/plane-manager.ts.
+    pm._updatePlanesGroup = () => {
+      if (child !== undefined) {
+        if ("dispose" in child && child.dispose instanceof Function) {
+          child.dispose();
+        }
+        parent.remove(child);
+      }
+      // TODO: Maintain group visible settings.
+      child = createPlanesGroup(
+        gui,
+        // TODO: Change the planes type from Array to Object.
+        Object.fromEntries(pm.planes.map((p, i) => [i, p])),
+        planeHelper,
+        arrowHelper
+      );
+      parent.add(child);
+    };
+    pm._updatePlanesGroup();
+
+    return parent;
+  }
+
+  /**
+   * Set GUI.
+   *
+   * @param name - The curve folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating plane manager.
+   * @param isClose - Whether to close the folder.
+   */
+  setGUI(
+    gui: GUI,
+    name = "PlaneManager",
+    updateCallback = () => {},
+    isClose = false
+  ) {
+    const pm = this;
+
+    const obj = {
+      addFreePlane: () => {
+        pm.addFreePlane();
+        update();
+      },
+      curveKey: pm.curveKeys[0] ?? "",
+      addVerticalPlane: () => {
+        pm.addVerticalPlane(obj.curveKey);
+        update();
+      },
+      planeIndex: 0,
+      removePlane: () => {
+        pm.removePlane(obj.planeIndex);
+        update();
+      },
+    };
+
+    deleteFolder(gui, name);
+    const folder = gui.addFolder(name);
+    folder.add(obj, "addFreePlane");
+    const cAVP = folder.add(obj, "addVerticalPlane");
+    const cRP = folder.add(obj, "removePlane");
+    let cCK = folder.add(obj, "curveKey").name("addVerticalPlane curveKey");
+    let cPI = folder.add(obj, "planeIndex").name("removePlane index");
+    updateEnabled();
+    updateOptions();
+    if (isClose) closeFolder(folder);
+
+    function update() {
+      updateEnabled();
+      updateOptions();
+      pm._updatePlanesGroup(); // Set it in advance using createPlanesGroup() in ./src/cross-section/plane-manager.ts.
+      updateCallback();
+    }
+    function updateEnabled() {
+      pm.curveKeys.includes(obj.curveKey) ? cAVP.enable() : cAVP.disable();
+      pm.planeIndices.includes(obj.planeIndex) ? cRP.enable() : cRP.disable();
+    }
+    function updateOptions() {
+      cCK = cCK.options(pm.curveKeys).onChange(updateEnabled);
+      cPI = cPI.options(pm.planeIndices).onChange(updateEnabled);
+    }
   }
 
   /**

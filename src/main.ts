@@ -2,9 +2,7 @@ import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
 import { createBaseCenterlines } from "./cross-section/centerline";
-// biome-ignore lint/correctness/noUnusedImports: keep FreePlane for later use.
-import { FreePlane } from "./cross-section/free-plane";
-import { VerticalPlane } from "./cross-section/vertical-plane";
+import { PlaneManager } from "./cross-section/plane-manager";
 import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
@@ -16,7 +14,6 @@ import {
   saveGui,
 } from "./main/gui";
 import { createRenderer, updateRenderer } from "./main/renderer";
-import { objectMap } from "./main/utils";
 import { createMaterials, type Materials } from "./material/materials";
 import {
   type ArrowHelperWithCallbacks,
@@ -25,7 +22,6 @@ import {
 import { createAxesHelper } from "./object-3d/axes-helper";
 import { createBaseGroup } from "./object-3d/group/base";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
-import { createPlanesGroup } from "./object-3d/group/planes";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
@@ -82,14 +78,10 @@ async function init() {
     setLinesGroupGUI(gui, linesGroup, false);
     scene.add(linesGroup);
 
-    // const planes = [...Array(3)].map(() => new FreePlane());
-    const planes = objectMap(lines, (v) => new VerticalPlane(v));
-    const planesGroup = createPlanesGroup(
-      gui,
-      planes,
-      planeHelper,
-      arrowHelper
-    );
+    // TODO: Manage pm with undos/redos.
+    const pm = new PlaneManager(lines);
+    pm.setGUI(gui);
+    const planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
     scene.add(planesGroup);
   });
 
