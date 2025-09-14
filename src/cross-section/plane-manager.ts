@@ -1,5 +1,4 @@
-// TODO: add addFreePlane(), addVerticalPlane(curveKey), removePlane(planeIndex), getCurveKeys(), getPlaneIndices()
-
+import { isInvalidIndex } from "src/math/utils";
 import * as THREE from "three";
 import { objectMap } from "../main/utils";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
@@ -40,6 +39,54 @@ export class PlaneManager {
   ) {
     this.curves = curves;
     this.planes = planes;
+  }
+
+  /**
+   * add the free plane to this.planes.
+   */
+  addFreePlane() {
+    this.planes.push(new FreePlane());
+  }
+
+  /**
+   * add the vertical plane to this.planes.
+   *
+   * @param curveKey - The curve key in this.curves.
+   */
+  addVerticalPlane(curveKey: string) {
+    if (!this.curveKeys.includes(curveKey)) {
+      console.error(`\
+!(curveKey in this.curves)
+- curveKey: ${curveKey}
+- this.curveKeys: ${JSON.stringify(this.curveKeys)}
+`);
+      return;
+    }
+    this.planes.push(new VerticalPlane(this.curves[curveKey]));
+  }
+
+  /**
+   * remove the plane from this.planes.
+   *
+   * @param index - The plane index in this.planes.
+   */
+  removePlane(index: number) {
+    if (isInvalidIndex(index, 0, this.planes.length - 1)) return;
+    this.planes.splice(index, 1);
+  }
+
+  /**
+   * Get the curve keys in this.curves.
+   */
+  get curveKeys(): string[] {
+    return Object.keys(this.curves);
+  }
+
+  /**
+   * Get the plane indices in this.planes.
+   */
+  get planeIndices(): number[] {
+    return this.planes.map((_, i) => i);
   }
 
   /**
