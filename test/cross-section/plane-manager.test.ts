@@ -22,10 +22,13 @@ describe("PlaneManager", () => {
       a: createLinePath(points),
       b: new THREE.CatmullRomCurve3(points),
     };
-    const planes = [
-      new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
-      new VerticalPlane(curves.b, 1),
-    ];
+    const planes = {
+      "[0] {FreePlane}": new FreePlane(
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(2, 3, 4)
+      ),
+      "[1] b {VerticalPlane}": new VerticalPlane(curves.a, 1),
+    };
     const pm = new PlaneManager(curves, planes);
     expect(pm.curves).toEqual(curves);
     expect(pm.planes).toEqual(planes);
@@ -33,10 +36,11 @@ describe("PlaneManager", () => {
 
   test("addFreePlane()", () => {
     const pm = new PlaneManager();
-    expect(pm.planes.length).toBe(0);
+    expect(pm.planeKeys.length).toBe(0);
     pm.addFreePlane();
-    expect(pm.planes.length).toBe(1);
-    expect(pm.planes[0].type).toBe("FreePlane");
+    expect(pm.planeKeys.length).toBe(1);
+    expect(pm.planeKeys).toContain("[0] {FreePlane}");
+    expect(pm.planes["[0] {FreePlane}"].type).toBe("FreePlane");
   });
 
   describe("addVerticalPlane()", () => {
@@ -46,60 +50,62 @@ describe("PlaneManager", () => {
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
       pm = new PlaneManager({ a: new THREE.CurvePath<THREE.Vector3>() });
-      expect(pm.planes.length).toBe(0);
+      expect(pm.planeKeys.length).toBe(0);
     });
 
     test("if (!this.curveKeys.includes(curveKey))", () => {
       spy.mockImplementationOnce((v) => {
         expect(v).toBe(`\
-!(curveKey in this.curves)
+if (!this.curveKeys.includes(curveKey))
 - curveKey: b
 - this.curveKeys: ["a"]
 `);
       });
       pm.addVerticalPlane("b");
-      expect(pm.planes.length).toBe(0);
+      expect(pm.planeKeys.length).toBe(0);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
     test("else", () => {
       pm.addVerticalPlane("a");
-      expect(pm.planes.length).toBe(1);
-      expect(pm.planes[0].type).toBe("VerticalPlane");
-      expect((pm.planes[0] as VerticalPlane).curve).toEqual(pm.curves.a);
+      expect(pm.planeKeys.length).toBe(1);
+      expect(pm.planeKeys).toContain("[0] a {VerticalPlane}");
+      expect(pm.planes["[0] a {VerticalPlane}"].type).toBe("VerticalPlane");
+      expect(
+        (pm.planes["[0] a {VerticalPlane}"] as VerticalPlane).curve
+      ).toEqual(pm.curves.a);
       expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
   describe("removePlane()", () => {
-    const planes = [
-      new FreePlane(new THREE.Vector3(1, 0, 0)),
-      new FreePlane(new THREE.Vector3(0, 1, 0)),
-      new FreePlane(new THREE.Vector3(0, 0, 1)),
-    ];
+    let spy: MockInstance;
+    let pm: PlaneManager;
 
-    test.each([
-      [[0, 1, 2], -1, [0, 1, 2], "the index(-1) is out of range [0,2]."],
-      [[0, 1, 2], 0, [1, 2], undefined],
-      [[0, 1, 2], 1, [0, 2], undefined],
-      [[0, 1, 2], 2, [0, 1], undefined],
-      [[0, 1, 2], 3, [0, 1, 2], "the index(3) is out of range [0,2]."],
-    ])(
-      "preIndexList:%j, index:%i, postIndexList:%j",
-      (preIndexList, index, postIndexList, msg) => {
-        const spy = vi.spyOn(console, "error");
-        if (msg !== undefined) {
-          spy.mockImplementationOnce((v) => expect(v).toBe(msg));
-        }
-        const pm = new PlaneManager(
-          {},
-          preIndexList.map((i) => planes[i])
-        );
-        pm.removePlane(index);
-        expect(pm.planes).toEqual(postIndexList.map((i) => planes[i]));
-        expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
-      }
-    );
+    beforeEach(() => {
+      spy = vi.spyOn(console, "error");
+      pm = new PlaneManager({}, { "[0] {FreePlane}": new FreePlane() });
+      expect(pm.planeKeys.length).toBe(1);
+    });
+
+    test("if (!this.planeKeys.includes(key))", () => {
+      spy.mockImplementationOnce((v) => {
+        expect(v).toBe(`\
+if (!this.planeKeys.includes(key))
+- key: [1] b {VerticalPlane}
+- this.planeKeys: ["[0] {FreePlane}"]
+`);
+      });
+      pm.removePlane("[1] b {VerticalPlane}");
+      expect(pm.planeKeys.length).toBe(1);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test("else", () => {
+      pm.removePlane("[0] {FreePlane}");
+      expect(pm.planeKeys.length).toBe(0);
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
   });
 
   describe("curveKeys()", () => {
@@ -115,14 +121,18 @@ describe("PlaneManager", () => {
     });
   });
 
-  describe("planeIndices()", () => {
+  describe("planeKeys()", () => {
     test.each([
-      [0, []],
-      [1, [0]],
-      [2, [0, 1]],
-    ])("length:%i, expected:%j", (length, expected) => {
-      const pm = new PlaneManager({}, Array(length).fill(new FreePlane()));
-      expect(pm.planeIndices).toEqual(expected);
+      [[]],
+      [["[0] {FreePlane}"]],
+      [["[0] {FreePlane}", "[1] {FreePlane}"]],
+    ])("planeKeys:%j", (planeKeys) => {
+      const planes: { [k: string]: FreePlane | VerticalPlane } = {};
+      planeKeys.forEach((k) => {
+        planes[k] = new FreePlane();
+      });
+      const pm = new PlaneManager({}, planes);
+      expect(pm.planeKeys).toEqual(planeKeys);
     });
   });
 
@@ -132,10 +142,13 @@ describe("PlaneManager", () => {
       a: createLinePath(points),
       b: new THREE.CatmullRomCurve3(points),
     };
-    const planes = [
-      new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
-      new VerticalPlane(curves.b, 1),
-    ];
+    const planes = {
+      "[0] {FreePlane}": new FreePlane(
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(2, 3, 4)
+      ),
+      "[1] b {VerticalPlane}": new VerticalPlane(curves.b, 1),
+    };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = pm1.clone();
     pm2._updatePlanesGroup = pm1._updatePlanesGroup;
@@ -148,10 +161,13 @@ describe("PlaneManager", () => {
       a: createLinePath(points),
       b: new THREE.CatmullRomCurve3(points),
     };
-    const planes = [
-      new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
-      new VerticalPlane(curves.b, 1),
-    ];
+    const planes = {
+      "[0] {FreePlane}": new FreePlane(
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(2, 3, 4)
+      ),
+      "[1] b {VerticalPlane}": new VerticalPlane(curves.b, 1),
+    };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = new PlaneManager().copy(pm1);
     pm2._updatePlanesGroup = pm1._updatePlanesGroup;
@@ -186,7 +202,8 @@ describe("PlaneManager", () => {
           Record<"v2", [number, number, number]>)[],
       },
     },
-    planes: [],
+    planes: {},
+    planeNextIndex: 0,
   };
   const _jsonForCatmullRomCurve3: PlaneManagerJSON = {
     curves: {
@@ -211,7 +228,8 @@ describe("PlaneManager", () => {
         Record<"curveType", string> &
         Record<"tension", number>,
     },
-    planes: [],
+    planes: {},
+    planeNextIndex: 0,
   };
   const _jsonForCubicBezierCurve3: PlaneManagerJSON = {
     curves: {
@@ -233,23 +251,25 @@ describe("PlaneManager", () => {
         Record<"v2", [number, number, number]> &
         Record<"v3", [number, number, number]>,
     },
-    planes: [],
+    planes: {},
+    planeNextIndex: 0,
   };
 
   const _jsonForFreePlane: PlaneManagerJSON = {
     curves: {},
-    planes: [
-      {
+    planes: {
+      "[0] {FreePlane}": {
         type: "FreePlane",
         normal: [1, 0, 0],
         point: [2, 3, 4],
       },
-    ],
+    },
+    planeNextIndex: 1,
   };
   const _jsonForVerticalPlane: PlaneManagerJSON = {
     curves: {},
-    planes: [
-      {
+    planes: {
+      "[1] b {VerticalPlane}": {
         type: "VerticalPlane",
         curve: {
           metadata: {
@@ -273,17 +293,19 @@ describe("PlaneManager", () => {
           Record<"tension", number>,
         u: 1,
       },
-    ],
+    },
+    planeNextIndex: 1,
   };
   const _jsonForNonExistentPlane: PlaneManagerJSON = {
     curves: {},
-    planes: [
-      {
+    planes: {
+      "[2] {NonExistentPlane}": {
         type: "NonExistentPlane",
         normal: [0, 0, 0],
         point: [0, 0, 0],
       },
-    ],
+    },
+    planeNextIndex: 1,
   };
 
   const _json: PlaneManagerJSON = {
@@ -291,7 +313,12 @@ describe("PlaneManager", () => {
       a: _jsonForCurvePath.curves.a,
       b: _jsonForCatmullRomCurve3.curves.b,
     },
-    planes: [_jsonForFreePlane.planes[0], _jsonForVerticalPlane.planes[0]],
+    planes: {
+      "[0] {FreePlane}": _jsonForFreePlane.planes["[0] {FreePlane}"],
+      "[1] b {VerticalPlane}":
+        _jsonForVerticalPlane.planes["[1] b {VerticalPlane}"],
+    },
+    planeNextIndex: 2,
   };
 
   test("toJSON()", () => {
@@ -300,10 +327,13 @@ describe("PlaneManager", () => {
       a: createLinePath(points),
       b: new THREE.CatmullRomCurve3(points),
     };
-    const planes = [
-      new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
-      new VerticalPlane(curves.b, 1),
-    ];
+    const planes = {
+      "[0] {FreePlane}": new FreePlane(
+        new THREE.Vector3(1, 0, 0),
+        new THREE.Vector3(2, 3, 4)
+      ),
+      "[1] b {VerticalPlane}": new VerticalPlane(curves.b, 1),
+    };
     const json1 = new PlaneManager(curves, planes).toJSON();
     const json2 = _json;
     expect(json1).toEqual(json2);
@@ -353,9 +383,12 @@ describe("PlaneManager", () => {
 
     test('planes: if (v.type === "FreePlane")', () => {
       const pm1 = new PlaneManager().fromJSON(_jsonForFreePlane);
-      const planes = [
-        new FreePlane(new THREE.Vector3(1, 0, 0), new THREE.Vector3(2, 3, 4)),
-      ];
+      const planes = {
+        "[0] {FreePlane}": new FreePlane(
+          new THREE.Vector3(1, 0, 0),
+          new THREE.Vector3(2, 3, 4)
+        ),
+      };
       const pm2 = new PlaneManager({}, planes);
       pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
@@ -366,7 +399,7 @@ describe("PlaneManager", () => {
       const pm1 = new PlaneManager().fromJSON(_jsonForVerticalPlane);
       const points = [new THREE.Vector3(1, 2, 3), new THREE.Vector3(1, 2, 4)];
       const curve = new THREE.CatmullRomCurve3(points);
-      const planes = [new VerticalPlane(curve, 1)];
+      const planes = { "[1] b {VerticalPlane}": new VerticalPlane(curve, 1) };
       const pm2 = new PlaneManager({}, planes);
       pm2._updatePlanesGroup = pm1._updatePlanesGroup;
       expect(pm1).toEqual(pm2);
@@ -381,8 +414,10 @@ describe("PlaneManager", () => {
 `);
       });
       const pm = new PlaneManager().fromJSON(_jsonForNonExistentPlane);
-      expect(pm.planes[0].type).not.toBe("NonExistentPlane");
-      expect(pm.planes[0].type).toBe("FreePlane");
+      expect(pm.planes["[2] {NonExistentPlane}"].type).not.toBe(
+        "NonExistentPlane"
+      );
+      expect(pm.planes["[2] {NonExistentPlane}"].type).toBe("FreePlane");
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

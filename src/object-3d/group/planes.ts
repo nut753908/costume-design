@@ -18,9 +18,8 @@ export function createPlanesGroup(
 
   const group = new THREE.Group();
 
-  Object.entries(planes).forEach(([k, v], i) => {
-    const name = String(i) !== k ? `[${i}] ${k}` : `[${i}]`;
-    group.add(createPlaneGroup(folder, v, planeHelper, arrowHelper, name));
+  Object.entries(planes).forEach(([k, v]) => {
+    group.add(createPlaneGroup(folder, v, planeHelper, arrowHelper, k));
   });
 
   return group;

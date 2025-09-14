@@ -45,8 +45,6 @@ export function createPlaneGroup(
   group.add(_arrowHelper);
 
   {
-    if (plane instanceof FreePlane) name += " {FreePlane}";
-    if (plane instanceof VerticalPlane) name += " {VerticalPlane}";
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(group, "visible");
