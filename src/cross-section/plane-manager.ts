@@ -1,4 +1,3 @@
-// TODO: test constructor(), clone(), copy(), toJSON(), fromJSON()
 // TODO: add addFreePlane(), addVerticalPlane(curveKey), removePlane(planeIndex), getCurveKeys(), getPlaneIndices()
 
 import * as THREE from "three";
