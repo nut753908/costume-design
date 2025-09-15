@@ -1,4 +1,4 @@
-import { Edge, type EdgeJSON } from "src/cross-section/edge";
+import { Edge, type EdgeJSON } from "src/cross-section/centerline/edge";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

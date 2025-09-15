@@ -1,5 +1,5 @@
-import { EdgeLoopStack } from "src/cross-section/edge-loop-stack";
-import { createAllEdgeLoopStacks } from "src/cross-section/edge-loop-stacks";
+import { EdgeLoopStack } from "src/cross-section/centerline/edge-loop-stack";
+import { createAllEdgeLoopStacks } from "src/cross-section/centerline/edge-loop-stacks";
 import {
   beforeEach,
   describe,

@@ -1,7 +1,7 @@
 import {
   createRemainingVerticesMap,
   findNextVertex,
-} from "src/cross-section/vertices";
+} from "src/cross-section/centerline/vertices";
 import {
   beforeEach,
   describe,

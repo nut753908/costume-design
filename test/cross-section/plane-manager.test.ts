@@ -1,4 +1,4 @@
-import { createLinePath } from "src/cross-section/centerline";
+import { createLinePath } from "src/cross-section/centerline/centerline";
 import { FreePlane } from "src/cross-section/free-plane";
 import {
   PlaneManager,
