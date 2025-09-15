@@ -11,13 +11,15 @@ import * as THREE from "three";
 
 /**
  * @param name - The folder name.
+ * @param updateCallback - The callback that is invoked after updating plane.
  */
 export function createPlaneGroup(
   gui: GUI,
   plane: FreePlane | VerticalPlane,
   planeHelper: PlaneHelperWithCallbacks,
   arrowHelper: ArrowHelperWithCallbacks,
-  name = "PlaneGroup"
+  name = "PlaneGroup",
+  updateCallback = (_name: string) => {}
 ): THREE.Group {
   const obj = {
     plane: plane.getPlane(),
@@ -79,6 +81,7 @@ export function createPlaneGroup(
         group.children[1].setDirection(obj.normal);
       }
       nFolder.controllers.map((c) => c.updateDisplay());
+      updateCallback(name);
     }
     function uP() /* updatePoint */ {
       if (!(plane instanceof FreePlane)) return;
@@ -90,6 +93,7 @@ export function createPlaneGroup(
       if (group.children[1] instanceof THREE.ArrowHelper) {
         group.children[1].position.copy(obj.point);
       }
+      updateCallback(name);
     }
     function uU() /* updateU */ {
       if (!(plane instanceof VerticalPlane)) return;
@@ -104,6 +108,7 @@ export function createPlaneGroup(
         group.children[1].setDirection(obj.normal);
         group.children[1].position.copy(obj.point);
       }
+      updateCallback(name);
     }
   }
 
