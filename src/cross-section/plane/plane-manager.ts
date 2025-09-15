@@ -125,7 +125,8 @@ export class PlaneManager {
       parent.add(children[k]);
     });
 
-    // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by addFreePlane() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by addVerticalPlane() in ./src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
       const p = this.planes[k];
       children[k] = createPlaneGroup(
@@ -139,7 +140,7 @@ export class PlaneManager {
       parent.add(children[k]);
     };
 
-    // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by removePlane() in ./src/cross-section/plane/plane-manager.ts.
     this._removePlaneGroup = (k: string) => {
       deleteFolder(folder, k);
       parent.remove(children[k]);
@@ -186,7 +187,8 @@ export class PlaneManager {
       }
     });
 
-    // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by addFreePlane() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by addVerticalPlane() in ./src/cross-section/plane/plane-manager.ts.
     this._addPointsGroup = (k: string) => {
       const p = this.planes[k];
       const { edge, vertex } = createAllIntersections(p, allEdges, positions);
@@ -202,7 +204,7 @@ export class PlaneManager {
       }
     };
 
-    // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
+    // This function is used by removePlane() in ./src/cross-section/plane/plane-manager.ts.
     this._removePointsGroup = (k: string) => {
       deleteFolder(folder, k);
       parent.remove(children[k]);
