@@ -11,14 +11,14 @@ import type * as THREE from "three";
  */
 export class EdgeIntersection {
   /**
-   * The index of the top vertex of the edge.
-   */
-  topV: number;
-
-  /**
    * The index of the bottom vertex of the edge.
    */
   bottomV: number;
+
+  /**
+   * The index of the top vertex of the edge.
+   */
+  topV: number;
 
   /**
    * The edge intersection position from bottomV to topV. Must be in the range [0, 1].
@@ -33,14 +33,14 @@ export class EdgeIntersection {
   /**
    * Constructs a new edge intersection.
    *
-   * @param topV - {@link EdgeIntersection#topV}
    * @param bottomV - {@link EdgeIntersection#bottomV}
+   * @param topV - {@link EdgeIntersection#topV}
    * @param u - {@link EdgeIntersection#u}
    * @param checked - {@link EdgeIntersection#checked}
    */
-  constructor(topV = -1, bottomV = -1, u = 0, checked = false) {
-    this.topV = topV;
+  constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
     this.bottomV = bottomV;
+    this.topV = topV;
     this.u = u;
     this.checked = checked;
   }
@@ -52,8 +52,8 @@ export class EdgeIntersection {
    * @return  The points.
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
-    const top = getPoint(positions, this.topV);
     const bottom = getPoint(positions, this.bottomV);
+    const top = getPoint(positions, this.topV);
     const diff = top.clone().sub(bottom);
     return bottom.clone().add(diff.multiplyScalar(this.u));
   }
@@ -74,8 +74,8 @@ export class EdgeIntersection {
    * @return  A reference to this edge intersection.
    */
   copy(source: EdgeIntersection): this {
-    this.topV = source.topV;
     this.bottomV = source.bottomV;
+    this.topV = source.topV;
     this.u = source.u;
     this.checked = source.checked;
 
@@ -89,8 +89,8 @@ export class EdgeIntersection {
    */
   toJSON(): EdgeIntersectionJSON {
     return {
-      topV: this.topV,
       bottomV: this.bottomV,
+      topV: this.topV,
       u: this.u,
       checked: this.checked,
     };
@@ -103,8 +103,8 @@ export class EdgeIntersection {
    * @return  A reference to this edge intersection.
    */
   fromJSON(json: EdgeIntersectionJSON): this {
-    this.topV = json.topV;
     this.bottomV = json.bottomV;
+    this.topV = json.topV;
     this.u = json.u;
     this.checked = json.checked;
 
@@ -116,10 +116,10 @@ export class EdgeIntersection {
  * The {@link EdgeIntersection} JSON interface.
  */
 export interface EdgeIntersectionJSON {
-  /** {@link EdgeIntersection#topV} */
-  topV: number;
   /** {@link EdgeIntersection#bottomV} */
   bottomV: number;
+  /** {@link EdgeIntersection#topV} */
+  topV: number;
   /** {@link EdgeIntersection#u} */
   u: number;
   /** {@link EdgeIntersection#checked} */
