@@ -42,8 +42,12 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
+let positions: THREE.BufferAttribute;
+let indices: THREE.BufferAttribute;
+
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
+let pointsGroup: THREE.Group;
 
 let loading = false;
 const undos: { pm: PlaneManagerJSON; gui: guiJSON; closed: closedJSON }[] = [];
@@ -76,9 +80,10 @@ async function init() {
     const geometry = baseGroup.children[0]
       .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = geometry.nPolygonIndices;
-    const positions = geometry.getAttribute(
+    positions = geometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
+    indices = geometry.getIndex() as THREE.BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
@@ -89,6 +94,8 @@ async function init() {
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
     scene.add(planesGroup);
+    pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+    scene.add(pointsGroup);
   });
 
   save();
@@ -111,6 +118,8 @@ function loadLastUndo() {
 
   scene.remove(planesGroup);
   disposeGroup(planesGroup);
+  scene.remove(pointsGroup);
+  disposeGroup(pointsGroup);
 
   const obj = undos[undos.length - 1];
 
@@ -118,6 +127,8 @@ function loadLastUndo() {
   pm.setGUI(gui);
   planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
   scene.add(planesGroup);
+  pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+  scene.add(pointsGroup);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);

@@ -11,9 +11,11 @@ export interface guiJSON {
 export function saveGui(gui: GUI): guiJSON {
   const guiObj = gui.save() as guiJSON;
   const folders: guiJSON["folders"] = {};
-  ["(fixed)", "LinesGroup", "PlanesGroup", "TubeGroup"].forEach((k) => {
-    folders[k] = guiObj.folders[k];
-  });
+  ["(fixed)", "LinesGroup", "PointsGroup", "PlanesGroup", "TubeGroup"].forEach(
+    (k) => {
+      folders[k] = guiObj.folders[k];
+    }
+  );
   guiObj.folders = folders;
   return guiObj;
 }

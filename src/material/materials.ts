@@ -22,6 +22,11 @@ export function createMaterials(gui: GUI): Materials {
     line: createLineMaterial(lineFolder, "line", 0x000000),
   };
 
+  const pointsFolder = folder.addFolder("points").close();
+  const points = {
+    points: createPointsMaterial(pointsFolder, "points", 0x000000),
+  };
+
   const cpFolder = folder.addFolder("cp").close();
   const cp = {
     points: createPointsMaterial(cpFolder, "points", 0x000000),
@@ -48,6 +53,7 @@ export function createMaterials(gui: GUI): Materials {
   return {
     base,
     line,
+    points,
     cp,
     curve,
     tube,
@@ -62,6 +68,9 @@ export interface Materials {
   line: {
     points: THREE.PointsMaterial;
     line: THREE.LineBasicMaterial;
+  };
+  points: {
+    points: THREE.PointsMaterial;
   };
   cp: {
     points: THREE.PointsMaterial;
