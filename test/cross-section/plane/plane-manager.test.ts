@@ -1,10 +1,10 @@
 import { createLinePath } from "src/cross-section/centerline/centerline";
-import { FreePlane } from "src/cross-section/free-plane";
+import { FreePlane } from "src/cross-section/plane/free-plane";
 import {
   PlaneManager,
   type PlaneManagerJSON,
-} from "src/cross-section/plane-manager";
-import { VerticalPlane } from "src/cross-section/vertical-plane";
+} from "src/cross-section/plane/plane-manager";
+import { VerticalPlane } from "src/cross-section/plane/vertical-plane";
 import * as THREE from "three";
 import {
   beforeEach,

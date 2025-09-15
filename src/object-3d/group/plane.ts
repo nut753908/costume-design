@@ -1,6 +1,6 @@
 import type { GUI } from "lil-gui";
-import { FreePlane } from "src/cross-section/free-plane";
-import { VerticalPlane } from "src/cross-section/vertical-plane";
+import { FreePlane } from "src/cross-section/plane/free-plane";
+import { VerticalPlane } from "src/cross-section/plane/vertical-plane";
 import { deleteFolder } from "src/main/gui";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
 import {
