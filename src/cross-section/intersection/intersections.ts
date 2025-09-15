@@ -1,6 +1,5 @@
 import type * as THREE from "three";
 import type { Edge } from "../centerline/edge";
-import { createAllEdges } from "../centerline/edges";
 import { getPoint } from "../centerline/points";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
