@@ -1,11 +1,11 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import { createBaseCenterlines } from "./cross-section/centerline";
+import { createBaseCenterlines } from "./cross-section/centerline/centerline";
 import {
   PlaneManager,
   type PlaneManagerJSON,
-} from "./cross-section/plane-manager";
+} from "./cross-section/plane/plane-manager";
 import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";

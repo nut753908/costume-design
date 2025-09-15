@@ -1,7 +1,7 @@
 import {
   EdgeLoopStack,
   type EdgeLoopStackJSON,
-} from "src/cross-section/edge-loop-stack";
+} from "src/cross-section/centerline/edge-loop-stack";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

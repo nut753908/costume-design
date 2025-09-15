@@ -1,4 +1,7 @@
-import { FreePlane, type FreePlaneJSON } from "src/cross-section/free-plane";
+import {
+  FreePlane,
+  type FreePlaneJSON,
+} from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

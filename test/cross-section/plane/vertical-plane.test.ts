@@ -1,8 +1,8 @@
-import { createLinePath } from "src/cross-section/centerline";
+import { createLinePath } from "src/cross-section/centerline/centerline";
 import {
   VerticalPlane,
   type VerticalPlaneJSON,
-} from "src/cross-section/vertical-plane";
+} from "src/cross-section/plane/vertical-plane";
 import * as THREE from "three";
 import {
   beforeEach,

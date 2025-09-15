@@ -1,4 +1,4 @@
-import { getCentroids, getPoint } from "src/cross-section/points";
+import { getCentroids, getPoint } from "src/cross-section/centerline/points";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

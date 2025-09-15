@@ -1,10 +1,10 @@
-import { Edge } from "src/cross-section/edge";
+import { Edge } from "src/cross-section/centerline/edge";
 import {
   createAllEdges,
   createEdgeMap,
   findNextEdge,
-} from "src/cross-section/edges";
-import { createRemainingVerticesMap } from "src/cross-section/vertices";
+} from "src/cross-section/centerline/edges";
+import { createRemainingVerticesMap } from "src/cross-section/centerline/vertices";
 import {
   beforeEach,
   describe,

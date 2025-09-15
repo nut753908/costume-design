@@ -1,8 +1,8 @@
-import { EdgeLoop } from "src/cross-section/edge-loop";
+import { EdgeLoop } from "src/cross-section/centerline/edge-loop";
 import {
   createAllEdgeLoops,
   createEdgeLoopsMap,
-} from "src/cross-section/edge-loops";
+} from "src/cross-section/centerline/edge-loops";
 import {
   beforeEach,
   describe,

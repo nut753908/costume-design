@@ -1,4 +1,7 @@
-import { EdgeLoop, type EdgeLoopJSON } from "src/cross-section/edge-loop";
+import {
+  EdgeLoop,
+  type EdgeLoopJSON,
+} from "src/cross-section/centerline/edge-loop";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

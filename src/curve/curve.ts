@@ -163,12 +163,12 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
       updateCallback();
     }
     function updateEnabled() {
-      c.iIndexList.includes(obj.iIndex) ? cICP.enable() : cICP.disable();
-      c.safeRIndexList.includes(obj.rIndex) ? cRCP.enable() : cRCP.disable();
+      c.iIndices.includes(obj.iIndex) ? cICP.enable() : cICP.disable();
+      c.safeRIndices.includes(obj.rIndex) ? cRCP.enable() : cRCP.disable();
     }
     function updateOptions() {
-      cII = cII.options(c.iIndexList).onChange(updateEnabled);
-      cRI = cRI.options(c.safeRIndexList).onChange(updateEnabled);
+      cII = cII.options(c.iIndices).onChange(updateEnabled);
+      cRI = cRI.options(c.safeRIndices).onChange(updateEnabled);
     }
     function updateCpsFolder() {
       deleteFolder(folder, null, "cp");
@@ -244,23 +244,23 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
   }
 
   /**
-   * Get the index list of interpolateCp(index).
+   * Get the indices of interpolateCp(index).
    */
-  get iIndexList(): number[] {
-    return this.rIndexList.slice(1);
+  get iIndices(): number[] {
+    return this.rIndices.slice(1);
   }
 
   /**
-   * Get the GUI-safe version of iIndexList.
+   * Get the GUI-safe version of rIndices.
    */
-  get safeRIndexList(): number[] {
-    return this.cps.length >= 3 ? this.rIndexList : [];
+  get safeRIndices(): number[] {
+    return this.cps.length >= 3 ? this.rIndices : [];
   }
 
   /**
-   * Get the index list of removeCp(index).
+   * Get the indices of removeCp(index).
    */
-  get rIndexList(): number[] {
+  get rIndices(): number[] {
     return [...Array(this.cps.length).keys()];
   }
 

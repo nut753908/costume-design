@@ -1,6 +1,6 @@
-import { Edge } from "src/cross-section/edge";
-import { EdgeLoop } from "src/cross-section/edge-loop";
-import { EdgeLoopStack } from "src/cross-section/edge-loop-stack";
+import { Edge } from "src/cross-section/centerline/edge";
+import { EdgeLoop } from "src/cross-section/centerline/edge-loop";
+import { EdgeLoopStack } from "src/cross-section/centerline/edge-loop-stack";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 
