@@ -154,7 +154,7 @@ describe("Curve3", () => {
     );
   });
 
-  describe("iIndexList()", () => {
+  describe("iIndices()", () => {
     test.each([
       [0, []],
       [1, []],
@@ -163,11 +163,11 @@ describe("Curve3", () => {
       [4, [1, 2, 3]],
     ])("length:%i, expected:%j", (length, expected) => {
       const c = new Curve3(Array(length).fill(new ControlPoint3()));
-      expect(c.iIndexList).toEqual(expected);
+      expect(c.iIndices).toEqual(expected);
     });
   });
 
-  describe("safeRIndexList()", () => {
+  describe("safeRIndices()", () => {
     test.each([
       [0, []],
       [1, []],
@@ -176,11 +176,11 @@ describe("Curve3", () => {
       [4, [0, 1, 2, 3]],
     ])("length:%i, expected:%j", (length, expected) => {
       const c = new Curve3(Array(length).fill(new ControlPoint3()));
-      expect(c.safeRIndexList).toEqual(expected);
+      expect(c.safeRIndices).toEqual(expected);
     });
   });
 
-  describe("rIndexList()", () => {
+  describe("rIndices()", () => {
     test.each([
       [0, []],
       [1, [0]],
@@ -189,7 +189,7 @@ describe("Curve3", () => {
       [4, [0, 1, 2, 3]],
     ])("length:%i, expected:%j", (length, expected) => {
       const c = new Curve3(Array(length).fill(new ControlPoint3()));
-      expect(c.rIndexList).toEqual(expected);
+      expect(c.rIndices).toEqual(expected);
     });
   });
 
