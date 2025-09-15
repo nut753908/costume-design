@@ -1,0 +1,45 @@
+import {
+  VertexIntersection,
+  type VertexIntersectionJSON,
+} from "src/cross-section/intersection/vertex-intersection";
+import * as THREE from "three";
+import { describe, expect, test } from "vitest";
+
+describe("VertexIntersection", () => {
+  test("constructor()", () => {
+    const vi = new VertexIntersection(0, true);
+    expect(vi.v).toBe(0);
+    expect(vi.checked).toBe(true);
+  });
+
+  test("getPoints()", () => {
+    const vi = new VertexIntersection(0, true);
+    const array = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    const positions = new THREE.Float32BufferAttribute(array, 3);
+    expect(vi.getPoint(positions)).toEqual(new THREE.Vector3(0, 1, 2));
+  });
+
+  test("clone()", () => {
+    const vi1 = new VertexIntersection(0, true);
+    const vi2 = vi1.clone();
+    expect(vi1).toEqual(vi2);
+  });
+
+  test("copy()", () => {
+    const vi1 = new VertexIntersection(0, true);
+    const vi2 = new VertexIntersection().copy(vi1);
+    expect(vi1).toEqual(vi2);
+  });
+
+  test("toJSON()", () => {
+    const json1 = new VertexIntersection(0, true).toJSON();
+    const json2: VertexIntersectionJSON = { v: 0, checked: true };
+    expect(json1).toEqual(json2);
+  });
+
+  test("fromJSON()", () => {
+    const vi1 = new VertexIntersection().fromJSON({ v: 0, checked: true });
+    const vi2 = new VertexIntersection(0, true);
+    expect(vi1).toEqual(vi2);
+  });
+});
