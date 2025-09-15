@@ -6,7 +6,7 @@ import { Plane } from "./plane";
  * A free plane at infinity.
  *
  * ```js
- * import { FreePlane } from "./src/cross-section/free-plane";
+ * import { FreePlane } from "./src/cross-section/plane/free-plane";
  * const normal = new THREE.Vector3( 0, 1, 0 );
  * const point = new THREE.Vector3( 0, 0, 0 );
  * const freePlane = new FreePlane( normal, point );

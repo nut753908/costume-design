@@ -6,7 +6,7 @@ import { Plane } from "./plane";
  * A plane at infinity. The plane is perpendicular to the curve at position u.
  *
  * ```js
- * import { VerticalPlane } from "./src/cross-section/vertical-plane";
+ * import { VerticalPlane } from "./src/cross-section/plane/vertical-plane";
  * const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 1, 0 ) ];
  * const curve = new THREE.CatmullRomCurve3( points );
  * const verticalPlane = new VerticalPlane( curve, 0 );
