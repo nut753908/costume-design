@@ -153,6 +153,9 @@ if (!this.planeKeys.includes(key))
     const pm2 = pm1.clone();
     pm2._addPlaneGroup = pm1._addPlaneGroup;
     pm2._removePlaneGroup = pm1._removePlaneGroup;
+    pm2._addPointsGroup = pm1._addPointsGroup;
+    pm2._removePointsGroup = pm1._removePointsGroup;
+    pm2._updatePointsGroup = pm1._updatePointsGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -173,6 +176,9 @@ if (!this.planeKeys.includes(key))
     const pm2 = new PlaneManager().copy(pm1);
     pm2._addPlaneGroup = pm1._addPlaneGroup;
     pm2._removePlaneGroup = pm1._removePlaneGroup;
+    pm2._addPointsGroup = pm1._addPointsGroup;
+    pm2._removePointsGroup = pm1._removePointsGroup;
+    pm2._updatePointsGroup = pm1._updatePointsGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -355,6 +361,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addPointsGroup = pm1._addPointsGroup;
+      pm2._removePointsGroup = pm1._removePointsGroup;
+      pm2._updatePointsGroup = pm1._updatePointsGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -366,6 +375,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addPointsGroup = pm1._addPointsGroup;
+      pm2._removePointsGroup = pm1._removePointsGroup;
+      pm2._updatePointsGroup = pm1._updatePointsGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -396,6 +408,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager({}, planes);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addPointsGroup = pm1._addPointsGroup;
+      pm2._removePointsGroup = pm1._removePointsGroup;
+      pm2._updatePointsGroup = pm1._updatePointsGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -408,6 +423,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager({}, planes);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addPointsGroup = pm1._addPointsGroup;
+      pm2._removePointsGroup = pm1._removePointsGroup;
+      pm2._updatePointsGroup = pm1._updatePointsGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

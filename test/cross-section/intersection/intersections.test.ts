@@ -1,3 +1,4 @@
+import { createAllEdges } from "src/cross-section/centerline/edges";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import {
   createAllIntersections,
@@ -44,6 +45,8 @@ describe("createAllIntersections()", () => {
     [4, 8, 7],
   ].flat();
   const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+  const nPolygonIndices = getNPolygonIndices(indices);
+  const allEdges = createAllEdges(nPolygonIndices);
 
   test("normal:[0,1,0], point:[0,0,0]", () => {
     /**
@@ -64,7 +67,9 @@ describe("createAllIntersections()", () => {
         new VertexIntersection(5),
       ],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 
   test("normal:[0,1,0], point:[0,0.5,0]", () => {
@@ -88,7 +93,9 @@ describe("createAllIntersections()", () => {
       ],
       vertex: [],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 
   test("normal:[1,0,0], point:[0,0,0]", () => {
@@ -110,7 +117,9 @@ describe("createAllIntersections()", () => {
         new VertexIntersection(7),
       ],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 
   test("normal:[1,0,0], point:[0.5,0,0]", () => {
@@ -134,7 +143,9 @@ describe("createAllIntersections()", () => {
       ],
       vertex: [],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 
   test("normal:[1,1,0], point:[0,0,0]", () => {
@@ -156,7 +167,9 @@ describe("createAllIntersections()", () => {
         new VertexIntersection(6),
       ],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 
   test("normal:[1,1,0], point:[0.5,0,0]", () => {
@@ -182,7 +195,9 @@ describe("createAllIntersections()", () => {
       ],
       vertex: [],
     };
-    expect(createAllIntersections(plane, positions, indices)).toEqual(expected);
+    expect(createAllIntersections(plane, allEdges, positions)).toEqual(
+      expected
+    );
   });
 });
 

@@ -4,10 +4,13 @@ import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
 import { createPlaneGroup } from "src/object-3d/group/plane";
-import { createPointsGroup } from "src/object-3d/group/points";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
-import { createAllIntersections } from "../intersection/intersections";
+import { createAllEdges } from "../centerline/edges";
+import {
+  createAllIntersections,
+  getNPolygonIndices,
+} from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
 
@@ -68,6 +71,13 @@ export class PlaneManager {
   _removePointsGroup: (k: string) => void;
 
   /**
+   * Secret field.
+   * This function is used by createPlanesGroup() in ./src/cross-section/plane/plane-manager.ts.
+   * Set it in advance using createPointsGroup() in ./src/cross-section/plane/plane-manager.ts.
+   */
+  _updatePointsGroup: (k: string) => void;
+
+  /**
    * Constructs a new plane manager.
    *
    * @param curves - {@link PlaneManager#curves}
@@ -86,6 +96,7 @@ export class PlaneManager {
     this._removePlaneGroup = () => {};
     this._addPointsGroup = () => {};
     this._removePointsGroup = () => {};
+    this._updatePointsGroup = () => {};
   }
 
   /**
@@ -103,14 +114,28 @@ export class PlaneManager {
     const children: { [k: string]: THREE.Group } = {};
 
     Object.entries(this.planes).forEach(([k, p]) => {
-      children[k] = createPlaneGroup(folder, p, planeHelper, arrowHelper, k);
+      children[k] = createPlaneGroup(
+        folder,
+        p,
+        planeHelper,
+        arrowHelper,
+        k,
+        this._updatePointsGroup
+      );
       parent.add(children[k]);
     });
 
     // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
       const p = this.planes[k];
-      children[k] = createPlaneGroup(folder, p, planeHelper, arrowHelper, k);
+      children[k] = createPlaneGroup(
+        folder,
+        p,
+        planeHelper,
+        arrowHelper,
+        k,
+        this._updatePointsGroup
+      );
       parent.add(children[k]);
     };
 
@@ -125,7 +150,6 @@ export class PlaneManager {
     return parent;
   }
 
-  // TODO: Link with PlanesGroup.
   /**
    * Create the points group.
    *
@@ -143,14 +167,18 @@ export class PlaneManager {
     const folder = gui.addFolder("PointsGroup");
 
     const parent = new THREE.Group();
-    const children: { [k: string]: THREE.Group } = {};
+    const children: { [k: string]: THREE.Points } = {};
+
+    const nPolygonIndices = getNPolygonIndices(indices);
+    const allEdges = createAllEdges(nPolygonIndices);
 
     Object.entries(this.planes).forEach(([k, p]) => {
-      const { edge, vertex } = createAllIntersections(p, positions, indices);
+      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
       const points = edge
         .map((e) => e.getPoint(positions))
         .concat(vertex.map((v) => v.getPoint(positions)));
-      children[k] = createPointsGroup(points, ms, k);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
       {
         const kFolder = folder.addFolder(k);
@@ -161,11 +189,12 @@ export class PlaneManager {
     // This function is used by setGUI() in ./src/cross-section/plane/plane-manager.ts.
     this._addPointsGroup = (k: string) => {
       const p = this.planes[k];
-      const { edge, vertex } = createAllIntersections(p, positions, indices);
+      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
       const points = edge
         .map((e) => e.getPoint(positions))
         .concat(vertex.map((v) => v.getPoint(positions)));
-      children[k] = createPointsGroup(points, ms, k);
+      const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
       {
         const kFolder = folder.addFolder(k);
@@ -179,6 +208,19 @@ export class PlaneManager {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
+    };
+
+    // This function is used by createPlanesGroup() in ./src/cross-section/plane/plane-manager.ts.
+    this._updatePointsGroup = (k: string) => {
+      const p = this.planes[k];
+      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
+      const points = edge
+        .map((e) => e.getPoint(positions))
+        .concat(vertex.map((v) => v.getPoint(positions)));
+      const geometry = new THREE.BufferGeometry();
+      geometry.setFromPoints(points);
+      children[k].geometry.dispose();
+      children[k].geometry = geometry;
     };
 
     return parent;

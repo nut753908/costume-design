@@ -1,4 +1,5 @@
 import type * as THREE from "three";
+import type { Edge } from "../centerline/edge";
 import { createAllEdges } from "../centerline/edges";
 import { getPoint } from "../centerline/points";
 import type { FreePlane } from "../plane/free-plane";
@@ -14,8 +15,8 @@ import { VertexIntersection } from "./vertex-intersection";
  */
 export function createAllIntersections(
   plane: FreePlane | VerticalPlane,
-  positions: THREE.BufferAttribute,
-  indices: THREE.BufferAttribute
+  allEdges: Edge[],
+  positions: THREE.BufferAttribute
 ): {
   edge: EdgeIntersection[];
   vertex: VertexIntersection[];
@@ -24,8 +25,6 @@ export function createAllIntersections(
   const vertices: VertexIntersection[] = [];
   const refP = plane.getPoint();
   const bottomNormal = plane.getBottomNormal();
-  const nPolygonIndices = getNPolygonIndices(indices);
-  const allEdges = createAllEdges(nPolygonIndices);
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const e = allEdges[i];
     const p1 = getPoint(positions, e.v1);
