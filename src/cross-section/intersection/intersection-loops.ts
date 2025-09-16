@@ -50,6 +50,8 @@ export function createAllIntersectionLoops(
           i2 = i3;
           continue whileLoop;
         }
+        console.log(indicesMap[i2.toString()]); // debug code
+        console.log(indicesMap2); // debug code
         break;
       }
     }

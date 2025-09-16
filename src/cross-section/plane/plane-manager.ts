@@ -170,7 +170,7 @@ export class PlaneManager {
     const folder = gui.addFolder("PointsGroup");
 
     const parent = new THREE.Group();
-    const children: { [k: string]: THREE.Points } = {};
+    const children: { [k: string]: THREE.Group } = {};
 
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
@@ -182,11 +182,13 @@ export class PlaneManager {
         indicesMap,
         allIntersections
       );
-      const points = allIntersectionLoops.flatMap((il) =>
-        il.getPoints(positions)
-      );
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      children[k] = new THREE.Points(geometry, ms.points.points);
+      children[k] = new THREE.Group();
+      allIntersectionLoops.forEach((il) => {
+        const points = il.getPoints(positions);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        children[k].add(new THREE.Points(geometry, ms.points.points));
+        children[k].add(new THREE.Line(geometry, ms.points.line));
+      });
       parent.add(children[k]);
       {
         const kFolder = folder.addFolder(k);
@@ -203,15 +205,22 @@ export class PlaneManager {
         indicesMap,
         allIntersections
       );
-      const points = allIntersectionLoops.flatMap((il) =>
-        il.getPoints(positions)
-      );
-      const geometry = new THREE.BufferGeometry().setFromPoints(points);
-      children[k] = new THREE.Points(geometry, ms.points.points);
+      console.log(allIntersectionLoops); // debug code
+      children[k] = new THREE.Group();
+      allIntersectionLoops.forEach((il) => {
+        const points = il.getPoints(positions);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        children[k].add(new THREE.Points(geometry, ms.points.points));
+        children[k].add(new THREE.Line(geometry, ms.points.line));
+      });
       parent.add(children[k]);
       {
         const kFolder = folder.addFolder(k);
         kFolder.add(children[k], "visible");
+        // debug codes
+        children[k].children.forEach((c, i) => {
+          kFolder.add(c, "visible").name(`child${i} visible`);
+        });
       }
     };
 
@@ -225,23 +234,8 @@ export class PlaneManager {
 
     // This function is used by createPlanesGroup() in ./src/cross-section/plane/plane-manager.ts.
     this._updatePointsGroup = (k: string) => {
-      const p = this.planes[k];
-      const allIntersections = createAllIntersections(p, allEdges, positions);
-      const allIntersectionLoops = createAllIntersectionLoops(
-        indicesMap,
-        allIntersections
-      );
-      // debug code
-      console.log(
-        `allIntersectionLoops.length: ${allIntersectionLoops.length}`
-      );
-      const points = allIntersectionLoops.flatMap((il) =>
-        il.getPoints(positions)
-      );
-      const geometry = new THREE.BufferGeometry();
-      geometry.setFromPoints(points);
-      children[k].geometry.dispose();
-      children[k].geometry = geometry;
+      this._removePointsGroup(k);
+      this._addPointsGroup(k);
     };
 
     return parent;
