@@ -4,14 +4,7 @@ import {
 } from "src/cross-section/intersection/edge-intersection";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import * as THREE from "three";
-import {
-  beforeEach,
-  describe,
-  expect,
-  type MockInstance,
-  test,
-  vi as vitestVi,
-} from "vitest";
+import { describe, expect, test } from "vitest";
 
 describe("EdgeIntersection", () => {
   test("constructor()", () => {
@@ -32,23 +25,10 @@ describe("EdgeIntersection", () => {
   });
 
   describe("equals()", () => {
-    let spy: MockInstance;
-
-    beforeEach(() => {
-      spy = vitestVi.spyOn(console, "error");
-    });
-
     test("if (!(i instanceof EdgeIntersection))", () => {
-      spy.mockImplementationOnce((v) => {
-        expect(v).toBe(`\
-(!(i instanceof EdgeIntersection)
-- i: {"v":0,"checked":false}
-`);
-      });
       const ei = new EdgeIntersection(0, 1, 0.5);
       const vi = new VertexIntersection(0);
       expect(ei.equals(vi)).toBe(false);
-      expect(spy).toHaveBeenCalledTimes(1);
     });
 
     describe("else", () => {
@@ -63,30 +43,16 @@ describe("EdgeIntersection", () => {
           const ei1 = new EdgeIntersection(...params1, 0.5);
           const ei2 = new EdgeIntersection(...params2, 0.5);
           expect(ei1.equals(ei2)).toBe(expected);
-          expect(spy).toHaveBeenCalledTimes(0);
         }
       );
     });
   });
 
   describe("has()", () => {
-    let spy: MockInstance;
-
-    beforeEach(() => {
-      spy = vitestVi.spyOn(console, "error");
-    });
-
     test("if (!(i instanceof VertexIntersection))", () => {
-      spy.mockImplementationOnce((v) => {
-        expect(v).toBe(`\
-(!(i instanceof VertexIntersection)
-- i: {"bottomV":0,"topV":1,"u":0.5,"checked":false}
-`);
-      });
       const ei1 = new EdgeIntersection(0, 1, 0.5);
       const ei2 = new EdgeIntersection(0, 1, 0.5);
       expect(ei1.has(ei2)).toBe(false);
-      expect(spy).toHaveBeenCalledTimes(1);
     });
 
     describe("else", () => {
@@ -100,7 +66,6 @@ describe("EdgeIntersection", () => {
           const ei = new EdgeIntersection(...eiParams, 0.5);
           const vi = new VertexIntersection(...viParams);
           expect(ei.has(vi)).toBe(expected);
-          expect(spy).toHaveBeenCalledTimes(0);
         }
       );
     });

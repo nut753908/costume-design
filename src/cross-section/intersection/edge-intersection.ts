@@ -64,13 +64,7 @@ export class EdgeIntersection extends Intersection {
    * @return  Whether this edge intersection is equal with the given one.
    */
   equals(i: Intersection): boolean {
-    if (!(i instanceof EdgeIntersection)) {
-      console.error(`\
-(!(i instanceof EdgeIntersection)
-- i: ${JSON.stringify(i)}
-`);
-      return false;
-    }
+    if (!(i instanceof EdgeIntersection)) return false;
     return i.bottomV === this.bottomV && i.topV === this.topV;
   }
 
@@ -78,13 +72,7 @@ export class EdgeIntersection extends Intersection {
    * Whether one intersection has the other intersection.
    */
   has(i: Intersection): boolean {
-    if (!(i instanceof VertexIntersection)) {
-      console.error(`\
-(!(i instanceof VertexIntersection)
-- i: ${JSON.stringify(i)}
-`);
-      return false;
-    }
+    if (!(i instanceof VertexIntersection)) return false;
     return i.v === this.bottomV || i.v === this.topV;
   }
 
