@@ -7,10 +7,10 @@ import { createPlaneGroup } from "src/object-3d/group/plane";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { createAllEdges } from "../centerline/edges";
+import { convertToTriangularPolygonIndices } from "../intersection/indices";
 import { createAllIntersections } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
-import { convertToTriangularPolygonIndices } from "../intersection/indices";
 
 /**
  * A class for managing the increase/decrease of planes at infinity.
