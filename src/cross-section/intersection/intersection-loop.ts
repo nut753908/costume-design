@@ -13,8 +13,9 @@ import {
  * ```js
  * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
  * const intersections = [
- *   new EdgeIntersection( 1, 2, 0.5, true );
- *   new EdgeIntersection( 0, 2, 0.5, true );
+ *   new EdgeIntersection( 1, 3, 0.5, true ),
+ *   new EdgeIntersection( 0, 3, 0.5, true ),
+ *   new VertexIntersection( 2, true ),
  * ];
  * const intersectionLoop = new IntersectionLoop( intersections, true );
  * ```
