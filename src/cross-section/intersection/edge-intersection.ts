@@ -1,7 +1,7 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
 import { Intersection } from "./intersection";
-import type { VertexIntersection } from "./vertex-intersection";
+import { VertexIntersection } from "./vertex-intersection";
 
 /**
  * An edge intersection with a plane.
@@ -60,18 +60,32 @@ export class EdgeIntersection extends Intersection {
   /**
    * Return `true` if this edge intersection is equal with the given one.
    *
-   * @param ei - The edge intersection to test for equality.
+   * @param i - The edge intersection to test for equality.
    * @return  Whether this edge intersection is equal with the given one.
    */
-  equals(ei: EdgeIntersection): boolean {
-    return ei.bottomV === this.bottomV && ei.topV === this.topV;
+  equals(i: Intersection): boolean {
+    if (!(i instanceof EdgeIntersection)) {
+      console.error(`\
+(!(i instanceof EdgeIntersection)
+- i: ${JSON.stringify(i)}
+`);
+      return false;
+    }
+    return i.bottomV === this.bottomV && i.topV === this.topV;
   }
 
   /**
    * Whether one intersection has the other intersection.
    */
-  has(vi: VertexIntersection): boolean {
-    return vi.v === this.bottomV || vi.v === this.topV;
+  has(i: Intersection): boolean {
+    if (!(i instanceof VertexIntersection)) {
+      console.error(`\
+(!(i instanceof VertexIntersection)
+- i: ${JSON.stringify(i)}
+`);
+      return false;
+    }
+    return i.v === this.bottomV || i.v === this.topV;
   }
 
   /**
