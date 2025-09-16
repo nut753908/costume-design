@@ -1,8 +1,8 @@
 import { createAllEdges } from "src/cross-section/centerline/edges";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import {
+  convertToNPolygonIndices,
   createAllIntersections,
-  getNPolygonIndices,
 } from "src/cross-section/intersection/intersections";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
@@ -45,7 +45,7 @@ describe("createAllIntersections()", () => {
     [4, 8, 7],
   ].flat();
   const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-  const nPolygonIndices = getNPolygonIndices(indices);
+  const nPolygonIndices = convertToNPolygonIndices(indices);
   const allEdges = createAllEdges(nPolygonIndices);
 
   test("normal:[0,1,0], point:[0,0,0]", () => {
@@ -201,7 +201,7 @@ describe("createAllIntersections()", () => {
   });
 });
 
-test("getNPolygonIndices()", () => {
+test("convertToNPolygonIndices()", () => {
   /**
    * flat layout:
    *   6 7 8
@@ -229,5 +229,5 @@ test("getNPolygonIndices()", () => {
     [4, 5, 8],
     [4, 8, 7],
   ];
-  expect(getNPolygonIndices(indices)).toEqual(expected);
+  expect(convertToNPolygonIndices(indices)).toEqual(expected);
 });

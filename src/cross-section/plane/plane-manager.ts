@@ -8,8 +8,8 @@ import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { createAllEdges } from "../centerline/edges";
 import {
+  convertToNPolygonIndices,
   createAllIntersections,
-  getNPolygonIndices,
 } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
@@ -170,7 +170,7 @@ export class PlaneManager {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Points } = {};
 
-    const nPolygonIndices = getNPolygonIndices(indices);
+    const nPolygonIndices = convertToNPolygonIndices(indices);
     const allEdges = createAllEdges(nPolygonIndices);
 
     Object.entries(this.planes).forEach(([k, p]) => {

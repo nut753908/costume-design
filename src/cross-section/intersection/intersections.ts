@@ -51,12 +51,14 @@ export function createAllIntersections(
 }
 
 /**
- * Get the n polygon indices.
+ * Convert to the n polygon indices.
  *
  * @param indices - The results of geometry.getIndex().
  * @return  The n polygon indices.
  */
-export function getNPolygonIndices(indices: THREE.BufferAttribute): number[][] {
+export function convertToNPolygonIndices(
+  indices: THREE.BufferAttribute
+): number[][] {
   const nPolygonIndices: number[][] = [];
   for (let i = 0, l = indices.count; i < l; i += 3) {
     nPolygonIndices.push([
