@@ -5,6 +5,20 @@ import type * as THREE from "three";
  */
 export abstract class Intersection {
   /**
+   * Whether the intersection is checked when finding intersections.
+   */
+  checked: boolean;
+
+  /**
+   * Constructs a new intersection.
+   *
+   * @param checked - {@link Intersection#checked}
+   */
+  constructor(checked = false) {
+    this.checked = checked;
+  }
+
+  /**
    * Get the point.
    */
   abstract getPoint(positions: THREE.BufferAttribute): THREE.Vector3;

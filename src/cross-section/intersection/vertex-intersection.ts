@@ -19,20 +19,14 @@ export class VertexIntersection extends Intersection {
   v: number;
 
   /**
-   * Whether the vertex intersection is checked when finding intersections.
-   */
-  checked: boolean;
-
-  /**
    * Constructs a new vertex intersection.
    *
    * @param v - {@link VertexIntersection#v}
-   * @param checked - {@link VertexIntersection#checked}
+   * @param checked - {@link Intersection#checked}
    */
   constructor(v = -1, checked = false) {
-    super();
+    super(checked);
     this.v = v;
-    this.checked = checked;
   }
 
   /**
@@ -116,6 +110,6 @@ export class VertexIntersection extends Intersection {
 export interface VertexIntersectionJSON {
   /** {@link VertexIntersection#v} */
   v: number;
-  /** {@link VertexIntersection#checked} */
+  /** {@link Intersection#checked} */
   checked: boolean;
 }

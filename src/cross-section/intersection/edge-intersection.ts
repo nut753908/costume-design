@@ -29,24 +29,18 @@ export class EdgeIntersection extends Intersection {
   u: number;
 
   /**
-   * Whether the edge intersection is checked when finding intersections.
-   */
-  checked: boolean;
-
-  /**
    * Constructs a new edge intersection.
    *
    * @param bottomV - {@link EdgeIntersection#bottomV}
    * @param topV - {@link EdgeIntersection#topV}
    * @param u - {@link EdgeIntersection#u}
-   * @param checked - {@link EdgeIntersection#checked}
+   * @param checked - {@link Intersection#checked}
    */
   constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
-    super();
+    super(checked);
     this.bottomV = bottomV;
     this.topV = topV;
     this.u = u;
-    this.checked = checked;
   }
 
   /**
@@ -143,6 +137,6 @@ export interface EdgeIntersectionJSON {
   topV: number;
   /** {@link EdgeIntersection#u} */
   u: number;
-  /** {@link EdgeIntersection#checked} */
+  /** {@link Intersection#checked} */
   checked: boolean;
 }
