@@ -10,7 +10,6 @@ import { VertexIntersection } from "./vertex-intersection";
  * Create all edge/vertex intersections with a plane.
  *
  * @param positions - The results of geometry.getAttribute("position").
- * @param indices - The results of geometry.getIndex().
  */
 export function createAllIntersections(
   plane: FreePlane | VerticalPlane,
