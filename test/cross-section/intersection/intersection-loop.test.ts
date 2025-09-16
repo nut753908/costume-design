@@ -9,10 +9,10 @@ import { createAllIntersections } from "src/cross-section/intersection/intersect
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 describe("createAllIntersectionLoops()", () => {
-  describe("three triangular pyramid example", () => {
+  describe("three triangular pyramids example", () => {
     const positionsArray = [
       [0, 0, 0],
       [1, 0, 0],
@@ -73,6 +73,7 @@ describe("createAllIntersectionLoops()", () => {
     });
 
     test("all intersection loops", () => {
+      const spy = vi.spyOn(console, "error");
       const plane = new FreePlane(
         new THREE.Vector3(0, 1, 0),
         new THREE.Vector3(0, 0.5, 0)
@@ -102,6 +103,7 @@ describe("createAllIntersectionLoops()", () => {
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
       );
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -157,6 +159,7 @@ describe("createAllIntersectionLoops()", () => {
     });
 
     test("all intersection loops", () => {
+      const spy = vi.spyOn(console, "error");
       const plane = new FreePlane(
         new THREE.Vector3(0, 1, 0),
         new THREE.Vector3(0, 0.5, 0)
@@ -181,6 +184,7 @@ describe("createAllIntersectionLoops()", () => {
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
       );
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -248,6 +252,7 @@ describe("createAllIntersectionLoops()", () => {
     });
 
     test("all intersection loops", () => {
+      const spy = vi.spyOn(console, "error");
       /**
        * flat layout:
        *   6(-1, 1) 7(0, 1) 8(1, 1)
@@ -275,6 +280,67 @@ describe("createAllIntersectionLoops()", () => {
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
       );
+      expect(spy).toHaveBeenCalledTimes(0);
     });
+  });
+
+  test("whileLoop: count > 1000", () => {
+    const spy = vi
+      .spyOn(console, "error")
+      .mockImplementationOnce((v) => expect(v).toBe("whileLoop: count > 1000"))
+      .mockImplementationOnce((v) => expect(v).toBe("whileLoop: count > 1000"));
+    /**
+     * top view flat layout:
+     *                 4+4i(0,0,1)
+     *   1+4i(-1,0,0)     0(0,0,1) 3+4i(1,0,0) ◢2 ◣3
+     *                2+4i(0,0,-1)             ◥0 ◤1
+     */
+    const positionsArray = [[0, 1, 0]]
+      .concat(
+        Array(250)
+          .fill([
+            [0, 0, -1],
+            [-1, 0, 0],
+            [1, 0, 0],
+            [0, 0, 1],
+          ])
+          .flat(),
+        [-1, 0, 0]
+      )
+      .flat();
+    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+    /**
+     * top view flat layout:
+     *                 4+4i(0,0,1)
+     *   1+4i(-1,0,0)     0(0,0,1) 3+4i(1,0,0) ◢2 ◣3
+     *                2+4i(0,0,-1)             ◥0 ◤1
+     */
+    const indicesArray = Array(250)
+      .fill(0)
+      .flatMap((_, i) => [
+        [0, 1 + 4 * i, 2 + 4 * i],
+        [0, 2 + 4 * i, 3 + 4 * i],
+        [0, 3 + 4 * i, 4 + 4 * i],
+        [0, 4 + 4 * i, 5 + 4 * i],
+      ])
+      .flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
+    const allEdges = createAllEdges(triangularPolygonIndices);
+    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const plane = new FreePlane(
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, 0.5, 0)
+    );
+    const allIntersections = createAllIntersections(plane, allEdges, positions);
+    const expected = [
+      Array(1001)
+        .fill(0)
+        .map((_, i) => new EdgeIntersection(1 + i, 0, 0.5, true)),
+    ];
+    expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
+      expected
+    );
+    expect(spy).toHaveBeenCalledTimes(2);
   });
 });
