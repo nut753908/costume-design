@@ -14,6 +14,8 @@ import { VertexIntersection } from "./vertex-intersection";
  * @augments Intersection
  */
 export class EdgeIntersection extends Intersection {
+  type: string;
+
   /**
    * The index of the bottom vertex of the edge.
    */
@@ -39,6 +41,7 @@ export class EdgeIntersection extends Intersection {
    */
   constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
     super(checked);
+    this.type = "EdgeIntersection";
     this.bottomV = bottomV;
     this.topV = topV;
     this.u = u;
@@ -114,6 +117,7 @@ export class EdgeIntersection extends Intersection {
    */
   toJSON(): EdgeIntersectionJSON {
     return {
+      type: this.type,
       bottomV: this.bottomV,
       topV: this.topV,
       u: this.u,
@@ -141,6 +145,8 @@ export class EdgeIntersection extends Intersection {
  * The {@link EdgeIntersection} JSON interface.
  */
 export interface EdgeIntersectionJSON {
+  /** {@link EdgeIntersection#type} */
+  type: string;
   /** {@link EdgeIntersection#bottomV} */
   bottomV: number;
   /** {@link EdgeIntersection#topV} */

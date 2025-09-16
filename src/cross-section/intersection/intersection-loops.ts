@@ -1,5 +1,6 @@
 import type { EdgeIntersection } from "./edge-intersection";
 import { createIndicesMap } from "./indices";
+import { IntersectionLoop } from "./intersection-loop";
 import type { VertexIntersection } from "./vertex-intersection";
 
 /**
@@ -11,8 +12,8 @@ import type { VertexIntersection } from "./vertex-intersection";
 export function createAllIntersectionLoops(
   indicesMap: { [k: string]: number[][] },
   allIntersections: (EdgeIntersection | VertexIntersection)[]
-): (EdgeIntersection | VertexIntersection)[][] {
-  const iLoops: (EdgeIntersection | VertexIntersection)[][] = []; // intersectionLoops
+): IntersectionLoop[] {
+  const iLoops: IntersectionLoop[] = []; // intersectionLoops
   for (let i = 0, l = allIntersections.length; i < l; i++) {
     const firstI = allIntersections[i]; // firstIntersection
     if (firstI.checked) continue;
@@ -52,7 +53,7 @@ export function createAllIntersectionLoops(
         break;
       }
     }
-    iLoops.push(iLoop);
+    iLoops.push(new IntersectionLoop(iLoop, !opened));
   }
   return iLoops;
 }

@@ -4,6 +4,7 @@ import {
   convertToTriangularPolygonIndices,
   createIndicesMap,
 } from "src/cross-section/intersection/indices";
+import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { createAllIntersectionLoops } from "src/cross-section/intersection/intersection-loops";
 import { createAllIntersections } from "src/cross-section/intersection/intersections";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
@@ -84,21 +85,30 @@ describe("createAllIntersectionLoops()", () => {
         positions
       );
       const expected = [
-        [
-          new EdgeIntersection(1, 3, 0.5, true),
-          new EdgeIntersection(0, 3, 0.5, true),
-          new EdgeIntersection(2, 3, 0.5, true),
-        ],
-        [
-          new EdgeIntersection(5, 7, 0.5, true),
-          new EdgeIntersection(6, 7, 0.5, true),
-          new VertexIntersection(4, true),
-        ],
-        [
-          new EdgeIntersection(9, 11, 0.5, true),
-          new VertexIntersection(8, true),
-          new VertexIntersection(10, true),
-        ],
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(1, 3, 0.5, true),
+            new EdgeIntersection(0, 3, 0.5, true),
+            new EdgeIntersection(2, 3, 0.5, true),
+          ],
+          true
+        ),
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(5, 7, 0.5, true),
+            new EdgeIntersection(6, 7, 0.5, true),
+            new VertexIntersection(4, true),
+          ],
+          true
+        ),
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(9, 11, 0.5, true),
+            new VertexIntersection(8, true),
+            new VertexIntersection(10, true),
+          ],
+          true
+        ),
       ];
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
@@ -170,16 +180,19 @@ describe("createAllIntersectionLoops()", () => {
         positions
       );
       const expected = [
-        [
-          new EdgeIntersection(1, 5, 0.5, true),
-          new EdgeIntersection(0, 5, 0.5, true),
-          new EdgeIntersection(0, 4, 0.5, true),
-          new EdgeIntersection(3, 4, 0.5, true),
-          new EdgeIntersection(3, 7, 0.5, true),
-          new EdgeIntersection(2, 7, 0.5, true),
-          new EdgeIntersection(2, 6, 0.5, true),
-          new EdgeIntersection(1, 6, 0.5, true),
-        ],
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(1, 5, 0.5, true),
+            new EdgeIntersection(0, 5, 0.5, true),
+            new EdgeIntersection(0, 4, 0.5, true),
+            new EdgeIntersection(3, 4, 0.5, true),
+            new EdgeIntersection(3, 7, 0.5, true),
+            new EdgeIntersection(2, 7, 0.5, true),
+            new EdgeIntersection(2, 6, 0.5, true),
+            new EdgeIntersection(1, 6, 0.5, true),
+          ],
+          true
+        ),
       ];
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
@@ -263,13 +276,16 @@ describe("createAllIntersectionLoops()", () => {
         positions
       );
       const expected = [
-        [
-          new EdgeIntersection(5, 8, 0.5, true),
-          new EdgeIntersection(4, 8, 0.5, true),
-          new EdgeIntersection(4, 7, 0.5, true),
-          new EdgeIntersection(3, 7, 0.5, true),
-          new EdgeIntersection(3, 6, 0.5, true),
-        ],
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(5, 8, 0.5, true),
+            new EdgeIntersection(4, 8, 0.5, true),
+            new EdgeIntersection(4, 7, 0.5, true),
+            new EdgeIntersection(3, 7, 0.5, true),
+            new EdgeIntersection(3, 6, 0.5, true),
+          ],
+          false
+        ),
       ];
       expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
         expected
@@ -324,9 +340,12 @@ describe("createAllIntersectionLoops()", () => {
     );
     const allIntersections = createAllIntersections(plane, allEdges, positions);
     const expected = [
-      Array(1001)
-        .fill(0)
-        .map((_, i) => new EdgeIntersection(1 + i, 0, 0.5, true)),
+      new IntersectionLoop(
+        Array(1001)
+          .fill(0)
+          .map((_, i) => new EdgeIntersection(1 + i, 0, 0.5, true)),
+        false
+      ),
     ];
     expect(createAllIntersectionLoops(indicesMap, allIntersections)).toEqual(
       expected

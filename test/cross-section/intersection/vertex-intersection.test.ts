@@ -84,12 +84,20 @@ describe("VertexIntersection", () => {
 
   test("toJSON()", () => {
     const json1 = new VertexIntersection(0, true).toJSON();
-    const json2: VertexIntersectionJSON = { v: 0, checked: true };
+    const json2: VertexIntersectionJSON = {
+      type: "VertexIntersection",
+      v: 0,
+      checked: true,
+    };
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
-    const vi1 = new VertexIntersection().fromJSON({ v: 0, checked: true });
+    const vi1 = new VertexIntersection().fromJSON({
+      type: "VertexIntersection",
+      v: 0,
+      checked: true,
+    });
     const vi2 = new VertexIntersection(0, true);
     expect(vi1).toEqual(vi2);
   });

@@ -14,6 +14,8 @@ import { Intersection } from "./intersection";
  * @augments Intersection
  */
 export class VertexIntersection extends Intersection {
+  type: string;
+
   /**
    * The index of the vertex.
    */
@@ -27,6 +29,7 @@ export class VertexIntersection extends Intersection {
    */
   constructor(v = -1, checked = false) {
     super(checked);
+    this.type = "VertexIntersection";
     this.v = v;
   }
 
@@ -95,6 +98,7 @@ export class VertexIntersection extends Intersection {
    */
   toJSON(): VertexIntersectionJSON {
     return {
+      type: this.type,
       v: this.v,
       checked: this.checked,
     };
@@ -118,6 +122,8 @@ export class VertexIntersection extends Intersection {
  * The {@link VertexIntersection} JSON interface.
  */
 export interface VertexIntersectionJSON {
+  /** {@link VertexIntersection#type} */
+  type: string;
   /** {@link VertexIntersection#v} */
   v: number;
   /** {@link Intersection#checked} */

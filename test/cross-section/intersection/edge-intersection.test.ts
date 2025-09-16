@@ -91,6 +91,7 @@ describe("EdgeIntersection", () => {
   test("toJSON()", () => {
     const json1 = new EdgeIntersection(0, 1, 0.5, true).toJSON();
     const json2: EdgeIntersectionJSON = {
+      type: "EdgeIntersection",
       bottomV: 0,
       topV: 1,
       u: 0.5,
@@ -101,6 +102,7 @@ describe("EdgeIntersection", () => {
 
   test("fromJSON()", () => {
     const ei1 = new EdgeIntersection().fromJSON({
+      type: "EdgeIntersection",
       bottomV: 0,
       topV: 1,
       u: 0.5,
