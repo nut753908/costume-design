@@ -1,5 +1,6 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
+import { Intersection } from "./intersection";
 
 /**
  * An edge intersection with a plane.
@@ -8,8 +9,10 @@ import type * as THREE from "three";
  * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
  * const edgeIntersection = new EdgeIntersection( 0, 1, 0 );
  * ```
+ *
+ * @augments Intersection
  */
-export class EdgeIntersection {
+export class EdgeIntersection extends Intersection {
   /**
    * The index of the bottom vertex of the edge.
    */
@@ -39,6 +42,7 @@ export class EdgeIntersection {
    * @param checked - {@link EdgeIntersection#checked}
    */
   constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
+    super();
     this.bottomV = bottomV;
     this.topV = topV;
     this.u = u;
@@ -46,16 +50,33 @@ export class EdgeIntersection {
   }
 
   /**
-   * Get the points.
+   * Get the point.
    *
    * @param positions - The results of geometry.getAttribute("position").
-   * @return  The points.
+   * @return  The point.
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
     const bottom = getPoint(positions, this.bottomV);
     const top = getPoint(positions, this.topV);
     const diff = top.clone().sub(bottom);
     return bottom.clone().add(diff.multiplyScalar(this.u));
+  }
+
+  /**
+   * Return `true` if this edge intersection is equal with the given one.
+   *
+   * @param ei - The edge intersection to test for equality.
+   * @return  Whether this edge intersection is equal with the given one.
+   */
+  equals(ei: EdgeIntersection): boolean {
+    return ei.bottomV === this.bottomV && ei.topV === this.topV;
+  }
+
+  /**
+   * Return a string representing this edge intersection.
+   */
+  toString(): string {
+    return `${this.bottomV},${this.topV}`;
   }
 
   /**

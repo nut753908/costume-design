@@ -19,6 +19,22 @@ describe("VertexIntersection", () => {
     expect(vi.getPoint(positions)).toEqual(new THREE.Vector3(0, 1, 2));
   });
 
+  describe("equals()", () => {
+    test.each([
+      [[0], [0], true],
+      [[0], [1], false],
+    ])("params1:%j, params2:%j, expected:%o", (params1, params2, expected) => {
+      const vi1 = new VertexIntersection(...params1);
+      const vi2 = new VertexIntersection(...params2);
+      expect(vi1.equals(vi2)).toBe(expected);
+    });
+  });
+
+  test("toString()", () => {
+    const vi = new VertexIntersection(0, true);
+    expect(vi.toString()).toBe("0");
+  });
+
   test("clone()", () => {
     const vi1 = new VertexIntersection(0, true);
     const vi2 = vi1.clone();

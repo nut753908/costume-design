@@ -23,6 +23,24 @@ describe("EdgeIntersection", () => {
     );
   });
 
+  describe("equals()", () => {
+    test.each([
+      [[0, 1], [0, 1], true],
+      [[0, 1], [1, 0], false],
+      [[0, 1], [0, 2], false],
+      [[0, 1], [2, 1], false],
+    ])("params1:%j, params2:%j, expected:%o", (params1, params2, expected) => {
+      const ei1 = new EdgeIntersection(...params1, 0.5);
+      const ei2 = new EdgeIntersection(...params2, 0.5);
+      expect(ei1.equals(ei2)).toBe(expected);
+    });
+  });
+
+  test("toString()", () => {
+    const ei = new EdgeIntersection(0, 1, 0.5, true);
+    expect(ei.toString()).toBe("0,1");
+  });
+
   test("clone()", () => {
     const ei1 = new EdgeIntersection(0, 1, 0.5, true);
     const ei2 = ei1.clone();
