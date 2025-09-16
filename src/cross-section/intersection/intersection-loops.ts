@@ -33,6 +33,7 @@ export function createAllIntersectionLoops(
       for (let j = 0; j < l; j++) {
         const i2 = intersections[j];
         if (i2.checked) continue;
+        if (i2.has(i1)) continue;
         if (i2.equals(firstI)) {
           isClosed = true;
           break whileLoop;
@@ -41,16 +42,6 @@ export function createAllIntersectionLoops(
           i2.checked = true;
           iLoop.push(i2);
           i1 = i2;
-          continue whileLoop;
-        }
-      }
-      for (let j = 0, l2 = intersections.length; j < l2; j++) {
-        const i2: EdgeIntersection | VertexIntersection = intersections[j];
-        if (i2.checked) continue;
-        if (i2.has(i1)) continue;
-        if (i2.toString() in indicesMap2) {
-          i2.checked = true;
-          iLoop.push(i2);
           continue whileLoop;
         }
       }
