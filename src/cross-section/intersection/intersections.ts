@@ -51,21 +51,21 @@ export function createAllIntersections(
 }
 
 /**
- * Convert to the n polygon indices.
+ * Convert to the triangular polygon indices.
  *
  * @param indices - The results of geometry.getIndex().
- * @return  The n polygon indices.
+ * @return  The triangular polygon indices.
  */
-export function convertToNPolygonIndices(
+export function convertToTriangularPolygonIndices(
   indices: THREE.BufferAttribute
-): number[][] {
-  const nPolygonIndices: number[][] = [];
+): [number, number, number][] {
+  const triangularPolygonIndices: [number, number, number][] = [];
   for (let i = 0, l = indices.count; i < l; i += 3) {
-    nPolygonIndices.push([
+    triangularPolygonIndices.push([
       indices.array[i],
       indices.array[i + 1],
       indices.array[i + 2],
     ]);
   }
-  return nPolygonIndices;
+  return triangularPolygonIndices;
 }
