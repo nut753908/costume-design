@@ -2,7 +2,6 @@ import type { EdgeIntersection } from "./edge-intersection";
 import { createIndicesMap } from "./indices";
 import type { VertexIntersection } from "./vertex-intersection";
 
-// TODO: add second{E,V} in the same way as createAllEdgeLoopStacks()
 // TODO: test
 /**
  * Create all intersection loops with a plane.
@@ -14,13 +13,12 @@ export function createAllIntersectionLoops(
   indicesMap: { [k: string]: number[][] },
   intersections: (EdgeIntersection | VertexIntersection)[]
 ): (EdgeIntersection | VertexIntersection)[][] {
-  const iLoops: (EdgeIntersection | VertexIntersection)[][] = []; // intersection loops
+  const iLoops: (EdgeIntersection | VertexIntersection)[][] = []; // intersectionLoops
   for (let i = 0, l = intersections.length; i < l; i++) {
-    let i1 = intersections[i];
+    let i1 = intersections[i]; // intersection1
     if (i1.checked) continue;
-    i1.checked = true;
-    const firstI = i1;
-    const iLoop = [i1]; // intersection loop
+    const firstI = i1; // firstIntersection
+    const iLoop = [i1]; // intersectionLoop
     let count = 0;
     let isClosed = false;
     whileLoop: while (true) {
@@ -31,10 +29,12 @@ export function createAllIntersectionLoops(
       }
       const indicesMap2 = createIndicesMap(indicesMap[i1.toString()]);
       for (let j = 0; j < l; j++) {
-        const i2 = intersections[j];
+        const i2 = intersections[j]; // intersection2
         if (i2.checked) continue;
         if (i2.has(i1)) continue;
+        if (i2.equals(i1)) continue;
         if (i2.equals(firstI)) {
+          i2.checked = true;
           isClosed = true;
           break whileLoop;
         }
