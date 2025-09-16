@@ -7,14 +7,13 @@ import type { VertexIntersection } from "./vertex-intersection";
 /**
  * Create all intersection loops with a plane.
  *
- * @param triangularPolygonIndices - The triangular polygon indices.
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
  * @param intersections - All edge/vertex intersections with a plane.
  */
 export function createAllIntersectionLoops(
-  triangularPolygonIndices: [number, number, number][],
+  indicesMap: { [k: string]: number[][] },
   intersections: (EdgeIntersection | VertexIntersection)[]
 ): (EdgeIntersection | VertexIntersection)[][] {
-  const indicesMap = createIndicesMap(triangularPolygonIndices);
   const iLoops: (EdgeIntersection | VertexIntersection)[][] = []; // intersection loops
   for (let i = 0, l = intersections.length; i < l; i++) {
     let i1 = intersections[i];
