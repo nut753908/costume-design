@@ -26,12 +26,6 @@ describe("createAllIntersections()", () => {
     [1, 1, 0],
   ].flat();
   const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-  /**
-   * flat layout:
-   *   6(-1, 1) 7(0, 1) 8(1, 1)
-   *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤5 ◢4  ◤7 ◢6
-   *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤1 ◢0  ◤3 ◢2
-   */
   const indicesArray = [
     [0, 1, 4],
     [0, 4, 3],

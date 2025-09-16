@@ -207,12 +207,6 @@ describe("createAllIntersectionLoops()", () => {
       [1, 1, 0],
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-    /**
-     * flat layout:
-     *   6(-1, 1) 7(0, 1) 8(1, 1)
-     *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤5 ◢4  ◤7 ◢6
-     *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤1 ◢0  ◤3 ◢2
-     */
     const indicesArray = [
       [0, 1, 4],
       [0, 4, 3],
@@ -284,6 +278,7 @@ describe("createAllIntersectionLoops()", () => {
     });
   });
 
+  // NOTE: This testing is expensive to perform.
   test("whileLoop: count > 1000", () => {
     const spy = vi
       .spyOn(console, "error")
@@ -309,12 +304,6 @@ describe("createAllIntersectionLoops()", () => {
       )
       .flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-    /**
-     * top view flat layout:
-     *                 4+4i(0,0,1)
-     *   1+4i(-1,0,0)     0(0,0,1) 3+4i(1,0,0) ◢2 ◣3
-     *                2+4i(0,0,-1)             ◥0 ◤1
-     */
     const indicesArray = Array(250)
       .fill(0)
       .flatMap((_, i) => [
@@ -328,6 +317,7 @@ describe("createAllIntersectionLoops()", () => {
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
     const indicesMap = createIndicesMap(triangularPolygonIndices);
+
     const plane = new FreePlane(
       new THREE.Vector3(0, 1, 0),
       new THREE.Vector3(0, 0.5, 0)
