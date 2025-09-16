@@ -57,14 +57,11 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(0, 1, 0),
       new THREE.Vector3(0, 0, 0)
     );
-    const expected = {
-      edge: [],
-      vertex: [
-        new VertexIntersection(3),
-        new VertexIntersection(4),
-        new VertexIntersection(5),
-      ],
-    };
+    const expected = [
+      new VertexIntersection(3),
+      new VertexIntersection(4),
+      new VertexIntersection(5),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );
@@ -81,16 +78,13 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(0, 1, 0),
       new THREE.Vector3(0, 0.5, 0)
     );
-    const expected = {
-      edge: [
-        new EdgeIntersection(4, 7, 0.5),
-        new EdgeIntersection(3, 7, 0.5),
-        new EdgeIntersection(3, 6, 0.5),
-        new EdgeIntersection(5, 8, 0.5),
-        new EdgeIntersection(4, 8, 0.5),
-      ],
-      vertex: [],
-    };
+    const expected = [
+      new EdgeIntersection(4, 7, 0.5),
+      new EdgeIntersection(3, 7, 0.5),
+      new EdgeIntersection(3, 6, 0.5),
+      new EdgeIntersection(5, 8, 0.5),
+      new EdgeIntersection(4, 8, 0.5),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );
@@ -107,14 +101,11 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(0, 0, 0)
     );
-    const expected = {
-      edge: [],
-      vertex: [
-        new VertexIntersection(1),
-        new VertexIntersection(4),
-        new VertexIntersection(7),
-      ],
-    };
+    const expected = [
+      new VertexIntersection(1),
+      new VertexIntersection(4),
+      new VertexIntersection(7),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );
@@ -131,16 +122,13 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(0.5, 0, 0)
     );
-    const expected = {
-      edge: [
-        new EdgeIntersection(1, 2, 0.5),
-        new EdgeIntersection(1, 5, 0.5),
-        new EdgeIntersection(4, 5, 0.5),
-        new EdgeIntersection(4, 8, 0.5),
-        new EdgeIntersection(7, 8, 0.5),
-      ],
-      vertex: [],
-    };
+    const expected = [
+      new EdgeIntersection(1, 2, 0.5),
+      new EdgeIntersection(1, 5, 0.5),
+      new EdgeIntersection(4, 5, 0.5),
+      new EdgeIntersection(4, 8, 0.5),
+      new EdgeIntersection(7, 8, 0.5),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );
@@ -157,14 +145,13 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(1, 1, 0),
       new THREE.Vector3(0, 0, 0)
     );
-    const expected = {
-      edge: [new EdgeIntersection(1, 5, 0.5), new EdgeIntersection(3, 7, 0.5)],
-      vertex: [
-        new VertexIntersection(2),
-        new VertexIntersection(4),
-        new VertexIntersection(6),
-      ],
-    };
+    const expected = [
+      new EdgeIntersection(1, 5, 0.5),
+      new EdgeIntersection(3, 7, 0.5),
+      new VertexIntersection(2),
+      new VertexIntersection(4),
+      new VertexIntersection(6),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );
@@ -181,18 +168,15 @@ describe("createAllIntersections()", () => {
       new THREE.Vector3(1, 1, 0),
       new THREE.Vector3(0.5, 0, 0)
     );
-    const expected = {
-      edge: [
-        new EdgeIntersection(2, 5, 0.5),
-        new EdgeIntersection(1, 5, 0.75),
-        new EdgeIntersection(4, 5, 0.5),
-        new EdgeIntersection(4, 7, 0.5),
-        new EdgeIntersection(3, 7, 0.75),
-        new EdgeIntersection(6, 7, 0.5),
-        new EdgeIntersection(4, 8, 0.25),
-      ],
-      vertex: [],
-    };
+    const expected = [
+      new EdgeIntersection(2, 5, 0.5),
+      new EdgeIntersection(1, 5, 0.75),
+      new EdgeIntersection(4, 5, 0.5),
+      new EdgeIntersection(4, 7, 0.5),
+      new EdgeIntersection(3, 7, 0.75),
+      new EdgeIntersection(6, 7, 0.5),
+      new EdgeIntersection(4, 8, 0.25),
+    ];
     expect(createAllIntersections(plane, allEdges, positions)).toEqual(
       expected
     );

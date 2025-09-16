@@ -15,12 +15,8 @@ export function createAllIntersections(
   plane: FreePlane | VerticalPlane,
   allEdges: Edge[],
   positions: THREE.BufferAttribute
-): {
-  edge: EdgeIntersection[];
-  vertex: VertexIntersection[];
-} {
-  const edges: EdgeIntersection[] = [];
-  const vertices: VertexIntersection[] = [];
+): (EdgeIntersection | VertexIntersection)[] {
+  const intersections: (EdgeIntersection | VertexIntersection)[] = [];
   const refP = plane.getPoint();
   const bottomNormal = plane.getBottomNormal();
   for (let i = 0, l = allEdges.length; i < l; i++) {
@@ -35,17 +31,17 @@ export function createAllIntersections(
     const top2 = -bottom2;
     if (bottom1 > 0 && top2 > 0) {
       const u = bottom1 / (bottom1 + top2);
-      edges.push(new EdgeIntersection(e.v1, e.v2, u));
+      intersections.push(new EdgeIntersection(e.v1, e.v2, u));
     } else if (bottom2 > 0 && top1 > 0) {
       const u = bottom2 / (bottom2 + top1);
-      edges.push(new EdgeIntersection(e.v2, e.v1, u));
+      intersections.push(new EdgeIntersection(e.v2, e.v1, u));
     }
   }
   for (let i = 0, l = positions.count; i < l; i++) {
     const p = getPoint(positions, i);
     const diff = p.clone().sub(refP);
     const bottom = bottomNormal.dot(diff);
-    if (bottom === 0) vertices.push(new VertexIntersection(i));
+    if (bottom === 0) intersections.push(new VertexIntersection(i));
   }
-  return { edge: edges, vertex: vertices };
+  return intersections;
 }

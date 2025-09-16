@@ -172,10 +172,8 @@ export class PlaneManager {
     const allEdges = createAllEdges(triangularPolygonIndices);
 
     Object.entries(this.planes).forEach(([k, p]) => {
-      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
-      const points = edge
-        .map((e) => e.getPoint(positions))
-        .concat(vertex.map((v) => v.getPoint(positions)));
+      const intersections = createAllIntersections(p, allEdges, positions);
+      const points = intersections.map((i) => i.getPoint(positions));
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
@@ -189,10 +187,8 @@ export class PlaneManager {
     // This function is used by addVerticalPlane() in ./src/cross-section/plane/plane-manager.ts.
     this._addPointsGroup = (k: string) => {
       const p = this.planes[k];
-      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
-      const points = edge
-        .map((e) => e.getPoint(positions))
-        .concat(vertex.map((v) => v.getPoint(positions)));
+      const intersections = createAllIntersections(p, allEdges, positions);
+      const points = intersections.map((i) => i.getPoint(positions));
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
@@ -213,10 +209,8 @@ export class PlaneManager {
     // This function is used by createPlanesGroup() in ./src/cross-section/plane/plane-manager.ts.
     this._updatePointsGroup = (k: string) => {
       const p = this.planes[k];
-      const { edge, vertex } = createAllIntersections(p, allEdges, positions);
-      const points = edge
-        .map((e) => e.getPoint(positions))
-        .concat(vertex.map((v) => v.getPoint(positions)));
+      const intersections = createAllIntersections(p, allEdges, positions);
+      const points = intersections.map((i) => i.getPoint(positions));
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(points);
       children[k].geometry.dispose();
