@@ -1,3 +1,4 @@
+import type * as THREE from "three";
 import {
   EdgeIntersection,
   type EdgeIntersectionJSON,
@@ -14,7 +15,7 @@ import {
  * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
  * const intersections = [
  *   new EdgeIntersection( 1, 3, 0.5, true ),
- *   new EdgeIntersection( 0, 3, 0.5, true ),
+ *   new EdgeIntersection( 0, 3, 0.75, true ),
  *   new VertexIntersection( 2, true ),
  * ];
  * const intersectionLoop = new IntersectionLoop( intersections, true );
@@ -43,6 +44,16 @@ export class IntersectionLoop {
   ) {
     this.intersections = intersections;
     this.closed = closed;
+  }
+
+  /**
+   * Get the points.
+   *
+   * @param positions - The results of geometry.getAttribute("position").
+   * @return  The points.
+   */
+  getPoints(positions: THREE.BufferAttribute): THREE.Vector3[] {
+    return this.intersections.map((i) => i.getPoint(positions));
   }
 
   /**
