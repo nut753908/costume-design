@@ -1,3 +1,4 @@
+import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import {
   VertexIntersection,
   type VertexIntersectionJSON,
@@ -28,6 +29,21 @@ describe("VertexIntersection", () => {
       const vi2 = new VertexIntersection(...params2);
       expect(vi1.equals(vi2)).toBe(expected);
     });
+  });
+
+  describe("has()", () => {
+    test.each([
+      [[0], [0, 1], true],
+      [[1], [0, 1], true],
+      [[2], [0, 1], false],
+    ])(
+      "viParams:%j, eiParams:%j, expected:%o",
+      (viParams, eiParams, expected) => {
+        const vi = new VertexIntersection(...viParams);
+        const ei = new EdgeIntersection(...eiParams, 0.5);
+        expect(vi.has(ei)).toBe(expected);
+      }
+    );
   });
 
   test("toString()", () => {

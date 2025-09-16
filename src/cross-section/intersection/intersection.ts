@@ -32,6 +32,11 @@ export abstract class Intersection {
   abstract equals(i: Intersection): boolean;
 
   /**
+   * Whether one intersection has the other intersection.
+   */
+  abstract has(i: Intersection): boolean;
+
+  /**
    * Return a string representing this intersection.
    */
   abstract toString(): string;

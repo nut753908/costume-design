@@ -1,5 +1,6 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
+import type { EdgeIntersection } from "./edge-intersection";
 import { Intersection } from "./intersection";
 
 /**
@@ -47,6 +48,13 @@ export class VertexIntersection extends Intersection {
    */
   equals(vi: VertexIntersection): boolean {
     return vi.v === this.v;
+  }
+
+  /**
+   * Whether one intersection has the other intersection.
+   */
+  has(ei: EdgeIntersection): boolean {
+    return ei.bottomV === this.v || ei.topV === this.v;
   }
 
   /**

@@ -53,7 +53,7 @@ export function createAllIntersectionLoops(
         const i2: EdgeIntersection | VertexIntersection =
           intersections.vertex[j];
         if (i2.checked) continue;
-        if (i1.topV === i2.v || i1.bottomV === i2.v) continue;
+        if (i2.has(i1)) continue;
         if (i2.toString() in indicesMap2) {
           i2.checked = true;
           iLoop.push(i2);
@@ -98,7 +98,7 @@ export function createAllIntersectionLoops(
       for (let j = 0, l2 = intersections.edge.length; j < l2; j++) {
         const i2: EdgeIntersection | VertexIntersection = intersections.edge[j];
         if (i2.checked) continue;
-        if (i1.v === i2.topV || i1.v === i2.bottomV) continue;
+        if (i2.has(i1)) continue;
         if (i2.toString() in indicesMap2) {
           i2.checked = true;
           iLoop.push(i2);
