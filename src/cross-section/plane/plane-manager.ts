@@ -7,7 +7,11 @@ import { createPlaneGroup } from "src/object-3d/group/plane";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { createAllEdges } from "../centerline/edges";
-import { convertToTriangularPolygonIndices } from "../intersection/indices";
+import {
+  convertToTriangularPolygonIndices,
+  createIndicesMap,
+} from "../intersection/indices";
+import { createAllIntersectionLoops } from "../intersection/intersection-loops";
 import { createAllIntersections } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
@@ -170,10 +174,17 @@ export class PlaneManager {
 
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
+    const indicesMap = createIndicesMap(triangularPolygonIndices);
 
     Object.entries(this.planes).forEach(([k, p]) => {
-      const intersections = createAllIntersections(p, allEdges, positions);
-      const points = intersections.map((i) => i.getPoint(positions));
+      const allIntersections = createAllIntersections(p, allEdges, positions);
+      const allIntersectionLoops = createAllIntersectionLoops(
+        indicesMap,
+        allIntersections
+      );
+      const points = allIntersectionLoops.flatMap((il) =>
+        il.getPoints(positions)
+      );
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
@@ -187,8 +198,14 @@ export class PlaneManager {
     // This function is used by addVerticalPlane() in ./src/cross-section/plane/plane-manager.ts.
     this._addPointsGroup = (k: string) => {
       const p = this.planes[k];
-      const intersections = createAllIntersections(p, allEdges, positions);
-      const points = intersections.map((i) => i.getPoint(positions));
+      const allIntersections = createAllIntersections(p, allEdges, positions);
+      const allIntersectionLoops = createAllIntersectionLoops(
+        indicesMap,
+        allIntersections
+      );
+      const points = allIntersectionLoops.flatMap((il) =>
+        il.getPoints(positions)
+      );
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
       children[k] = new THREE.Points(geometry, ms.points.points);
       parent.add(children[k]);
@@ -209,8 +226,18 @@ export class PlaneManager {
     // This function is used by createPlanesGroup() in ./src/cross-section/plane/plane-manager.ts.
     this._updatePointsGroup = (k: string) => {
       const p = this.planes[k];
-      const intersections = createAllIntersections(p, allEdges, positions);
-      const points = intersections.map((i) => i.getPoint(positions));
+      const allIntersections = createAllIntersections(p, allEdges, positions);
+      const allIntersectionLoops = createAllIntersectionLoops(
+        indicesMap,
+        allIntersections
+      );
+      // debug code
+      console.log(
+        `allIntersectionLoops.length: ${allIntersectionLoops.length}`
+      );
+      const points = allIntersectionLoops.flatMap((il) =>
+        il.getPoints(positions)
+      );
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(points);
       children[k].geometry.dispose();
