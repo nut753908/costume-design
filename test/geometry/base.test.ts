@@ -222,36 +222,170 @@ describe("correctNPolygonIndices()", () => {
   });
 });
 
-test("mergeIndices()", () => {
-  /**
-   * flat layout:
-   *   4  5(,6) 7
-   *   0  1(,2) 3
-   */
-  const arrayP = [
-    [0, 0, 0], // index: 0
-    [1, 0, 0], // index: 1
-    [1, 0, 0], // index: 2
-    [2, 0, 0], // index: 3
-    [0, 1, 0], // index: 4
-    [1, 1, 0], // index: 5
-    [1, 1, 0], // index: 6
-    [2, 1, 0], // index: 7
-  ].flat();
-  const positions = new THREE.Float32BufferAttribute(arrayP, 3);
-  const arrayI = [
-    [0, 1, 5],
-    [0, 5, 4],
-    [2, 3, 7],
-    [2, 7, 6],
-  ].flat();
-  const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
-  const arrayNI = [
-    [0, 1, 5],
-    [0, 5, 4],
-    [1, 3, 7],
-    [1, 7, 5],
-  ].flat();
-  const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-  expect(mergeIndices(positions, indices)).toEqual(newIndices);
+describe("mergeIndices()", () => {
+  test("split by vertical centerline (ascending order)", () => {
+    /**
+     * flat layout:
+     *   4  5(,6) 7
+     *   0  1(,2) 3
+     */
+    const arrayP = [
+      [0, 0, 0], // index: 0
+      [1, 0, 0], // index: 1
+      [1, 0, 0], // index: 2
+      [2, 0, 0], // index: 3
+      [0, 1, 0], // index: 4
+      [1, 1, 0], // index: 5
+      [1, 1, 0], // index: 6
+      [2, 1, 0], // index: 7
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(arrayP, 3);
+    const arrayI = [
+      [0, 1, 5],
+      [0, 5, 4],
+      [2, 3, 7],
+      [2, 7, 6],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
+    const arrayNI = [
+      [0, 1, 5],
+      [0, 5, 4],
+      [1, 3, 7],
+      [1, 7, 5],
+    ].flat();
+    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
+    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+  });
+
+  test("split by vertical centerline (descending order)", () => {
+    /**
+     * flat layout:
+     *   4  6(,5) 7
+     *   0  2(,1) 3
+     */
+    const arrayP = [
+      [0, 0, 0], // index: 0
+      [1, 0, 0], // index: 1
+      [1, 0, 0], // index: 2
+      [2, 0, 0], // index: 3
+      [0, 1, 0], // index: 4
+      [1, 1, 0], // index: 5
+      [1, 1, 0], // index: 6
+      [2, 1, 0], // index: 7
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(arrayP, 3);
+    const arrayI = [
+      [0, 2, 6],
+      [0, 6, 4],
+      [1, 3, 7],
+      [1, 7, 5],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
+    const arrayNI = [
+      [0, 1, 5],
+      [0, 5, 4],
+      [1, 3, 7],
+      [1, 7, 5],
+    ].flat();
+    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
+    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+  });
+
+  test("different center points (ascending order)", () => {
+    /**
+     * flat layout:
+     *   11  12             13
+     *    3   4(,5,6,7,8,9) 10
+     *    0   1              2
+     */
+    const arrayP = [
+      [0, 0, 0], // index: 0
+      [1, 0, 0], // index: 1
+      [2, 0, 0], // index: 2
+      [0, 1, 0], // index: 3
+      [1, 1, 0], // index: 4
+      [1, 1, 0], // index: 5
+      [1, 1, 0], // index: 6
+      [1, 1, 0], // index: 7
+      [1, 1, 0], // index: 8
+      [1, 1, 0], // index: 9
+      [2, 1, 0], // index: 10
+      [0, 2, 0], // index: 11
+      [1, 2, 0], // index: 12
+      [2, 2, 0], // index: 13
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(arrayP, 3);
+    const arrayI = [
+      [0, 1, 4],
+      [0, 5, 3],
+      [1, 2, 10],
+      [1, 10, 6],
+      [3, 7, 12],
+      [3, 12, 11],
+      [8, 10, 13],
+      [9, 13, 12],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
+    const arrayNI = [
+      [0, 1, 4],
+      [0, 4, 3],
+      [1, 2, 10],
+      [1, 10, 4],
+      [3, 4, 12],
+      [3, 12, 11],
+      [4, 10, 13],
+      [4, 13, 12],
+    ].flat();
+    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
+    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+  });
+
+  test("different center points (descending order)", () => {
+    /**
+     * flat layout:
+     *   11  12             13
+     *    3   9(,8,7,6,5,4) 10
+     *    0   1              2
+     */
+    const arrayP = [
+      [0, 0, 0], // index: 0
+      [1, 0, 0], // index: 1
+      [2, 0, 0], // index: 2
+      [0, 1, 0], // index: 3
+      [1, 1, 0], // index: 4
+      [1, 1, 0], // index: 5
+      [1, 1, 0], // index: 6
+      [1, 1, 0], // index: 7
+      [1, 1, 0], // index: 8
+      [1, 1, 0], // index: 9
+      [2, 1, 0], // index: 10
+      [0, 2, 0], // index: 11
+      [1, 2, 0], // index: 12
+      [2, 2, 0], // index: 13
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(arrayP, 3);
+    const arrayI = [
+      [0, 1, 9],
+      [0, 8, 3],
+      [1, 2, 10],
+      [1, 10, 7],
+      [3, 6, 12],
+      [3, 12, 11],
+      [5, 10, 13],
+      [4, 13, 12],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
+    const arrayNI = [
+      [0, 1, 4],
+      [0, 4, 3],
+      [1, 2, 10],
+      [1, 10, 4],
+      [3, 4, 12],
+      [3, 12, 11],
+      [4, 10, 13],
+      [4, 13, 12],
+    ].flat();
+    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
+    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+  });
 });
