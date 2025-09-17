@@ -89,7 +89,7 @@ export function correctNPolygonIndices(
  *
  * @param positions - The results of geometry.getAttribute("position").
  * @param indices - The results of geometry.getIndex().
- * @return  The unique indices.
+ * @return  The indices merged at the same position.
  */
 export function mergeIndices(
   positions: THREE.BufferAttribute,
