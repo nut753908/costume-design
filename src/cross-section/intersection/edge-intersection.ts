@@ -1,5 +1,7 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
+import { Intersection, type IntersectionJSON } from "./intersection";
+import { VertexIntersection } from "./vertex-intersection";
 
 /**
  * An edge intersection with a plane.
@@ -8,8 +10,10 @@ import type * as THREE from "three";
  * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
  * const edgeIntersection = new EdgeIntersection( 0, 1, 0 );
  * ```
+ *
+ * @augments Intersection
  */
-export class EdgeIntersection {
+export class EdgeIntersection extends Intersection {
   /**
    * The index of the bottom vertex of the edge.
    */
@@ -26,36 +30,58 @@ export class EdgeIntersection {
   u: number;
 
   /**
-   * Whether the edge intersection is checked when finding intersections.
-   */
-  checked: boolean;
-
-  /**
    * Constructs a new edge intersection.
    *
    * @param bottomV - {@link EdgeIntersection#bottomV}
    * @param topV - {@link EdgeIntersection#topV}
    * @param u - {@link EdgeIntersection#u}
-   * @param checked - {@link EdgeIntersection#checked}
+   * @param checked - {@link Intersection#checked}
    */
   constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
+    super(checked);
+    this.type = "EdgeIntersection";
     this.bottomV = bottomV;
     this.topV = topV;
     this.u = u;
-    this.checked = checked;
   }
 
   /**
-   * Get the points.
+   * Get the point.
    *
    * @param positions - The results of geometry.getAttribute("position").
-   * @return  The points.
+   * @return  The point.
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
     const bottom = getPoint(positions, this.bottomV);
     const top = getPoint(positions, this.topV);
     const diff = top.clone().sub(bottom);
     return bottom.clone().add(diff.multiplyScalar(this.u));
+  }
+
+  /**
+   * Return `true` if this edge intersection is equal with the given one.
+   *
+   * @param i - The edge intersection to test for equality.
+   * @return  Whether this edge intersection is equal with the given one.
+   */
+  equals(i: Intersection): boolean {
+    if (!(i instanceof EdgeIntersection)) return false;
+    return i.bottomV === this.bottomV && i.topV === this.topV;
+  }
+
+  /**
+   * Whether one intersection has the other intersection.
+   */
+  has(i: Intersection): boolean {
+    if (!(i instanceof VertexIntersection)) return false;
+    return i.v === this.bottomV || i.v === this.topV;
+  }
+
+  /**
+   * Return a string representing this edge intersection.
+   */
+  toString(): string {
+    return `${this.bottomV},${this.topV}`;
   }
 
   /**
@@ -89,6 +115,7 @@ export class EdgeIntersection {
    */
   toJSON(): EdgeIntersectionJSON {
     return {
+      type: this.type,
       bottomV: this.bottomV,
       topV: this.topV,
       u: this.u,
@@ -115,13 +142,11 @@ export class EdgeIntersection {
 /**
  * The {@link EdgeIntersection} JSON interface.
  */
-export interface EdgeIntersectionJSON {
+export interface EdgeIntersectionJSON extends IntersectionJSON {
   /** {@link EdgeIntersection#bottomV} */
   bottomV: number;
   /** {@link EdgeIntersection#topV} */
   topV: number;
   /** {@link EdgeIntersection#u} */
   u: number;
-  /** {@link EdgeIntersection#checked} */
-  checked: boolean;
 }

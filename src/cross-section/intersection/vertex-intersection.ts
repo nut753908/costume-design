@@ -1,5 +1,7 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
+import { EdgeIntersection } from "./edge-intersection";
+import { Intersection, type IntersectionJSON } from "./intersection";
 
 /**
  * An vertex intersection with a plane.
@@ -8,37 +10,61 @@ import type * as THREE from "three";
  * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
  * const vertexIntersection = new VertexIntersection( 0 );
  * ```
+ *
+ * @augments Intersection
  */
-export class VertexIntersection {
+export class VertexIntersection extends Intersection {
   /**
    * The index of the vertex.
    */
   v: number;
 
   /**
-   * Whether the vertex intersection is checked when finding intersections.
-   */
-  checked: boolean;
-
-  /**
    * Constructs a new vertex intersection.
    *
    * @param v - {@link VertexIntersection#v}
-   * @param checked - {@link VertexIntersection#checked}
+   * @param checked - {@link Intersection#checked}
    */
   constructor(v = -1, checked = false) {
+    super(checked);
+    this.type = "VertexIntersection";
     this.v = v;
-    this.checked = checked;
   }
 
   /**
-   * Get the points.
+   * Get the point.
    *
    * @param positions - The results of geometry.getAttribute("position").
-   * @return  The points.
+   * @return  The point.
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
     return getPoint(positions, this.v);
+  }
+
+  /**
+   * Return `true` if this vertex intersection is equal with the given one.
+   *
+   * @param i - The vertex intersection to test for equality.
+   * @return  Whether this vertex intersection is equal with the given one.
+   */
+  equals(i: Intersection): boolean {
+    if (!(i instanceof VertexIntersection)) return false;
+    return i.v === this.v;
+  }
+
+  /**
+   * Whether one intersection has the other intersection.
+   */
+  has(i: Intersection): boolean {
+    if (!(i instanceof EdgeIntersection)) return false;
+    return i.bottomV === this.v || i.topV === this.v;
+  }
+
+  /**
+   * Return a string representing this vertex intersection.
+   */
+  toString(): string {
+    return `${this.v}`;
   }
 
   /**
@@ -70,6 +96,7 @@ export class VertexIntersection {
    */
   toJSON(): VertexIntersectionJSON {
     return {
+      type: this.type,
       v: this.v,
       checked: this.checked,
     };
@@ -92,9 +119,7 @@ export class VertexIntersection {
 /**
  * The {@link VertexIntersection} JSON interface.
  */
-export interface VertexIntersectionJSON {
+export interface VertexIntersectionJSON extends IntersectionJSON {
   /** {@link VertexIntersection#v} */
   v: number;
-  /** {@link VertexIntersection#checked} */
-  checked: boolean;
 }
