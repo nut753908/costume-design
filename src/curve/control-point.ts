@@ -34,8 +34,8 @@ export abstract class ControlPoint<
 
   /**
    * Secret field.
-   * This function is used by setGUI() in ./src/curve/control-point-{3,2}.ts.
-   * Set it in advance using createGeometry() in ./src/curve/control-point.ts.
+   * This function is used by setGUI() in src/curve/control-point-{3,2}.ts.
+   * Set it in advance using createGeometry() in src/curve/control-point.ts.
    */
   _updateGeometry: () => void;
 
@@ -70,7 +70,7 @@ export abstract class ControlPoint<
     // biome-ignore lint/complexity/noUselessThisAlias: to leave cp(=this) alive.
     const cp = this;
 
-    // This function is used by setGUI() in ./src/curve/control-point-{3,2}.ts.
+    // This function is used by setGUI() in src/curve/control-point-{3,2}.ts.
     cp._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
