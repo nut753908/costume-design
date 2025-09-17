@@ -99,8 +99,7 @@ export function mergeIndices(
   const map: number[] = Array(positions.count)
     .fill(0)
     .map((_, i) => i);
-  const l = positions.count * 3;
-  for (let i = l - 3; i >= 0; i -= 3) {
+  for (let i = 3, l = positions.count * 3; i < l; i += 3) {
     for (let j = 0; j < i; j += 3) {
       if (
         Math.abs(positions.array[i] - positions.array[j]) < EPS &&
