@@ -40,6 +40,12 @@ export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndi
     geometry.getAttribute("position") as THREE.Float32BufferAttribute,
     indices
   );
+  geometry.setIndex(
+    correctIndices(
+      geometry.getAttribute("position") as THREE.Float32BufferAttribute,
+      geometry.getIndex() as THREE.Uint16BufferAttribute
+    )
+  );
   return geometry;
 }
 
@@ -68,7 +74,7 @@ export function correctNPolygonIndices(
         Math.abs(positions.array[j + 1] - nPolygonPositions[i][2]) < EPS &&
         Math.abs(positions.array[j + 2] + nPolygonPositions[i][1]) < EPS
       ) {
-        map[i] = j / 3; // note: one i may have many j/3.
+        map[i] = j / 3; // NOTE: One i may have many j/3.
         break;
       }
     }
@@ -76,4 +82,30 @@ export function correctNPolygonIndices(
   return nPolygonIndices
     .map((list) => list.map((v) => map[v]))
     .filter((list) => !list.includes(undefined)) as number[][];
+}
+
+export function correctIndices(
+  positions: THREE.BufferAttribute,
+  indices: THREE.BufferAttribute
+): THREE.BufferAttribute {
+  const EPS = Number.EPSILON;
+  const map: number[] = Array(positions.count)
+    .fill(0)
+    .map((_, i) => i);
+  const l = positions.count * 3;
+  for (let i = l - 3; i >= 0; i -= 3) {
+    for (let j = 0; j < i; j += 3) {
+      if (
+        Math.abs(positions.array[i] - positions.array[j]) < EPS &&
+        Math.abs(positions.array[i + 1] - positions.array[j + 1]) < EPS &&
+        Math.abs(positions.array[i + 2] - positions.array[j + 2]) < EPS
+      ) {
+        map[i / 3] = j / 3; // NOTE: Use the first one.
+        break;
+      }
+    }
+  }
+  const newIndices = indices.clone();
+  newIndices.array = newIndices.array.map((i) => map[i]);
+  return newIndices;
 }

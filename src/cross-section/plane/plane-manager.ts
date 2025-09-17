@@ -205,7 +205,6 @@ export class PlaneManager {
         indicesMap,
         allIntersections
       );
-      console.log(allIntersectionLoops); // debug code
       children[k] = new THREE.Group();
       allIntersectionLoops.forEach((il) => {
         const points = il.getPoints(positions);
@@ -217,10 +216,6 @@ export class PlaneManager {
       {
         const kFolder = folder.addFolder(k);
         kFolder.add(children[k], "visible");
-        // debug codes
-        children[k].children.forEach((c, i) => {
-          kFolder.add(c, "visible").name(`child${i} visible`);
-        });
       }
     };
 

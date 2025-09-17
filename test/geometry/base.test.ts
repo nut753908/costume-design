@@ -1,4 +1,4 @@
-import { correctNPolygonIndices } from "src/geometry/base";
+import { correctIndices, correctNPolygonIndices } from "src/geometry/base";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -220,4 +220,38 @@ describe("correctNPolygonIndices()", () => {
       ).toEqual(expected);
     });
   });
+});
+
+test("correctIndices()", () => {
+  /**
+   * flat layout:
+   *   4  5(,6) 7
+   *   0  1(,2) 3
+   */
+  const arrayP = [
+    [0, 0, 0], // index: 0
+    [1, 0, 0], // index: 1
+    [1, 0, 0], // index: 2
+    [2, 0, 0], // index: 3
+    [0, 1, 0], // index: 4
+    [1, 1, 0], // index: 5
+    [1, 1, 0], // index: 6
+    [2, 1, 0], // index: 7
+  ].flat();
+  const positions = new THREE.Float32BufferAttribute(arrayP, 3);
+  const arrayI = [
+    [0, 1, 5],
+    [0, 5, 4],
+    [2, 3, 7],
+    [2, 7, 6],
+  ].flat();
+  const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
+  const arrayNI = [
+    [0, 1, 5],
+    [0, 5, 4],
+    [1, 3, 7],
+    [1, 7, 5],
+  ].flat();
+  const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
+  expect(correctIndices(positions, indices)).toEqual(newIndices);
 });
