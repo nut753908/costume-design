@@ -247,14 +247,14 @@ describe("mergeIndices()", () => {
       [2, 7, 6],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
-    const arrayNI = [
+    const arrayI2 = [
       [0, 1, 5],
       [0, 5, 4],
       [1, 3, 7],
       [1, 7, 5],
     ].flat();
-    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+    const indices2 = new THREE.Uint16BufferAttribute(arrayI2, 1);
+    expect(mergeIndices(positions, indices)).toEqual(indices2);
   });
 
   test("split by vertical centerline (descending order)", () => {
@@ -281,14 +281,14 @@ describe("mergeIndices()", () => {
       [1, 7, 5],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
-    const arrayNI = [
+    const arrayI2 = [
       [0, 1, 5],
       [0, 5, 4],
       [1, 3, 7],
       [1, 7, 5],
     ].flat();
-    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+    const indices2 = new THREE.Uint16BufferAttribute(arrayI2, 1);
+    expect(mergeIndices(positions, indices)).toEqual(indices2);
   });
 
   test("different center points (ascending order)", () => {
@@ -326,7 +326,7 @@ describe("mergeIndices()", () => {
       [9, 13, 12],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
-    const arrayNI = [
+    const arrayI2 = [
       [0, 1, 4],
       [0, 4, 3],
       [1, 2, 10],
@@ -336,8 +336,8 @@ describe("mergeIndices()", () => {
       [4, 10, 13],
       [4, 13, 12],
     ].flat();
-    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+    const indices2 = new THREE.Uint16BufferAttribute(arrayI2, 1);
+    expect(mergeIndices(positions, indices)).toEqual(indices2);
   });
 
   test("different center points (descending order)", () => {
@@ -375,7 +375,7 @@ describe("mergeIndices()", () => {
       [4, 13, 12],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(arrayI, 1);
-    const arrayNI = [
+    const arrayI2 = [
       [0, 1, 4],
       [0, 4, 3],
       [1, 2, 10],
@@ -385,7 +385,7 @@ describe("mergeIndices()", () => {
       [4, 10, 13],
       [4, 13, 12],
     ].flat();
-    const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-    expect(mergeIndices(positions, indices)).toEqual(newIndices);
+    const indices2 = new THREE.Uint16BufferAttribute(arrayI2, 1);
+    expect(mergeIndices(positions, indices)).toEqual(indices2);
   });
 });
