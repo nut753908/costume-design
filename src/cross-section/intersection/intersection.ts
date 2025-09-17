@@ -4,6 +4,8 @@ import type * as THREE from "three";
  * Abstract class for EdgeIntersection and VertexIntersection.
  */
 export abstract class Intersection {
+  type: string;
+
   /**
    * Whether the intersection is checked when finding intersections.
    */
@@ -15,6 +17,7 @@ export abstract class Intersection {
    * @param checked - {@link Intersection#checked}
    */
   constructor(checked = false) {
+    this.type = "Intersection";
     this.checked = checked;
   }
 
@@ -40,4 +43,14 @@ export abstract class Intersection {
    * Return a string representing this intersection.
    */
   abstract toString(): string;
+}
+
+/**
+ * The {@link Intersection} JSON interface.
+ */
+export interface IntersectionJSON {
+  /** {@link Intersection#type} */
+  type: string;
+  /** {@link Intersection#checked} */
+  checked: boolean;
 }

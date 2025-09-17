@@ -1,6 +1,6 @@
 import { getPoint } from "src/cross-section/centerline/points";
 import type * as THREE from "three";
-import { Intersection } from "./intersection";
+import { Intersection, type IntersectionJSON } from "./intersection";
 import { VertexIntersection } from "./vertex-intersection";
 
 /**
@@ -14,8 +14,6 @@ import { VertexIntersection } from "./vertex-intersection";
  * @augments Intersection
  */
 export class EdgeIntersection extends Intersection {
-  type: string;
-
   /**
    * The index of the bottom vertex of the edge.
    */
@@ -144,15 +142,11 @@ export class EdgeIntersection extends Intersection {
 /**
  * The {@link EdgeIntersection} JSON interface.
  */
-export interface EdgeIntersectionJSON {
-  /** {@link EdgeIntersection#type} */
-  type: string;
+export interface EdgeIntersectionJSON extends IntersectionJSON {
   /** {@link EdgeIntersection#bottomV} */
   bottomV: number;
   /** {@link EdgeIntersection#topV} */
   topV: number;
   /** {@link EdgeIntersection#u} */
   u: number;
-  /** {@link Intersection#checked} */
-  checked: boolean;
 }
