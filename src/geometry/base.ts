@@ -41,7 +41,7 @@ export async function loadBaseGeometry(): Promise<BufferGeometryWithNPolygonIndi
     indices
   );
   geometry.setIndex(
-    correctIndices(
+    mergeIndices(
       geometry.getAttribute("position") as THREE.Float32BufferAttribute,
       geometry.getIndex() as THREE.Uint16BufferAttribute
     )
@@ -84,7 +84,14 @@ export function correctNPolygonIndices(
     .filter((list) => !list.includes(undefined)) as number[][];
 }
 
-export function correctIndices(
+/**
+ * Create the indices merged at the same position.
+ *
+ * @param positions - The results of geometry.getAttribute("position").
+ * @param indices - The results of geometry.getIndex().
+ * @return  The unique indices.
+ */
+export function mergeIndices(
   positions: THREE.BufferAttribute,
   indices: THREE.BufferAttribute
 ): THREE.BufferAttribute {

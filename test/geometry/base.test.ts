@@ -1,4 +1,4 @@
-import { correctIndices, correctNPolygonIndices } from "src/geometry/base";
+import { correctNPolygonIndices, mergeIndices } from "src/geometry/base";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -222,7 +222,7 @@ describe("correctNPolygonIndices()", () => {
   });
 });
 
-test("correctIndices()", () => {
+test("mergeIndices()", () => {
   /**
    * flat layout:
    *   4  5(,6) 7
@@ -253,5 +253,5 @@ test("correctIndices()", () => {
     [1, 7, 5],
   ].flat();
   const newIndices = new THREE.Uint16BufferAttribute(arrayNI, 1);
-  expect(correctIndices(positions, indices)).toEqual(newIndices);
+  expect(mergeIndices(positions, indices)).toEqual(newIndices);
 });
