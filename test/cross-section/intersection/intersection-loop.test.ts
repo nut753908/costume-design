@@ -6,7 +6,14 @@ import {
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
-import { describe, expect, test } from "vitest";
+import {
+  beforeEach,
+  describe,
+  expect,
+  type MockInstance,
+  test,
+  vi,
+} from "vitest";
 
 describe("IntersectionLoop", () => {
   test("constructor()", () => {
@@ -311,6 +318,18 @@ describe("IntersectionLoop", () => {
     ],
     closed: true,
   };
+  const _jsonForNonExistentIntersection: IntersectionLoopJSON = {
+    intersections: [
+      {
+        type: "NonExistentIntersection",
+        bottomV: -1,
+        topV: -1,
+        u: 0,
+        checked: false,
+      },
+    ],
+    closed: false,
+  };
 
   test("toJSON()", () => {
     const intersections = [
@@ -323,14 +342,38 @@ describe("IntersectionLoop", () => {
     expect(json1).toEqual(json2);
   });
 
-  test("fromJSON()", () => {
-    const il1 = new IntersectionLoop().fromJSON(_json);
-    const intersections = [
-      new EdgeIntersection(1, 3, 0.5, true),
-      new EdgeIntersection(0, 3, 0.75, true),
-      new VertexIntersection(2, true),
-    ];
-    const il2 = new IntersectionLoop(intersections, true);
-    expect(il1).toEqual(il2);
+  describe("fromJSON()", () => {
+    let spy: MockInstance;
+
+    beforeEach(() => {
+      spy = vi.spyOn(console, "error");
+    });
+
+    test('intersections: if (i.type === "EdgeIntersection") {...} else if (i.type === "VertexIntersection") {...}', () => {
+      const il1 = new IntersectionLoop().fromJSON(_json);
+      const intersections = [
+        new EdgeIntersection(1, 3, 0.5, true),
+        new EdgeIntersection(0, 3, 0.75, true),
+        new VertexIntersection(2, true),
+      ];
+      const il2 = new IntersectionLoop(intersections, true);
+      expect(il1).toEqual(il2);
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
+
+    test("intersections: else {...}", () => {
+      spy.mockImplementationOnce((v) => {
+        expect(v).toBe(`\
+!(i.type === "EdgeIntersection") && !(i.type === "VertexIntersection")
+- i: {"type":"NonExistentIntersection","bottomV":-1,"topV":-1,"u":0,"checked":false}
+`);
+      });
+      const il = new IntersectionLoop().fromJSON(
+        _jsonForNonExistentIntersection
+      );
+      expect(il.intersections[0].type).not.toBe("NonExistentIntersection");
+      expect(il.intersections[0].type).toBe("EdgeIntersection");
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 });

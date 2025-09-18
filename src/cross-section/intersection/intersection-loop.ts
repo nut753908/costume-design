@@ -170,7 +170,7 @@ export class IntersectionLoop {
       } else {
         console.error(`\
 !(i.type === "EdgeIntersection") && !(i.type === "VertexIntersection")
-- i.type: ${JSON.stringify(i.type)}
+- i: ${JSON.stringify(i)}
 `);
         return new EdgeIntersection();
       }
