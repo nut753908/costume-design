@@ -1,4 +1,6 @@
-import type * as THREE from "three";
+import * as THREE from "three";
+import type { FreePlane } from "../plane/free-plane";
+import type { VerticalPlane } from "../plane/vertical-plane";
 import {
   EdgeIntersection,
   type EdgeIntersectionJSON,
@@ -54,6 +56,53 @@ export class IntersectionLoop {
    */
   getPoints(positions: THREE.BufferAttribute): THREE.Vector3[] {
     return this.intersections.map((i) => i.getPoint(positions));
+  }
+
+  /**
+   * Get whether the reference point of the plane is inside the intersection loop.
+   *
+   * @param positions - The results of geometry.getAttribute("position").
+   */
+  inLoop(
+    plane: FreePlane | VerticalPlane,
+    positions: THREE.BufferAttribute
+  ): boolean {
+    if (!this.closed) return false;
+    const top = plane.getTopNormal();
+    const points = this.getPoints(positions);
+    const c = plane.getPoint();
+    let anyVector = new THREE.Vector3(1, 0, 0);
+    if (top.equals(anyVector) || top.equals(anyVector.clone().negate()))
+      anyVector = new THREE.Vector3(0, 0, 1);
+    const cd = anyVector.clone().cross(top);
+    let count = 0;
+    for (let i = 0, l = points.length; i < l; i++) {
+      // console.log(`i: ${i}`);
+      const a = points[i];
+      const b = i + 1 < l ? points[i + 1] : points[0];
+      const ac = c.clone().sub(a);
+      const ab = b.clone().sub(a);
+      const v0 = ac;
+      const v1 = ab;
+      const v2 = cd;
+      const cross12 = v1.clone().cross(v2).dot(top);
+      if (cross12 === 0) continue;
+      const cross01 = v0.clone().cross(v1).dot(top);
+      const cross02 = v0.clone().cross(v2).dot(top);
+      const t2 = cross01 / cross12;
+      const t1 = cross02 / cross12;
+      // console.log(`t1: ${t1}`);
+      // console.log(`t2: ${t2}`);
+      // console.log(`cross12: ${cross12}`);
+      if (t2 >= 0) {
+        if (t1 > 0 && t1 < 1) count += 1;
+        if (cross12 > 0 && t1 === 0) count += 1; // for top
+        if (cross12 < 0 && t1 === 1) count += 1; // for top
+      }
+    }
+    // console.log(`count: ${count}`);
+    // console.log();
+    return count % 2 === 1;
   }
 
   /**

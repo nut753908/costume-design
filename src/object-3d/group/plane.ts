@@ -35,7 +35,7 @@ export function createPlaneGroup(
   _planeHelper.normal = obj.normal;
   _planeHelper.point = obj.point;
   _planeHelper.size = planeHelper.size;
-  // These functions are used by createPlaneHelper() in ./src/object-3d/plane-helper.ts.
+  // These functions are used by createPlaneHelper() in src/object-3d/plane-helper.ts.
   planeHelper._updateSizeCallbacks.push((v) => {
     _planeHelper.size = v;
   });
@@ -45,7 +45,7 @@ export function createPlaneGroup(
   _arrowHelper.visible = true;
   _arrowHelper.setDirection(obj.normal);
   _arrowHelper.position.copy(obj.point);
-  // These functions are used by createArrowHelper() in ./src/object-3d/arrow-helper.ts.
+  // These functions are used by createArrowHelper() in src/object-3d/arrow-helper.ts.
   arrowHelper._updateLengthCallbacks.push((v) => _arrowHelper.setLength(v));
   group.add(_arrowHelper);
 
