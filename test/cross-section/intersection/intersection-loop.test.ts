@@ -79,7 +79,7 @@ describe("IntersectionLoop", () => {
           // z:1, x:(any)
           [new THREE.Vector3(0.5, 0.5, 1), true], // count:1
           [new THREE.Vector3(1, 0.5, 1), true], // count:1
-        ])("point:%j", (point, expected) => {
+        ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
             "(intersections) reversed:%o",
@@ -110,7 +110,7 @@ describe("IntersectionLoop", () => {
           [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
           [new THREE.Vector3(0.5, 1.5, 0.5), false], // count:0
           [new THREE.Vector3(0.5, -0.5, 0.5), false], // count:2
-        ])("point:%j", (point, expected) => {
+        ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
             "(intersections) reversed:%o",
@@ -141,7 +141,7 @@ describe("IntersectionLoop", () => {
           [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
           [new THREE.Vector3(1.5, 0.5, 0.5), false], // count:0
           [new THREE.Vector3(-0.5, 0.5, 0.5), false], // count:2
-        ])("point:%j", (point, expected) => {
+        ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
             "(intersections) reversed:%o",
@@ -173,7 +173,7 @@ describe("IntersectionLoop", () => {
           [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
           [new THREE.Vector3(0.5, -0.5, 1.5), false], // count:0
           [new THREE.Vector3(0.5, 1.5, -0.5), false], // count:2
-        ])("point:%j", (point, expected) => {
+        ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
             "(intersections) reversed:%o",
@@ -206,7 +206,7 @@ describe("IntersectionLoop", () => {
           [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
           [new THREE.Vector3(0.5, -0.5, 0.5), false], // count:0
           [new THREE.Vector3(0.5, 1.5, 0.5), false], // count:2
-        ])("point:%j", (point, expected) => {
+        ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
             "(intersections) reversed:%o",
