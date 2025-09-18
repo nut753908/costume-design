@@ -25,7 +25,7 @@ import {
  */
 export class IntersectionLoop {
   /**
-   * The vertices within an edge loop.
+   * The intersections within an intersection loop.
    */
   intersections: (EdgeIntersection | VertexIntersection)[];
 
@@ -46,6 +46,22 @@ export class IntersectionLoop {
   ) {
     this.intersections = intersections;
     this.closed = closed;
+  }
+
+  /**
+   * Get the vertex indices as the bottom vertex of each edges.
+   * Duplicate indices are removed and made unique.
+   */
+  get bottomVs(): number[] {
+    return [...new Set(this.intersections.map((i) => i.bottomV))];
+  }
+
+  /**
+   * Get the vertex indices as the top vertex of each edges.
+   * Duplicate indices are removed and made unique.
+   */
+  get topVs(): number[] {
+    return [...new Set(this.intersections.map((i) => i.topV))];
   }
 
   /**
@@ -106,7 +122,7 @@ export class IntersectionLoop {
   }
 
   /**
-   * Returns a new edge loop with copied values from this instance.
+   * Returns a new intersection loop with copied values from this instance.
    *
    * @return  A clone of this instance.
    */
@@ -115,10 +131,10 @@ export class IntersectionLoop {
   }
 
   /**
-   * Copies the values of the given edge loop to this instance.
+   * Copies the values of the given intersection loop to this instance.
    *
-   * @param source - The edge loop to copy.
-   * @return  A reference to this edge loop.
+   * @param source - The intersection loop to copy.
+   * @return  A reference to this intersection loop.
    */
   copy(source: IntersectionLoop): this {
     this.intersections = source.intersections.map((i) => i.clone());
@@ -128,9 +144,9 @@ export class IntersectionLoop {
   }
 
   /**
-   * Serializes the edge loop into JSON.
+   * Serializes the intersection loop into JSON.
    *
-   * @return  A JSON object representing the serialized edge loop.
+   * @return  A JSON object representing the serialized intersection loop.
    */
   toJSON(): IntersectionLoopJSON {
     return {
@@ -140,10 +156,10 @@ export class IntersectionLoop {
   }
 
   /**
-   * Deserializes the edge loop from the given JSON.
+   * Deserializes the intersection loop from the given JSON.
    *
-   * @param json - The JSON holding the serialized edge loop.
-   * @return  A reference to this edge loop.
+   * @param json - The JSON holding the serialized intersection loop.
+   * @return  A reference to this intersection loop.
    */
   fromJSON(json: IntersectionLoopJSON): this {
     this.intersections = json.intersections.map((i) => {
@@ -154,7 +170,7 @@ export class IntersectionLoop {
       } else {
         console.error(`\
 !(i.type === "EdgeIntersection") && !(i.type === "VertexIntersection")
-- i.type: ${JSON.stringify(i.type)}
+- i: ${JSON.stringify(i)}
 `);
         return new EdgeIntersection();
       }
