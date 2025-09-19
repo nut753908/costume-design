@@ -27,7 +27,7 @@ describe("IntersectionLoop", () => {
     expect(il.closed).toBe(true);
   });
 
-  test("bottomVs()", () => {
+  test("backVs()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -35,10 +35,10 @@ describe("IntersectionLoop", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    expect(il.bottomVs).toEqual([1, 0, 2]);
+    expect(il.backVs).toEqual([1, 0, 2]);
   });
 
-  test("topVs()", () => {
+  test("frontVs()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -46,7 +46,7 @@ describe("IntersectionLoop", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    expect(il.topVs).toEqual([3, 4, 2]);
+    expect(il.frontVs).toEqual([3, 4, 2]);
   });
 
   test("getPoints()", () => {
@@ -163,13 +163,13 @@ describe("IntersectionLoop", () => {
       describe("normal:[0,0,1]", () => {
         const normal = new THREE.Vector3(0, 0, 1);
         // anyVector:[1,0,0]
-        // cd(v2):[0,0,1]
+        // cd(v2):[0,-1,0]
         // z:0.5
         describe.each([
           // x:(any), y:0.5
           [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
-          [new THREE.Vector3(1.5, 0.5, 0.5), false], // count:0
-          [new THREE.Vector3(-0.5, 0.5, 0.5), false], // count:2
+          [new THREE.Vector3(0.5, -0.5, 0.5), false], // count:0
+          [new THREE.Vector3(0.5, 1.5, 0.5), false], // count:2
         ])("point:%j, expected:%o", (point, expected) => {
           const plane = new FreePlane(normal, point);
           test.each([[false], [true]])(
@@ -225,6 +225,37 @@ describe("IntersectionLoop", () => {
         });
       });
 
+      describe("normal:[0,-1,0]", () => {
+        const normal = new THREE.Vector3(0, -1, 0);
+        // anyVector:[1,0,0]
+        // cd(v2):[0,0,-1]
+        // y:0.5
+        describe.each([
+          // z:(any), x:0.5
+          [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
+          [new THREE.Vector3(0.5, 0.5, -0.5), false], // count:0
+          [new THREE.Vector3(0.5, 0.5, 1.5), false], // count:2
+        ])("point:%j, expected:%o", (point, expected) => {
+          const plane = new FreePlane(normal, point);
+          test.each([[false], [true]])(
+            "(intersections) reversed:%o",
+            (reversed) => {
+              const intersections = [
+                new EdgeIntersection(0, 4, 0.5, true),
+                new EdgeIntersection(1, 5, 0.5, true),
+                new EdgeIntersection(2, 6, 0.5, true),
+                new EdgeIntersection(3, 7, 0.5, true),
+              ];
+              const il = new IntersectionLoop(
+                reversed ? intersections.toReversed() : intersections,
+                true
+              );
+              expect(il.inLoop(plane, positions)).toBe(expected);
+            }
+          );
+        });
+      });
+
       describe("normal:[-1,0,0]", () => {
         const normal = new THREE.Vector3(-1, 0, 0);
         // anyVector:[0,0,1]
@@ -245,6 +276,37 @@ describe("IntersectionLoop", () => {
                 new EdgeIntersection(3, 2, 0.5, true),
                 new EdgeIntersection(7, 6, 0.5, true),
                 new EdgeIntersection(4, 5, 0.5, true),
+              ];
+              const il = new IntersectionLoop(
+                reversed ? intersections.toReversed() : intersections,
+                true
+              );
+              expect(il.inLoop(plane, positions)).toBe(expected);
+            }
+          );
+        });
+      });
+
+      describe("normal:[0,0,-1]", () => {
+        const normal = new THREE.Vector3(0, 0, -1);
+        // anyVector:[1,0,0]
+        // cd(v2):[0,1,0]
+        // z:0.5
+        describe.each([
+          // x:(any), y:0.5
+          [new THREE.Vector3(0.5, 0.5, 0.5), true], // count:1
+          [new THREE.Vector3(0.5, 1.5, 0.5), false], // count:0
+          [new THREE.Vector3(0.5, -0.5, 0.5), false], // count:2
+        ])("point:%j, expected:%o", (point, expected) => {
+          const plane = new FreePlane(normal, point);
+          test.each([[false], [true]])(
+            "(intersections) reversed:%o",
+            (reversed) => {
+              const intersections = [
+                new EdgeIntersection(0, 3, 0.5, true),
+                new EdgeIntersection(1, 2, 0.5, true),
+                new EdgeIntersection(5, 6, 0.5, true),
+                new EdgeIntersection(4, 7, 0.5, true),
               ];
               const il = new IntersectionLoop(
                 reversed ? intersections.toReversed() : intersections,
@@ -298,15 +360,15 @@ describe("IntersectionLoop", () => {
     intersections: [
       {
         type: "EdgeIntersection",
-        bottomV: 1,
-        topV: 3,
+        backV: 1,
+        frontV: 3,
         u: 0.5,
         checked: true,
       },
       {
         type: "EdgeIntersection",
-        bottomV: 0,
-        topV: 3,
+        backV: 0,
+        frontV: 3,
         u: 0.75,
         checked: true,
       },
@@ -322,8 +384,8 @@ describe("IntersectionLoop", () => {
     intersections: [
       {
         type: "NonExistentIntersection",
-        bottomV: -1,
-        topV: -1,
+        backV: -1,
+        frontV: -1,
         u: 0,
         checked: false,
       },
@@ -365,7 +427,7 @@ describe("IntersectionLoop", () => {
       spy.mockImplementationOnce((v) => {
         expect(v).toBe(`\
 !(i.type === "EdgeIntersection") && !(i.type === "VertexIntersection")
-- i: {"type":"NonExistentIntersection","bottomV":-1,"topV":-1,"u":0,"checked":false}
+- i: {"type":"NonExistentIntersection","backV":-1,"frontV":-1,"u":0,"checked":false}
 `);
       });
       const il = new IntersectionLoop().fromJSON(

@@ -15,33 +15,33 @@ import { VertexIntersection } from "./vertex-intersection";
  */
 export class EdgeIntersection extends Intersection {
   /**
-   * The index of the bottom vertex of the edge.
+   * The index of the back vertex of the edge.
    */
-  bottomV: number;
+  backV: number;
 
   /**
-   * The index of the top vertex of the edge.
+   * The index of the front vertex of the edge.
    */
-  topV: number;
+  frontV: number;
 
   /**
-   * The edge intersection position from bottomV to topV. Must be in the range [0, 1].
+   * The edge intersection position from backV to frontV. Must be in the range [0, 1].
    */
   u: number;
 
   /**
    * Constructs a new edge intersection.
    *
-   * @param bottomV - {@link EdgeIntersection#bottomV}
-   * @param topV - {@link EdgeIntersection#topV}
+   * @param backV - {@link EdgeIntersection#backV}
+   * @param frontV - {@link EdgeIntersection#frontV}
    * @param u - {@link EdgeIntersection#u}
    * @param checked - {@link Intersection#checked}
    */
-  constructor(bottomV = -1, topV = -1, u = 0, checked = false) {
+  constructor(backV = -1, frontV = -1, u = 0, checked = false) {
     super(checked);
     this.type = "EdgeIntersection";
-    this.bottomV = bottomV;
-    this.topV = topV;
+    this.backV = backV;
+    this.frontV = frontV;
     this.u = u;
   }
 
@@ -52,10 +52,10 @@ export class EdgeIntersection extends Intersection {
    * @return  The point.
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
-    const bottom = getPoint(positions, this.bottomV);
-    const top = getPoint(positions, this.topV);
-    const diff = top.clone().sub(bottom);
-    return bottom.clone().add(diff.multiplyScalar(this.u));
+    const back = getPoint(positions, this.backV);
+    const front = getPoint(positions, this.frontV);
+    const diff = front.clone().sub(back);
+    return back.clone().add(diff.multiplyScalar(this.u));
   }
 
   /**
@@ -66,7 +66,7 @@ export class EdgeIntersection extends Intersection {
    */
   equals(i: Intersection): boolean {
     if (!(i instanceof EdgeIntersection)) return false;
-    return i.bottomV === this.bottomV && i.topV === this.topV;
+    return i.backV === this.backV && i.frontV === this.frontV;
   }
 
   /**
@@ -74,14 +74,14 @@ export class EdgeIntersection extends Intersection {
    */
   has(i: Intersection): boolean {
     if (!(i instanceof VertexIntersection)) return false;
-    return i.v === this.bottomV || i.v === this.topV;
+    return i.v === this.backV || i.v === this.frontV;
   }
 
   /**
    * Return a string representing this edge intersection.
    */
   toString(): string {
-    return `${this.bottomV},${this.topV}`;
+    return `${this.backV},${this.frontV}`;
   }
 
   /**
@@ -100,8 +100,8 @@ export class EdgeIntersection extends Intersection {
    * @return  A reference to this edge intersection.
    */
   copy(source: EdgeIntersection): this {
-    this.bottomV = source.bottomV;
-    this.topV = source.topV;
+    this.backV = source.backV;
+    this.frontV = source.frontV;
     this.u = source.u;
     this.checked = source.checked;
 
@@ -116,8 +116,8 @@ export class EdgeIntersection extends Intersection {
   toJSON(): EdgeIntersectionJSON {
     return {
       type: this.type,
-      bottomV: this.bottomV,
-      topV: this.topV,
+      backV: this.backV,
+      frontV: this.frontV,
       u: this.u,
       checked: this.checked,
     };
@@ -130,8 +130,8 @@ export class EdgeIntersection extends Intersection {
    * @return  A reference to this edge intersection.
    */
   fromJSON(json: EdgeIntersectionJSON): this {
-    this.bottomV = json.bottomV;
-    this.topV = json.topV;
+    this.backV = json.backV;
+    this.frontV = json.frontV;
     this.u = json.u;
     this.checked = json.checked;
 
@@ -143,10 +143,10 @@ export class EdgeIntersection extends Intersection {
  * The {@link EdgeIntersection} JSON interface.
  */
 export interface EdgeIntersectionJSON extends IntersectionJSON {
-  /** {@link EdgeIntersection#bottomV} */
-  bottomV: number;
-  /** {@link EdgeIntersection#topV} */
-  topV: number;
+  /** {@link EdgeIntersection#backV} */
+  backV: number;
+  /** {@link EdgeIntersection#frontV} */
+  frontV: number;
   /** {@link EdgeIntersection#u} */
   u: number;
 }

@@ -15,22 +15,6 @@ export abstract class Plane {
   abstract getPoint(): THREE.Vector3;
 
   /**
-   * Get the normal direction of the top face.
-   */
-  getTopNormal(): THREE.Vector3 {
-    const normal = this.getNormal();
-    return normal.y >= 0 ? normal : normal.clone().negate();
-  }
-
-  /**
-   * Get the normal direction of the bottom face.
-   */
-  getBottomNormal(): THREE.Vector3 {
-    const normal = this.getNormal();
-    return normal.y < 0 ? normal : normal.clone().negate();
-  }
-
-  /**
    * Get the THREE.Plane instance.
    */
   getPlane(): THREE.Plane {

@@ -49,19 +49,19 @@ export class IntersectionLoop {
   }
 
   /**
-   * Get the vertex indices as the bottom vertex of each edges.
+   * Get the vertex indices as the back vertex of each edges.
    * Duplicate indices are removed and made unique.
    */
-  get bottomVs(): number[] {
-    return [...new Set(this.intersections.map((i) => i.bottomV))];
+  get backVs(): number[] {
+    return [...new Set(this.intersections.map((i) => i.backV))];
   }
 
   /**
-   * Get the vertex indices as the top vertex of each edges.
+   * Get the vertex indices as the front vertex of each edges.
    * Duplicate indices are removed and made unique.
    */
-  get topVs(): number[] {
-    return [...new Set(this.intersections.map((i) => i.topV))];
+  get frontVs(): number[] {
+    return [...new Set(this.intersections.map((i) => i.frontV))];
   }
 
   /**
@@ -84,13 +84,15 @@ export class IntersectionLoop {
     positions: THREE.BufferAttribute
   ): boolean {
     if (!this.closed) return false;
-    const top = plane.getTopNormal();
+    const normal = plane.getNormal();
     const points = this.getPoints(positions);
     const c = plane.getPoint();
     let anyVector = new THREE.Vector3(1, 0, 0);
-    if (top.equals(anyVector) || top.equals(anyVector.clone().negate()))
+    if (normal.equals(anyVector) || normal.equals(anyVector.clone().negate()))
       anyVector = new THREE.Vector3(0, 0, 1);
-    const cd = anyVector.clone().cross(top);
+    const cd = anyVector.clone().cross(normal);
+    // console.log(`anyVector: ${JSON.stringify(anyVector)}`);
+    // console.log(`cd: ${JSON.stringify(cd)}`);
     let count = 0;
     for (let i = 0, l = points.length; i < l; i++) {
       // console.log(`i: ${i}`);
@@ -101,10 +103,10 @@ export class IntersectionLoop {
       const v0 = ac;
       const v1 = ab;
       const v2 = cd;
-      const cross12 = v1.clone().cross(v2).dot(top);
+      const cross12 = v1.clone().cross(v2).dot(normal);
       if (cross12 === 0) continue;
-      const cross01 = v0.clone().cross(v1).dot(top);
-      const cross02 = v0.clone().cross(v2).dot(top);
+      const cross01 = v0.clone().cross(v1).dot(normal);
+      const cross02 = v0.clone().cross(v2).dot(normal);
       const t2 = cross01 / cross12;
       const t1 = cross02 / cross12;
       // console.log(`t1: ${t1}`);
@@ -112,8 +114,8 @@ export class IntersectionLoop {
       // console.log(`cross12: ${cross12}`);
       if (t2 >= 0) {
         if (t1 > 0 && t1 < 1) count += 1;
-        if (cross12 > 0 && t1 === 0) count += 1; // for top
-        if (cross12 < 0 && t1 === 1) count += 1; // for top
+        if (cross12 > 0 && t1 === 0) count += 1;
+        if (cross12 < 0 && t1 === 1) count += 1;
       }
     }
     // console.log(`count: ${count}`);

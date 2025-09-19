@@ -9,8 +9,8 @@ import { describe, expect, test } from "vitest";
 describe("EdgeIntersection", () => {
   test("constructor()", () => {
     const ei = new EdgeIntersection(0, 1, 0.5, true);
-    expect(ei.bottomV).toBe(0);
-    expect(ei.topV).toBe(1);
+    expect(ei.backV).toBe(0);
+    expect(ei.frontV).toBe(1);
     expect(ei.u).toBe(0.5);
     expect(ei.checked).toBe(true);
   });
@@ -92,8 +92,8 @@ describe("EdgeIntersection", () => {
     const json1 = new EdgeIntersection(0, 1, 0.5, true).toJSON();
     const json2: EdgeIntersectionJSON = {
       type: "EdgeIntersection",
-      bottomV: 0,
-      topV: 1,
+      backV: 0,
+      frontV: 1,
       u: 0.5,
       checked: true,
     };
@@ -103,8 +103,8 @@ describe("EdgeIntersection", () => {
   test("fromJSON()", () => {
     const ei1 = new EdgeIntersection().fromJSON({
       type: "EdgeIntersection",
-      bottomV: 0,
-      topV: 1,
+      backV: 0,
+      frontV: 1,
       u: 0.5,
       checked: true,
     });

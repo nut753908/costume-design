@@ -13,14 +13,14 @@ describe("VertexIntersection", () => {
     expect(vi.checked).toBe(true);
   });
 
-  test("bottomV()", () => {
+  test("backV()", () => {
     const vi = new VertexIntersection(0, true);
-    expect(vi.bottomV).toBe(0);
+    expect(vi.backV).toBe(0);
   });
 
-  test("topV()", () => {
+  test("frontV()", () => {
     const vi = new VertexIntersection(0, true);
-    expect(vi.topV).toBe(0);
+    expect(vi.frontV).toBe(0);
   });
 
   test("getPoints()", () => {
