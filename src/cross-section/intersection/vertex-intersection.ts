@@ -32,16 +32,16 @@ export class VertexIntersection extends Intersection {
   }
 
   /**
-   * Get the vertex index as the bottom vertex of the edge.
+   * Get the vertex index as the back vertex of the edge.
    */
-  get bottomV(): number {
+  get backV(): number {
     return this.v;
   }
 
   /**
-   * Get the vertex index as the top vertex of the edge.
+   * Get the vertex index as the front vertex of the edge.
    */
-  get topV(): number {
+  get frontV(): number {
     return this.v;
   }
 
@@ -71,7 +71,7 @@ export class VertexIntersection extends Intersection {
    */
   has(i: Intersection): boolean {
     if (!(i instanceof EdgeIntersection)) return false;
-    return i.bottomV === this.v || i.topV === this.v;
+    return i.backV === this.v || i.frontV === this.v;
   }
 
   /**

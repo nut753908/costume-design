@@ -18,30 +18,30 @@ export function createAllIntersections(
 ): (EdgeIntersection | VertexIntersection)[] {
   const intersections: (EdgeIntersection | VertexIntersection)[] = [];
   const refP = plane.getPoint();
-  const bottomNormal = plane.getBottomNormal();
+  const normal = plane.getNormal();
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const e = allEdges[i];
     const p1 = getPoint(positions, e.v1);
     const p2 = getPoint(positions, e.v2);
     const diff1 = p1.clone().sub(refP);
     const diff2 = p2.clone().sub(refP);
-    const bottom1 = bottomNormal.dot(diff1);
-    const bottom2 = bottomNormal.dot(diff2);
-    const top1 = -bottom1;
-    const top2 = -bottom2;
-    if (bottom1 > 0 && top2 > 0) {
-      const u = bottom1 / (bottom1 + top2);
+    const front1 = normal.dot(diff1);
+    const front2 = normal.dot(diff2);
+    const back1 = -front1;
+    const back2 = -front2;
+    if (back1 > 0 && front2 > 0) {
+      const u = back1 / (back1 + front2);
       intersections.push(new EdgeIntersection(e.v1, e.v2, u));
-    } else if (bottom2 > 0 && top1 > 0) {
-      const u = bottom2 / (bottom2 + top1);
+    } else if (back2 > 0 && front1 > 0) {
+      const u = back2 / (back2 + front1);
       intersections.push(new EdgeIntersection(e.v2, e.v1, u));
     }
   }
   for (let i = 0, l = positions.count; i < l; i++) {
     const p = getPoint(positions, i);
     const diff = p.clone().sub(refP);
-    const bottom = bottomNormal.dot(diff);
-    if (bottom === 0) intersections.push(new VertexIntersection(i));
+    const front = normal.dot(diff);
+    if (front === 0) intersections.push(new VertexIntersection(i));
   }
   return intersections;
 }
