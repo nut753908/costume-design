@@ -1,4 +1,4 @@
-import { getAngles, getVertical, mean } from "src/math/vector";
+import { getAngles, mean } from "src/math/vector";
 import * as THREE from "three";
 import {
   beforeEach,
@@ -72,22 +72,5 @@ describe("mean()", () => {
     v2 = new THREE.Vector3(3, 6, 9);
     mean<THREE.Vector3 | THREE.Vector2>(v1, v2);
     expect(spy).toHaveBeenCalledTimes(2);
-  });
-});
-
-describe("getVertical()", () => {
-  test.each([
-    [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 1, 0)],
-    [new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0, -1, 0)],
-    [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 1)],
-    [new THREE.Vector3(0, -1, 0), new THREE.Vector3(0, 0, -1)],
-    [new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, -1, 0)],
-    [new THREE.Vector3(0, 0, -1), new THREE.Vector3(0, 1, 0)],
-    [new THREE.Vector3(1, 1, 1), new THREE.Vector3(0, -1, 1)],
-  ])("v:%j, expected:%j", (v, expected) => {
-    const actual = getVertical(v);
-    expect(actual.x).toBeCloseTo(expected.x);
-    expect(actual.y).toBeCloseTo(expected.y);
-    expect(actual.z).toBeCloseTo(expected.z);
   });
 });

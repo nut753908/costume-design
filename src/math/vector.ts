@@ -43,13 +43,3 @@ export function mean<TVector extends THREE.Vector3 | THREE.Vector2>(
 `);
   return v1;
 }
-
-/**
- * Get the vertical vector of v.
- */
-export function getVertical(v: THREE.Vector3): THREE.Vector3 {
-  let anyV = new THREE.Vector3(1, 0, 0);
-  if (v.equals(anyV) || v.equals(anyV.clone().negate()))
-    anyV = new THREE.Vector3(0, 0, 1);
-  return anyV.clone().cross(v);
-}
