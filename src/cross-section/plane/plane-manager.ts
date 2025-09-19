@@ -117,18 +117,7 @@ export class PlaneManager {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    Object.entries(this.planes).forEach(([k, p]) => {
-      children[k] = createPlaneGroup(
-        folder,
-        p,
-        planeHelper,
-        arrowHelper,
-        k,
-        this._updatePointsGroup
-      );
-      parent.add(children[k]);
-    });
-
+    // This function is used by createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
     // This function is used by addFreePlane() in src/cross-section/plane/plane-manager.ts.
     // This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
@@ -143,6 +132,7 @@ export class PlaneManager {
       );
       parent.add(children[k]);
     };
+    Object.keys(this.planes).map((k) => this._addPlaneGroup(k));
 
     // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
     this._removePlaneGroup = (k: string) => {
