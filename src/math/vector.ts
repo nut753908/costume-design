@@ -21,6 +21,10 @@ export function getAngles(v: THREE.Vector3): THREE.Vector3 {
   );
 }
 
+/**
+ * Get the mean vector of v1 and v2.
+ * v1, v2 and the return value must have a common type (THREE.Vector3 or THREE.Vector2).
+ */
 export function mean<TVector extends THREE.Vector3 | THREE.Vector2>(
   v1: TVector,
   v2: TVector

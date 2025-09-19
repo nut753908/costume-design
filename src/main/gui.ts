@@ -5,17 +5,23 @@ export interface guiJSON {
   folders: { [_title: string]: guiJSON };
 }
 
+const foldersToSave = [
+  "(fixed)",
+  "LinesGroup",
+  "PointsGroup",
+  "PlanesGroup",
+  "TubeGroup",
+];
+
 /**
  * Save GUI states of only the specified folders.
  */
 export function saveGui(gui: GUI): guiJSON {
   const guiObj = gui.save() as guiJSON;
   const folders: guiJSON["folders"] = {};
-  ["(fixed)", "LinesGroup", "PointsGroup", "PlanesGroup", "TubeGroup"].forEach(
-    (k) => {
-      folders[k] = guiObj.folders[k];
-    }
-  );
+  foldersToSave.forEach((k) => {
+    folders[k] = guiObj.folders[k];
+  });
   guiObj.folders = folders;
   return guiObj;
 }
