@@ -1,4 +1,5 @@
-import * as THREE from "three";
+import { getVertical } from "src/math/vector";
+import type * as THREE from "three";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
 import {
@@ -87,11 +88,7 @@ export class IntersectionLoop {
     const normal = plane.getNormal();
     const points = this.getPoints(positions);
     const c = plane.getPoint();
-    let anyVector = new THREE.Vector3(1, 0, 0);
-    if (normal.equals(anyVector) || normal.equals(anyVector.clone().negate()))
-      anyVector = new THREE.Vector3(0, 0, 1);
-    const cd = anyVector.clone().cross(normal);
-    // console.log(`anyVector: ${JSON.stringify(anyVector)}`);
+    const cd = getVertical(normal);
     // console.log(`cd: ${JSON.stringify(cd)}`);
     let count = 0;
     for (let i = 0, l = points.length; i < l; i++) {
