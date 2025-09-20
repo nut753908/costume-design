@@ -379,6 +379,106 @@ describe("IntersectionLoops", () => {
     expect(IntersectionLoops.getSelections()).toContain("some");
   });
 
+  describe("getSelectedIntersectionLoops()", () => {
+    describe("three triangular pyramids example", () => {
+      const positionsArray = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        //
+        [2, 0.5, 0.5],
+        [3, 0, 0],
+        [3, 0, 1],
+        [3, 1, 0.5],
+        //
+        [4, 0.5, 0],
+        [5, 0, 0.5],
+        [4, 0.5, 1],
+        [5, 1, 0.5],
+      ].flat();
+      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+      const indicesArray = [
+        [0, 1, 2],
+        [0, 1, 3],
+        [1, 2, 3],
+        [2, 0, 3],
+        //
+        [4, 5, 6],
+        [4, 5, 7],
+        [5, 6, 7],
+        [6, 4, 7],
+        //
+        [8, 9, 10],
+        [8, 9, 11],
+        [9, 10, 11],
+        [10, 8, 11],
+      ].flat();
+      const _indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+
+      const plane = new FreePlane(
+        new THREE.Vector3(0, 1, 0),
+        new THREE.Vector3(0.1, 0.5, 0.1)
+      );
+      const intersectionLoops = [
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(1, 3, 0.5, true),
+            new EdgeIntersection(0, 3, 0.5, true),
+            new EdgeIntersection(2, 3, 0.5, true),
+          ],
+          true
+        ),
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(5, 7, 0.5, true),
+            new EdgeIntersection(6, 7, 0.5, true),
+            new VertexIntersection(4, true),
+          ],
+          true
+        ),
+        new IntersectionLoop(
+          [
+            new EdgeIntersection(9, 11, 0.5, true),
+            new VertexIntersection(8, true),
+            new VertexIntersection(10, true),
+          ],
+          true
+        ),
+      ];
+
+      test('case "all"', () => {
+        const ils = new IntersectionLoops(intersectionLoops, "all");
+        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual(
+          intersectionLoops
+        );
+      });
+
+      test('case "including plane"', () => {
+        const ils = new IntersectionLoops(intersectionLoops, "including plane");
+        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+          intersectionLoops[0],
+        ]);
+      });
+
+      test('case "excluding plane"', () => {
+        const ils = new IntersectionLoops(intersectionLoops, "excluding plane");
+        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+          intersectionLoops[1],
+          intersectionLoops[2],
+        ]);
+      });
+
+      test('case "some"', () => {
+        const ils = new IntersectionLoops(intersectionLoops, "some", [0, 2]);
+        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+          intersectionLoops[0],
+          intersectionLoops[2],
+        ]);
+      });
+    });
+  });
+
   test("clone()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),

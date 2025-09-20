@@ -1,3 +1,6 @@
+import type * as THREE from "three";
+import type { FreePlane } from "../plane/free-plane";
+import type { VerticalPlane } from "../plane/vertical-plane";
 import type { EdgeIntersection } from "./edge-intersection";
 import { createIndicesMap } from "./indices";
 import {
@@ -117,6 +120,28 @@ export class IntersectionLoops {
    */
   static getSelections(): IntersectionLoops["selection"][] {
     return ["all", "including plane", "excluding plane", "some"];
+  }
+
+  /**
+   * Get the selected intersection loops as the selection.
+   *
+   * @param positions - The results of geometry.getAttribute("position").
+   */
+  getSelectedIntersectionLoops(
+    plane: FreePlane | VerticalPlane,
+    positions: THREE.BufferAttribute
+  ): IntersectionLoop[] {
+    const list = this.intersectionLoops;
+    switch (this.selection) {
+      case "all":
+        return list;
+      case "including plane":
+        return list.filter((v) => v.inLoop(plane, positions));
+      case "excluding plane":
+        return list.filter((v) => !v.inLoop(plane, positions));
+      case "some":
+        return this.indices.map((i) => list[i]);
+    }
   }
 
   /**
