@@ -19,18 +19,24 @@ describe("VerticalPlane", () => {
       new THREE.Vector3(1, 2, 3),
       new THREE.Vector3(1, 2, 4),
     ]);
-    const p = new VerticalPlane(curve, 1);
+    const p = new VerticalPlane(curve, 1, true);
     expect(p.curve).toEqual(curve);
     expect(p.u).toEqual(1);
+    expect(p.inverted).toBe(true);
   });
 
   test("getNormal()", () => {
+    let p: VerticalPlane;
     const curve = createLinePath([
       new THREE.Vector3(1, 2, 3),
       new THREE.Vector3(1, 2, 4),
     ]);
-    const p = new VerticalPlane(curve, 1);
+
+    p = new VerticalPlane(curve, 1, false);
     expect(p.getNormal()).toEqual(new THREE.Vector3(0, 0, 1));
+
+    p = new VerticalPlane(curve, 1, true);
+    expect(p.getNormal()).toEqual(new THREE.Vector3(-0, -0, -1));
   });
 
   test("getPoint()", () => {
@@ -103,6 +109,7 @@ describe("VerticalPlane", () => {
         Record<"v2", [number, number, number]>)[],
     },
     u: 1,
+    inverted: false,
   };
   const _jsonForCatmullRomCurve3: VerticalPlaneJSON = {
     type: "VerticalPlane",
@@ -127,6 +134,7 @@ describe("VerticalPlane", () => {
       Record<"curveType", string> &
       Record<"tension", number>,
     u: 1,
+    inverted: false,
   };
   const _jsonForCubicBezierCurve3: VerticalPlaneJSON = {
     type: "VerticalPlane",
@@ -148,6 +156,7 @@ describe("VerticalPlane", () => {
       Record<"v2", [number, number, number]> &
       Record<"v3", [number, number, number]>,
     u: 1,
+    inverted: false,
   };
 
   test("toJSON()", () => {

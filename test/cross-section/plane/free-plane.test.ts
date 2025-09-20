@@ -9,18 +9,30 @@ describe("FreePlane", () => {
   test("constructor()", () => {
     const p = new FreePlane(
       new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(2, 3, 4)
+      new THREE.Vector3(2, 3, 4),
+      true
     );
     expect(p.normal).toEqual(new THREE.Vector3(1, 0, 0));
     expect(p.point).toEqual(new THREE.Vector3(2, 3, 4));
+    expect(p.inverted).toBe(true);
   });
 
   test("getNormal()", () => {
-    const p = new FreePlane(
+    let p: FreePlane;
+
+    p = new FreePlane(
       new THREE.Vector3(1, 0, 0),
-      new THREE.Vector3(2, 3, 4)
+      new THREE.Vector3(2, 3, 4),
+      false
     );
     expect(p.getNormal()).toEqual(new THREE.Vector3(1, 0, 0));
+
+    p = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4),
+      true
+    );
+    expect(p.getNormal()).toEqual(new THREE.Vector3(-1, -0, -0));
   });
 
   test("getPoint()", () => {
@@ -71,6 +83,7 @@ describe("FreePlane", () => {
       type: "FreePlane",
       normal: [1, 0, 0],
       point: [2, 3, 4],
+      inverted: false,
     };
     expect(json1).toEqual(json2);
   });
@@ -80,6 +93,7 @@ describe("FreePlane", () => {
       type: "FreePlane",
       normal: [1, 0, 0],
       point: [2, 3, 4],
+      inverted: false,
     });
     const p2 = new FreePlane(
       new THREE.Vector3(1, 0, 0),

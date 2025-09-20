@@ -278,6 +278,7 @@ if (!this.planeKeys.includes(key))
         type: "FreePlane",
         normal: [1, 0, 0],
         point: [2, 3, 4],
+        inverted: false,
       },
     },
     planeNextIndex: 1,
@@ -308,6 +309,7 @@ if (!this.planeKeys.includes(key))
           Record<"curveType", string> &
           Record<"tension", number>,
         u: 1,
+        inverted: false,
       },
     },
     planeNextIndex: 1,
@@ -319,6 +321,7 @@ if (!this.planeKeys.includes(key))
         type: "NonExistentPlane",
         normal: [0, 0, 0],
         point: [0, 0, 0],
+        inverted: false,
       },
     },
     planeNextIndex: 1,
@@ -446,7 +449,7 @@ if (!this.planeKeys.includes(key))
       spy.mockImplementationOnce((v) => {
         expect(v).toBe(`\
 !(v.type === "FreePlane") && !(v.type === "VerticalPlane")
-- v: {"type":"NonExistentPlane","normal":[0,0,0],"point":[0,0,0]}
+- v: {"type":"NonExistentPlane","normal":[0,0,0],"point":[0,0,0],"inverted":false}
 `);
       });
       const pm = new PlaneManager().fromJSON(_jsonForNonExistentPlane);

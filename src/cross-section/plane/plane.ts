@@ -11,6 +11,11 @@ import * as THREE from "three";
  */
 export abstract class Plane {
   /**
+   * Whether to invert the result of this.getNormal().
+   */
+  inverted: boolean;
+
+  /**
    * Secret field.
    * This function is used by setGUI() in src/cross-section/plane/free-plane.ts.
    * This function is used by setGUI() in src/cross-section/plane/vertical-plane.ts.
@@ -18,7 +23,13 @@ export abstract class Plane {
    */
   _updateGroup: () => void;
 
-  constructor() {
+  /**
+   * Constructs a new plane.
+   *
+   * @param inverted - {@link Plane#inverted}
+   */
+  constructor(inverted = false) {
+    this.inverted = inverted;
     this._updateGroup = () => {};
   }
 
