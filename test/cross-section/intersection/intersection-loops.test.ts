@@ -5,7 +5,11 @@ import {
   createIndicesMap,
 } from "src/cross-section/intersection/indices";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
-import { createAllIntersectionLoops } from "src/cross-section/intersection/intersection-loops";
+import {
+  createAllIntersectionLoops,
+  IntersectionLoops,
+  type IntersectionLoopsJSON,
+} from "src/cross-section/intersection/intersection-loops";
 import { createAllIntersections } from "src/cross-section/intersection/intersections";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
@@ -351,5 +355,99 @@ describe("createAllIntersectionLoops()", () => {
       expected
     );
     expect(spy).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe("IntersectionLoops", () => {
+  test("constructor()", () => {
+    const intersections = [
+      new EdgeIntersection(1, 3, 0.5, true),
+      new EdgeIntersection(0, 3, 0.75, true),
+      new VertexIntersection(2, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+    const ils = new IntersectionLoops([il], "some", [0]);
+    expect(ils.intersectionLoops).toEqual([il]);
+    expect(ils.selection).toBe("some");
+    expect(ils.indices).toEqual([0]);
+  });
+
+  test("clone()", () => {
+    const intersections = [
+      new EdgeIntersection(1, 3, 0.5, true),
+      new EdgeIntersection(0, 3, 0.75, true),
+      new VertexIntersection(2, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+    const ils1 = new IntersectionLoops([il], "some", [0]);
+    const ils2 = ils1.clone();
+    expect(ils1).toEqual(ils2);
+  });
+
+  test("copy()", () => {
+    const intersections = [
+      new EdgeIntersection(1, 3, 0.5, true),
+      new EdgeIntersection(0, 3, 0.75, true),
+      new VertexIntersection(2, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+    const ils1 = new IntersectionLoops([il], "some", [0]);
+    const ils2 = new IntersectionLoops().copy(ils1);
+    expect(ils1).toEqual(ils2);
+  });
+
+  const _json: IntersectionLoopsJSON = {
+    intersectionLoops: [
+      {
+        intersections: [
+          {
+            type: "EdgeIntersection",
+            backV: 1,
+            frontV: 3,
+            u: 0.5,
+            checked: true,
+          },
+          {
+            type: "EdgeIntersection",
+            backV: 0,
+            frontV: 3,
+            u: 0.75,
+            checked: true,
+          },
+          {
+            type: "VertexIntersection",
+            v: 2,
+            checked: true,
+          },
+        ],
+        closed: true,
+      },
+    ],
+    selection: "some",
+    indices: [0],
+  };
+
+  test("toJSON()", () => {
+    const intersections = [
+      new EdgeIntersection(1, 3, 0.5, true),
+      new EdgeIntersection(0, 3, 0.75, true),
+      new VertexIntersection(2, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+    const json1 = new IntersectionLoops([il], "some", [0]).toJSON();
+    const json2: IntersectionLoopsJSON = _json;
+    expect(json1).toEqual(json2);
+  });
+
+  test("fromJSON()", () => {
+    const ils1 = new IntersectionLoops().fromJSON(_json);
+    const intersections = [
+      new EdgeIntersection(1, 3, 0.5, true),
+      new EdgeIntersection(0, 3, 0.75, true),
+      new VertexIntersection(2, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+    const ils2 = new IntersectionLoops([il], "some", [0]);
+    expect(ils1).toEqual(ils2);
   });
 });

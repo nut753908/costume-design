@@ -1,6 +1,9 @@
 import type { EdgeIntersection } from "./edge-intersection";
 import { createIndicesMap } from "./indices";
-import { IntersectionLoop } from "./intersection-loop";
+import {
+  IntersectionLoop,
+  type IntersectionLoopJSON,
+} from "./intersection-loop";
 import type { VertexIntersection } from "./vertex-intersection";
 
 /**
@@ -56,4 +59,120 @@ export function createAllIntersectionLoops(
     iLoops.push(new IntersectionLoop(iLoop, !opened));
   }
   return iLoops;
+}
+
+/**
+ * All intersection loops with a plane.
+ *
+ * ```js
+ * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
+ * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
+ * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
+ * import { IntersectionLoops } from "./src/cross-section/intersection/intersection-loops";
+ * const intersections = [
+ *   new EdgeIntersection( 1, 3, 0.5, true ),
+ *   new EdgeIntersection( 0, 3, 0.75, true ),
+ *   new VertexIntersection( 2, true ),
+ * ];
+ * const intersectionLoop = new IntersectionLoop( intersections, true );
+ * const intersectionLoops = new IntersectionLoops( [ intersectionLoop ], "all", [] );
+ * ```
+ */
+export class IntersectionLoops {
+  /**
+   * The intersection loops.
+   */
+  intersectionLoops: IntersectionLoop[];
+
+  /**
+   * The method for selecting intersection loops.
+   */
+  selection: "all" | "including plane" | "excluding plane" | "some";
+
+  /**
+   * The specified indices of the intersection loops.
+   * This is only used if the selection is "some".
+   */
+  indices: number[];
+
+  /**
+   * Constructs a new intersection loops.
+   *
+   * @param intersectionLoops - {@link IntersectionLoops#intersectionLoops}
+   * @param selection - {@link IntersectionLoops#selection}
+   * @param indices - {@link IntersectionLoops#indices}
+   */
+  constructor(
+    intersectionLoops: IntersectionLoop[] = [],
+    selection: IntersectionLoops["selection"] = "all",
+    indices: number[] = []
+  ) {
+    this.intersectionLoops = intersectionLoops;
+    this.selection = selection;
+    this.indices = indices;
+  }
+
+  /**
+   * Returns a new intersection loops with copied values from this instance.
+   *
+   * @return  A clone of this instance.
+   */
+  clone(): IntersectionLoops {
+    return new IntersectionLoops().copy(this);
+  }
+
+  /**
+   * Copies the values of the given intersection loops to this instance.
+   *
+   * @param source - The intersection loops to copy.
+   * @return  A reference to this intersection loops.
+   */
+  copy(source: IntersectionLoops): this {
+    this.intersectionLoops = source.intersectionLoops.map((il) => il.clone());
+    this.selection = source.selection;
+    this.indices = source.indices;
+
+    return this;
+  }
+
+  /**
+   * Serializes the intersection loops into JSON.
+   *
+   * @return  A JSON object representing the serialized intersection loops.
+   */
+  toJSON(): IntersectionLoopsJSON {
+    return {
+      intersectionLoops: this.intersectionLoops.map((il) => il.toJSON()),
+      selection: this.selection,
+      indices: this.indices,
+    };
+  }
+
+  /**
+   * Deserializes the intersection loops from the given JSON.
+   *
+   * @param json - The JSON holding the serialized intersection loops.
+   * @return  A reference to this intersection loops.
+   */
+  fromJSON(json: IntersectionLoopsJSON): this {
+    this.intersectionLoops = json.intersectionLoops.map((il) =>
+      new IntersectionLoop().fromJSON(il)
+    );
+    this.selection = json.selection;
+    this.indices = json.indices;
+
+    return this;
+  }
+}
+
+/**
+ * The {@link IntersectionLoops} JSON interface.
+ */
+export interface IntersectionLoopsJSON {
+  /** {@link IntersectionLoops#intersectionLoops} */
+  intersectionLoops: IntersectionLoopJSON[];
+  /** {@link IntersectionLoops#selection} */
+  selection: IntersectionLoops["selection"];
+  /** {@link IntersectionLoops#indices} */
+  indices: number[];
 }
