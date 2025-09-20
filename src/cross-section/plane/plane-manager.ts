@@ -3,7 +3,6 @@ import { closeFolder, deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
-import { createPlaneGroup } from "src/object-3d/group/plane";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { createAllEdges } from "../centerline/edges";
@@ -14,6 +13,7 @@ import {
 import { createAllIntersectionLoops } from "../intersection/intersection-loops";
 import { createAllIntersections } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
+import { Plane } from "./plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
 
 /**
@@ -107,49 +107,28 @@ export class PlaneManager {
    * Create the planes group.
    */
   createPlanesGroup(
-    gui: GUI,
     planeHelper: PlaneHelperWithCallbacks,
     arrowHelper: ArrowHelperWithCallbacks
   ): THREE.Group {
-    deleteFolder(gui, "PlanesGroup");
-    const folder = gui.addFolder("PlanesGroup");
-
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    Object.entries(this.planes).forEach(([k, p]) => {
-      children[k] = createPlaneGroup(
-        folder,
-        p,
-        planeHelper,
-        arrowHelper,
-        k,
-        this._updatePointsGroup
-      );
-      parent.add(children[k]);
-    });
-
+    // This function is used by createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
     // This function is used by addFreePlane() in src/cross-section/plane/plane-manager.ts.
     // This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
       const p = this.planes[k];
-      children[k] = createPlaneGroup(
-        folder,
-        p,
-        planeHelper,
-        arrowHelper,
-        k,
-        this._updatePointsGroup
-      );
+      children[k] = p.createGroup(k, planeHelper, arrowHelper);
       parent.add(children[k]);
     };
+    Object.keys(this.planes).map((k) => this._addPlaneGroup(k));
 
     // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
     this._removePlaneGroup = (k: string) => {
-      deleteFolder(folder, k);
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
+      Plane.removeCallbacks(k, planeHelper, arrowHelper);
     };
 
     return parent;
@@ -163,14 +142,10 @@ export class PlaneManager {
    * @param ms - The materials.
    */
   createPointsGroup(
-    gui: GUI,
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute,
     ms: Materials
   ): THREE.Group {
-    deleteFolder(gui, "PointsGroup");
-    const folder = gui.addFolder("PointsGroup");
-
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
@@ -196,17 +171,12 @@ export class PlaneManager {
         children[k].add(new THREE.Line(geometry, ms.points.line));
       });
       parent.add(children[k]);
-      {
-        const kFolder = folder.addFolder(k);
-        kFolder.add(children[k], "visible");
-      }
     };
     Object.keys(this.planes).map((k) => this._addPointsGroup(k));
 
     // This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
     // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
     this._removePointsGroup = (k: string) => {
-      deleteFolder(folder, k);
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
@@ -268,6 +238,7 @@ export class PlaneManager {
     function update() {
       updateEnabled();
       updateOptions();
+      updatePlanesFolder();
       updateCallback();
     }
     function updateEnabled() {
@@ -277,6 +248,12 @@ export class PlaneManager {
     function updateOptions() {
       cCK = cCK.options(pm.curveKeys).onChange(updateEnabled);
       cPK = cPK.options(pm.planeKeys).onChange(updateEnabled);
+    }
+    function updatePlanesFolder() {
+      deleteFolder(folder, null, "plane");
+      Object.entries(pm.planes).forEach(([k, p]) => {
+        p.setGUI(folder, `plane${k}`, k, pm._updatePointsGroup);
+      });
     }
   }
 

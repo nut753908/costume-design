@@ -156,6 +156,10 @@ if (!this.planeKeys.includes(key))
     pm2._addPointsGroup = pm1._addPointsGroup;
     pm2._removePointsGroup = pm1._removePointsGroup;
     pm2._updatePointsGroup = pm1._updatePointsGroup;
+    pm2.planes["[0] {FreePlane}"]._updateGroup =
+      pm1.planes["[0] {FreePlane}"]._updateGroup;
+    pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
+      pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -179,6 +183,10 @@ if (!this.planeKeys.includes(key))
     pm2._addPointsGroup = pm1._addPointsGroup;
     pm2._removePointsGroup = pm1._removePointsGroup;
     pm2._updatePointsGroup = pm1._updatePointsGroup;
+    pm2.planes["[0] {FreePlane}"]._updateGroup =
+      pm1.planes["[0] {FreePlane}"]._updateGroup;
+    pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
+      pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
     expect(pm1).toEqual(pm2);
   });
 
@@ -411,6 +419,8 @@ if (!this.planeKeys.includes(key))
       pm2._addPointsGroup = pm1._addPointsGroup;
       pm2._removePointsGroup = pm1._removePointsGroup;
       pm2._updatePointsGroup = pm1._updatePointsGroup;
+      pm2.planes["[0] {FreePlane}"]._updateGroup =
+        pm1.planes["[0] {FreePlane}"]._updateGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -426,6 +436,8 @@ if (!this.planeKeys.includes(key))
       pm2._addPointsGroup = pm1._addPointsGroup;
       pm2._removePointsGroup = pm1._removePointsGroup;
       pm2._updatePointsGroup = pm1._updatePointsGroup;
+      pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
+        pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

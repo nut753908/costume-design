@@ -67,8 +67,6 @@ async function init() {
     scene.add(createAxesHelper(folder));
     planeHelper = createPlaneHelper(folder);
     arrowHelper = createArrowHelper(folder);
-    scene.add(planeHelper);
-    scene.add(arrowHelper);
     ms = createMaterials(folder);
   }
 
@@ -92,9 +90,9 @@ async function init() {
 
     pm = new PlaneManager(lines);
     pm.setGUI(gui);
-    planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+    planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
-    pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+    pointsGroup = pm.createPointsGroup(positions, indices, ms);
     scene.add(pointsGroup);
   });
 
@@ -125,9 +123,9 @@ function loadLastUndo() {
 
   pm.fromJSON(obj.pm);
   pm.setGUI(gui);
-  planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+  planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
   scene.add(planesGroup);
-  pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+  pointsGroup = pm.createPointsGroup(positions, indices, ms);
   scene.add(pointsGroup);
 
   gui.load(obj.gui);

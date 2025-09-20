@@ -47,6 +47,7 @@ describe("FreePlane", () => {
       new THREE.Vector3(2, 3, 4)
     );
     const p2 = p1.clone();
+    p2._updateGroup = p1._updateGroup;
     expect(p1).toEqual(p2);
   });
 
@@ -56,6 +57,7 @@ describe("FreePlane", () => {
       new THREE.Vector3(2, 3, 4)
     );
     const p2 = new FreePlane().copy(p1);
+    p2._updateGroup = p1._updateGroup;
     expect(p1).toEqual(p2);
   });
 
@@ -83,6 +85,7 @@ describe("FreePlane", () => {
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
     );
+    p2._updateGroup = p1._updateGroup;
     expect(p1).toEqual(p2);
   });
 });
