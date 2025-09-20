@@ -48,9 +48,15 @@ export class FreePlane extends Plane {
    * Set GUI.
    *
    * @param name - The curve folder name used in the GUI.
+   * @param key - The key for the callback.
    * @param updateCallback - The callback that is invoked after updating plane.
    */
-  setGUI(gui: GUI, name = this.type, updateCallback = (_name: string) => {}) {
+  setGUI(
+    gui: GUI,
+    name = this.type,
+    key = this.type,
+    updateCallback = (_key: string) => {}
+  ) {
     const p = this;
 
     deleteFolder(gui, name);
@@ -68,11 +74,11 @@ export class FreePlane extends Plane {
       p.normal.normalize();
       p._updateGroup();
       nFolder.controllers.map((c) => c.updateDisplay());
-      updateCallback(name);
+      updateCallback(key);
     }
     function uP() /* updatePoint */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
-      updateCallback(name);
+      updateCallback(key);
     }
   }
 

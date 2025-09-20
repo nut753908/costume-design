@@ -250,10 +250,9 @@ export class PlaneManager {
       cPK = cPK.options(pm.planeKeys).onChange(updateEnabled);
     }
     function updatePlanesFolder() {
-      deleteFolder(folder, "planes");
-      const pFolder = folder.addFolder("planes");
+      deleteFolder(folder, null, "plane");
       Object.entries(pm.planes).forEach(([k, p]) => {
-        p.setGUI(pFolder, k, pm._updatePointsGroup);
+        p.setGUI(folder, `plane${k}`, k, pm._updatePointsGroup);
       });
     }
   }

@@ -89,13 +89,15 @@ export abstract class Plane {
   /**
    * Set GUI.
    *
-   * @param name - The cp folder name used in the GUI.
+   * @param name - The curve folder name used in the GUI.
+   * @param key - The key for the callback.
    * @param updateCallback - The callback that is invoked after updating plane.
    */
   abstract setGUI(
     gui: GUI,
     name: string,
-    updateCallback: (_name: string) => void
+    key: string,
+    updateCallback: (_key: string) => void
   ): void;
 
   /**
