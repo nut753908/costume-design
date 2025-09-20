@@ -185,8 +185,13 @@ export class IntersectionLoops {
     // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
     Object.keys(checklist).map((i) => iFolder.add(checklist, i).onChange(uI));
+    updateHidden();
 
+    function updateHidden() {
+      ils.selection === "some" ? iFolder.show() : iFolder.hide();
+    }
     function uS() /* updateSelection */ {
+      updateHidden();
       ils._updateGroup();
     }
     function uI(e: {
