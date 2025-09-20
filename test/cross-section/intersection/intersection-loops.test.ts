@@ -470,7 +470,7 @@ describe("IntersectionLoops", () => {
       });
 
       test('case "some"', () => {
-        const ils = new IntersectionLoops(intersectionLoops, "some", [0, 2]);
+        const ils = new IntersectionLoops(intersectionLoops, "some", [0, 2, 3]);
         expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
           intersectionLoops[2],

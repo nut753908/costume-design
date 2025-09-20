@@ -235,7 +235,7 @@ export class IntersectionLoops {
       case "excluding plane":
         return list.filter((v) => !v.inLoop(plane, positions));
       case "some":
-        return this.indices.map((i) => list[i]);
+        return this.indices.filter((i) => i < list.length).map((i) => list[i]);
     }
   }
 
