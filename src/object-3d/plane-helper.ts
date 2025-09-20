@@ -17,7 +17,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     obj.size,
     obj.color
   ) as PlaneHelperWithCallbacks;
-  // These function are set in createPlaneGroup() in src/object-3d/group/plane.ts.
+  // These function are set in createGroup() in src/cross-section/plane/plane.ts.
   helper._updateVisibleCallbacks = [];
   helper._updateSizeCallbacks = [];
 

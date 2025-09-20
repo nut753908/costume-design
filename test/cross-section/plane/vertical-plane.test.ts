@@ -60,6 +60,7 @@ describe("VerticalPlane", () => {
     ]);
     const p1 = new VerticalPlane(curve, 1);
     const p2 = p1.clone();
+    p2._updateGroup = p1._updateGroup;
     expect(p1).toEqual(p2);
   });
 
@@ -70,6 +71,7 @@ describe("VerticalPlane", () => {
     ]);
     const p1 = new VerticalPlane(curve, 1);
     const p2 = new VerticalPlane().copy(p1);
+    p2._updateGroup = p1._updateGroup;
     expect(p1).toEqual(p2);
   });
 
@@ -173,6 +175,7 @@ describe("VerticalPlane", () => {
         new THREE.Vector3(1, 2, 4),
       ]);
       const p2 = new VerticalPlane(curve, 1);
+      p2._updateGroup = p1._updateGroup;
       expect(p1).toEqual(p2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -184,6 +187,7 @@ describe("VerticalPlane", () => {
         new THREE.Vector3(1, 2, 4),
       ]);
       const p2 = new VerticalPlane(curve, 1);
+      p2._updateGroup = p1._updateGroup;
       expect(p1).toEqual(p2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

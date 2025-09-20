@@ -3,7 +3,6 @@ import { closeFolder, deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
-import { createPlaneGroup } from "src/object-3d/group/plane";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { createAllEdges } from "../centerline/edges";
@@ -107,13 +106,9 @@ export class PlaneManager {
    * Create the planes group.
    */
   createPlanesGroup(
-    gui: GUI,
     planeHelper: PlaneHelperWithCallbacks,
     arrowHelper: ArrowHelperWithCallbacks
   ): THREE.Group {
-    deleteFolder(gui, "PlanesGroup");
-    const folder = gui.addFolder("PlanesGroup");
-
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
@@ -122,21 +117,13 @@ export class PlaneManager {
     // This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
       const p = this.planes[k];
-      children[k] = createPlaneGroup(
-        folder,
-        p,
-        planeHelper,
-        arrowHelper,
-        k,
-        this._updatePointsGroup
-      );
+      children[k] = p.createGroup(planeHelper, arrowHelper);
       parent.add(children[k]);
     };
     Object.keys(this.planes).map((k) => this._addPlaneGroup(k));
 
     // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
     this._removePlaneGroup = (k: string) => {
-      deleteFolder(folder, k);
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
@@ -249,6 +236,7 @@ export class PlaneManager {
     function update() {
       updateEnabled();
       updateOptions();
+      updatePlanesFolder();
       updateCallback();
     }
     function updateEnabled() {
@@ -258,6 +246,13 @@ export class PlaneManager {
     function updateOptions() {
       cCK = cCK.options(pm.curveKeys).onChange(updateEnabled);
       cPK = cPK.options(pm.planeKeys).onChange(updateEnabled);
+    }
+    function updatePlanesFolder() {
+      deleteFolder(folder, "planes");
+      const pFolder = folder.addFolder("planes");
+      Object.entries(pm.planes).forEach(([k, p]) => {
+        p.setGUI(pFolder, k, pm._updatePointsGroup);
+      });
     }
   }
 

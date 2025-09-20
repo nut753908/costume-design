@@ -17,7 +17,7 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
     obj.length,
     obj.color
   ) as ArrowHelperWithCallbacks;
-  // These function are set in createPlaneGroup() in src/object-3d/group/plane.ts.
+  // These function are set in createGroup() in src/cross-section/plane/plane.ts.
   helper._updateVisibleCallbacks = [];
   helper._updateLengthCallbacks = [];
   {

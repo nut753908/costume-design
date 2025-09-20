@@ -90,7 +90,7 @@ async function init() {
 
     pm = new PlaneManager(lines);
     pm.setGUI(gui);
-    planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+    planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
     pointsGroup = pm.createPointsGroup(positions, indices, ms);
     scene.add(pointsGroup);
@@ -123,7 +123,7 @@ function loadLastUndo() {
 
   pm.fromJSON(obj.pm);
   pm.setGUI(gui);
-  planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
+  planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
   scene.add(planesGroup);
   pointsGroup = pm.createPointsGroup(positions, indices, ms);
   scene.add(pointsGroup);

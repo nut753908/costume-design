@@ -1,5 +1,6 @@
+import type GUI from "lil-gui";
+import { deleteFolder } from "src/main/gui";
 import * as THREE from "three";
-
 import { Plane } from "./plane";
 
 /**
@@ -43,6 +44,25 @@ export class VerticalPlane extends Plane {
     this.type = "VerticalPlane";
     this.curve = curve;
     this.u = u;
+  }
+
+  /**
+   * Set GUI.
+   *
+   * @param name - The curve folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating plane.
+   */
+  setGUI(gui: GUI, name = this.type, updateCallback = (_name: string) => {}) {
+    const p = this;
+
+    deleteFolder(gui, name);
+    const folder = gui.addFolder(name);
+    folder.add(p, "u", 0, 1, 0.01).onChange(uU);
+
+    function uU() /* updateU */ {
+      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      updateCallback(name);
+    }
   }
 
   /**

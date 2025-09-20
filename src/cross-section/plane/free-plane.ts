@@ -1,5 +1,6 @@
+import type GUI from "lil-gui";
+import { deleteFolder } from "src/main/gui";
 import * as THREE from "three";
-
 import { Plane } from "./plane";
 
 /**
@@ -41,6 +42,38 @@ export class FreePlane extends Plane {
     this.type = "FreePlane";
     this.normal = normal;
     this.point = point;
+  }
+
+  /**
+   * Set GUI.
+   *
+   * @param name - The curve folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating plane.
+   */
+  setGUI(gui: GUI, name = this.type, updateCallback = (_name: string) => {}) {
+    const p = this;
+
+    deleteFolder(gui, name);
+    const folder = gui.addFolder(name);
+    const nFolder = folder.addFolder("normal");
+    nFolder.add(p.normal, "x").step(0.01).onChange(uN);
+    nFolder.add(p.normal, "y").step(0.01).onChange(uN);
+    nFolder.add(p.normal, "z").step(0.01).onChange(uN);
+    const pFolder = folder.addFolder("point");
+    pFolder.add(p.point, "x").step(0.01).onChange(uP);
+    pFolder.add(p.point, "y").step(0.01).onChange(uP);
+    pFolder.add(p.point, "z").step(0.01).onChange(uP);
+
+    function uN() /* updateNormal */ {
+      p.normal.normalize();
+      p._updateGroup();
+      nFolder.controllers.map((c) => c.updateDisplay());
+      updateCallback(name);
+    }
+    function uP() /* updatePoint */ {
+      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      updateCallback(name);
+    }
   }
 
   /**
