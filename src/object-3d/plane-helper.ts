@@ -18,8 +18,8 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     obj.color
   ) as PlaneHelperWithCallbacks;
   // These function are set in createGroup() in src/cross-section/plane/plane.ts.
-  helper._updateVisibleCallbacks = [];
-  helper._updateSizeCallbacks = [];
+  helper._updateVisibleCallbacks = {};
+  helper._updateSizeCallbacks = {};
 
   {
     deleteFolder(gui, "PlaneHelper");
@@ -30,10 +30,10 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     folder.addColor(obj, "color").onChange(uC);
 
     function uV() /* updateVisible */ {
-      helper._updateVisibleCallbacks.map((c) => c(obj.visible));
+      Object.values(helper._updateVisibleCallbacks).map((c) => c(obj.visible));
     }
     function uS() /* updateSize */ {
-      helper._updateSizeCallbacks.map((c) => c(obj.size));
+      Object.values(helper._updateSizeCallbacks).map((c) => c(obj.size));
     }
     function uC() /* updateColor */ {
       helper.setColor(obj.color);
@@ -114,5 +114,8 @@ export class PlaneHelper extends THREE.PlaneHelper {
 }
 
 export type PlaneHelperWithCallbacks = PlaneHelper &
-  Record<"_updateVisibleCallbacks", ((visible: boolean) => void)[]> &
-  Record<"_updateSizeCallbacks", ((size: number) => void)[]>;
+  Record<
+    "_updateVisibleCallbacks",
+    { [k: string]: (visible: boolean) => void }
+  > &
+  Record<"_updateSizeCallbacks", { [k: string]: (size: number) => void }>;

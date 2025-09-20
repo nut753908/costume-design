@@ -13,6 +13,7 @@ import {
 import { createAllIntersectionLoops } from "../intersection/intersection-loops";
 import { createAllIntersections } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
+import { Plane } from "./plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
 
 /**
@@ -117,7 +118,7 @@ export class PlaneManager {
     // This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
     this._addPlaneGroup = (k: string) => {
       const p = this.planes[k];
-      children[k] = p.createGroup(planeHelper, arrowHelper);
+      children[k] = p.createGroup(k, planeHelper, arrowHelper);
       parent.add(children[k]);
     };
     Object.keys(this.planes).map((k) => this._addPlaneGroup(k));
@@ -127,6 +128,7 @@ export class PlaneManager {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
+      Plane.removeCallbacks(k, planeHelper, arrowHelper);
     };
 
     return parent;

@@ -23,9 +23,12 @@ export abstract class Plane {
   }
 
   /**
-   * Create group.
+   * Create a group for helpers.
+   *
+   * @param name - The name for each callback.
    */
   createGroup(
+    name: string,
     planeHelper: PlaneHelperWithCallbacks,
     arrowHelper: ArrowHelperWithCallbacks
   ): THREE.Group {
@@ -34,20 +37,20 @@ export abstract class Plane {
     const _planeHelper = planeHelper.clone();
     _planeHelper.size = planeHelper.size;
     // These functions are used by createPlaneHelper() in src/object-3d/plane-helper.ts.
-    planeHelper._updateVisibleCallbacks.push((v) => {
+    planeHelper._updateVisibleCallbacks[name] = (v) => {
       _planeHelper.visible = v;
-    });
-    planeHelper._updateSizeCallbacks.push((v) => {
+    };
+    planeHelper._updateSizeCallbacks[name] = (v) => {
       _planeHelper.size = v;
-    });
+    };
     group.add(_planeHelper);
 
     const _arrowHelper = arrowHelper.clone();
     // These functions are used by createArrowHelper() in src/object-3d/arrow-helper.ts.
-    arrowHelper._updateVisibleCallbacks.push((v) => {
+    arrowHelper._updateVisibleCallbacks[name] = (v) => {
       _arrowHelper.visible = v;
-    });
-    arrowHelper._updateLengthCallbacks.push((v) => _arrowHelper.setLength(v));
+    };
+    arrowHelper._updateLengthCallbacks[name] = (v) => _arrowHelper.setLength(v);
     group.add(_arrowHelper);
 
     // This function is used by setGUI() in src/cross-section/plane/free-plane.ts.
@@ -65,6 +68,22 @@ export abstract class Plane {
     this._updateGroup();
 
     return group;
+  }
+
+  /**
+   * Remove the callbacks for helpers.
+   *
+   * @param name - The name for callbacks.
+   */
+  static removeCallbacks(
+    name: string,
+    planeHelper: PlaneHelperWithCallbacks,
+    arrowHelper: ArrowHelperWithCallbacks
+  ) {
+    delete planeHelper._updateVisibleCallbacks[name];
+    delete planeHelper._updateSizeCallbacks[name];
+    delete arrowHelper._updateVisibleCallbacks[name];
+    delete arrowHelper._updateLengthCallbacks[name];
   }
 
   /**

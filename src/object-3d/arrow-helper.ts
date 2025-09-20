@@ -18,8 +18,8 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
     obj.color
   ) as ArrowHelperWithCallbacks;
   // These function are set in createGroup() in src/cross-section/plane/plane.ts.
-  helper._updateVisibleCallbacks = [];
-  helper._updateLengthCallbacks = [];
+  helper._updateVisibleCallbacks = {};
+  helper._updateLengthCallbacks = {};
   {
     deleteFolder(gui, "THREE.ArrowHelper");
     const folder = gui.addFolder("THREE.ArrowHelper");
@@ -29,10 +29,10 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
     folder.addColor(obj, "color").onChange(uC);
 
     function uV() /* updateVisible */ {
-      helper._updateVisibleCallbacks.map((c) => c(obj.visible));
+      Object.values(helper._updateVisibleCallbacks).map((c) => c(obj.visible));
     }
     function uL() /* updateLength */ {
-      helper._updateLengthCallbacks.map((c) => c(obj.length));
+      Object.values(helper._updateLengthCallbacks).map((c) => c(obj.length));
     }
     function uC() /* updateColor */ {
       helper.setColor(obj.color);
@@ -42,5 +42,8 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
 }
 
 export type ArrowHelperWithCallbacks = THREE.ArrowHelper &
-  Record<"_updateVisibleCallbacks", ((visible: boolean) => void)[]> &
-  Record<"_updateLengthCallbacks", ((length: number) => void)[]>;
+  Record<
+    "_updateVisibleCallbacks",
+    { [k: string]: (visible: boolean) => void }
+  > &
+  Record<"_updateLengthCallbacks", { [k: string]: (length: number) => void }>;
