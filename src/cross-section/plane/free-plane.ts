@@ -33,12 +33,14 @@ export class FreePlane extends Plane {
    *
    * @param normal - {@link FreePlane#normal}
    * @param point - {@link FreePlane#point}
+   * @param inverted - {@link Plane#inverted}
    */
   constructor(
     normal = new THREE.Vector3(0, 1, 0),
-    point = new THREE.Vector3(0, 0, 0)
+    point = new THREE.Vector3(0, 0, 0),
+    inverted = false
   ) {
-    super();
+    super(inverted);
     this.type = "FreePlane";
     this.normal = normal;
     this.point = point;
@@ -69,6 +71,7 @@ export class FreePlane extends Plane {
     pFolder.add(p.point, "x").step(0.01).onChange(uP);
     pFolder.add(p.point, "y").step(0.01).onChange(uP);
     pFolder.add(p.point, "z").step(0.01).onChange(uP);
+    folder.add(p, "inverted").onChange(uI);
 
     function uN() /* updateNormal */ {
       p.normal.normalize();
@@ -80,13 +83,16 @@ export class FreePlane extends Plane {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
       updateCallback(key);
     }
+    function uI() /* updateInverted */ {
+      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+    }
   }
 
   /**
    * Get the normal direction of the plane.
    */
   getNormal(): THREE.Vector3 {
-    return this.normal;
+    return this.inverted ? this.normal.clone().negate() : this.normal;
   }
 
   /**
@@ -114,6 +120,7 @@ export class FreePlane extends Plane {
   copy(source: FreePlane): this {
     this.normal.copy(source.normal);
     this.point.copy(source.point);
+    this.inverted = source.inverted;
 
     return this;
   }
@@ -128,6 +135,7 @@ export class FreePlane extends Plane {
       type: this.type,
       normal: this.normal.toArray(),
       point: this.point.toArray(),
+      inverted: this.inverted,
     };
   }
 
@@ -140,6 +148,7 @@ export class FreePlane extends Plane {
   fromJSON(json: FreePlaneJSON): this {
     this.normal.fromArray(json.normal);
     this.point.fromArray(json.point);
+    this.inverted = json.inverted;
 
     return this;
   }
@@ -155,4 +164,6 @@ export interface FreePlaneJSON {
   normal: THREE.Vector3Tuple;
   /** {@link FreePlane#point} */
   point: THREE.Vector3Tuple;
+  /** {@link Plane#inverted} */
+  inverted: boolean;
 }

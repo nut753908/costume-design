@@ -33,14 +33,16 @@ export class VerticalPlane extends Plane {
    *
    * @param curve - {@link VerticalPlane#curve}
    * @param u - {@link VerticalPlane#u}
+   * @param inverted - {@link Plane#inverted}
    */
   constructor(
     curve:
       | THREE.CurvePath<THREE.Vector3>
       | THREE.CatmullRomCurve3 = new THREE.CurvePath(),
-    u = 0
+    u = 0,
+    inverted = false
   ) {
-    super();
+    super(inverted);
     this.type = "VerticalPlane";
     this.curve = curve;
     this.u = u;
@@ -64,10 +66,14 @@ export class VerticalPlane extends Plane {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(p, "u", 0, 1, 0.01).onChange(uU);
+    folder.add(p, "inverted").onChange(uI);
 
     function uU() /* updateU */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
       updateCallback(key);
+    }
+    function uI() /* updateInverted */ {
+      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
     }
   }
 
@@ -75,7 +81,9 @@ export class VerticalPlane extends Plane {
    * Get the normal direction of the plane.
    */
   getNormal(): THREE.Vector3 {
-    return this.curve.getTangentAt(this.u);
+    return this.inverted
+      ? this.curve.getTangentAt(this.u).negate()
+      : this.curve.getTangentAt(this.u);
   }
 
   /**
@@ -103,6 +111,7 @@ export class VerticalPlane extends Plane {
   copy(source: VerticalPlane): this {
     this.curve = source.curve.clone();
     this.u = source.u;
+    this.inverted = source.inverted;
 
     return this;
   }
@@ -117,6 +126,7 @@ export class VerticalPlane extends Plane {
       type: this.type,
       curve: this.curve.toJSON(),
       u: this.u,
+      inverted: this.inverted,
     };
   }
 
@@ -143,6 +153,7 @@ export class VerticalPlane extends Plane {
       this.curve = new THREE.CurvePath<THREE.Vector3>();
     }
     this.u = json.u;
+    this.inverted = json.inverted;
 
     return this;
   }
@@ -158,4 +169,6 @@ export interface VerticalPlaneJSON {
   curve: THREE.CurvePathJSON | THREE.CurveJSON;
   /** {@link VerticalPlane#u} */
   u: number;
+  /** {@link Plane#inverted} */
+  inverted: boolean;
 }

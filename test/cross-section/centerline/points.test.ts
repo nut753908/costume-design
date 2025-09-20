@@ -1,4 +1,8 @@
-import { getCentroids, getPoint } from "src/cross-section/centerline/points";
+import {
+  getCentroid,
+  getCentroids,
+  getPoint,
+} from "src/cross-section/centerline/points";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -32,4 +36,15 @@ test("getCentroids()", () => {
     new THREE.Vector3(17.5, 18.5, 19.5),
   ];
   expect(getCentroids(points)).toEqual(expected);
+});
+
+test("getCentroid()", () => {
+  const points = [
+    new THREE.Vector3(1, 2, 3),
+    new THREE.Vector3(4, 5, 6),
+    new THREE.Vector3(7, 8, 9),
+    new THREE.Vector3(10, 11, 12),
+  ];
+  const expected = new THREE.Vector3(5.5, 6.5, 7.5);
+  expect(getCentroid(points)).toEqual(expected);
 });
