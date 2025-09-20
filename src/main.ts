@@ -92,7 +92,7 @@ async function init() {
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
     scene.add(planesGroup);
-    pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+    pointsGroup = pm.createPointsGroup(positions, indices, ms);
     scene.add(pointsGroup);
   });
 
@@ -125,7 +125,7 @@ function loadLastUndo() {
   pm.setGUI(gui);
   planesGroup = pm.createPlanesGroup(gui, planeHelper, arrowHelper);
   scene.add(planesGroup);
-  pointsGroup = pm.createPointsGroup(gui, positions, indices, ms);
+  pointsGroup = pm.createPointsGroup(positions, indices, ms);
   scene.add(pointsGroup);
 
   gui.load(obj.gui);

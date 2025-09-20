@@ -153,14 +153,10 @@ export class PlaneManager {
    * @param ms - The materials.
    */
   createPointsGroup(
-    gui: GUI,
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute,
     ms: Materials
   ): THREE.Group {
-    deleteFolder(gui, "PointsGroup");
-    const folder = gui.addFolder("PointsGroup");
-
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
@@ -186,17 +182,12 @@ export class PlaneManager {
         children[k].add(new THREE.Line(geometry, ms.points.line));
       });
       parent.add(children[k]);
-      {
-        const kFolder = folder.addFolder(k);
-        kFolder.add(children[k], "visible");
-      }
     };
     Object.keys(this.planes).map((k) => this._addPointsGroup(k));
 
     // This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
     // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
     this._removePointsGroup = (k: string) => {
-      deleteFolder(folder, k);
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
