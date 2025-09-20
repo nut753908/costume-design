@@ -5,6 +5,7 @@ import * as THREE from "three";
 
 export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   const obj = {
+    visible: true,
     normal: new THREE.Vector3(0, 0, 1),
     point: new THREE.Vector3(0, 0, 0),
     size: 0.3,
@@ -16,17 +17,21 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     obj.size,
     obj.color
   ) as PlaneHelperWithCallbacks;
-  helper.visible = false;
   // These function are set in createPlaneGroup() in src/object-3d/group/plane.ts.
+  helper._updateVisibleCallbacks = [];
   helper._updateSizeCallbacks = [];
 
   {
     deleteFolder(gui, "PlaneHelper");
     const folder = gui.addFolder("PlaneHelper");
     closeFolder(folder);
+    folder.add(obj, "visible").onChange(uV);
     folder.add(obj, "size").step(0.01).onChange(uS);
     folder.addColor(obj, "color").onChange(uC);
 
+    function uV() /* updateVisible */ {
+      helper._updateVisibleCallbacks.map((c) => c(obj.visible));
+    }
     function uS() /* updateSize */ {
       helper._updateSizeCallbacks.map((c) => c(obj.size));
     }
@@ -109,4 +114,5 @@ export class PlaneHelper extends THREE.PlaneHelper {
 }
 
 export type PlaneHelperWithCallbacks = PlaneHelper &
+  Record<"_updateVisibleCallbacks", ((visible: boolean) => void)[]> &
   Record<"_updateSizeCallbacks", ((size: number) => void)[]>;

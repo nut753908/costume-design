@@ -67,8 +67,6 @@ async function init() {
     scene.add(createAxesHelper(folder));
     planeHelper = createPlaneHelper(folder);
     arrowHelper = createArrowHelper(folder);
-    scene.add(planeHelper);
-    scene.add(arrowHelper);
     ms = createMaterials(folder);
   }
 

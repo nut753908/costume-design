@@ -28,32 +28,33 @@ export function createPlaneGroup(
   };
 
   const group = new THREE.Group();
-  group.visible = false;
 
   const _planeHelper = planeHelper.clone();
-  _planeHelper.visible = true;
   _planeHelper.normal = obj.normal;
   _planeHelper.point = obj.point;
   _planeHelper.size = planeHelper.size;
   // These functions are used by createPlaneHelper() in src/object-3d/plane-helper.ts.
+  planeHelper._updateVisibleCallbacks.push((v) => {
+    _planeHelper.visible = v;
+  });
   planeHelper._updateSizeCallbacks.push((v) => {
     _planeHelper.size = v;
   });
   group.add(_planeHelper);
 
   const _arrowHelper = arrowHelper.clone();
-  _arrowHelper.visible = true;
   _arrowHelper.setDirection(obj.normal);
   _arrowHelper.position.copy(obj.point);
   // These functions are used by createArrowHelper() in src/object-3d/arrow-helper.ts.
+  arrowHelper._updateVisibleCallbacks.push((v) => {
+    _arrowHelper.visible = v;
+  });
   arrowHelper._updateLengthCallbacks.push((v) => _arrowHelper.setLength(v));
   group.add(_arrowHelper);
 
   {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
-    folder.add(group, "visible");
-
     let nFolder: GUI;
     if (plane instanceof FreePlane) {
       nFolder = folder.addFolder("normal");
