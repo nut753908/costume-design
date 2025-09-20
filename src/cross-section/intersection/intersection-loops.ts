@@ -113,6 +113,13 @@ export class IntersectionLoops {
   }
 
   /**
+   * Get the strings that can be used as a selection.
+   */
+  static getSelections(): IntersectionLoops["selection"][] {
+    return ["all", "including plane", "excluding plane", "some"];
+  }
+
+  /**
    * Returns a new intersection loops with copied values from this instance.
    *
    * @return  A clone of this instance.

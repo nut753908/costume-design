@@ -372,6 +372,13 @@ describe("IntersectionLoops", () => {
     expect(ils.indices).toEqual([0]);
   });
 
+  test("getSelections()", () => {
+    expect(IntersectionLoops.getSelections()).toContain("all");
+    expect(IntersectionLoops.getSelections()).toContain("including plane");
+    expect(IntersectionLoops.getSelections()).toContain("excluding plane");
+    expect(IntersectionLoops.getSelections()).toContain("some");
+  });
+
   test("clone()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
