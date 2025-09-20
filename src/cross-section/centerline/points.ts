@@ -31,10 +31,10 @@ export function getCentroids(points: THREE.Vector3[][]): THREE.Vector3[] {
 /**
  * Get the centroid.
  *
- * @param points - The points within an edge loop.
+ * @param points - The points within an edge loop or an intersection loop.
  * @return  The centroid.
  */
-function getCentroid(points: THREE.Vector3[]): THREE.Vector3 {
+export function getCentroid(points: THREE.Vector3[]): THREE.Vector3 {
   const centroid = new THREE.Vector3(0, 0, 0);
   points.map((p) => centroid.add(p));
   centroid.divideScalar(points.length);

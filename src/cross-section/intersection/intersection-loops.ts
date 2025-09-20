@@ -4,6 +4,7 @@ import { deleteFolder } from "src/main/gui";
 import { disposeGroup } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
+import { getCentroid } from "../centerline/points";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
 import type { EdgeIntersection } from "./edge-intersection";
@@ -67,6 +68,28 @@ export function createAllIntersectionLoops(
     iLoops.push(new IntersectionLoop(iLoop, !opened));
   }
   return iLoops;
+}
+
+/**
+ * Sort the intersection loops in y, z, x order of the centroid.
+ *
+ * @param intersectionLoops - The intersection loops with a plane.
+ * @param positions - The results of geometry.getAttribute("position").
+ * @return The sorted intersection loops.
+ */
+export function sortIntersectionLoops(
+  intersectionLoops: IntersectionLoop[],
+  positions: THREE.BufferAttribute
+): IntersectionLoop[] {
+  return intersectionLoops
+    .map<[IntersectionLoop, THREE.Vector3]>((il) => [
+      il,
+      getCentroid(il.getPoints(positions)),
+    ])
+    .sort((a, b) => (a[1].y < b[1].y ? -1 : a[1].y > b[1].y ? 1 : 0))
+    .sort((a, b) => (a[1].z < b[1].z ? -1 : a[1].z > b[1].z ? 1 : 0))
+    .sort((a, b) => (a[1].x < b[1].x ? -1 : a[1].x > b[1].x ? 1 : 0))
+    .map(([il, _]) => il);
 }
 
 /**
