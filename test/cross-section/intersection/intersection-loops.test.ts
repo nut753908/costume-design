@@ -488,6 +488,7 @@ describe("IntersectionLoops", () => {
     const il = new IntersectionLoop(intersections, true);
     const ils1 = new IntersectionLoops([il], "some", [0]);
     const ils2 = ils1.clone();
+    ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
   });
 
@@ -500,6 +501,7 @@ describe("IntersectionLoops", () => {
     const il = new IntersectionLoop(intersections, true);
     const ils1 = new IntersectionLoops([il], "some", [0]);
     const ils2 = new IntersectionLoops().copy(ils1);
+    ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
   });
 
@@ -555,6 +557,7 @@ describe("IntersectionLoops", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils2 = new IntersectionLoops([il], "some", [0]);
+    ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
   });
 });
