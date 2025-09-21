@@ -90,14 +90,6 @@ export class CrossSectionManager {
     // This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
     // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
     this._addGroup = (k: string) => {
-      if (!(k in this.crossSections)) {
-        console.error(`\
-!(k in this.crossSections)
-- k: ${k}
-- this.crossSections: ${JSON.stringify(this.crossSections)}
-`);
-        return;
-      }
       const p = this.crossSections[k].plane;
       const ils = this.crossSections[k].intersectionLoopPicker;
       children[k] = ils.createGroup(p, positions, ms);
