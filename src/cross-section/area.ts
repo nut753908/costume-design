@@ -143,7 +143,7 @@ export class Area {
 
   // TODO: test
   /**
-   * Create a plane to an intersection loop picker converter.
+   * Create a plane to intersection loop picker converter.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
