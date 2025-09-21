@@ -157,9 +157,6 @@ if (!this.planeKeys.includes(key))
       pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
     pm2._addPlaneGroup = pm1._addPlaneGroup;
     pm2._removePlaneGroup = pm1._removePlaneGroup;
-    pm2._addPointsGroup = pm1._addPointsGroup;
-    pm2._removePointsGroup = pm1._removePointsGroup;
-    pm2._updatePointsGroup = pm1._updatePointsGroup;
     pm2._addCrossSection = pm1._addCrossSection;
     pm2._removeCrossSection = pm1._removeCrossSection;
     pm2._updateCrossSection = pm1._updateCrossSection;
@@ -187,9 +184,6 @@ if (!this.planeKeys.includes(key))
       pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
     pm2._addPlaneGroup = pm1._addPlaneGroup;
     pm2._removePlaneGroup = pm1._removePlaneGroup;
-    pm2._addPointsGroup = pm1._addPointsGroup;
-    pm2._removePointsGroup = pm1._removePointsGroup;
-    pm2._updatePointsGroup = pm1._updatePointsGroup;
     pm2._addCrossSection = pm1._addCrossSection;
     pm2._removeCrossSection = pm1._removeCrossSection;
     pm2._updateCrossSection = pm1._updateCrossSection;
@@ -378,9 +372,6 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2._addCrossSection = pm1._addCrossSection;
       pm2._removeCrossSection = pm1._removeCrossSection;
       pm2._updateCrossSection = pm1._updateCrossSection;
@@ -395,9 +386,6 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2._addCrossSection = pm1._addCrossSection;
       pm2._removeCrossSection = pm1._removeCrossSection;
       pm2._updateCrossSection = pm1._updateCrossSection;
@@ -433,9 +421,6 @@ if (!this.planeKeys.includes(key))
         pm1.planes["[0] {FreePlane}"]._updateGroup;
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2._addCrossSection = pm1._addCrossSection;
       pm2._removeCrossSection = pm1._removeCrossSection;
       pm2._updateCrossSection = pm1._updateCrossSection;
@@ -453,9 +438,6 @@ if (!this.planeKeys.includes(key))
         pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2._addCrossSection = pm1._addCrossSection;
       pm2._removeCrossSection = pm1._removeCrossSection;
       pm2._updateCrossSection = pm1._updateCrossSection;

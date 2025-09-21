@@ -48,7 +48,6 @@ let indices: THREE.BufferAttribute;
 
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
-// let pointsGroup: THREE.Group;
 
 let area: Area;
 let ilpsGroup: THREE.Group;
@@ -106,8 +105,6 @@ async function init() {
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
-    // pointsGroup = pm.createPointsGroup(positions, indices, ms);
-    // scene.add(pointsGroup);
 
     area = new Area(Area.createPlaneToIlp(positions, indices));
     pm._addCrossSection = area.addCrossSection.bind(area);
@@ -143,8 +140,6 @@ function loadLastUndo() {
 
   scene.remove(planesGroup);
   disposeGroup(planesGroup);
-  // scene.remove(pointsGroup);
-  // disposeGroup(pointsGroup);
 
   scene.remove(ilpsGroup);
   disposeGroup(ilpsGroup);
@@ -155,8 +150,6 @@ function loadLastUndo() {
   pm.setGUI(gui);
   planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
   scene.add(planesGroup);
-  // pointsGroup = pm.createPointsGroup(positions, indices, ms);
-  // scene.add(pointsGroup);
 
   area.fromJSON(obj.area);
   pm._addCrossSection = area.addCrossSection.bind(area);
