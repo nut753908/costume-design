@@ -51,9 +51,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addGroup = csm1._addGroup;
-    csm2._removeGroup = csm1._removeGroup;
-    csm2._updateGroup = csm1._updateGroup;
+    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
+    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
+    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -78,9 +78,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addGroup = csm1._addGroup;
-    csm2._removeGroup = csm1._removeGroup;
-    csm2._updateGroup = csm1._updateGroup;
+    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
+    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
+    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -168,9 +168,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addGroup = csm1._addGroup;
-    csm2._removeGroup = csm1._removeGroup;
-    csm2._updateGroup = csm1._updateGroup;
+    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
+    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
+    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
     expect(csm1).toEqual(csm2);
   });
 });
