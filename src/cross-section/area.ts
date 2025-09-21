@@ -71,6 +71,7 @@ export class Area {
 
   /**
    * Secret field.
+   * This function is used by setGUI() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
    * This function is used by removeCrossSection() in src/cross-section/area.ts.
    * Set it in advance using setGUI() in src/cross-section/area.ts.
@@ -140,6 +141,7 @@ export class Area {
    * @param name - The area folder name used in the GUI.
    */
   setGUI(gui: GUI, name = "Area") {
+    // This function is used by setGUI() in src/cross-section/area.ts.
     // This function is used by addCrossSection() in src/cross-section/area.ts.
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
     this._updateGUI = () => {

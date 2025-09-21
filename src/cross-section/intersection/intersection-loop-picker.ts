@@ -46,6 +46,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Secret field.
+   * This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
    * This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
    * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
    */
@@ -82,6 +83,7 @@ export class IntersectionLoopPicker {
   ): THREE.Group {
     const group = new THREE.Group();
 
+    // This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
     // This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
     this._updateGroup = () => {
       disposeGroup(group);
