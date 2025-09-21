@@ -42,6 +42,11 @@ export class Area {
   thickness: number;
 
   /**
+   * The plane to intersection loop picker converter.
+   */
+  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
+
+  /**
    * Secret field.
    * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
@@ -64,12 +69,12 @@ export class Area {
    */
   _updateIlpGroup: (k: string) => void;
 
-  // TODO: add planeToIlpConverter
   /**
    * Constructs a new area.
    *
    * @param crossSections - {@link Area#crossSections}
    * @param thickness - {@link Area#thickness}
+   * @param planeToIlp - {@link Area#planeToIlp}
    */
   constructor(
     crossSections: {
@@ -78,10 +83,12 @@ export class Area {
         ilp: IntersectionLoopPicker;
       };
     } = {},
-    thickness = 0.001
+    thickness = 0.001,
+    planeToIlp = () => new IntersectionLoopPicker()
   ) {
     this.crossSections = crossSections;
     this.thickness = thickness;
+    this.planeToIlp = planeToIlp;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
     this._updateIlpGroup = () => {};
@@ -148,7 +155,7 @@ export class Area {
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIlpConverter(
+  static createPlaneToIlp(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker {
@@ -175,12 +182,8 @@ export class Area {
    *
    * @param key - The key in this.crossSections.
    */
-  addCrossSection(
-    key: string,
-    plane: FreePlane | VerticalPlane,
-    ilp: IntersectionLoopPicker
-  ) {
-    this.crossSections[key] = { plane, ilp };
+  addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
+    this.crossSections[key] = { plane, ilp: this.planeToIlp(plane) };
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
