@@ -1,5 +1,5 @@
 import type GUI from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
+import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
@@ -200,15 +200,8 @@ export class PlaneManager {
    * Set GUI.
    *
    * @param name - The curve folder name used in the GUI.
-   * @param updateCallback - The callback that is invoked after updating plane manager.
-   * @param isClose - Whether to close the folder.
    */
-  setGUI(
-    gui: GUI,
-    name = "PlaneManager",
-    updateCallback = () => {},
-    isClose = false
-  ) {
+  setGUI(gui: GUI, name = "PlaneManager") {
     const pm = this;
 
     const obj = {
@@ -238,13 +231,11 @@ export class PlaneManager {
     let cPK = folder.add(obj, "planeKey").name("removePlane key");
     updateEnabled();
     updateOptions();
-    if (isClose) closeFolder(folder);
 
     function update() {
       updateEnabled();
       updateOptions();
       updatePlanesFolder();
-      updateCallback();
     }
     function updateEnabled() {
       pm.curveKeys.includes(obj.curveKey) ? cAVP.enable() : cAVP.disable();
