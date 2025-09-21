@@ -1,16 +1,16 @@
-import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
-import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
-import { IntersectionLoops } from "src/cross-section/intersection/intersection-loops";
 import {
   CrossSectionManager,
   type CrossSectionManagerJSON,
-} from "src/cross-section/intersection/intersection-loops-manager";
+} from "src/cross-section/cross-section-manager";
+import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
+import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
+import { IntersectionLoops } from "src/cross-section/intersection/intersection-loops";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
-describe("IntersectionLoopsManager", () => {
+describe("CrossSectionManager", () => {
   test("constructor()", () => {
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),

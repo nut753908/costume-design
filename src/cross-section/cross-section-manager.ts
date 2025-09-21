@@ -3,16 +3,19 @@ import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { createAllEdges } from "../centerline/edges";
+import { createAllEdges } from "./centerline/edges";
+import {
+  convertToTriangularPolygonIndices,
+  createIndicesMap,
+} from "./intersection/indices";
 import {
   createAllIntersectionLoops,
   IntersectionLoops,
   type IntersectionLoopsJSON,
-} from "../intersection/intersection-loops";
-import { FreePlane, type FreePlaneJSON } from "../plane/free-plane";
-import { VerticalPlane, type VerticalPlaneJSON } from "../plane/vertical-plane";
-import { convertToTriangularPolygonIndices, createIndicesMap } from "./indices";
-import { createAllIntersections } from "./intersections";
+} from "./intersection/intersection-loops";
+import { createAllIntersections } from "./intersection/intersections";
+import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
+import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
 
 /**
  * A class for managing the increase/decrease of cross section.
