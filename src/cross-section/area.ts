@@ -8,6 +8,7 @@ import {
   convertToTriangularPolygonIndices,
   createIndicesMap,
 } from "./intersection/indices";
+import type { IntersectionLoop } from "./intersection/intersection-loop";
 import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
@@ -27,9 +28,9 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
  */
 export class Area {
   /**
-   * The plane to intersection loop picker converter.
+   * The plane to all intersection loops converter.
    */
-  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
+  planeToAllIls: (plane: FreePlane | VerticalPlane) => IntersectionLoop[];
 
   /**
    * The cross sections dividing the area.
@@ -80,16 +81,16 @@ export class Area {
   /**
    * Constructs a new area.
    *
-   * @param planeToIlp - {@link Area#planeToIlp}
+   * @param planeToAllIls - {@link Area#planeToAllIls}
    * @param crossSections - {@link Area#crossSections}
    * @param thickness - {@link Area#thickness}
    */
   constructor(
-    planeToIlp: Area["planeToIlp"] = () => new IntersectionLoopPicker(),
+    planeToAllIls: Area["planeToAllIls"] = () => [],
     crossSections: Area["crossSections"] = {},
     thickness = 0.001
   ) {
-    this.planeToIlp = planeToIlp;
+    this.planeToAllIls = planeToAllIls;
     this.crossSections = crossSections;
     this.thickness = thickness;
     this._addIlpGroup = () => {};
@@ -163,15 +164,15 @@ export class Area {
   }
 
   /**
-   * Create a plane to intersection loop picker converter.
+   * Create a plane to all intersection loops converter.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIlp(
+  static createPlaneToAllIls(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
-  ): (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker {
+  ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
     const indicesMap = createIndicesMap(triangularPolygonIndices);
@@ -181,11 +182,7 @@ export class Area {
         allEdges,
         positions
       );
-      const allIntersectionLoops = createAllIntersectionLoops(
-        indicesMap,
-        allIntersections
-      );
-      return new IntersectionLoopPicker(allIntersectionLoops);
+      return createAllIntersectionLoops(indicesMap, allIntersections);
     };
   }
 
@@ -195,7 +192,10 @@ export class Area {
    * @param key - The key in this.crossSections.
    */
   addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
-    this.crossSections[key] = { plane, ilp: this.planeToIlp(plane) };
+    this.crossSections[key] = {
+      plane,
+      ilp: new IntersectionLoopPicker(this.planeToAllIls(plane)),
+    };
     this._addGUI(key); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
@@ -219,8 +219,7 @@ export class Area {
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     this.crossSections[key].plane = plane;
-    this.crossSections[key].ilp.intersectionLoops =
-      this.planeToIlp(plane).intersectionLoops;
+    this.crossSections[key].ilp.intersectionLoops = this.planeToAllIls(plane);
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
