@@ -21,8 +21,9 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area = new Area(crossSections);
+    const area = new Area(crossSections, 0.002);
     expect(area.crossSections).toEqual(crossSections);
+    expect(area.thickness).toEqual(0.002);
   });
 
   test("clone()", () => {
@@ -38,7 +39,7 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area1 = new Area(crossSections);
+    const area1 = new Area(crossSections, 0.002);
     const area2 = area1.clone();
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
@@ -63,7 +64,7 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area1 = new Area(crossSections);
+    const area1 = new Area(crossSections, 0.002);
     const area2 = new Area().copy(area1);
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
@@ -116,6 +117,7 @@ describe("Area", () => {
         },
       },
     },
+    thickness: 0.002,
   };
 
   test("toJSON()", () => {
@@ -131,7 +133,7 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const json1 = new Area(crossSections).toJSON();
+    const json1 = new Area(crossSections, 0.002).toJSON();
     const json2: AreaJSON = _json;
     expect(json1).toEqual(json2);
   });
@@ -150,7 +152,7 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area2 = new Area(crossSections);
+    const area2 = new Area(crossSections, 0.002);
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =

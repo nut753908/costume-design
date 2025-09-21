@@ -37,6 +37,11 @@ export class Area {
   };
 
   /**
+   * The thickness of the area.
+   */
+  thickness: number;
+
+  /**
    * Secret field.
    * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
@@ -64,6 +69,7 @@ export class Area {
    * Constructs a new area.
    *
    * @param crossSections - {@link Area#crossSections}
+   * @param thickness - {@link Area#thickness}
    */
   constructor(
     crossSections: {
@@ -71,9 +77,11 @@ export class Area {
         plane: FreePlane | VerticalPlane;
         ilp: IntersectionLoopPicker;
       };
-    } = {}
+    } = {},
+    thickness = 0.001
   ) {
     this.crossSections = crossSections;
+    this.thickness = thickness;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
     this._updateIlpGroup = () => {};
@@ -126,6 +134,7 @@ export class Area {
   setGUI(gui: GUI, name = "Area") {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
+    folder.add(this, "thickness", 0, 1, 0.0001);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
       cs.ilp.setGUI(folder, `ilp${k}`, k, this._updateIlpGroup);
@@ -206,6 +215,7 @@ export class Area {
       plane: v.plane.clone(),
       ilp: v.ilp.clone(),
     }));
+    this.thickness = source.thickness;
 
     return this;
   }
@@ -221,6 +231,7 @@ export class Area {
         plane: v.plane.toJSON(),
         ilp: v.ilp.toJSON(),
       })),
+      thickness: this.thickness,
     };
   }
 
@@ -249,6 +260,7 @@ export class Area {
         ilp: new IntersectionLoopPicker().fromJSON(v.ilp),
       };
     });
+    this.thickness = json.thickness;
 
     return this;
   }
@@ -265,4 +277,6 @@ export interface AreaJSON {
       ilp: IntersectionLoopPickerJSON;
     };
   };
+  /** {@link Area#thickness} */
+  thickness: number;
 }
