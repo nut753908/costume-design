@@ -93,7 +93,7 @@ export function sortIntersectionLoops(
 }
 
 /**
- * The intersection loop selector.
+ * The intersection loop picker.
  *
  * ```js
  * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
@@ -106,10 +106,10 @@ export function sortIntersectionLoops(
  *   new VertexIntersection( 2, true ),
  * ];
  * const intersectionLoop = new IntersectionLoop( intersections, true );
- * const intersectionLoopSelector = new IntersectionLoopSelector( [ intersectionLoop ], "all", [] );
+ * const intersectionLoopPicker = new IntersectionLoopPicker( [ intersectionLoop ], "all", [] );
  * ```
  */
-export class IntersectionLoopSelector {
+export class IntersectionLoopPicker {
   /**
    * The intersection loops.
    */
@@ -134,15 +134,15 @@ export class IntersectionLoopSelector {
   _updateGroup: () => void;
 
   /**
-   * Constructs a new intersection loop selector.
+   * Constructs a new intersection loop picker.
    *
-   * @param intersectionLoops - {@link IntersectionLoopSelector#intersectionLoops}
-   * @param selection - {@link IntersectionLoopSelector#selection}
-   * @param indices - {@link IntersectionLoopSelector#indices}
+   * @param intersectionLoops - {@link IntersectionLoopPicker#intersectionLoops}
+   * @param selection - {@link IntersectionLoopPicker#selection}
+   * @param indices - {@link IntersectionLoopPicker#indices}
    */
   constructor(
     intersectionLoops: IntersectionLoop[] = [],
-    selection: IntersectionLoopSelector["selection"] = "all",
+    selection: IntersectionLoopPicker["selection"] = "all",
     indices: number[] = []
   ) {
     this.intersectionLoops = intersectionLoops;
@@ -185,14 +185,14 @@ export class IntersectionLoopSelector {
   /**
    * Set GUI.
    *
-   * @param name - The intersection loop selector folder name used in the GUI.
+   * @param name - The intersection loop picker folder name used in the GUI.
    * @param key - The key for the callback.
-   * @param updateCallback - The callback that is invoked after updating intersection loop selector.
+   * @param updateCallback - The callback that is invoked after updating intersection loop picker.
    */
   setGUI(
     gui: GUI,
-    name = "IntersectionLoopSelector",
-    key = "IntersectionLoopSelector",
+    name = "IntersectionLoopPicker",
+    key = "IntersectionLoopPicker",
     updateCallback = (_key: string) => {}
   ) {
     const ils = this;
@@ -210,7 +210,7 @@ export class IntersectionLoopSelector {
     const folder = gui.addFolder(name);
     folder
       .add(ils, "selection")
-      .options(IntersectionLoopSelector.getSelections())
+      .options(IntersectionLoopPicker.getSelections())
       .onChange(uS);
     // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
@@ -245,7 +245,7 @@ export class IntersectionLoopSelector {
   /**
    * Get the strings that can be used as a selection.
    */
-  static getSelections(): IntersectionLoopSelector["selection"][] {
+  static getSelections(): IntersectionLoopPicker["selection"][] {
     return ["all", "including plane", "excluding plane", "some"];
   }
 
@@ -272,21 +272,21 @@ export class IntersectionLoopSelector {
   }
 
   /**
-   * Returns a new intersection loop selector with copied values from this instance.
+   * Returns a new intersection loop picker with copied values from this instance.
    *
    * @return  A clone of this instance.
    */
-  clone(): IntersectionLoopSelector {
-    return new IntersectionLoopSelector().copy(this);
+  clone(): IntersectionLoopPicker {
+    return new IntersectionLoopPicker().copy(this);
   }
 
   /**
-   * Copies the values of the given intersection loop selector to this instance.
+   * Copies the values of the given intersection loop picker to this instance.
    *
-   * @param source - The intersection loop selector to copy.
-   * @return  A reference to this intersection loop selector.
+   * @param source - The intersection loop picker to copy.
+   * @return  A reference to this intersection loop picker.
    */
-  copy(source: IntersectionLoopSelector): this {
+  copy(source: IntersectionLoopPicker): this {
     this.intersectionLoops = source.intersectionLoops.map((il) => il.clone());
     this.selection = source.selection;
     this.indices = source.indices;
@@ -295,11 +295,11 @@ export class IntersectionLoopSelector {
   }
 
   /**
-   * Serializes the intersection loop selector into JSON.
+   * Serializes the intersection loop picker into JSON.
    *
-   * @return  A JSON object representing the serialized intersection loop selector.
+   * @return  A JSON object representing the serialized intersection loop picker.
    */
-  toJSON(): IntersectionLoopSelectorJSON {
+  toJSON(): IntersectionLoopPickerJSON {
     return {
       intersectionLoops: this.intersectionLoops.map((il) => il.toJSON()),
       selection: this.selection,
@@ -308,12 +308,12 @@ export class IntersectionLoopSelector {
   }
 
   /**
-   * Deserializes the intersection loop selector from the given JSON.
+   * Deserializes the intersection loop picker from the given JSON.
    *
-   * @param json - The JSON holding the serialized intersection loop selector.
-   * @return  A reference to this intersection loop selector.
+   * @param json - The JSON holding the serialized intersection loop picker.
+   * @return  A reference to this intersection loop picker.
    */
-  fromJSON(json: IntersectionLoopSelectorJSON): this {
+  fromJSON(json: IntersectionLoopPickerJSON): this {
     this.intersectionLoops = json.intersectionLoops.map((il) =>
       new IntersectionLoop().fromJSON(il)
     );
@@ -325,13 +325,13 @@ export class IntersectionLoopSelector {
 }
 
 /**
- * The {@link IntersectionLoopSelector} JSON interface.
+ * The {@link IntersectionLoopPicker} JSON interface.
  */
-export interface IntersectionLoopSelectorJSON {
-  /** {@link IntersectionLoopSelector#intersectionLoops} */
+export interface IntersectionLoopPickerJSON {
+  /** {@link IntersectionLoopPicker#intersectionLoops} */
   intersectionLoops: IntersectionLoopJSON[];
-  /** {@link IntersectionLoopSelector#selection} */
-  selection: IntersectionLoopSelector["selection"];
-  /** {@link IntersectionLoopSelector#indices} */
+  /** {@link IntersectionLoopPicker#selection} */
+  selection: IntersectionLoopPicker["selection"];
+  /** {@link IntersectionLoopPicker#indices} */
   indices: number[];
 }

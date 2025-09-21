@@ -4,7 +4,7 @@ import {
 } from "src/cross-section/cross-section-manager";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
-import { IntersectionLoopSelector } from "src/cross-section/intersection/intersection-loops";
+import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loops";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
@@ -22,9 +22,9 @@ describe("CrossSectionManager", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopSelector([il], "some", [0]);
+    const ils = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopSelector: ils },
+      "[0] {FreePlane}": { plane, intersectionLoopPicker: ils },
     };
     const csm = new CrossSectionManager(crossSections);
     expect(csm.crossSections).toEqual(crossSections);
@@ -41,20 +41,16 @@ describe("CrossSectionManager", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopSelector([il], "some", [0]);
+    const ils = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopSelector: ils },
+      "[0] {FreePlane}": { plane, intersectionLoopPicker: ils },
     };
     const csm1 = new CrossSectionManager(crossSections);
     const csm2 = csm1.clone();
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections[
-      "[0] {FreePlane}"
-    ].intersectionLoopSelector._updateGroup =
-      csm1.crossSections[
-        "[0] {FreePlane}"
-      ].intersectionLoopSelector._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
     csm2._addGroup = csm1._addGroup;
     csm2._removeGroup = csm1._removeGroup;
     csm2._updateGroup = csm1._updateGroup;
@@ -72,20 +68,16 @@ describe("CrossSectionManager", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopSelector([il], "some", [0]);
+    const ils = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopSelector: ils },
+      "[0] {FreePlane}": { plane, intersectionLoopPicker: ils },
     };
     const csm1 = new CrossSectionManager(crossSections);
     const csm2 = new CrossSectionManager().copy(csm1);
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections[
-      "[0] {FreePlane}"
-    ].intersectionLoopSelector._updateGroup =
-      csm1.crossSections[
-        "[0] {FreePlane}"
-      ].intersectionLoopSelector._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
     csm2._addGroup = csm1._addGroup;
     csm2._removeGroup = csm1._removeGroup;
     csm2._updateGroup = csm1._updateGroup;
@@ -101,7 +93,7 @@ describe("CrossSectionManager", () => {
           point: [2, 3, 4],
           inverted: false,
         },
-        intersectionLoopSelector: {
+        intersectionLoopPicker: {
           intersectionLoops: [
             {
               intersections: [
@@ -146,9 +138,9 @@ describe("CrossSectionManager", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopSelector([il], "some", [0]);
+    const ils = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopSelector: ils },
+      "[0] {FreePlane}": { plane, intersectionLoopPicker: ils },
     };
     const json1 = new CrossSectionManager(crossSections).toJSON();
     const json2: CrossSectionManagerJSON = _json;
@@ -167,19 +159,15 @@ describe("CrossSectionManager", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopSelector([il], "some", [0]);
+    const ils = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopSelector: ils },
+      "[0] {FreePlane}": { plane, intersectionLoopPicker: ils },
     };
     const csm2 = new CrossSectionManager(crossSections);
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections[
-      "[0] {FreePlane}"
-    ].intersectionLoopSelector._updateGroup =
-      csm1.crossSections[
-        "[0] {FreePlane}"
-      ].intersectionLoopSelector._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
     csm2._addGroup = csm1._addGroup;
     csm2._removeGroup = csm1._removeGroup;
     csm2._updateGroup = csm1._updateGroup;
