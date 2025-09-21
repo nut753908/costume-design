@@ -51,11 +51,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
-    csm2._removeIntersectionLoopPickerGroup =
-      csm1._removeIntersectionLoopPickerGroup;
-    csm2._updateIntersectionLoopPickerGroup =
-      csm1._updateIntersectionLoopPickerGroup;
+    csm2._addIlpGroup = csm1._addIlpGroup;
+    csm2._removeIlpGroup = csm1._removeIlpGroup;
+    csm2._updateIlpGroup = csm1._updateIlpGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -80,11 +78,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
-    csm2._removeIntersectionLoopPickerGroup =
-      csm1._removeIntersectionLoopPickerGroup;
-    csm2._updateIntersectionLoopPickerGroup =
-      csm1._updateIntersectionLoopPickerGroup;
+    csm2._addIlpGroup = csm1._addIlpGroup;
+    csm2._removeIlpGroup = csm1._removeIlpGroup;
+    csm2._updateIlpGroup = csm1._updateIlpGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -172,11 +168,9 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
-    csm2._removeIntersectionLoopPickerGroup =
-      csm1._removeIntersectionLoopPickerGroup;
-    csm2._updateIntersectionLoopPickerGroup =
-      csm1._updateIntersectionLoopPickerGroup;
+    csm2._addIlpGroup = csm1._addIlpGroup;
+    csm2._removeIlpGroup = csm1._removeIlpGroup;
+    csm2._updateIlpGroup = csm1._updateIlpGroup;
     expect(csm1).toEqual(csm2);
   });
 });

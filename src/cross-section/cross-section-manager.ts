@@ -38,26 +38,26 @@ export class CrossSectionManager {
 
   /**
    * Secret field.
-   * This function is used by createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
    * This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
    */
-  _addIntersectionLoopPickerGroup: (k: string) => void;
+  _addIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
    * This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
    */
-  _removeIntersectionLoopPickerGroup: (k: string) => void;
+  _removeIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
    */
-  _updateIntersectionLoopPickerGroup: (k: string) => void;
+  _updateIlpGroup: (k: string) => void;
 
   // TODO: add planeToIntersectionLoopPickerConverter
   /**
@@ -74,46 +74,44 @@ export class CrossSectionManager {
     } = {}
   ) {
     this.crossSections = crossSections;
-    this._addIntersectionLoopPickerGroup = () => {};
-    this._removeIntersectionLoopPickerGroup = () => {};
-    this._updateIntersectionLoopPickerGroup = () => {};
+    this._addIlpGroup = () => {};
+    this._removeIlpGroup = () => {};
+    this._updateIlpGroup = () => {};
   }
 
   // TODO: test
   /**
    * Create the intersection loop pickers group.
    */
-  createIntersectionLoopPickersGroup(
+  createIlpsGroup(
     positions: THREE.BufferAttribute,
     ms: Materials
   ): THREE.Group {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    // This function is used by createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
     // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
-    this._addIntersectionLoopPickerGroup = (k: string) => {
+    this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].intersectionLoopPicker;
       children[k] = ilp.createGroup(p, positions, ms);
       parent.add(children[k]);
     };
-    Object.keys(this.crossSections).map((k) =>
-      this._addIntersectionLoopPickerGroup(k)
-    );
+    Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
     // This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
-    this._removeIntersectionLoopPickerGroup = (k: string) => {
+    this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
     // This function is used by setGUI() in src/cross-section/cross-section-manager.ts.
-    this._updateIntersectionLoopPickerGroup = (k: string) => {
-      this._removeIntersectionLoopPickerGroup(k);
-      this._addIntersectionLoopPickerGroup(k);
+    this._updateIlpGroup = (k: string) => {
+      this._removeIlpGroup(k);
+      this._addIlpGroup(k);
     };
 
     return parent;
@@ -129,12 +127,12 @@ export class CrossSectionManager {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateIntersectionLoopPickerGroup: Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
       cs.intersectionLoopPicker.setGUI(
         folder,
         `intersectionLoopPicker${k}`,
         k,
-        this._updateIntersectionLoopPickerGroup
+        this._updateIlpGroup
       );
     });
   }
@@ -179,7 +177,7 @@ export class CrossSectionManager {
     intersectionLoopPicker: IntersectionLoopPicker
   ) {
     this.crossSections[key] = { plane, intersectionLoopPicker };
-    this._addIntersectionLoopPickerGroup(key); // Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
   }
 
   // TODO: test
@@ -189,7 +187,7 @@ export class CrossSectionManager {
    * @param key - The key in this.crossSections.
    */
   removeCrossSection(key: string) {
-    this._removeIntersectionLoopPickerGroup(key); // Set it in advance using createIntersectionLoopPickersGroup() in src/cross-section/cross-section-manager.ts.
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
     delete this.crossSections[key];
   }
 
