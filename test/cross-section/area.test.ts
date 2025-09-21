@@ -45,6 +45,7 @@ describe("Area", () => {
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;
@@ -70,6 +71,7 @@ describe("Area", () => {
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;
@@ -112,7 +114,7 @@ describe("Area", () => {
               closed: true,
             },
           ],
-          selection: "some",
+          option: "some",
           indices: [0],
         },
       },
@@ -157,6 +159,7 @@ describe("Area", () => {
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;
