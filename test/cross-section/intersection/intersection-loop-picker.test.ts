@@ -58,10 +58,10 @@ describe("IntersectionLoopPicker", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoopPicker([il], "some", [0]);
-    expect(ils.intersectionLoops).toEqual([il]);
-    expect(ils.selection).toBe("some");
-    expect(ils.indices).toEqual([0]);
+    const ilp = new IntersectionLoopPicker([il], "some", [0]);
+    expect(ilp.intersectionLoops).toEqual([il]);
+    expect(ilp.selection).toBe("some");
+    expect(ilp.indices).toEqual([0]);
   });
 
   test("getSelections()", () => {
@@ -140,40 +140,40 @@ describe("IntersectionLoopPicker", () => {
       ];
 
       test('case "all"', () => {
-        const ils = new IntersectionLoopPicker(intersectionLoops, "all");
-        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual(
+        const ilp = new IntersectionLoopPicker(intersectionLoops, "all");
+        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual(
           intersectionLoops
         );
       });
 
       test('case "including plane"', () => {
-        const ils = new IntersectionLoopPicker(
+        const ilp = new IntersectionLoopPicker(
           intersectionLoops,
           "including plane"
         );
-        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
         ]);
       });
 
       test('case "excluding plane"', () => {
-        const ils = new IntersectionLoopPicker(
+        const ilp = new IntersectionLoopPicker(
           intersectionLoops,
           "excluding plane"
         );
-        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[1],
           intersectionLoops[2],
         ]);
       });
 
       test('case "some"', () => {
-        const ils = new IntersectionLoopPicker(
+        const ilp = new IntersectionLoopPicker(
           intersectionLoops,
           "some",
           [0, 2, 3]
         );
-        expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
           intersectionLoops[2],
         ]);
