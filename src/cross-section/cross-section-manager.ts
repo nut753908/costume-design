@@ -10,8 +10,8 @@ import {
 } from "./intersection/indices";
 import {
   createAllIntersectionLoops,
-  IntersectionLoops,
-  type IntersectionLoopsJSON,
+  IntersectionLoopSelector,
+  type IntersectionLoopSelectorJSON,
 } from "./intersection/intersection-loops";
 import { createAllIntersections } from "./intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
@@ -32,7 +32,7 @@ export class CrossSectionManager {
   crossSections: {
     [k: string]: {
       plane: FreePlane | VerticalPlane;
-      intersectionLoops: IntersectionLoops;
+      intersectionLoopSelector: IntersectionLoopSelector;
     };
   };
 
@@ -69,7 +69,7 @@ export class CrossSectionManager {
     crossSections: {
       [k: string]: {
         plane: FreePlane | VerticalPlane;
-        intersectionLoops: IntersectionLoops;
+        intersectionLoopSelector: IntersectionLoopSelector;
       };
     } = {}
   ) {
@@ -99,7 +99,7 @@ export class CrossSectionManager {
         return;
       }
       const p = this.crossSections[k].plane;
-      const ils = this.crossSections[k].intersectionLoops;
+      const ils = this.crossSections[k].intersectionLoopSelector;
       children[k] = ils.createGroup(p, positions, ms);
       parent.add(children[k]);
     };
@@ -133,9 +133,9 @@ export class CrossSectionManager {
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateGroup: Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
-      cs.intersectionLoops.setGUI(
+      cs.intersectionLoopSelector.setGUI(
         folder,
-        `intersectionLoops${k}`,
+        `intersectionLoopSelector${k}`,
         k,
         this._updateGroup
       );
@@ -144,15 +144,15 @@ export class CrossSectionManager {
 
   // TODO: test
   /**
-   * Create a plane to intersection loops converter.
+   * Create a plane to an intersection loop selector converter.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIntersectionLoopsConverter(
+  static createPlaneToIntersectionLoopSelectorConverter(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
-  ): (plane: FreePlane | VerticalPlane) => IntersectionLoops {
+  ): (plane: FreePlane | VerticalPlane) => IntersectionLoopSelector {
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
     const indicesMap = createIndicesMap(triangularPolygonIndices);
@@ -166,7 +166,7 @@ export class CrossSectionManager {
         indicesMap,
         allIntersections
       );
-      return new IntersectionLoops(allIntersectionLoops);
+      return new IntersectionLoopSelector(allIntersectionLoops);
     };
   }
 
@@ -174,14 +174,14 @@ export class CrossSectionManager {
   /**
    * Add a cross section.
    *
-   * @param key - The key in both this.planes and this.intersectionLoops.
+   * @param key - The key in this.crossSections.
    */
   addCrossSection(
     key: string,
     plane: FreePlane | VerticalPlane,
-    intersectionLoops: IntersectionLoops
+    intersectionLoopSelector: IntersectionLoopSelector
   ) {
-    this.crossSections[key] = { plane, intersectionLoops };
+    this.crossSections[key] = { plane, intersectionLoopSelector };
     this._addGroup(key); // Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
   }
 
@@ -189,7 +189,7 @@ export class CrossSectionManager {
   /**
    * Remove a cross section.
    *
-   * @param key - The key in both this.planes and this.intersectionLoops.
+   * @param key - The key in this.crossSections.
    */
   removeCrossSection(key: string) {
     this._removeGroup(key); // Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
@@ -214,7 +214,7 @@ export class CrossSectionManager {
   copy(source: CrossSectionManager): this {
     this.crossSections = objectMap(source.crossSections, (v) => ({
       plane: v.plane.clone(),
-      intersectionLoops: v.intersectionLoops.clone(),
+      intersectionLoopSelector: v.intersectionLoopSelector.clone(),
     }));
 
     return this;
@@ -229,7 +229,7 @@ export class CrossSectionManager {
     return {
       crossSections: objectMap(this.crossSections, (v) => ({
         plane: v.plane.toJSON(),
-        intersectionLoops: v.intersectionLoops.toJSON(),
+        intersectionLoopSelector: v.intersectionLoopSelector.toJSON(),
       })),
     };
   }
@@ -256,8 +256,8 @@ export class CrossSectionManager {
       }
       return {
         plane,
-        intersectionLoops: new IntersectionLoops().fromJSON(
-          v.intersectionLoops
+        intersectionLoopSelector: new IntersectionLoopSelector().fromJSON(
+          v.intersectionLoopSelector
         ),
       };
     });
@@ -274,7 +274,7 @@ export interface CrossSectionManagerJSON {
   crossSections: {
     [k: string]: {
       plane: FreePlaneJSON | VerticalPlaneJSON;
-      intersectionLoops: IntersectionLoopsJSON;
+      intersectionLoopSelector: IntersectionLoopSelectorJSON;
     };
   };
 }

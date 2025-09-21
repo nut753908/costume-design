@@ -7,8 +7,8 @@ import {
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import {
   createAllIntersectionLoops,
-  IntersectionLoops,
-  type IntersectionLoopsJSON,
+  IntersectionLoopSelector,
+  type IntersectionLoopSelectorJSON,
   sortIntersectionLoops,
 } from "src/cross-section/intersection/intersection-loops";
 import { createAllIntersections } from "src/cross-section/intersection/intersections";
@@ -399,7 +399,7 @@ describe("sortIntersectionLoops()", () => {
   });
 });
 
-describe("IntersectionLoops", () => {
+describe("IntersectionLoopSelector", () => {
   test("constructor()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
@@ -407,17 +407,21 @@ describe("IntersectionLoops", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils = new IntersectionLoops([il], "some", [0]);
+    const ils = new IntersectionLoopSelector([il], "some", [0]);
     expect(ils.intersectionLoops).toEqual([il]);
     expect(ils.selection).toBe("some");
     expect(ils.indices).toEqual([0]);
   });
 
   test("getSelections()", () => {
-    expect(IntersectionLoops.getSelections()).toContain("all");
-    expect(IntersectionLoops.getSelections()).toContain("including plane");
-    expect(IntersectionLoops.getSelections()).toContain("excluding plane");
-    expect(IntersectionLoops.getSelections()).toContain("some");
+    expect(IntersectionLoopSelector.getSelections()).toContain("all");
+    expect(IntersectionLoopSelector.getSelections()).toContain(
+      "including plane"
+    );
+    expect(IntersectionLoopSelector.getSelections()).toContain(
+      "excluding plane"
+    );
+    expect(IntersectionLoopSelector.getSelections()).toContain("some");
   });
 
   describe("getSelectedIntersectionLoops()", () => {
@@ -489,21 +493,27 @@ describe("IntersectionLoops", () => {
       ];
 
       test('case "all"', () => {
-        const ils = new IntersectionLoops(intersectionLoops, "all");
+        const ils = new IntersectionLoopSelector(intersectionLoops, "all");
         expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual(
           intersectionLoops
         );
       });
 
       test('case "including plane"', () => {
-        const ils = new IntersectionLoops(intersectionLoops, "including plane");
+        const ils = new IntersectionLoopSelector(
+          intersectionLoops,
+          "including plane"
+        );
         expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
         ]);
       });
 
       test('case "excluding plane"', () => {
-        const ils = new IntersectionLoops(intersectionLoops, "excluding plane");
+        const ils = new IntersectionLoopSelector(
+          intersectionLoops,
+          "excluding plane"
+        );
         expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[1],
           intersectionLoops[2],
@@ -511,7 +521,11 @@ describe("IntersectionLoops", () => {
       });
 
       test('case "some"', () => {
-        const ils = new IntersectionLoops(intersectionLoops, "some", [0, 2, 3]);
+        const ils = new IntersectionLoopSelector(
+          intersectionLoops,
+          "some",
+          [0, 2, 3]
+        );
         expect(ils.getSelectedIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
           intersectionLoops[2],
@@ -527,7 +541,7 @@ describe("IntersectionLoops", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils1 = new IntersectionLoops([il], "some", [0]);
+    const ils1 = new IntersectionLoopSelector([il], "some", [0]);
     const ils2 = ils1.clone();
     ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
@@ -540,13 +554,13 @@ describe("IntersectionLoops", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils1 = new IntersectionLoops([il], "some", [0]);
-    const ils2 = new IntersectionLoops().copy(ils1);
+    const ils1 = new IntersectionLoopSelector([il], "some", [0]);
+    const ils2 = new IntersectionLoopSelector().copy(ils1);
     ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
   });
 
-  const _json: IntersectionLoopsJSON = {
+  const _json: IntersectionLoopSelectorJSON = {
     intersectionLoops: [
       {
         intersections: [
@@ -584,20 +598,20 @@ describe("IntersectionLoops", () => {
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const json1 = new IntersectionLoops([il], "some", [0]).toJSON();
-    const json2: IntersectionLoopsJSON = _json;
+    const json1 = new IntersectionLoopSelector([il], "some", [0]).toJSON();
+    const json2: IntersectionLoopSelectorJSON = _json;
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
-    const ils1 = new IntersectionLoops().fromJSON(_json);
+    const ils1 = new IntersectionLoopSelector().fromJSON(_json);
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
       new VertexIntersection(2, true),
     ];
     const il = new IntersectionLoop(intersections, true);
-    const ils2 = new IntersectionLoops([il], "some", [0]);
+    const ils2 = new IntersectionLoopSelector([il], "some", [0]);
     ils2._updateGroup = ils1._updateGroup;
     expect(ils1).toEqual(ils2);
   });

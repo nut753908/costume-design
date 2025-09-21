@@ -93,7 +93,7 @@ export function sortIntersectionLoops(
 }
 
 /**
- * All intersection loops with a plane.
+ * The intersection loop selector.
  *
  * ```js
  * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
@@ -106,10 +106,10 @@ export function sortIntersectionLoops(
  *   new VertexIntersection( 2, true ),
  * ];
  * const intersectionLoop = new IntersectionLoop( intersections, true );
- * const intersectionLoops = new IntersectionLoops( [ intersectionLoop ], "all", [] );
+ * const intersectionLoopSelector = new IntersectionLoopSelector( [ intersectionLoop ], "all", [] );
  * ```
  */
-export class IntersectionLoops {
+export class IntersectionLoopSelector {
   /**
    * The intersection loops.
    */
@@ -134,15 +134,15 @@ export class IntersectionLoops {
   _updateGroup: () => void;
 
   /**
-   * Constructs a new intersection loops.
+   * Constructs a new intersection loop selector.
    *
-   * @param intersectionLoops - {@link IntersectionLoops#intersectionLoops}
-   * @param selection - {@link IntersectionLoops#selection}
-   * @param indices - {@link IntersectionLoops#indices}
+   * @param intersectionLoops - {@link IntersectionLoopSelector#intersectionLoops}
+   * @param selection - {@link IntersectionLoopSelector#selection}
+   * @param indices - {@link IntersectionLoopSelector#indices}
    */
   constructor(
     intersectionLoops: IntersectionLoop[] = [],
-    selection: IntersectionLoops["selection"] = "all",
+    selection: IntersectionLoopSelector["selection"] = "all",
     indices: number[] = []
   ) {
     this.intersectionLoops = intersectionLoops;
@@ -185,14 +185,14 @@ export class IntersectionLoops {
   /**
    * Set GUI.
    *
-   * @param name - The intersection loops folder name used in the GUI.
+   * @param name - The intersection loop selector folder name used in the GUI.
    * @param key - The key for the callback.
-   * @param updateCallback - The callback that is invoked after updating intersection loops.
+   * @param updateCallback - The callback that is invoked after updating intersection loop selector.
    */
   setGUI(
     gui: GUI,
-    name = "IntersectionLoops",
-    key = "IntersectionLoops",
+    name = "IntersectionLoopSelector",
+    key = "IntersectionLoopSelector",
     updateCallback = (_key: string) => {}
   ) {
     const ils = this;
@@ -210,7 +210,7 @@ export class IntersectionLoops {
     const folder = gui.addFolder(name);
     folder
       .add(ils, "selection")
-      .options(IntersectionLoops.getSelections())
+      .options(IntersectionLoopSelector.getSelections())
       .onChange(uS);
     // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
@@ -245,7 +245,7 @@ export class IntersectionLoops {
   /**
    * Get the strings that can be used as a selection.
    */
-  static getSelections(): IntersectionLoops["selection"][] {
+  static getSelections(): IntersectionLoopSelector["selection"][] {
     return ["all", "including plane", "excluding plane", "some"];
   }
 
@@ -272,21 +272,21 @@ export class IntersectionLoops {
   }
 
   /**
-   * Returns a new intersection loops with copied values from this instance.
+   * Returns a new intersection loop selector with copied values from this instance.
    *
    * @return  A clone of this instance.
    */
-  clone(): IntersectionLoops {
-    return new IntersectionLoops().copy(this);
+  clone(): IntersectionLoopSelector {
+    return new IntersectionLoopSelector().copy(this);
   }
 
   /**
-   * Copies the values of the given intersection loops to this instance.
+   * Copies the values of the given intersection loop selector to this instance.
    *
-   * @param source - The intersection loops to copy.
-   * @return  A reference to this intersection loops.
+   * @param source - The intersection loop selector to copy.
+   * @return  A reference to this intersection loop selector.
    */
-  copy(source: IntersectionLoops): this {
+  copy(source: IntersectionLoopSelector): this {
     this.intersectionLoops = source.intersectionLoops.map((il) => il.clone());
     this.selection = source.selection;
     this.indices = source.indices;
@@ -295,11 +295,11 @@ export class IntersectionLoops {
   }
 
   /**
-   * Serializes the intersection loops into JSON.
+   * Serializes the intersection loop selector into JSON.
    *
-   * @return  A JSON object representing the serialized intersection loops.
+   * @return  A JSON object representing the serialized intersection loop selector.
    */
-  toJSON(): IntersectionLoopsJSON {
+  toJSON(): IntersectionLoopSelectorJSON {
     return {
       intersectionLoops: this.intersectionLoops.map((il) => il.toJSON()),
       selection: this.selection,
@@ -308,12 +308,12 @@ export class IntersectionLoops {
   }
 
   /**
-   * Deserializes the intersection loops from the given JSON.
+   * Deserializes the intersection loop selector from the given JSON.
    *
-   * @param json - The JSON holding the serialized intersection loops.
-   * @return  A reference to this intersection loops.
+   * @param json - The JSON holding the serialized intersection loop selector.
+   * @return  A reference to this intersection loop selector.
    */
-  fromJSON(json: IntersectionLoopsJSON): this {
+  fromJSON(json: IntersectionLoopSelectorJSON): this {
     this.intersectionLoops = json.intersectionLoops.map((il) =>
       new IntersectionLoop().fromJSON(il)
     );
@@ -325,13 +325,13 @@ export class IntersectionLoops {
 }
 
 /**
- * The {@link IntersectionLoops} JSON interface.
+ * The {@link IntersectionLoopSelector} JSON interface.
  */
-export interface IntersectionLoopsJSON {
-  /** {@link IntersectionLoops#intersectionLoops} */
+export interface IntersectionLoopSelectorJSON {
+  /** {@link IntersectionLoopSelector#intersectionLoops} */
   intersectionLoops: IntersectionLoopJSON[];
-  /** {@link IntersectionLoops#selection} */
-  selection: IntersectionLoops["selection"];
-  /** {@link IntersectionLoops#indices} */
+  /** {@link IntersectionLoopSelector#selection} */
+  selection: IntersectionLoopSelector["selection"];
+  /** {@link IntersectionLoopSelector#indices} */
   indices: number[];
 }
