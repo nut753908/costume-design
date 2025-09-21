@@ -1,5 +1,5 @@
 import type GUI from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
+import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
@@ -21,7 +21,12 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
  *
  * ```js
  * import { PlaneManager } from "./src/cross-section/plane/plane-manager";
- * const planeManager = new PlaneManager();
+ * const points = [ new THREE.Vector3( 1, 2, 3 ), new THREE.Vector3( 1, 2, 4 ) ];
+ * const curves = {
+ *   a: createLinePath( points ),
+ *   b: new THREE.CatmullRomCurve3( points ),
+ * };
+ * const planeManager = new PlaneManager( curves );
  * ```
  */
 export class PlaneManager {
@@ -194,16 +199,9 @@ export class PlaneManager {
   /**
    * Set GUI.
    *
-   * @param name - The curve folder name used in the GUI.
-   * @param updateCallback - The callback that is invoked after updating plane manager.
-   * @param isClose - Whether to close the folder.
+   * @param name - The plane manager folder name used in the GUI.
    */
-  setGUI(
-    gui: GUI,
-    name = "PlaneManager",
-    updateCallback = () => {},
-    isClose = false
-  ) {
+  setGUI(gui: GUI, name = "PlaneManager") {
     const pm = this;
 
     const obj = {
@@ -233,13 +231,11 @@ export class PlaneManager {
     let cPK = folder.add(obj, "planeKey").name("removePlane key");
     updateEnabled();
     updateOptions();
-    if (isClose) closeFolder(folder);
 
     function update() {
       updateEnabled();
       updateOptions();
       updatePlanesFolder();
-      updateCallback();
     }
     function updateEnabled() {
       pm.curveKeys.includes(obj.curveKey) ? cAVP.enable() : cAVP.disable();
@@ -258,7 +254,7 @@ export class PlaneManager {
   }
 
   /**
-   * add the free plane to this.planes.
+   * Add the free plane to this.planes.
    */
   addFreePlane() {
     const key = `[${this.planeNextIndex}] {FreePlane}`;
@@ -269,7 +265,7 @@ export class PlaneManager {
   }
 
   /**
-   * add the vertical plane to this.planes.
+   * Add the vertical plane to this.planes.
    *
    * @param curveKey - The curve key in this.curves.
    */
@@ -290,7 +286,7 @@ if (!this.curveKeys.includes(curveKey))
   }
 
   /**
-   * remove the plane from this.planes.
+   * Remove the plane from this.planes.
    *
    * @param key - The plane key in this.planes.
    */
@@ -336,7 +332,7 @@ if (!this.planeKeys.includes(key))
    * @param source - The plane manager to copy.
    * @return  A reference to this plane manager.
    */
-  copy(source: PlaneManager): PlaneManager {
+  copy(source: PlaneManager): this {
     this.curves = objectMap(source.curves, (v) => v.clone());
     this.planes = objectMap(source.planes, (v) => v.clone());
     this.planeNextIndex = source.planeNextIndex;
@@ -347,7 +343,7 @@ if (!this.planeKeys.includes(key))
   /**
    * Serializes the plane manager into JSON.
    *
-   * @return {Object} A JSON object representing the serialized plane manager.
+   * @return  A JSON object representing the serialized plane manager.
    */
   toJSON(): PlaneManagerJSON {
     return {
@@ -360,10 +356,10 @@ if (!this.planeKeys.includes(key))
   /**
    * Deserializes the plane manager from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized plane manager.
-   * @return {PlaneManager} A reference to this plane manager.
+   * @param json - The JSON holding the serialized plane manager.
+   * @return  A reference to this plane manager.
    */
-  fromJSON(json: PlaneManagerJSON): PlaneManager {
+  fromJSON(json: PlaneManagerJSON): this {
     this.curves = objectMap(json.curves, (v) => {
       if (v.type === "CurvePath") {
         return new THREE.CurvePath<THREE.Vector3>().fromJSON(
