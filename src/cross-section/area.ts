@@ -144,7 +144,6 @@ export class Area {
     });
   }
 
-  // TODO: test
   /**
    * Create a plane to intersection loop picker converter.
    *
@@ -172,7 +171,6 @@ export class Area {
     };
   }
 
-  // TODO: test
   /**
    * Add a cross section.
    *
@@ -183,7 +181,6 @@ export class Area {
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
-  // TODO: test
   /**
    * Remove a cross section.
    *
@@ -194,7 +191,6 @@ export class Area {
     delete this.crossSections[key];
   }
 
-  // TODO: test
   /**
    * Update a cross section.
    *

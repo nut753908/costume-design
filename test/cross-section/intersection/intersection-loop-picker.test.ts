@@ -31,6 +31,7 @@ describe("IntersectionLoopPicker", () => {
   });
 
   describe("pickIntersectionLoops()", () => {
+    // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
     describe("three triangular pyramids example", () => {
       const positionsArray = [
         [0, 0, 0],

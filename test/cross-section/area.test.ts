@@ -30,6 +30,143 @@ describe("Area", () => {
     expect(area.thickness).toEqual(0.002);
   });
 
+  describe("createPlaneToIlp()", () => {
+    // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
+    describe("three triangular pyramids example", () => {
+      const positionsArray = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        //
+        [2, 0.5, 0.5],
+        [3, 0, 0],
+        [3, 0, 1],
+        [3, 1, 0.5],
+        //
+        [4, 0.5, 0],
+        [5, 0, 0.5],
+        [4, 0.5, 1],
+        [5, 1, 0.5],
+      ].flat();
+      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+      const indicesArray = [
+        [0, 1, 2],
+        [0, 1, 3],
+        [1, 2, 3],
+        [2, 0, 3],
+        //
+        [4, 5, 6],
+        [4, 5, 7],
+        [5, 6, 7],
+        [6, 4, 7],
+        //
+        [8, 9, 10],
+        [8, 9, 11],
+        [9, 10, 11],
+        [10, 8, 11],
+      ].flat();
+      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+
+      test("check algorithm", () => {
+        const plane = new FreePlane(
+          new THREE.Vector3(0, 1, 0),
+          new THREE.Vector3(0, 0.5, 0)
+        );
+        const ilp = Area.createPlaneToIlp(positions, indices)(plane);
+        expect(ilp.intersectionLoops).toEqual([
+          new IntersectionLoop(
+            [
+              new EdgeIntersection(1, 3, 0.5, true),
+              new EdgeIntersection(0, 3, 0.5, true),
+              new EdgeIntersection(2, 3, 0.5, true),
+            ],
+            true
+          ),
+          new IntersectionLoop(
+            [
+              new EdgeIntersection(5, 7, 0.5, true),
+              new EdgeIntersection(6, 7, 0.5, true),
+              new VertexIntersection(4, true),
+            ],
+            true
+          ),
+          new IntersectionLoop(
+            [
+              new EdgeIntersection(9, 11, 0.5, true),
+              new VertexIntersection(8, true),
+              new VertexIntersection(10, true),
+            ],
+            true
+          ),
+        ]);
+      });
+    });
+  });
+
+  describe("addCrossSection()", () => {
+    test("check keys and planes for cross section", () => {
+      const area = new Area();
+      expect(Object.keys(area.crossSections)).toEqual([]);
+
+      const plane1 = new FreePlane(new THREE.Vector3(1, 0, 0));
+      area.addCrossSection("a", plane1);
+      expect(Object.keys(area.crossSections)).toEqual(["a"]);
+      expect(area.crossSections.a.plane).toEqual(plane1);
+
+      const plane2 = new FreePlane(new THREE.Vector3(0, 1, 0));
+      area.addCrossSection("b", plane2);
+      expect(Object.keys(area.crossSections)).toEqual(["a", "b"]);
+      expect(area.crossSections.a.plane).toEqual(plane1);
+      expect(area.crossSections.b.plane).toEqual(plane2);
+    });
+  });
+
+  describe("removeCrossSection()", () => {
+    test("check keys and planes for cross section", () => {
+      const area = new Area();
+      const plane1 = new FreePlane(new THREE.Vector3(1, 0, 0));
+      const plane2 = new FreePlane(new THREE.Vector3(0, 1, 0));
+      area.addCrossSection("a", plane1);
+      area.addCrossSection("b", plane2);
+      expect(Object.keys(area.crossSections)).toEqual(["a", "b"]);
+      expect(area.crossSections.a.plane).toEqual(plane1);
+      expect(area.crossSections.b.plane).toEqual(plane2);
+
+      area.removeCrossSection("a");
+      expect(Object.keys(area.crossSections)).toEqual(["b"]);
+      expect(area.crossSections.b.plane).toEqual(plane2);
+
+      area.removeCrossSection("b");
+      expect(Object.keys(area.crossSections)).toEqual([]);
+    });
+  });
+
+  describe("updateCrossSection()", () => {
+    test("check keys and planes for cross section", () => {
+      const area = new Area();
+      const plane1 = new FreePlane(new THREE.Vector3(1, 0, 0));
+      const plane2 = new FreePlane(new THREE.Vector3(0, 1, 0));
+      area.addCrossSection("a", plane1);
+      area.addCrossSection("b", plane2);
+      expect(Object.keys(area.crossSections)).toEqual(["a", "b"]);
+      expect(area.crossSections.a.plane).toEqual(plane1);
+      expect(area.crossSections.b.plane).toEqual(plane2);
+
+      const plane3 = new FreePlane(new THREE.Vector3(0, 0, 1));
+      area.updateCrossSection("a", plane3);
+      expect(Object.keys(area.crossSections)).toEqual(["b", "a"]);
+      expect(area.crossSections.a.plane).toEqual(plane3);
+      expect(area.crossSections.b.plane).toEqual(plane2);
+
+      const plane4 = new FreePlane(new THREE.Vector3(-1, 0, 0));
+      area.updateCrossSection("b", plane4);
+      expect(Object.keys(area.crossSections)).toEqual(["a", "b"]);
+      expect(area.crossSections.a.plane).toEqual(plane3);
+      expect(area.crossSections.b.plane).toEqual(plane4);
+    });
+  });
+
   test("clone()", () => {
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
