@@ -50,24 +50,32 @@ export class Area {
    * Secret field.
    * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _addIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _removeIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by addCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using setGUI() in src/cross-section/area.ts.
    */
-  _updateIlpGroup: (k: string) => void;
+  _addGUI: (k: string) => void;
+
+  /**
+   * Secret field.
+   * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using setGUI() in src/cross-section/area.ts.
+   */
+  _removeGUI: (k: string) => void;
 
   /**
    * Constructs a new area.
@@ -86,7 +94,8 @@ export class Area {
     this.thickness = thickness;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
-    this._updateIlpGroup = () => {};
+    this._addGUI = () => {};
+    this._removeGUI = () => {};
   }
 
   /**
@@ -101,6 +110,7 @@ export class Area {
 
     // This function is used by createIlpsGroup() in src/cross-section/area.ts.
     // This function is used by addCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].ilp;
@@ -109,24 +119,17 @@ export class Area {
     };
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
-    // This function is used by setGUI() in src/cross-section/area.ts.
-    this._updateIlpGroup = (k: string) => {
-      this._removeIlpGroup(k);
-      this._addIlpGroup(k);
-    };
-
     return parent;
   }
 
-  // TODO: test
   /**
    * Set GUI.
    *
@@ -136,12 +139,27 @@ export class Area {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder.add(this, "thickness", 0, 1, 0.0001);
-    Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-      cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
-        this.updateCrossSection(k, cs.plane);
+    Object.entries(this.crossSections)
+      .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+      .forEach(([k, cs]) => {
+        cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
+          this.updateCrossSection(k, cs.plane);
+        });
       });
-    });
+
+    // This function is used by addCrossSection() in src/cross-section/area.ts.
+    this._addGUI = (k: string) => {
+      const p = this.crossSections[k].plane;
+      const ilp = this.crossSections[k].ilp;
+      ilp.setGUI(folder, `intersection loops${k}`, () => {
+        this.updateCrossSection(k, p);
+      });
+    };
+
+    // This function is used by removeCrossSection() in src/cross-section/area.ts.
+    this._removeGUI = (k: string) => {
+      deleteFolder(folder, `intersection loops${k}`);
+    };
   }
 
   /**
@@ -178,6 +196,7 @@ export class Area {
    */
   addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this.crossSections[key] = { plane, ilp: this.planeToIlp(plane) };
+    this._addGUI(key); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
@@ -188,6 +207,7 @@ export class Area {
    */
   removeCrossSection(key: string) {
     this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+    this._removeGUI(key); // Set it in advance using setGUI() in src/cross-section/area.ts.
     delete this.crossSections[key];
   }
 
@@ -197,8 +217,11 @@ export class Area {
    * @param key - The key in this.crossSections.
    */
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
-    this.removeCrossSection(key);
-    this.addCrossSection(key, plane);
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+    this.crossSections[key].plane = plane;
+    this.crossSections[key].ilp.intersectionLoops =
+      this.planeToIlp(plane).intersectionLoops;
+    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
   /**

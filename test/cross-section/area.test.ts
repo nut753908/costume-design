@@ -155,7 +155,7 @@ describe("Area", () => {
 
       const plane3 = new FreePlane(new THREE.Vector3(0, 0, 1));
       area.updateCrossSection("a", plane3);
-      expect(Object.keys(area.crossSections)).toEqual(["b", "a"]);
+      expect(Object.keys(area.crossSections)).toEqual(["a", "b"]);
       expect(area.crossSections.a.plane).toEqual(plane3);
       expect(area.crossSections.b.plane).toEqual(plane2);
 
@@ -192,7 +192,8 @@ describe("Area", () => {
     area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
-    area2._updateIlpGroup = area1._updateIlpGroup;
+    area2._addGUI = area1._addGUI;
+    area2._removeGUI = area1._removeGUI;
     expect(area1).toEqual(area2);
   });
 
@@ -221,7 +222,8 @@ describe("Area", () => {
     area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
-    area2._updateIlpGroup = area1._updateIlpGroup;
+    area2._addGUI = area1._addGUI;
+    area2._removeGUI = area1._removeGUI;
     expect(area1).toEqual(area2);
   });
 
@@ -315,7 +317,8 @@ describe("Area", () => {
     area2.planeToIlp = area1.planeToIlp;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
-    area2._updateIlpGroup = area1._updateIlpGroup;
+    area2._addGUI = area1._addGUI;
+    area2._removeGUI = area1._removeGUI;
     expect(area1).toEqual(area2);
   });
 });
