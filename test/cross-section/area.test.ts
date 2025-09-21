@@ -1,4 +1,4 @@
-import { Area, type AreaJSON } from "src/cross-section/cross-section-manager";
+import { Area, type AreaJSON } from "src/cross-section/area";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
