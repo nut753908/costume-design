@@ -51,9 +51,11 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
-    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
-    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
+    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
+    csm2._removeIntersectionLoopPickerGroup =
+      csm1._removeIntersectionLoopPickerGroup;
+    csm2._updateIntersectionLoopPickerGroup =
+      csm1._updateIntersectionLoopPickerGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -78,9 +80,11 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
-    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
-    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
+    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
+    csm2._removeIntersectionLoopPickerGroup =
+      csm1._removeIntersectionLoopPickerGroup;
+    csm2._updateIntersectionLoopPickerGroup =
+      csm1._updateIntersectionLoopPickerGroup;
     expect(csm1).toEqual(csm2);
   });
 
@@ -168,9 +172,11 @@ describe("CrossSectionManager", () => {
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
-    csm2._addIntersectionLoopsGroup = csm1._addIntersectionLoopsGroup;
-    csm2._removeIntersectionLoopsGroup = csm1._removeIntersectionLoopsGroup;
-    csm2._updateIntersectionLoopsGroup = csm1._updateIntersectionLoopsGroup;
+    csm2._addIntersectionLoopPickerGroup = csm1._addIntersectionLoopPickerGroup;
+    csm2._removeIntersectionLoopPickerGroup =
+      csm1._removeIntersectionLoopPickerGroup;
+    csm2._updateIntersectionLoopPickerGroup =
+      csm1._updateIntersectionLoopPickerGroup;
     expect(csm1).toEqual(csm2);
   });
 });
