@@ -77,6 +77,7 @@ export class Area {
    * This function is used by setGUI() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
    * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using setGUI() in src/cross-section/area.ts.
    */
   _updateGUI: () => void;
@@ -215,6 +216,7 @@ export class Area {
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this.crossSections[key].plane = plane;
     this.crossSections[key].ilp.intersectionLoops = this.planeToAllIls(plane);
+    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 

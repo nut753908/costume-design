@@ -100,7 +100,6 @@ export class IntersectionLoopPicker {
     return group;
   }
 
-  // TODO: test
   /**
    * Set GUI.
    *
@@ -125,7 +124,6 @@ export class IntersectionLoopPicker {
       .add(ils, "option")
       .options(IntersectionLoopPicker.getOptions())
       .onChange(uS);
-    // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
     Object.keys(checklist).map((i) =>
       iFolder.add(checklist, i).onChange(() => uI(i))
