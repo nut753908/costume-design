@@ -81,9 +81,9 @@ export class Area {
     crossSections: Area["crossSections"] = {},
     thickness = 0.001
   ) {
+    this.planeToIlp = planeToIlp;
     this.crossSections = crossSections;
     this.thickness = thickness;
-    this.planeToIlp = planeToIlp;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
     this._updateIlpGroup = () => {};
