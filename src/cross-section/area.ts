@@ -137,24 +137,20 @@ export class Area {
 
   /**
    * Set GUI.
-   *
-   * @param name - The area folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "Area") {
+  setGUI(gui: GUI) {
     // This function is used by setGUI() in src/cross-section/area.ts.
     // This function is used by addCrossSection() in src/cross-section/area.ts.
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
     this._updateGUI = () => {
-      deleteFolder(gui, name);
-      const folder = gui.addFolder(name);
+      deleteFolder(gui, "Area");
+      const folder = gui.addFolder("Area");
       folder.add(this, "thickness", 0, 1, 0.0001);
-      Object.entries(this.crossSections)
-        .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
-        .forEach(([k, cs]) => {
-          cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
-            this.updateCrossSection(k, cs.plane);
-          });
+      Object.entries(this.crossSections).forEach(([k, cs]) => {
+        cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
+          this.updateCrossSection(k, cs.plane);
         });
+      });
     };
     this._updateGUI();
   }
