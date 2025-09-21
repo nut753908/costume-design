@@ -9,10 +9,10 @@ import {
   createIndicesMap,
 } from "./intersection/indices";
 import {
-  createAllIntersectionLoops,
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
-} from "./intersection/intersection-loops";
+} from "./intersection/intersection-loop-picker";
+import { createAllIntersectionLoops } from "./intersection/intersection-loops";
 import { createAllIntersections } from "./intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
