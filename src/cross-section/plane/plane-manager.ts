@@ -1,17 +1,9 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
-import type { Materials } from "src/material/materials";
 import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
 import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
-import { createAllEdges } from "../centerline/edges";
-import {
-  convertToTriangularPolygonIndices,
-  createIndicesMap,
-} from "../intersection/indices";
-import { createAllIntersectionLoops } from "../intersection/intersection-loops";
-import { createAllIntersections } from "../intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { Plane } from "./plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
@@ -64,27 +56,25 @@ export class PlaneManager {
 
   /**
    * Secret field.
-   * This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
    * This function is used by addFreePlane() in src/cross-section/plane/plane-manager.ts.
    * This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
-   * Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+   * Set it manually in src/main.ts.
    */
-  _addPointsGroup: (k: string) => void;
+  _addCrossSection: (key: string, plane: FreePlane | VerticalPlane) => void;
 
   /**
    * Secret field.
-   * This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
    * This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
-   * Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+   * Set it manually in src/main.ts.
    */
-  _removePointsGroup: (k: string) => void;
+  _removeCrossSection: (key: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
-   * Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+   * This function is used by setGUI() in src/cross-section/plane/plane-manager.ts.
+   * Set it manually in src/main.ts.
    */
-  _updatePointsGroup: (k: string) => void;
+  _updateCrossSection: (key: string, plane: FreePlane | VerticalPlane) => void;
 
   /**
    * Constructs a new plane manager.
@@ -103,9 +93,9 @@ export class PlaneManager {
     this.planeNextIndex = this.planeKeys.length;
     this._addPlaneGroup = () => {};
     this._removePlaneGroup = () => {};
-    this._addPointsGroup = () => {};
-    this._removePointsGroup = () => {};
-    this._updatePointsGroup = () => {};
+    this._addCrossSection = () => {};
+    this._removeCrossSection = () => {};
+    this._updateCrossSection = () => {};
   }
 
   /**
@@ -134,63 +124,6 @@ export class PlaneManager {
       disposeGroup(children[k]);
       delete children[k];
       Plane.removeCallbacks(k, planeHelper, arrowHelper);
-    };
-
-    return parent;
-  }
-
-  /**
-   * Create the points group.
-   *
-   * @param positions - The results of geometry.getAttribute("position").
-   * @param indices - The results of geometry.getIndex().
-   * @param ms - The materials.
-   */
-  createPointsGroup(
-    positions: THREE.BufferAttribute,
-    indices: THREE.BufferAttribute,
-    ms: Materials
-  ): THREE.Group {
-    const parent = new THREE.Group();
-    const children: { [k: string]: THREE.Group } = {};
-
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
-
-    // This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
-    // This function is used by addFreePlane() in src/cross-section/plane/plane-manager.ts.
-    // This function is used by addVerticalPlane() in src/cross-section/plane/plane-manager.ts.
-    this._addPointsGroup = (k: string) => {
-      const p = this.planes[k];
-      const allIntersections = createAllIntersections(p, allEdges, positions);
-      const allIntersectionLoops = createAllIntersectionLoops(
-        indicesMap,
-        allIntersections
-      );
-      children[k] = new THREE.Group();
-      allIntersectionLoops.forEach((il) => {
-        const points = il.getPoints(positions);
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
-        children[k].add(new THREE.Points(geometry, ms.points.points));
-        children[k].add(new THREE.Line(geometry, ms.points.line));
-      });
-      parent.add(children[k]);
-    };
-    Object.keys(this.planes).map((k) => this._addPointsGroup(k));
-
-    // This function is used by createPointsGroup() in src/cross-section/plane/plane-manager.ts.
-    // This function is used by removePlane() in src/cross-section/plane/plane-manager.ts.
-    this._removePointsGroup = (k: string) => {
-      parent.remove(children[k]);
-      disposeGroup(children[k]);
-      delete children[k];
-    };
-
-    // This function is used by createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
-    this._updatePointsGroup = (k: string) => {
-      this._removePointsGroup(k);
-      this._addPointsGroup(k);
     };
 
     return parent;
@@ -248,7 +181,9 @@ export class PlaneManager {
     function updatePlanesFolder() {
       deleteFolder(folder, null, "plane");
       Object.entries(pm.planes).forEach(([k, p]) => {
-        p.setGUI(folder, `plane${k}`, k, pm._updatePointsGroup);
+        p.setGUI(folder, `plane${k}`, () => {
+          pm._updateCrossSection(k, p); // Set it manually in src/main.ts.
+        });
       });
     }
   }
@@ -260,7 +195,7 @@ export class PlaneManager {
     const key = `[${this.planeNextIndex}] {FreePlane}`;
     this.planes[key] = new FreePlane();
     this._addPlaneGroup(key); // Set it in advance using createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
-    this._addPointsGroup(key); // Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+    this._addCrossSection(key, this.planes[key]); // Set it manually in src/main.ts.
     this.planeNextIndex += 1;
   }
 
@@ -281,7 +216,7 @@ if (!this.curveKeys.includes(curveKey))
     const planeKey = `[${this.planeNextIndex}] ${curveKey} {VerticalPlane}`;
     this.planes[planeKey] = new VerticalPlane(this.curves[curveKey]);
     this._addPlaneGroup(planeKey); // Set it in advance using createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
-    this._addPointsGroup(planeKey); // Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+    this._addCrossSection(planeKey, this.planes[planeKey]); // Set it manually in src/main.ts.
     this.planeNextIndex += 1;
   }
 
@@ -299,7 +234,7 @@ if (!this.planeKeys.includes(key))
 `);
     }
     this._removePlaneGroup(key); // Set it in advance using createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
-    this._removePointsGroup(key); // Set it in advance using createPointsGroup() in src/cross-section/plane/plane-manager.ts.
+    this._removeCrossSection(key); // Set it manually in src/main.ts.
     delete this.planes[key];
   }
 

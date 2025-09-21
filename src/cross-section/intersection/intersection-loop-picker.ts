@@ -17,7 +17,7 @@ import {
  * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
  * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
  * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
- * import { IntersectionLoops } from "./src/cross-section/intersection/intersection-loops";
+ * import { IntersectionLoopPicker } from "./src/cross-section/intersection/intersection-loop-picker";
  * const intersections = [
  *   new EdgeIntersection( 1, 3, 0.5, true ),
  *   new EdgeIntersection( 0, 3, 0.75, true ),
@@ -34,13 +34,13 @@ export class IntersectionLoopPicker {
   intersectionLoops: IntersectionLoop[];
 
   /**
-   * The method for selecting intersection loops.
+   * The option for picking intersection loops.
    */
-  selection: "all" | "including plane" | "excluding plane" | "some";
+  option: "all" | "including plane" | "excluding plane" | "some";
 
   /**
    * The specified indices of the intersection loops.
-   * This is only used if the selection is "some".
+   * This is only used if the option is "some".
    */
   indices: number[];
 
@@ -55,21 +55,20 @@ export class IntersectionLoopPicker {
    * Constructs a new intersection loop picker.
    *
    * @param intersectionLoops - {@link IntersectionLoopPicker#intersectionLoops}
-   * @param selection - {@link IntersectionLoopPicker#selection}
+   * @param option - {@link IntersectionLoopPicker#option}
    * @param indices - {@link IntersectionLoopPicker#indices}
    */
   constructor(
     intersectionLoops: IntersectionLoop[] = [],
-    selection: IntersectionLoopPicker["selection"] = "all",
+    option: IntersectionLoopPicker["option"] = "all",
     indices: number[] = []
   ) {
     this.intersectionLoops = intersectionLoops;
-    this.selection = selection;
+    this.option = option;
     this.indices = indices;
     this._updateGroup = () => {};
   }
 
-  // TODO: test
   /**
    * Create the group.
    *
@@ -87,7 +86,7 @@ export class IntersectionLoopPicker {
     this._updateGroup = () => {
       disposeGroup(group);
       group.clear();
-      this.getSelectedIntersectionLoops(plane, positions).forEach((il) => {
+      this.pickIntersectionLoops(plane, positions).forEach((il) => {
         const geometry = new THREE.BufferGeometry();
         geometry.setFromPoints(il.getPoints(positions));
         group.add(new THREE.Points(geometry, ms.points.points));
@@ -104,15 +103,9 @@ export class IntersectionLoopPicker {
    * Set GUI.
    *
    * @param name - The intersection loop picker folder name used in the GUI.
-   * @param key - The key for the callback.
    * @param updateCallback - The callback that is invoked after updating intersection loop picker.
    */
-  setGUI(
-    gui: GUI,
-    name = "IntersectionLoopPicker",
-    key = "IntersectionLoopPicker",
-    updateCallback = (_key: string) => {}
-  ) {
+  setGUI(gui: GUI, name = "IntersectionLoopPicker", updateCallback = () => {}) {
     const ils = this;
 
     const checklist = Object.fromEntries(
@@ -127,8 +120,8 @@ export class IntersectionLoopPicker {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder
-      .add(ils, "selection")
-      .options(IntersectionLoopPicker.getSelections())
+      .add(ils, "option")
+      .options(IntersectionLoopPicker.getOptions())
       .onChange(uS);
     // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
@@ -136,12 +129,12 @@ export class IntersectionLoopPicker {
     updateHidden();
 
     function updateHidden() {
-      ils.selection === "some" ? iFolder.show() : iFolder.hide();
+      ils.option === "some" ? iFolder.show() : iFolder.hide();
     }
     function uS() /* updateSelection */ {
       updateHidden();
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-      updateCallback(key);
+      updateCallback();
     }
     function uI(e: {
       object: object;
@@ -156,28 +149,28 @@ export class IntersectionLoopPicker {
         if (i !== -1) ils.indices.splice(i, 1);
       }
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-      updateCallback(key);
+      updateCallback();
     }
   }
 
   /**
-   * Get the strings that can be used as a selection.
+   * Get the strings that can be used as a option.
    */
-  static getSelections(): IntersectionLoopPicker["selection"][] {
+  static getOptions(): IntersectionLoopPicker["option"][] {
     return ["all", "including plane", "excluding plane", "some"];
   }
 
   /**
-   * Get the selected intersection loops as the selection.
+   * Pick intersection loops.
    *
    * @param positions - The results of geometry.getAttribute("position").
    */
-  getSelectedIntersectionLoops(
+  pickIntersectionLoops(
     plane: FreePlane | VerticalPlane,
     positions: THREE.BufferAttribute
   ): IntersectionLoop[] {
     const list = this.intersectionLoops;
-    switch (this.selection) {
+    switch (this.option) {
       case "all":
         return list;
       case "including plane":
@@ -206,7 +199,7 @@ export class IntersectionLoopPicker {
    */
   copy(source: IntersectionLoopPicker): this {
     this.intersectionLoops = source.intersectionLoops.map((il) => il.clone());
-    this.selection = source.selection;
+    this.option = source.option;
     this.indices = source.indices;
 
     return this;
@@ -220,7 +213,7 @@ export class IntersectionLoopPicker {
   toJSON(): IntersectionLoopPickerJSON {
     return {
       intersectionLoops: this.intersectionLoops.map((il) => il.toJSON()),
-      selection: this.selection,
+      option: this.option,
       indices: this.indices,
     };
   }
@@ -235,7 +228,7 @@ export class IntersectionLoopPicker {
     this.intersectionLoops = json.intersectionLoops.map((il) =>
       new IntersectionLoop().fromJSON(il)
     );
-    this.selection = json.selection;
+    this.option = json.option;
     this.indices = json.indices;
 
     return this;
@@ -248,8 +241,8 @@ export class IntersectionLoopPicker {
 export interface IntersectionLoopPickerJSON {
   /** {@link IntersectionLoopPicker#intersectionLoops} */
   intersectionLoops: IntersectionLoopJSON[];
-  /** {@link IntersectionLoopPicker#selection} */
-  selection: IntersectionLoopPicker["selection"];
+  /** {@link IntersectionLoopPicker#option} */
+  option: IntersectionLoopPicker["option"];
   /** {@link IntersectionLoopPicker#indices} */
   indices: number[];
 }

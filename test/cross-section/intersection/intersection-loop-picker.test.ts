@@ -4,51 +4,10 @@ import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
 } from "src/cross-section/intersection/intersection-loop-picker";
-import { sortIntersectionLoops } from "src/cross-section/intersection/intersection-loops";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
-
-describe("sortIntersectionLoops()", () => {
-  test("check order", () => {
-    const positionsArray = [
-      [0, 0, 0],
-      [1, 0, 0],
-      [1, 0, 1],
-      [0, 0, 1],
-      [0, 1, 0],
-      [1, 1, 0],
-      [1, 1, 1],
-      [0, 1, 1],
-    ].flat();
-    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-
-    const intersectionLoops = [
-      new IntersectionLoop([new VertexIntersection(0)]),
-      new IntersectionLoop([new VertexIntersection(1)]),
-      new IntersectionLoop([new VertexIntersection(2)]),
-      new IntersectionLoop([new VertexIntersection(3)]),
-      new IntersectionLoop([new VertexIntersection(4)]),
-      new IntersectionLoop([new VertexIntersection(5)]),
-      new IntersectionLoop([new VertexIntersection(6)]),
-      new IntersectionLoop([new VertexIntersection(7)]),
-    ];
-    const expected = [
-      new IntersectionLoop([new VertexIntersection(0)]),
-      new IntersectionLoop([new VertexIntersection(4)]),
-      new IntersectionLoop([new VertexIntersection(3)]),
-      new IntersectionLoop([new VertexIntersection(7)]),
-      new IntersectionLoop([new VertexIntersection(1)]),
-      new IntersectionLoop([new VertexIntersection(5)]),
-      new IntersectionLoop([new VertexIntersection(2)]),
-      new IntersectionLoop([new VertexIntersection(6)]),
-    ];
-    expect(sortIntersectionLoops(intersectionLoops, positions)).toEqual(
-      expected
-    );
-  });
-});
 
 describe("IntersectionLoopPicker", () => {
   test("constructor()", () => {
@@ -60,18 +19,18 @@ describe("IntersectionLoopPicker", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     expect(ilp.intersectionLoops).toEqual([il]);
-    expect(ilp.selection).toBe("some");
+    expect(ilp.option).toBe("some");
     expect(ilp.indices).toEqual([0]);
   });
 
-  test("getSelections()", () => {
-    expect(IntersectionLoopPicker.getSelections()).toContain("all");
-    expect(IntersectionLoopPicker.getSelections()).toContain("including plane");
-    expect(IntersectionLoopPicker.getSelections()).toContain("excluding plane");
-    expect(IntersectionLoopPicker.getSelections()).toContain("some");
+  test("getOptions()", () => {
+    expect(IntersectionLoopPicker.getOptions()).toContain("all");
+    expect(IntersectionLoopPicker.getOptions()).toContain("including plane");
+    expect(IntersectionLoopPicker.getOptions()).toContain("excluding plane");
+    expect(IntersectionLoopPicker.getOptions()).toContain("some");
   });
 
-  describe("getSelectedIntersectionLoops()", () => {
+  describe("pickIntersectionLoops()", () => {
     describe("three triangular pyramids example", () => {
       const positionsArray = [
         [0, 0, 0],
@@ -141,7 +100,7 @@ describe("IntersectionLoopPicker", () => {
 
       test('case "all"', () => {
         const ilp = new IntersectionLoopPicker(intersectionLoops, "all");
-        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual(
+        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual(
           intersectionLoops
         );
       });
@@ -151,7 +110,7 @@ describe("IntersectionLoopPicker", () => {
           intersectionLoops,
           "including plane"
         );
-        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
         ]);
       });
@@ -161,7 +120,7 @@ describe("IntersectionLoopPicker", () => {
           intersectionLoops,
           "excluding plane"
         );
-        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[1],
           intersectionLoops[2],
         ]);
@@ -173,7 +132,7 @@ describe("IntersectionLoopPicker", () => {
           "some",
           [0, 2, 3]
         );
-        expect(ilp.getSelectedIntersectionLoops(plane, positions)).toEqual([
+        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
           intersectionLoops[0],
           intersectionLoops[2],
         ]);
@@ -234,7 +193,7 @@ describe("IntersectionLoopPicker", () => {
         closed: true,
       },
     ],
-    selection: "some",
+    option: "some",
     indices: [0],
   };
 

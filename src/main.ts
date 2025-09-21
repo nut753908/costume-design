@@ -1,6 +1,7 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
+import { Area, type AreaJSON } from "./cross-section/area";
 import { createBaseCenterlines } from "./cross-section/centerline/centerline";
 import {
   PlaneManager,
@@ -47,11 +48,23 @@ let indices: THREE.BufferAttribute;
 
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
-let pointsGroup: THREE.Group;
+
+let area: Area;
+let ilpsGroup: THREE.Group;
 
 let loading = false;
-const undos: { pm: PlaneManagerJSON; gui: guiJSON; closed: closedJSON }[] = [];
-const redos: { pm: PlaneManagerJSON; gui: guiJSON; closed: closedJSON }[] = [];
+const undos: {
+  pm: PlaneManagerJSON;
+  area: AreaJSON;
+  gui: guiJSON;
+  closed: closedJSON;
+}[] = [];
+const redos: {
+  pm: PlaneManagerJSON;
+  area: AreaJSON;
+  gui: guiJSON;
+  closed: closedJSON;
+}[] = [];
 
 init();
 
@@ -92,8 +105,14 @@ async function init() {
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
-    pointsGroup = pm.createPointsGroup(positions, indices, ms);
-    scene.add(pointsGroup);
+
+    area = new Area(Area.createPlaneToIlp(positions, indices));
+    pm._addCrossSection = area.addCrossSection.bind(area);
+    pm._removeCrossSection = area.removeCrossSection.bind(area);
+    pm._updateCrossSection = area.updateCrossSection.bind(area);
+    area.setGUI(gui);
+    ilpsGroup = area.createIlpsGroup(positions, ms);
+    scene.add(ilpsGroup);
   });
 
   save();
@@ -107,7 +126,12 @@ async function init() {
 function save() {
   if (loading) return; // "loading" is set by loadLastUndo().
 
-  undos.push({ pm: pm.toJSON(), gui: saveGui(gui), closed: saveClosed(gui) });
+  undos.push({
+    pm: pm.toJSON(),
+    area: area.toJSON(),
+    gui: saveGui(gui),
+    closed: saveClosed(gui),
+  });
   redos.length = 0;
 }
 
@@ -116,8 +140,9 @@ function loadLastUndo() {
 
   scene.remove(planesGroup);
   disposeGroup(planesGroup);
-  scene.remove(pointsGroup);
-  disposeGroup(pointsGroup);
+
+  scene.remove(ilpsGroup);
+  disposeGroup(ilpsGroup);
 
   const obj = undos[undos.length - 1];
 
@@ -125,8 +150,14 @@ function loadLastUndo() {
   pm.setGUI(gui);
   planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
   scene.add(planesGroup);
-  pointsGroup = pm.createPointsGroup(positions, indices, ms);
-  scene.add(pointsGroup);
+
+  area.fromJSON(obj.area);
+  pm._addCrossSection = area.addCrossSection.bind(area);
+  pm._removeCrossSection = area.removeCrossSection.bind(area);
+  pm._updateCrossSection = area.updateCrossSection.bind(area);
+  area.setGUI(gui);
+  ilpsGroup = area.createIlpsGroup(positions, ms);
+  scene.add(ilpsGroup);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);

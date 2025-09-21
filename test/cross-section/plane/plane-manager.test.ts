@@ -151,15 +151,15 @@ if (!this.planeKeys.includes(key))
     };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = pm1.clone();
-    pm2._addPlaneGroup = pm1._addPlaneGroup;
-    pm2._removePlaneGroup = pm1._removePlaneGroup;
-    pm2._addPointsGroup = pm1._addPointsGroup;
-    pm2._removePointsGroup = pm1._removePointsGroup;
-    pm2._updatePointsGroup = pm1._updatePointsGroup;
     pm2.planes["[0] {FreePlane}"]._updateGroup =
       pm1.planes["[0] {FreePlane}"]._updateGroup;
     pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
       pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
+    pm2._addPlaneGroup = pm1._addPlaneGroup;
+    pm2._removePlaneGroup = pm1._removePlaneGroup;
+    pm2._addCrossSection = pm1._addCrossSection;
+    pm2._removeCrossSection = pm1._removeCrossSection;
+    pm2._updateCrossSection = pm1._updateCrossSection;
     expect(pm1).toEqual(pm2);
   });
 
@@ -178,15 +178,15 @@ if (!this.planeKeys.includes(key))
     };
     const pm1 = new PlaneManager(curves, planes);
     const pm2 = new PlaneManager().copy(pm1);
-    pm2._addPlaneGroup = pm1._addPlaneGroup;
-    pm2._removePlaneGroup = pm1._removePlaneGroup;
-    pm2._addPointsGroup = pm1._addPointsGroup;
-    pm2._removePointsGroup = pm1._removePointsGroup;
-    pm2._updatePointsGroup = pm1._updatePointsGroup;
     pm2.planes["[0] {FreePlane}"]._updateGroup =
       pm1.planes["[0] {FreePlane}"]._updateGroup;
     pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
       pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
+    pm2._addPlaneGroup = pm1._addPlaneGroup;
+    pm2._removePlaneGroup = pm1._removePlaneGroup;
+    pm2._addCrossSection = pm1._addCrossSection;
+    pm2._removeCrossSection = pm1._removeCrossSection;
+    pm2._updateCrossSection = pm1._updateCrossSection;
     expect(pm1).toEqual(pm2);
   });
 
@@ -372,9 +372,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
+      pm2._addCrossSection = pm1._addCrossSection;
+      pm2._removeCrossSection = pm1._removeCrossSection;
+      pm2._updateCrossSection = pm1._updateCrossSection;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -386,9 +386,9 @@ if (!this.planeKeys.includes(key))
       const pm2 = new PlaneManager(curves);
       pm2._addPlaneGroup = pm1._addPlaneGroup;
       pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
+      pm2._addCrossSection = pm1._addCrossSection;
+      pm2._removeCrossSection = pm1._removeCrossSection;
+      pm2._updateCrossSection = pm1._updateCrossSection;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -417,13 +417,13 @@ if (!this.planeKeys.includes(key))
         ),
       };
       const pm2 = new PlaneManager({}, planes);
-      pm2._addPlaneGroup = pm1._addPlaneGroup;
-      pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2.planes["[0] {FreePlane}"]._updateGroup =
         pm1.planes["[0] {FreePlane}"]._updateGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addCrossSection = pm1._addCrossSection;
+      pm2._removeCrossSection = pm1._removeCrossSection;
+      pm2._updateCrossSection = pm1._updateCrossSection;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });
@@ -434,13 +434,13 @@ if (!this.planeKeys.includes(key))
       const curve = new THREE.CatmullRomCurve3(points);
       const planes = { "[1] b {VerticalPlane}": new VerticalPlane(curve, 1) };
       const pm2 = new PlaneManager({}, planes);
-      pm2._addPlaneGroup = pm1._addPlaneGroup;
-      pm2._removePlaneGroup = pm1._removePlaneGroup;
-      pm2._addPointsGroup = pm1._addPointsGroup;
-      pm2._removePointsGroup = pm1._removePointsGroup;
-      pm2._updatePointsGroup = pm1._updatePointsGroup;
       pm2.planes["[1] b {VerticalPlane}"]._updateGroup =
         pm1.planes["[1] b {VerticalPlane}"]._updateGroup;
+      pm2._addPlaneGroup = pm1._addPlaneGroup;
+      pm2._removePlaneGroup = pm1._removePlaneGroup;
+      pm2._addCrossSection = pm1._addCrossSection;
+      pm2._removeCrossSection = pm1._removeCrossSection;
+      pm2._updateCrossSection = pm1._updateCrossSection;
       expect(pm1).toEqual(pm2);
       expect(spy).toHaveBeenCalledTimes(0);
     });

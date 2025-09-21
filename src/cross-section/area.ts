@@ -18,16 +18,21 @@ import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
 
 /**
- * A class for managing the increase/decrease of cross sections.
+ * The area divided by cross sections.
  *
  * ```js
- * import { CrossSectionManager } from "./src/cross-section/cross-section-manager";
- * const crossSectionManager = new CrossSectionManager();
+ * import { Area } from "./src/cross-section/area";
+ * const area = new Area();
  * ```
  */
-export class CrossSectionManager {
+export class Area {
   /**
-   * The cross sections.
+   * The plane to intersection loop picker converter.
+   */
+  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
+
+  /**
+   * The cross sections dividing the area.
    */
   crossSections: {
     [k: string]: {
@@ -37,49 +42,53 @@ export class CrossSectionManager {
   };
 
   /**
+   * The thickness of the area.
+   */
+  thickness: number;
+
+  /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by addCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _addIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _removeIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _updateIlpGroup: (k: string) => void;
 
-  // TODO: add planeToIlpConverter
   /**
-   * Constructs a new cross section manager.
+   * Constructs a new area.
    *
-   * @param crossSections - {@link CrossSectionManager#crossSections}
+   * @param planeToIlp - {@link Area#planeToIlp}
+   * @param crossSections - {@link Area#crossSections}
+   * @param thickness - {@link Area#thickness}
    */
   constructor(
-    crossSections: {
-      [k: string]: {
-        plane: FreePlane | VerticalPlane;
-        ilp: IntersectionLoopPicker;
-      };
-    } = {}
+    planeToIlp: Area["planeToIlp"] = () => new IntersectionLoopPicker(),
+    crossSections: Area["crossSections"] = {},
+    thickness = 0.001
   ) {
+    this.planeToIlp = planeToIlp;
     this.crossSections = crossSections;
+    this.thickness = thickness;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
     this._updateIlpGroup = () => {};
   }
 
-  // TODO: test
   /**
    * Create the intersection loop pickers group.
    */
@@ -90,8 +99,8 @@ export class CrossSectionManager {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-    // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
+    // This function is used by addCrossSection() in src/cross-section/area.ts.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].ilp;
@@ -100,15 +109,15 @@ export class CrossSectionManager {
     };
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-    // This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
+    // This function is used by removeCrossSection() in src/cross-section/area.ts.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
-    // This function is used by setGUI() in src/cross-section/cross-section-manager.ts.
+    // This function is used by setGUI() in src/cross-section/area.ts.
     this._updateIlpGroup = (k: string) => {
       this._removeIlpGroup(k);
       this._addIlpGroup(k);
@@ -121,25 +130,28 @@ export class CrossSectionManager {
   /**
    * Set GUI.
    *
-   * @param name - The cross section manager folder name used in the GUI.
+   * @param name - The area folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "CrossSectionManager") {
+  setGUI(gui: GUI, name = "Area") {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
+    folder.add(this, "thickness", 0, 1, 0.0001);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-      cs.ilp.setGUI(folder, `ilp${k}`, k, this._updateIlpGroup);
+      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+      cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
+        this.updateCrossSection(k, cs.plane);
+      });
     });
   }
 
   // TODO: test
   /**
-   * Create a plane to an intersection loop picker converter.
+   * Create a plane to intersection loop picker converter.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIlpConverter(
+  static createPlaneToIlp(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker {
@@ -166,13 +178,9 @@ export class CrossSectionManager {
    *
    * @param key - The key in this.crossSections.
    */
-  addCrossSection(
-    key: string,
-    plane: FreePlane | VerticalPlane,
-    ilp: IntersectionLoopPicker
-  ) {
-    this.crossSections[key] = { plane, ilp };
-    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+  addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
+    this.crossSections[key] = { plane, ilp: this.planeToIlp(plane) };
+    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
   // TODO: test
@@ -182,55 +190,68 @@ export class CrossSectionManager {
    * @param key - The key in this.crossSections.
    */
   removeCrossSection(key: string) {
-    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     delete this.crossSections[key];
   }
 
+  // TODO: test
   /**
-   * Returns a new cross section manager with copied values from this instance.
+   * Update a cross section.
    *
-   * @return  A clone of this instance.
+   * @param key - The key in this.crossSections.
    */
-  clone(): CrossSectionManager {
-    return new CrossSectionManager().copy(this);
+  updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
+    this.removeCrossSection(key);
+    this.addCrossSection(key, plane);
   }
 
   /**
-   * Copies the values of the given cross section manager to this instance.
+   * Returns a new area with copied values from this instance.
    *
-   * @param source - The cross section manager to copy.
-   * @return  A reference to this cross section manager.
+   * @return  A clone of this instance.
    */
-  copy(source: CrossSectionManager): this {
+  clone(): Area {
+    return new Area().copy(this);
+  }
+
+  /**
+   * Copies the values of the given area to this instance.
+   *
+   * @param source - The area to copy.
+   * @return  A reference to this area.
+   */
+  copy(source: Area): this {
     this.crossSections = objectMap(source.crossSections, (v) => ({
       plane: v.plane.clone(),
       ilp: v.ilp.clone(),
     }));
+    this.thickness = source.thickness;
 
     return this;
   }
 
   /**
-   * Serializes the cross section manager into JSON.
+   * Serializes the area into JSON.
    *
-   * @return  A JSON object representing the serialized cross section manager.
+   * @return  A JSON object representing the serialized area.
    */
-  toJSON(): CrossSectionManagerJSON {
+  toJSON(): AreaJSON {
     return {
       crossSections: objectMap(this.crossSections, (v) => ({
         plane: v.plane.toJSON(),
         ilp: v.ilp.toJSON(),
       })),
+      thickness: this.thickness,
     };
   }
 
   /**
-   * Deserializes the cross section manager from the given JSON.
+   * Deserializes the area from the given JSON.
    *
-   * @param json - The JSON holding the serialized cross section manager.
-   * @return  A reference to this cross section manager.
+   * @param json - The JSON holding the serialized area.
+   * @return  A reference to this area.
    */
-  fromJSON(json: CrossSectionManagerJSON): this {
+  fromJSON(json: AreaJSON): this {
     this.crossSections = objectMap(json.crossSections, (v) => {
       let plane: FreePlane | VerticalPlane;
       if (v.plane.type === "FreePlane") {
@@ -249,20 +270,23 @@ export class CrossSectionManager {
         ilp: new IntersectionLoopPicker().fromJSON(v.ilp),
       };
     });
+    this.thickness = json.thickness;
 
     return this;
   }
 }
 
 /**
- * The {@link CrossSectionManager} JSON interface.
+ * The {@link Area} JSON interface.
  */
-export interface CrossSectionManagerJSON {
-  /** {@link CrossSectionManager#crossSections} */
+export interface AreaJSON {
+  /** {@link Area#crossSections} */
   crossSections: {
     [k: string]: {
       plane: FreePlaneJSON | VerticalPlaneJSON;
       ilp: IntersectionLoopPickerJSON;
     };
   };
+  /** {@link Area#thickness} */
+  thickness: number;
 }
