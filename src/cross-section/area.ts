@@ -27,6 +27,11 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
  */
 export class Area {
   /**
+   * The plane to intersection loop picker converter.
+   */
+  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
+
+  /**
    * The cross sections dividing the area.
    */
   crossSections: {
@@ -40,11 +45,6 @@ export class Area {
    * The thickness of the area.
    */
   thickness: number;
-
-  /**
-   * The plane to intersection loop picker converter.
-   */
-  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
 
   /**
    * Secret field.
@@ -72,19 +72,14 @@ export class Area {
   /**
    * Constructs a new area.
    *
+   * @param planeToIlp - {@link Area#planeToIlp}
    * @param crossSections - {@link Area#crossSections}
    * @param thickness - {@link Area#thickness}
-   * @param planeToIlp - {@link Area#planeToIlp}
    */
   constructor(
-    crossSections: {
-      [k: string]: {
-        plane: FreePlane | VerticalPlane;
-        ilp: IntersectionLoopPicker;
-      };
-    } = {},
-    thickness = 0.001,
-    planeToIlp = () => new IntersectionLoopPicker()
+    planeToIlp: Area["planeToIlp"] = () => new IntersectionLoopPicker(),
+    crossSections: Area["crossSections"] = {},
+    thickness = 0.001
   ) {
     this.crossSections = crossSections;
     this.thickness = thickness;
