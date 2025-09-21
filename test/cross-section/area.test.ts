@@ -33,16 +33,17 @@ describe("Area", () => {
   describe("createPlaneToIlp()", () => {
     // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
     describe("three triangular pyramids example", () => {
+      // (Switch between index:0-3 and index:4-7 to see the sorting)
       const positionsArray = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [0, 0, 1],
-        [0, 1, 0],
-        //
         [2, 0.5, 0.5],
         [3, 0, 0],
         [3, 0, 1],
         [3, 1, 0.5],
+        //
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
         //
         [4, 0.5, 0],
         [5, 0, 0.5],
@@ -76,17 +77,17 @@ describe("Area", () => {
         expect(Area.createPlaneToAllIls(positions, indices)(plane)).toEqual([
           new IntersectionLoop(
             [
-              new EdgeIntersection(1, 3, 0.5, true),
-              new EdgeIntersection(0, 3, 0.5, true),
-              new EdgeIntersection(2, 3, 0.5, true),
+              new EdgeIntersection(5, 7, 0.5, true),
+              new EdgeIntersection(4, 7, 0.5, true),
+              new EdgeIntersection(6, 7, 0.5, true),
             ],
             true
           ),
           new IntersectionLoop(
             [
-              new EdgeIntersection(5, 7, 0.5, true),
-              new EdgeIntersection(6, 7, 0.5, true),
-              new VertexIntersection(4, true),
+              new EdgeIntersection(1, 3, 0.5, true),
+              new EdgeIntersection(2, 3, 0.5, true),
+              new VertexIntersection(0, true),
             ],
             true
           ),
