@@ -191,6 +191,7 @@ describe("Area", () => {
     area2.planeToAllIls = area1.planeToAllIls;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
     area2._updateGUI = area1._updateGUI;
     expect(area1).toEqual(area2);
   });
@@ -220,6 +221,7 @@ describe("Area", () => {
     area2.planeToAllIls = area1.planeToAllIls;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
     area2._updateGUI = area1._updateGUI;
     expect(area1).toEqual(area2);
   });
@@ -314,6 +316,7 @@ describe("Area", () => {
     area2.planeToAllIls = area1.planeToAllIls;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
     area2._updateGUI = area1._updateGUI;
     expect(area1).toEqual(area2);
   });

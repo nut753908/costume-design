@@ -51,7 +51,6 @@ export class Area {
    * Secret field.
    * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by addCrossSection() in src/cross-section/area.ts.
-   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _addIlpGroup: (k: string) => void;
@@ -59,10 +58,16 @@ export class Area {
   /**
    * Secret field.
    * This function is used by removeCrossSection() in src/cross-section/area.ts.
-   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _removeIlpGroup: (k: string) => void;
+
+  /**
+   * Secret field.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+   */
+  _updateIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
@@ -89,6 +94,7 @@ export class Area {
     this.thickness = thickness;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
+    this._updateIlpGroup = () => {};
     this._updateGUI = () => {};
   }
 
@@ -104,7 +110,6 @@ export class Area {
 
     // This function is used by createIlpsGroup() in src/cross-section/area.ts.
     // This function is used by addCrossSection() in src/cross-section/area.ts.
-    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].ilp;
@@ -114,11 +119,16 @@ export class Area {
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
-    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
+    };
+
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
+    this._updateIlpGroup = (k: string) => {
+      this._removeIlpGroup(k);
+      this._addIlpGroup(k);
     };
 
     return parent;
@@ -203,8 +213,7 @@ export class Area {
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this.crossSections[key].plane = plane;
     this.crossSections[key].ilp.intersectionLoops = this.planeToAllIls(plane);
-    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+    this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
   /**
