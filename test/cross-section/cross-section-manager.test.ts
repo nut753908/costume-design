@@ -23,9 +23,7 @@ describe("CrossSectionManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
-    const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopPicker: ilp },
-    };
+    const crossSections = { "[0] {FreePlane}": { plane, ilp } };
     const csm = new CrossSectionManager(crossSections);
     expect(csm.crossSections).toEqual(crossSections);
   });
@@ -42,15 +40,13 @@ describe("CrossSectionManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
-    const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopPicker: ilp },
-    };
+    const crossSections = { "[0] {FreePlane}": { plane, ilp } };
     const csm1 = new CrossSectionManager(crossSections);
     const csm2 = csm1.clone();
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
     csm2._addIlpGroup = csm1._addIlpGroup;
     csm2._removeIlpGroup = csm1._removeIlpGroup;
     csm2._updateIlpGroup = csm1._updateIlpGroup;
@@ -69,15 +65,13 @@ describe("CrossSectionManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
-    const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopPicker: ilp },
-    };
+    const crossSections = { "[0] {FreePlane}": { plane, ilp } };
     const csm1 = new CrossSectionManager(crossSections);
     const csm2 = new CrossSectionManager().copy(csm1);
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
     csm2._addIlpGroup = csm1._addIlpGroup;
     csm2._removeIlpGroup = csm1._removeIlpGroup;
     csm2._updateIlpGroup = csm1._updateIlpGroup;
@@ -93,7 +87,7 @@ describe("CrossSectionManager", () => {
           point: [2, 3, 4],
           inverted: false,
         },
-        intersectionLoopPicker: {
+        ilp: {
           intersectionLoops: [
             {
               intersections: [
@@ -139,9 +133,7 @@ describe("CrossSectionManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
-    const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopPicker: ilp },
-    };
+    const crossSections = { "[0] {FreePlane}": { plane, ilp } };
     const json1 = new CrossSectionManager(crossSections).toJSON();
     const json2: CrossSectionManagerJSON = _json;
     expect(json1).toEqual(json2);
@@ -160,14 +152,12 @@ describe("CrossSectionManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
-    const crossSections = {
-      "[0] {FreePlane}": { plane, intersectionLoopPicker: ilp },
-    };
+    const crossSections = { "[0] {FreePlane}": { plane, ilp } };
     const csm2 = new CrossSectionManager(crossSections);
     csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].intersectionLoopPicker._updateGroup;
+    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
     csm2._addIlpGroup = csm1._addIlpGroup;
     csm2._removeIlpGroup = csm1._removeIlpGroup;
     csm2._updateIlpGroup = csm1._updateIlpGroup;

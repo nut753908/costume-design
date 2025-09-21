@@ -32,7 +32,7 @@ export class CrossSectionManager {
   crossSections: {
     [k: string]: {
       plane: FreePlane | VerticalPlane;
-      intersectionLoopPicker: IntersectionLoopPicker;
+      ilp: IntersectionLoopPicker;
     };
   };
 
@@ -69,7 +69,7 @@ export class CrossSectionManager {
     crossSections: {
       [k: string]: {
         plane: FreePlane | VerticalPlane;
-        intersectionLoopPicker: IntersectionLoopPicker;
+        ilp: IntersectionLoopPicker;
       };
     } = {}
   ) {
@@ -94,7 +94,7 @@ export class CrossSectionManager {
     // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
-      const ilp = this.crossSections[k].intersectionLoopPicker;
+      const ilp = this.crossSections[k].ilp;
       children[k] = ilp.createGroup(p, positions, ms);
       parent.add(children[k]);
     };
@@ -128,12 +128,7 @@ export class CrossSectionManager {
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-      cs.intersectionLoopPicker.setGUI(
-        folder,
-        `intersectionLoopPicker${k}`,
-        k,
-        this._updateIlpGroup
-      );
+      cs.ilp.setGUI(folder, `ilp${k}`, k, this._updateIlpGroup);
     });
   }
 
@@ -174,9 +169,9 @@ export class CrossSectionManager {
   addCrossSection(
     key: string,
     plane: FreePlane | VerticalPlane,
-    intersectionLoopPicker: IntersectionLoopPicker
+    ilp: IntersectionLoopPicker
   ) {
-    this.crossSections[key] = { plane, intersectionLoopPicker };
+    this.crossSections[key] = { plane, ilp };
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
   }
 
@@ -209,7 +204,7 @@ export class CrossSectionManager {
   copy(source: CrossSectionManager): this {
     this.crossSections = objectMap(source.crossSections, (v) => ({
       plane: v.plane.clone(),
-      intersectionLoopPicker: v.intersectionLoopPicker.clone(),
+      ilp: v.ilp.clone(),
     }));
 
     return this;
@@ -224,7 +219,7 @@ export class CrossSectionManager {
     return {
       crossSections: objectMap(this.crossSections, (v) => ({
         plane: v.plane.toJSON(),
-        intersectionLoopPicker: v.intersectionLoopPicker.toJSON(),
+        ilp: v.ilp.toJSON(),
       })),
     };
   }
@@ -251,9 +246,7 @@ export class CrossSectionManager {
       }
       return {
         plane,
-        intersectionLoopPicker: new IntersectionLoopPicker().fromJSON(
-          v.intersectionLoopPicker
-        ),
+        ilp: new IntersectionLoopPicker().fromJSON(v.ilp),
       };
     });
 
@@ -269,7 +262,7 @@ export interface CrossSectionManagerJSON {
   crossSections: {
     [k: string]: {
       plane: FreePlaneJSON | VerticalPlaneJSON;
-      intersectionLoopPicker: IntersectionLoopPickerJSON;
+      ilp: IntersectionLoopPickerJSON;
     };
   };
 }
