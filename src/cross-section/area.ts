@@ -13,7 +13,10 @@ import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
 } from "./intersection/intersection-loop-picker";
-import { createAllIntersectionLoops } from "./intersection/intersection-loops";
+import {
+  createAllIntersectionLoops,
+  sortIntersectionLoops,
+} from "./intersection/intersection-loops";
 import { createAllIntersections } from "./intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
@@ -174,7 +177,8 @@ export class Area {
         allEdges,
         positions
       );
-      return createAllIntersectionLoops(indicesMap, allIntersections);
+      const allIls = createAllIntersectionLoops(indicesMap, allIntersections);
+      return sortIntersectionLoops(allIls, positions);
     };
   }
 
