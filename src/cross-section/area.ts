@@ -8,11 +8,15 @@ import {
   convertToTriangularPolygonIndices,
   createIndicesMap,
 } from "./intersection/indices";
+import type { IntersectionLoop } from "./intersection/intersection-loop";
 import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
 } from "./intersection/intersection-loop-picker";
-import { createAllIntersectionLoops } from "./intersection/intersection-loops";
+import {
+  createAllIntersectionLoops,
+  sortIntersectionLoops,
+} from "./intersection/intersection-loops";
 import { createAllIntersections } from "./intersection/intersections";
 import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
@@ -27,9 +31,9 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
  */
 export class Area {
   /**
-   * The plane to intersection loop picker converter.
+   * The plane to all intersection loops converter.
    */
-  planeToIlp: (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker;
+  planeToAllIls: (plane: FreePlane | VerticalPlane) => IntersectionLoop[];
 
   /**
    * The cross sections dividing the area.
@@ -56,7 +60,6 @@ export class Area {
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
    * This function is used by removeCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
@@ -64,29 +67,40 @@ export class Area {
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
    * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _updateIlpGroup: (k: string) => void;
 
   /**
+   * Secret field.
+   * This function is used by setGUI() in src/cross-section/area.ts.
+   * This function is used by addCrossSection() in src/cross-section/area.ts.
+   * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using setGUI() in src/cross-section/area.ts.
+   */
+  _updateGUI: () => void;
+
+  /**
    * Constructs a new area.
    *
-   * @param planeToIlp - {@link Area#planeToIlp}
+   * @param planeToAllIls - {@link Area#planeToAllIls}
    * @param crossSections - {@link Area#crossSections}
    * @param thickness - {@link Area#thickness}
    */
   constructor(
-    planeToIlp: Area["planeToIlp"] = () => new IntersectionLoopPicker(),
+    planeToAllIls: Area["planeToAllIls"] = () => [],
     crossSections: Area["crossSections"] = {},
     thickness = 0.001
   ) {
-    this.planeToIlp = planeToIlp;
+    this.planeToAllIls = planeToAllIls;
     this.crossSections = crossSections;
     this.thickness = thickness;
     this._addIlpGroup = () => {};
     this._removeIlpGroup = () => {};
     this._updateIlpGroup = () => {};
+    this._updateGUI = () => {};
   }
 
   /**
@@ -109,7 +123,6 @@ export class Area {
     };
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
@@ -117,7 +130,7 @@ export class Area {
       delete children[k];
     };
 
-    // This function is used by setGUI() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._updateIlpGroup = (k: string) => {
       this._removeIlpGroup(k);
       this._addIlpGroup(k);
@@ -126,35 +139,35 @@ export class Area {
     return parent;
   }
 
-  // TODO: test
   /**
    * Set GUI.
-   *
-   * @param name - The area folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "Area") {
-    deleteFolder(gui, name);
-    const folder = gui.addFolder(name);
-    folder.add(this, "thickness", 0, 1, 0.0001);
-    Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-      cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
-        this.updateCrossSection(k, cs.plane);
+  setGUI(gui: GUI) {
+    // This function is used by setGUI() in src/cross-section/area.ts.
+    // This function is used by addCrossSection() in src/cross-section/area.ts.
+    // This function is used by removeCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
+    this._updateGUI = () => {
+      deleteFolder(gui, "Area");
+      const folder = gui.addFolder("Area");
+      folder.add(this, "thickness", 0, 1, 0.0001);
+      Object.entries(this.crossSections).forEach(([k, cs]) => {
+        cs.ilp.setGUI(folder, `intersection loops${k}`);
       });
-    });
+    };
+    this._updateGUI();
   }
 
-  // TODO: test
   /**
-   * Create a plane to intersection loop picker converter.
+   * Create a plane to all intersection loops converter.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIlp(
+  static createPlaneToAllIls(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
-  ): (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker {
+  ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
     const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
     const allEdges = createAllEdges(triangularPolygonIndices);
     const indicesMap = createIndicesMap(triangularPolygonIndices);
@@ -164,45 +177,46 @@ export class Area {
         allEdges,
         positions
       );
-      const allIntersectionLoops = createAllIntersectionLoops(
-        indicesMap,
-        allIntersections
-      );
-      return new IntersectionLoopPicker(allIntersectionLoops);
+      const allIls = createAllIntersectionLoops(indicesMap, allIntersections);
+      return sortIntersectionLoops(allIls, positions);
     };
   }
 
-  // TODO: test
   /**
    * Add a cross section.
    *
    * @param key - The key in this.crossSections.
    */
   addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
-    this.crossSections[key] = { plane, ilp: this.planeToIlp(plane) };
+    this.crossSections[key] = {
+      plane,
+      ilp: new IntersectionLoopPicker(this.planeToAllIls(plane)),
+    };
+    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
-  // TODO: test
   /**
    * Remove a cross section.
    *
    * @param key - The key in this.crossSections.
    */
   removeCrossSection(key: string) {
-    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     delete this.crossSections[key];
+    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
-  // TODO: test
   /**
    * Update a cross section.
    *
    * @param key - The key in this.crossSections.
    */
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
-    this.removeCrossSection(key);
-    this.addCrossSection(key, plane);
+    this.crossSections[key].plane = plane;
+    this.crossSections[key].ilp.intersectionLoops = this.planeToAllIls(plane);
+    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
+    this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
   /**

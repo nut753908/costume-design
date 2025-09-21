@@ -106,7 +106,7 @@ async function init() {
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
 
-    area = new Area(Area.createPlaneToIlp(positions, indices));
+    area = new Area(Area.createPlaneToAllIls(positions, indices));
     pm._addCrossSection = area.addCrossSection.bind(area);
     pm._removeCrossSection = area.removeCrossSection.bind(area);
     pm._updateCrossSection = area.updateCrossSection.bind(area);

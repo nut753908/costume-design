@@ -1,4 +1,4 @@
-import type { Controller, GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { deleteFolder } from "src/main/gui";
 import { disposeGroup } from "src/main/utils";
 import type { Materials } from "src/material/materials";
@@ -46,6 +46,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Secret field.
+   * This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
    * This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
    * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
    */
@@ -82,6 +83,7 @@ export class IntersectionLoopPicker {
   ): THREE.Group {
     const group = new THREE.Group();
 
+    // This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
     // This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
     this._updateGroup = () => {
       disposeGroup(group);
@@ -98,14 +100,12 @@ export class IntersectionLoopPicker {
     return group;
   }
 
-  // TODO: test
   /**
    * Set GUI.
    *
    * @param name - The intersection loop picker folder name used in the GUI.
-   * @param updateCallback - The callback that is invoked after updating intersection loop picker.
    */
-  setGUI(gui: GUI, name = "IntersectionLoopPicker", updateCallback = () => {}) {
+  setGUI(gui: GUI, name = "IntersectionLoopPicker") {
     const ils = this;
 
     const checklist = Object.fromEntries(
@@ -123,9 +123,10 @@ export class IntersectionLoopPicker {
       .add(ils, "option")
       .options(IntersectionLoopPicker.getOptions())
       .onChange(uS);
-    // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
-    Object.keys(checklist).map((i) => iFolder.add(checklist, i).onChange(uI));
+    Object.keys(checklist).map((i) =>
+      iFolder.add(checklist, i).onChange(() => uI(i))
+    );
     updateHidden();
 
     function updateHidden() {
@@ -134,22 +135,15 @@ export class IntersectionLoopPicker {
     function uS() /* updateSelection */ {
       updateHidden();
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-      updateCallback();
     }
-    function uI(e: {
-      object: object;
-      property: string;
-      value: boolean;
-      controller: Controller;
-    }) /* updateIndices */ {
-      const i = ils.indices.indexOf(Number(e.property));
-      if (e.value) {
-        if (i === -1) ils.indices.push(Number(e.property));
+    function uI(i: string) /* updateIndices */ {
+      const index = ils.indices.indexOf(Number(i));
+      if (checklist[i]) {
+        if (index === -1) ils.indices.push(Number(i));
       } else {
-        if (i !== -1) ils.indices.splice(i, 1);
+        if (index !== -1) ils.indices.splice(index, 1);
       }
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-      updateCallback();
     }
   }
 
