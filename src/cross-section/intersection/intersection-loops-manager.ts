@@ -15,14 +15,14 @@ import { convertToTriangularPolygonIndices, createIndicesMap } from "./indices";
 import { createAllIntersections } from "./intersections";
 
 /**
- * A class for managing the increase/decrease of intersection loops.
+ * A class for managing the increase/decrease of cross section.
  *
  * ```js
- * import { IntersectionLoopsManager } from "./src/cross-section/intersection/intersection-loops-manager";
- * const intersectionLoopsManager = new IntersectionLoopsManager();
+ * import { CrossSectionManager } from "./src/cross-section/cross-section-manager";
+ * const crossSectionManager = new CrossSectionManager();
  * ```
  */
-export class IntersectionLoopsManager {
+export class CrossSectionManager {
   /**
    * The cross sections.
    */
@@ -35,32 +35,32 @@ export class IntersectionLoopsManager {
 
   /**
    * Secret field.
-   * This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-   * This function is used by addPlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
-   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+   * This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by addPlaneAndIntersectionLoops() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
    */
   _addGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-   * This function is used by removePlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
-   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+   * This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by removePlaneAndIntersectionLoops() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
    */
   _removeGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+   * This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
+   * Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
    */
   _updateGroup: (k: string) => void;
 
   // TODO: add planeToIntersectionLoopsConverter
   /**
-   * Constructs a new intersection loops manager.
+   * Constructs a new cross section manager.
    *
-   * @param crossSections - {@link IntersectionLoopsManager#crossSections}
+   * @param crossSections - {@link CrossSectionManager#crossSections}
    */
   constructor(
     crossSections: {
@@ -84,8 +84,8 @@ export class IntersectionLoopsManager {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    // This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-    // This function is used by addPlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
+    // This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
+    // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
     this._addGroup = (k: string) => {
       if (!(k in this.crossSections)) {
         console.error(`\
@@ -102,15 +102,15 @@ export class IntersectionLoopsManager {
     };
     Object.keys(this.crossSections).map((k) => this._addGroup(k));
 
-    // This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-    // This function is used by removePlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
+    // This function is used by createGroup() in src/cross-section/cross-section-manager.ts.
+    // This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
     this._removeGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
-    // This function is used by setGUI() in src/cross-section/intersection/intersection-loops-manager.ts.
+    // This function is used by setGUI() in src/cross-section/cross-section-manager.ts.
     this._updateGroup = (k: string) => {
       this._removeGroup(k);
       this._addGroup(k);
@@ -123,13 +123,13 @@ export class IntersectionLoopsManager {
   /**
    * Set GUI.
    *
-   * @param name - The intersection loops manager folder name used in the GUI.
+   * @param name - The cross section manager folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "IntersectionLoopsManager") {
+  setGUI(gui: GUI, name = "CrossSectionManager") {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateGroup: Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+      // _updateGroup: Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
       cs.intersectionLoops.setGUI(
         folder,
         `intersectionLoops${k}`,
@@ -169,46 +169,46 @@ export class IntersectionLoopsManager {
 
   // TODO: test
   /**
-   * Add a plane and intersection loops.
+   * Add a cross section.
    *
    * @param key - The key in both this.planes and this.intersectionLoops.
    */
-  addPlaneAndIntersectionLoops(
+  addCrossSection(
     key: string,
     plane: FreePlane | VerticalPlane,
     intersectionLoops: IntersectionLoops
   ) {
     this.crossSections[key] = { plane, intersectionLoops };
-    this._addGroup(key); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+    this._addGroup(key); // Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
   }
 
   // TODO: test
   /**
-   * Remove a plane and intersection loops.
+   * Remove a cross section.
    *
    * @param key - The key in both this.planes and this.intersectionLoops.
    */
-  removePlaneAndIntersectionLoops(key: string) {
-    this._removeGroup(key); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
+  removeCrossSection(key: string) {
+    this._removeGroup(key); // Set it in advance using createGroup() in src/cross-section/cross-section-manager.ts.
     delete this.crossSections[key];
   }
 
   /**
-   * Returns a new intersection loops manager with copied values from this instance.
+   * Returns a new cross section manager with copied values from this instance.
    *
    * @return  A clone of this instance.
    */
-  clone(): IntersectionLoopsManager {
-    return new IntersectionLoopsManager().copy(this);
+  clone(): CrossSectionManager {
+    return new CrossSectionManager().copy(this);
   }
 
   /**
-   * Copies the values of the given intersection loops manager to this instance.
+   * Copies the values of the given cross section manager to this instance.
    *
-   * @param source - The intersection loops manager to copy.
-   * @return  A reference to this intersection loops manager.
+   * @param source - The cross section manager to copy.
+   * @return  A reference to this cross section manager.
    */
-  copy(source: IntersectionLoopsManager): this {
+  copy(source: CrossSectionManager): this {
     this.crossSections = objectMap(source.crossSections, (v) => ({
       plane: v.plane.clone(),
       intersectionLoops: v.intersectionLoops.clone(),
@@ -218,11 +218,11 @@ export class IntersectionLoopsManager {
   }
 
   /**
-   * Serializes the intersection loops manager into JSON.
+   * Serializes the cross section manager into JSON.
    *
-   * @return  A JSON object representing the serialized intersection loops manager.
+   * @return  A JSON object representing the serialized cross section manager.
    */
-  toJSON(): IntersectionLoopsManagerJSON {
+  toJSON(): CrossSectionManagerJSON {
     return {
       crossSections: objectMap(this.crossSections, (v) => ({
         plane: v.plane.toJSON(),
@@ -232,12 +232,12 @@ export class IntersectionLoopsManager {
   }
 
   /**
-   * Deserializes the intersection loops manager from the given JSON.
+   * Deserializes the cross section manager from the given JSON.
    *
-   * @param json - The JSON holding the serialized intersection loops manager.
-   * @return  A reference to this intersection loops manager.
+   * @param json - The JSON holding the serialized cross section manager.
+   * @return  A reference to this cross section manager.
    */
-  fromJSON(json: IntersectionLoopsManagerJSON): this {
+  fromJSON(json: CrossSectionManagerJSON): this {
     this.crossSections = objectMap(json.crossSections, (v) => {
       let plane: FreePlane | VerticalPlane;
       if (v.plane.type === "FreePlane") {
@@ -264,10 +264,10 @@ export class IntersectionLoopsManager {
 }
 
 /**
- * The {@link IntersectionLoopsManager} JSON interface.
+ * The {@link CrossSectionManager} JSON interface.
  */
-export interface IntersectionLoopsManagerJSON {
-  /** {@link IntersectionLoopsManager#crossSections} */
+export interface CrossSectionManagerJSON {
+  /** {@link CrossSectionManager#crossSections} */
   crossSections: {
     [k: string]: {
       plane: FreePlaneJSON | VerticalPlaneJSON;
