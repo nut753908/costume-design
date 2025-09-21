@@ -1,4 +1,4 @@
-import type { Controller, GUI } from "lil-gui";
+import type { GUI } from "lil-gui";
 import { deleteFolder } from "src/main/gui";
 import { disposeGroup } from "src/main/utils";
 import type { Materials } from "src/material/materials";
@@ -127,7 +127,9 @@ export class IntersectionLoopPicker {
       .onChange(uS);
     // TODO: support for changing intersectionLoops.length
     const iFolder = folder.addFolder("indices");
-    Object.keys(checklist).map((i) => iFolder.add(checklist, i).onChange(uI));
+    Object.keys(checklist).map((i) =>
+      iFolder.add(checklist, i).onChange(() => uI(i))
+    );
     updateHidden();
 
     function updateHidden() {
@@ -138,17 +140,12 @@ export class IntersectionLoopPicker {
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback();
     }
-    function uI(e: {
-      object: object;
-      property: string;
-      value: boolean;
-      controller: Controller;
-    }) /* updateIndices */ {
-      const i = ils.indices.indexOf(Number(e.property));
-      if (e.value) {
-        if (i === -1) ils.indices.push(Number(e.property));
+    function uI(i: string) /* updateIndices */ {
+      const index = ils.indices.indexOf(Number(i));
+      if (checklist[i]) {
+        if (index === -1) ils.indices.push(Number(i));
       } else {
-        if (i !== -1) ils.indices.splice(i, 1);
+        if (index !== -1) ils.indices.splice(index, 1);
       }
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback();
