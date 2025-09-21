@@ -144,7 +144,7 @@ export class Area {
     folder.add(this, "thickness", 0, 1, 0.0001);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-      cs.ilp.setGUI(folder, `ilp${k}`, k, this._updateIlpGroup);
+      cs.ilp.setGUI(folder, `intersection loops${k}`, k, this._updateIlpGroup);
     });
   }
 
