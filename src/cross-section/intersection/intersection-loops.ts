@@ -186,8 +186,15 @@ export class IntersectionLoops {
    * Set GUI.
    *
    * @param name - The intersection loops folder name used in the GUI.
+   * @param key - The key for the callback.
+   * @param updateCallback - The callback that is invoked after updating intersection loops.
    */
-  setGUI(gui: GUI, name = "IntersectionLoops") {
+  setGUI(
+    gui: GUI,
+    name = "IntersectionLoops",
+    key = "IntersectionLoops",
+    updateCallback = (_key: string) => {}
+  ) {
     const ils = this;
 
     const checklist = Object.fromEntries(
@@ -216,6 +223,7 @@ export class IntersectionLoops {
     function uS() /* updateSelection */ {
       updateHidden();
       ils._updateGroup();
+      updateCallback(key);
     }
     function uI(e: {
       object: object;
@@ -230,6 +238,7 @@ export class IntersectionLoops {
         if (i !== -1) ils.indices.splice(i, 1);
       }
       ils._updateGroup();
+      updateCallback(key);
     }
   }
 

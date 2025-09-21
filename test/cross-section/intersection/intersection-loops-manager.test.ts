@@ -6,10 +6,17 @@ import {
   type IntersectionLoopsManagerJSON,
 } from "src/cross-section/intersection/intersection-loops-manager";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
+import { FreePlane } from "src/cross-section/plane/free-plane";
+import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
 describe("IntersectionLoopsManager", () => {
   test("constructor()", () => {
+    const plane = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4)
+    );
+    const planes = { "[0] {FreePlane}": plane };
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -17,12 +24,18 @@ describe("IntersectionLoopsManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils = new IntersectionLoops([il], "some", [0]);
-    const ilsList = { a: ils };
-    const ilsm = new IntersectionLoopsManager(ilsList);
+    const ilsList = { "[0] {FreePlane}": ils };
+    const ilsm = new IntersectionLoopsManager(planes, ilsList);
+    expect(ilsm.planes).toEqual(planes);
     expect(ilsm.intersectionLoopsList).toEqual(ilsList);
   });
 
   test("clone()", () => {
+    const plane = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4)
+    );
+    const planes = { "[0] {FreePlane}": plane };
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -30,15 +43,25 @@ describe("IntersectionLoopsManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils = new IntersectionLoops([il], "some", [0]);
-    const ilsList = { a: ils };
-    const ilsm1 = new IntersectionLoopsManager(ilsList);
+    const ilsList = { "[0] {FreePlane}": ils };
+    const ilsm1 = new IntersectionLoopsManager(planes, ilsList);
     const ilsm2 = ilsm1.clone();
-    ilsm2.intersectionLoopsList.a._updateGroup =
-      ilsm1.intersectionLoopsList.a._updateGroup;
+    ilsm2.planes["[0] {FreePlane}"]._updateGroup =
+      ilsm1.planes["[0] {FreePlane}"]._updateGroup;
+    ilsm2.intersectionLoopsList["[0] {FreePlane}"]._updateGroup =
+      ilsm1.intersectionLoopsList["[0] {FreePlane}"]._updateGroup;
+    ilsm2._addGroup = ilsm1._addGroup;
+    ilsm2._removeGroup = ilsm1._removeGroup;
+    ilsm2._updateGroup = ilsm1._updateGroup;
     expect(ilsm1).toEqual(ilsm2);
   });
 
   test("copy()", () => {
+    const plane = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4)
+    );
+    const planes = { "[0] {FreePlane}": plane };
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -46,17 +69,30 @@ describe("IntersectionLoopsManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils = new IntersectionLoops([il], "some", [0]);
-    const ilsList = { a: ils };
-    const ilsm1 = new IntersectionLoopsManager(ilsList);
+    const ilsList = { "[0] {FreePlane}": ils };
+    const ilsm1 = new IntersectionLoopsManager(planes, ilsList);
     const ilsm2 = new IntersectionLoopsManager().copy(ilsm1);
-    ilsm2.intersectionLoopsList.a._updateGroup =
-      ilsm1.intersectionLoopsList.a._updateGroup;
+    ilsm2.planes["[0] {FreePlane}"]._updateGroup =
+      ilsm1.planes["[0] {FreePlane}"]._updateGroup;
+    ilsm2.intersectionLoopsList["[0] {FreePlane}"]._updateGroup =
+      ilsm1.intersectionLoopsList["[0] {FreePlane}"]._updateGroup;
+    ilsm2._addGroup = ilsm1._addGroup;
+    ilsm2._removeGroup = ilsm1._removeGroup;
+    ilsm2._updateGroup = ilsm1._updateGroup;
     expect(ilsm1).toEqual(ilsm2);
   });
 
   const _json: IntersectionLoopsManagerJSON = {
+    planes: {
+      "[0] {FreePlane}": {
+        type: "FreePlane",
+        normal: [1, 0, 0],
+        point: [2, 3, 4],
+        inverted: false,
+      },
+    },
     intersectionLoopsList: {
-      a: {
+      "[0] {FreePlane}": {
         intersectionLoops: [
           {
             intersections: [
@@ -90,6 +126,11 @@ describe("IntersectionLoopsManager", () => {
   };
 
   test("toJSON()", () => {
+    const plane = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4)
+    );
+    const planes = { "[0] {FreePlane}": plane };
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -97,14 +138,19 @@ describe("IntersectionLoopsManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils = new IntersectionLoops([il], "some", [0]);
-    const ilsList = { a: ils };
-    const json1 = new IntersectionLoopsManager(ilsList).toJSON();
+    const ilsList = { "[0] {FreePlane}": ils };
+    const json1 = new IntersectionLoopsManager(planes, ilsList).toJSON();
     const json2: IntersectionLoopsManagerJSON = _json;
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
     const ilsm1 = new IntersectionLoopsManager().fromJSON(_json);
+    const plane = new FreePlane(
+      new THREE.Vector3(1, 0, 0),
+      new THREE.Vector3(2, 3, 4)
+    );
+    const planes = { "[0] {FreePlane}": plane };
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),
       new EdgeIntersection(0, 3, 0.75, true),
@@ -112,10 +158,15 @@ describe("IntersectionLoopsManager", () => {
     ];
     const il = new IntersectionLoop(intersections, true);
     const ils = new IntersectionLoops([il], "some", [0]);
-    const ilsList = { a: ils };
-    const ilsm2 = new IntersectionLoopsManager(ilsList);
-    ilsm2.intersectionLoopsList.a._updateGroup =
-      ilsm1.intersectionLoopsList.a._updateGroup;
+    const ilsList = { "[0] {FreePlane}": ils };
+    const ilsm2 = new IntersectionLoopsManager(planes, ilsList);
+    ilsm2.planes["[0] {FreePlane}"]._updateGroup =
+      ilsm1.planes["[0] {FreePlane}"]._updateGroup;
+    ilsm2.intersectionLoopsList["[0] {FreePlane}"]._updateGroup =
+      ilsm1.intersectionLoopsList["[0] {FreePlane}"]._updateGroup;
+    ilsm2._addGroup = ilsm1._addGroup;
+    ilsm2._removeGroup = ilsm1._removeGroup;
+    ilsm2._updateGroup = ilsm1._updateGroup;
     expect(ilsm1).toEqual(ilsm2);
   });
 });
