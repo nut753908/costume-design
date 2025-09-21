@@ -146,6 +146,7 @@ export class Area {
     // This function is used by setGUI() in src/cross-section/area.ts.
     // This function is used by addCrossSection() in src/cross-section/area.ts.
     // This function is used by removeCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._updateGUI = () => {
       deleteFolder(gui, "Area");
       const folder = gui.addFolder("Area");
