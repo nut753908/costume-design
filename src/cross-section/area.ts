@@ -151,9 +151,7 @@ export class Area {
       const folder = gui.addFolder("Area");
       folder.add(this, "thickness", 0, 1, 0.0001);
       Object.entries(this.crossSections).forEach(([k, cs]) => {
-        cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
-          this.updateCrossSection(k, cs.plane);
-        });
+        cs.ilp.setGUI(folder, `intersection loops${k}`);
       });
     };
     this._updateGUI();
