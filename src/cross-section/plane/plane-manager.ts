@@ -199,7 +199,7 @@ export class PlaneManager {
   /**
    * Set GUI.
    *
-   * @param name - The curve folder name used in the GUI.
+   * @param name - The plane manager folder name used in the GUI.
    */
   setGUI(gui: GUI, name = "PlaneManager") {
     const pm = this;

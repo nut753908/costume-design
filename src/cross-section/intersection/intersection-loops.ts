@@ -185,7 +185,7 @@ export class IntersectionLoops {
   /**
    * Set GUI.
    *
-   * @param name - The curve folder name used in the GUI.
+   * @param name - The intersection loops folder name used in the GUI.
    */
   setGUI(gui: GUI, name = "IntersectionLoops") {
     const ils = this;
