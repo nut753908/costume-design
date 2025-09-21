@@ -1,7 +1,4 @@
-import {
-  CrossSectionManager,
-  type CrossSectionManagerJSON,
-} from "src/cross-section/cross-section-manager";
+import { Area, type AreaJSON } from "src/cross-section/cross-section-manager";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
@@ -10,7 +7,7 @@ import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
-describe("CrossSectionManager", () => {
+describe("Area", () => {
   test("constructor()", () => {
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
@@ -24,8 +21,8 @@ describe("CrossSectionManager", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const csm = new CrossSectionManager(crossSections);
-    expect(csm.crossSections).toEqual(crossSections);
+    const area = new Area(crossSections);
+    expect(area.crossSections).toEqual(crossSections);
   });
 
   test("clone()", () => {
@@ -41,16 +38,16 @@ describe("CrossSectionManager", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const csm1 = new CrossSectionManager(crossSections);
-    const csm2 = csm1.clone();
-    csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    csm2._addIlpGroup = csm1._addIlpGroup;
-    csm2._removeIlpGroup = csm1._removeIlpGroup;
-    csm2._updateIlpGroup = csm1._updateIlpGroup;
-    expect(csm1).toEqual(csm2);
+    const area1 = new Area(crossSections);
+    const area2 = area1.clone();
+    area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
+    area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2._addIlpGroup = area1._addIlpGroup;
+    area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
+    expect(area1).toEqual(area2);
   });
 
   test("copy()", () => {
@@ -66,19 +63,19 @@ describe("CrossSectionManager", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const csm1 = new CrossSectionManager(crossSections);
-    const csm2 = new CrossSectionManager().copy(csm1);
-    csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    csm2._addIlpGroup = csm1._addIlpGroup;
-    csm2._removeIlpGroup = csm1._removeIlpGroup;
-    csm2._updateIlpGroup = csm1._updateIlpGroup;
-    expect(csm1).toEqual(csm2);
+    const area1 = new Area(crossSections);
+    const area2 = new Area().copy(area1);
+    area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
+    area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2._addIlpGroup = area1._addIlpGroup;
+    area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
+    expect(area1).toEqual(area2);
   });
 
-  const _json: CrossSectionManagerJSON = {
+  const _json: AreaJSON = {
     crossSections: {
       "[0] {FreePlane}": {
         plane: {
@@ -134,13 +131,13 @@ describe("CrossSectionManager", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const json1 = new CrossSectionManager(crossSections).toJSON();
-    const json2: CrossSectionManagerJSON = _json;
+    const json1 = new Area(crossSections).toJSON();
+    const json2: AreaJSON = _json;
     expect(json1).toEqual(json2);
   });
 
   test("fromJSON()", () => {
-    const csm1 = new CrossSectionManager().fromJSON(_json);
+    const area1 = new Area().fromJSON(_json);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -153,14 +150,14 @@ describe("CrossSectionManager", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const csm2 = new CrossSectionManager(crossSections);
-    csm2.crossSections["[0] {FreePlane}"].plane._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].plane._updateGroup;
-    csm2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
-      csm1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    csm2._addIlpGroup = csm1._addIlpGroup;
-    csm2._removeIlpGroup = csm1._removeIlpGroup;
-    csm2._updateIlpGroup = csm1._updateIlpGroup;
-    expect(csm1).toEqual(csm2);
+    const area2 = new Area(crossSections);
+    area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
+    area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
+      area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
+    area2._addIlpGroup = area1._addIlpGroup;
+    area2._removeIlpGroup = area1._removeIlpGroup;
+    area2._updateIlpGroup = area1._updateIlpGroup;
+    expect(area1).toEqual(area2);
   });
 });

@@ -18,16 +18,16 @@ import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
 
 /**
- * A class for managing the increase/decrease of cross sections.
+ * The area divided by cross sections.
  *
  * ```js
- * import { CrossSectionManager } from "./src/cross-section/cross-section-manager";
- * const crossSectionManager = new CrossSectionManager();
+ * import { Area } from "./src/cross-section/cross-section-manager";
+ * const area = new Area();
  * ```
  */
-export class CrossSectionManager {
+export class Area {
   /**
-   * The cross sections.
+   * The cross sections dividing the area.
    */
   crossSections: {
     [k: string]: {
@@ -61,9 +61,9 @@ export class CrossSectionManager {
 
   // TODO: add planeToIlpConverter
   /**
-   * Constructs a new cross section manager.
+   * Constructs a new area.
    *
-   * @param crossSections - {@link CrossSectionManager#crossSections}
+   * @param crossSections - {@link Area#crossSections}
    */
   constructor(
     crossSections: {
@@ -121,9 +121,9 @@ export class CrossSectionManager {
   /**
    * Set GUI.
    *
-   * @param name - The cross section manager folder name used in the GUI.
+   * @param name - The area folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "CrossSectionManager") {
+  setGUI(gui: GUI, name = "Area") {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
@@ -187,21 +187,21 @@ export class CrossSectionManager {
   }
 
   /**
-   * Returns a new cross section manager with copied values from this instance.
+   * Returns a new area with copied values from this instance.
    *
    * @return  A clone of this instance.
    */
-  clone(): CrossSectionManager {
-    return new CrossSectionManager().copy(this);
+  clone(): Area {
+    return new Area().copy(this);
   }
 
   /**
-   * Copies the values of the given cross section manager to this instance.
+   * Copies the values of the given area to this instance.
    *
-   * @param source - The cross section manager to copy.
-   * @return  A reference to this cross section manager.
+   * @param source - The area to copy.
+   * @return  A reference to this area.
    */
-  copy(source: CrossSectionManager): this {
+  copy(source: Area): this {
     this.crossSections = objectMap(source.crossSections, (v) => ({
       plane: v.plane.clone(),
       ilp: v.ilp.clone(),
@@ -211,11 +211,11 @@ export class CrossSectionManager {
   }
 
   /**
-   * Serializes the cross section manager into JSON.
+   * Serializes the area into JSON.
    *
-   * @return  A JSON object representing the serialized cross section manager.
+   * @return  A JSON object representing the serialized area.
    */
-  toJSON(): CrossSectionManagerJSON {
+  toJSON(): AreaJSON {
     return {
       crossSections: objectMap(this.crossSections, (v) => ({
         plane: v.plane.toJSON(),
@@ -225,12 +225,12 @@ export class CrossSectionManager {
   }
 
   /**
-   * Deserializes the cross section manager from the given JSON.
+   * Deserializes the area from the given JSON.
    *
-   * @param json - The JSON holding the serialized cross section manager.
-   * @return  A reference to this cross section manager.
+   * @param json - The JSON holding the serialized area.
+   * @return  A reference to this area.
    */
-  fromJSON(json: CrossSectionManagerJSON): this {
+  fromJSON(json: AreaJSON): this {
     this.crossSections = objectMap(json.crossSections, (v) => {
       let plane: FreePlane | VerticalPlane;
       if (v.plane.type === "FreePlane") {
@@ -255,10 +255,10 @@ export class CrossSectionManager {
 }
 
 /**
- * The {@link CrossSectionManager} JSON interface.
+ * The {@link Area} JSON interface.
  */
-export interface CrossSectionManagerJSON {
-  /** {@link CrossSectionManager#crossSections} */
+export interface AreaJSON {
+  /** {@link Area#crossSections} */
   crossSections: {
     [k: string]: {
       plane: FreePlaneJSON | VerticalPlaneJSON;
