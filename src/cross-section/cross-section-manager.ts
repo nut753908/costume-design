@@ -59,7 +59,7 @@ export class CrossSectionManager {
    */
   _updateIlpGroup: (k: string) => void;
 
-  // TODO: add planeToIntersectionLoopPickerConverter
+  // TODO: add planeToIlpConverter
   /**
    * Constructs a new cross section manager.
    *
@@ -139,7 +139,7 @@ export class CrossSectionManager {
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToIntersectionLoopPickerConverter(
+  static createPlaneToIlpConverter(
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoopPicker {
