@@ -18,7 +18,7 @@ import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
 
 /**
- * A class for managing the increase/decrease of cross section.
+ * A class for managing the increase/decrease of cross sections.
  *
  * ```js
  * import { CrossSectionManager } from "./src/cross-section/cross-section-manager";
