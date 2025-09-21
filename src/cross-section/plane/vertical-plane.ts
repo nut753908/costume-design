@@ -52,15 +52,9 @@ export class VerticalPlane extends Plane {
    * Set GUI.
    *
    * @param name - The vertical plane folder name used in the GUI.
-   * @param key - The key for the callback.
    * @param updateCallback - The callback that is invoked after updating plane.
    */
-  setGUI(
-    gui: GUI,
-    name = this.type,
-    key = this.type,
-    updateCallback = (_key: string) => {}
-  ) {
+  setGUI(gui: GUI, name = this.type, updateCallback = () => {}) {
     const p = this;
 
     deleteFolder(gui, name);
@@ -70,7 +64,7 @@ export class VerticalPlane extends Plane {
 
     function uU() /* updateU */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
-      updateCallback(key);
+      updateCallback();
     }
     function uI() /* updateInverted */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.

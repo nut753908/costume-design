@@ -89,7 +89,6 @@ export class Area {
     this._updateIlpGroup = () => {};
   }
 
-  // TODO: test
   /**
    * Create the intersection loop pickers group.
    */
@@ -139,7 +138,9 @@ export class Area {
     folder.add(this, "thickness", 0, 1, 0.0001);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-      cs.ilp.setGUI(folder, `intersection loops${k}`, k, this._updateIlpGroup);
+      cs.ilp.setGUI(folder, `intersection loops${k}`, () => {
+        this.updateCrossSection(k, cs.plane);
+      });
     });
   }
 
@@ -191,6 +192,17 @@ export class Area {
   removeCrossSection(key: string) {
     this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     delete this.crossSections[key];
+  }
+
+  // TODO: test
+  /**
+   * Update a cross section.
+   *
+   * @param key - The key in this.crossSections.
+   */
+  updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
+    this.removeCrossSection(key);
+    this.addCrossSection(key, plane);
   }
 
   /**

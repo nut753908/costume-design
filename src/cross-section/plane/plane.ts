@@ -101,15 +101,9 @@ export abstract class Plane {
    * Set GUI.
    *
    * @param name - The curve folder name used in the GUI.
-   * @param key - The key for the callback.
    * @param updateCallback - The callback that is invoked after updating plane.
    */
-  abstract setGUI(
-    gui: GUI,
-    name: string,
-    key: string,
-    updateCallback: (_key: string) => void
-  ): void;
+  abstract setGUI(gui: GUI, name: string, updateCallback: () => void): void;
 
   /**
    * Get the normal direction of the plane.
