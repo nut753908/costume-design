@@ -4,51 +4,10 @@ import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
 } from "src/cross-section/intersection/intersection-loop-picker";
-import { sortIntersectionLoops } from "src/cross-section/intersection/intersection-loops";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
-
-describe("sortIntersectionLoops()", () => {
-  test("check order", () => {
-    const positionsArray = [
-      [0, 0, 0],
-      [1, 0, 0],
-      [1, 0, 1],
-      [0, 0, 1],
-      [0, 1, 0],
-      [1, 1, 0],
-      [1, 1, 1],
-      [0, 1, 1],
-    ].flat();
-    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-
-    const intersectionLoops = [
-      new IntersectionLoop([new VertexIntersection(0)]),
-      new IntersectionLoop([new VertexIntersection(1)]),
-      new IntersectionLoop([new VertexIntersection(2)]),
-      new IntersectionLoop([new VertexIntersection(3)]),
-      new IntersectionLoop([new VertexIntersection(4)]),
-      new IntersectionLoop([new VertexIntersection(5)]),
-      new IntersectionLoop([new VertexIntersection(6)]),
-      new IntersectionLoop([new VertexIntersection(7)]),
-    ];
-    const expected = [
-      new IntersectionLoop([new VertexIntersection(0)]),
-      new IntersectionLoop([new VertexIntersection(4)]),
-      new IntersectionLoop([new VertexIntersection(3)]),
-      new IntersectionLoop([new VertexIntersection(7)]),
-      new IntersectionLoop([new VertexIntersection(1)]),
-      new IntersectionLoop([new VertexIntersection(5)]),
-      new IntersectionLoop([new VertexIntersection(2)]),
-      new IntersectionLoop([new VertexIntersection(6)]),
-    ];
-    expect(sortIntersectionLoops(intersectionLoops, positions)).toEqual(
-      expected
-    );
-  });
-});
 
 describe("IntersectionLoopPicker", () => {
   test("constructor()", () => {
