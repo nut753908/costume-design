@@ -21,7 +21,12 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./vertical-plane";
  *
  * ```js
  * import { PlaneManager } from "./src/cross-section/plane/plane-manager";
- * const planeManager = new PlaneManager();
+ * const points = [ new THREE.Vector3( 1, 2, 3 ), new THREE.Vector3( 1, 2, 4 ) ];
+ * const curves = {
+ *   a: createLinePath( points ),
+ *   b: new THREE.CatmullRomCurve3( points ),
+ * };
+ * const planeManager = new PlaneManager( curves );
  * ```
  */
 export class PlaneManager {
