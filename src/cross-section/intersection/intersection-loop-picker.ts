@@ -46,8 +46,8 @@ export class IntersectionLoopPicker {
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/cross-section/intersection/intersection-loops.ts.
-   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops.ts.
+   * This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
+   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
    */
   _updateGroup: () => void;
 
@@ -83,7 +83,7 @@ export class IntersectionLoopPicker {
   ): THREE.Group {
     const group = new THREE.Group();
 
-    // This function is used by setGUI() in src/cross-section/intersection/intersection-loops.ts.
+    // This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
     this._updateGroup = () => {
       disposeGroup(group);
       group.clear();
@@ -140,7 +140,7 @@ export class IntersectionLoopPicker {
     }
     function uS() /* updateSelection */ {
       updateHidden();
-      ils._updateGroup();
+      ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback(key);
     }
     function uI(e: {
@@ -155,7 +155,7 @@ export class IntersectionLoopPicker {
       } else {
         if (i !== -1) ils.indices.splice(i, 1);
       }
-      ils._updateGroup();
+      ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback(key);
     }
   }
