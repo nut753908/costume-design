@@ -254,7 +254,7 @@ export class PlaneManager {
   }
 
   /**
-   * add the free plane to this.planes.
+   * Add the free plane to this.planes.
    */
   addFreePlane() {
     const key = `[${this.planeNextIndex}] {FreePlane}`;
@@ -265,7 +265,7 @@ export class PlaneManager {
   }
 
   /**
-   * add the vertical plane to this.planes.
+   * Add the vertical plane to this.planes.
    *
    * @param curveKey - The curve key in this.curves.
    */
@@ -286,7 +286,7 @@ if (!this.curveKeys.includes(curveKey))
   }
 
   /**
-   * remove the plane from this.planes.
+   * Remove the plane from this.planes.
    *
    * @param key - The plane key in this.planes.
    */
