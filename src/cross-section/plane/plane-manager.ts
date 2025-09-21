@@ -231,9 +231,9 @@ if (!this.planeKeys.includes(key))
 - this.planeKeys: ${JSON.stringify(this.planeKeys)}
 `);
     }
+    delete this.planes[key];
     this._removePlaneGroup(key); // Set it in advance using createPlanesGroup() in src/cross-section/plane/plane-manager.ts.
     this._removeCrossSection(key); // Set it manually in src/main.ts.
-    delete this.planes[key];
   }
 
   /**
