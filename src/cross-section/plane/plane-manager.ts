@@ -332,7 +332,7 @@ if (!this.planeKeys.includes(key))
    * @param source - The plane manager to copy.
    * @return  A reference to this plane manager.
    */
-  copy(source: PlaneManager): PlaneManager {
+  copy(source: PlaneManager): this {
     this.curves = objectMap(source.curves, (v) => v.clone());
     this.planes = objectMap(source.planes, (v) => v.clone());
     this.planeNextIndex = source.planeNextIndex;
@@ -343,7 +343,7 @@ if (!this.planeKeys.includes(key))
   /**
    * Serializes the plane manager into JSON.
    *
-   * @return {Object} A JSON object representing the serialized plane manager.
+   * @return  A JSON object representing the serialized plane manager.
    */
   toJSON(): PlaneManagerJSON {
     return {
@@ -356,10 +356,10 @@ if (!this.planeKeys.includes(key))
   /**
    * Deserializes the plane manager from the given JSON.
    *
-   * @param {Object} json - The JSON holding the serialized plane manager.
-   * @return {PlaneManager} A reference to this plane manager.
+   * @param json - The JSON holding the serialized plane manager.
+   * @return  A reference to this plane manager.
    */
-  fromJSON(json: PlaneManagerJSON): PlaneManager {
+  fromJSON(json: PlaneManagerJSON): this {
     this.curves = objectMap(json.curves, (v) => {
       if (v.type === "CurvePath") {
         return new THREE.CurvePath<THREE.Vector3>().fromJSON(
