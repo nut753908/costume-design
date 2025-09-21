@@ -21,7 +21,7 @@ import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
  * The area divided by cross sections.
  *
  * ```js
- * import { Area } from "./src/cross-section/cross-section-manager";
+ * import { Area } from "./src/cross-section/area";
  * const area = new Area();
  * ```
  */
@@ -38,24 +38,24 @@ export class Area {
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by addCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _addIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by removeCrossSection() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _removeIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
+   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
    */
   _updateIlpGroup: (k: string) => void;
 
@@ -90,8 +90,8 @@ export class Area {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-    // This function is used by addCrossSection() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
+    // This function is used by addCrossSection() in src/cross-section/area.ts.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].ilp;
@@ -100,15 +100,15 @@ export class Area {
     };
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by createIlpsGroup() in src/cross-section/cross-section-manager.ts.
-    // This function is used by removeCrossSection() in src/cross-section/cross-section-manager.ts.
+    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
+    // This function is used by removeCrossSection() in src/cross-section/area.ts.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
-    // This function is used by setGUI() in src/cross-section/cross-section-manager.ts.
+    // This function is used by setGUI() in src/cross-section/area.ts.
     this._updateIlpGroup = (k: string) => {
       this._removeIlpGroup(k);
       this._addIlpGroup(k);
@@ -127,7 +127,7 @@ export class Area {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     Object.entries(this.crossSections).forEach(([k, cs]) => {
-      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+      // _updateIlpGroup: Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
       cs.ilp.setGUI(folder, `ilp${k}`, k, this._updateIlpGroup);
     });
   }
@@ -172,7 +172,7 @@ export class Area {
     ilp: IntersectionLoopPicker
   ) {
     this.crossSections[key] = { plane, ilp };
-    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
   }
 
   // TODO: test
@@ -182,7 +182,7 @@ export class Area {
    * @param key - The key in this.crossSections.
    */
   removeCrossSection(key: string) {
-    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/cross-section-manager.ts.
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     delete this.crossSections[key];
   }
 
