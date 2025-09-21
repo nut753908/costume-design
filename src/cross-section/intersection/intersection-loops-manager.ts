@@ -24,14 +24,14 @@ import { createAllIntersections } from "./intersections";
  */
 export class IntersectionLoopsManager {
   /**
-   * The planes at infinity.
+   * The cross sections.
    */
-  planes: { [k: string]: FreePlane | VerticalPlane };
-
-  /**
-   * The intersection loops list.
-   */
-  intersectionLoopsList: { [k: string]: IntersectionLoops };
+  crossSections: {
+    [k: string]: {
+      plane: FreePlane | VerticalPlane;
+      intersectionLoops: IntersectionLoops;
+    };
+  };
 
   /**
    * Secret field.
@@ -60,15 +60,17 @@ export class IntersectionLoopsManager {
   /**
    * Constructs a new intersection loops manager.
    *
-   * @param planes - {@link IntersectionLoopsManager#planes}
-   * @param intersectionLoopsList - {@link IntersectionLoopsManager#intersectionLoopsList}
+   * @param crossSections - {@link IntersectionLoopsManager#crossSections}
    */
   constructor(
-    planes: { [k: string]: FreePlane | VerticalPlane } = {},
-    intersectionLoopsList: { [k: string]: IntersectionLoops } = {}
+    crossSections: {
+      [k: string]: {
+        plane: FreePlane | VerticalPlane;
+        intersectionLoops: IntersectionLoops;
+      };
+    } = {}
   ) {
-    this.planes = planes;
-    this.intersectionLoopsList = intersectionLoopsList;
+    this.crossSections = crossSections;
     this._addGroup = () => {};
     this._removeGroup = () => {};
     this._updateGroup = () => {};
@@ -85,28 +87,20 @@ export class IntersectionLoopsManager {
     // This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
     // This function is used by addPlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
     this._addGroup = (k: string) => {
-      if (!(k in this.planes)) {
+      if (!(k in this.crossSections)) {
         console.error(`\
-!(k in this.planes)
+!(k in this.crossSections)
 - k: ${k}
-- this.planes: ${JSON.stringify(this.planes)}
+- this.crossSections: ${JSON.stringify(this.crossSections)}
 `);
         return;
       }
-      if (!(k in this.intersectionLoopsList)) {
-        console.error(`\
-!(k in this.intersectionLoopsList)
-- k: ${k}
-- this.intersectionLoopsList: ${JSON.stringify(this.intersectionLoopsList)}
-`);
-        return;
-      }
-      const p = this.planes[k];
-      const ils = this.intersectionLoopsList[k];
+      const p = this.crossSections[k].plane;
+      const ils = this.crossSections[k].intersectionLoops;
       children[k] = ils.createGroup(p, positions, ms);
       parent.add(children[k]);
     };
-    Object.keys(this.intersectionLoopsList).map((k) => this._addGroup(k));
+    Object.keys(this.crossSections).map((k) => this._addGroup(k));
 
     // This function is used by createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
     // This function is used by removePlaneAndIntersectionLoops() in src/cross-section/intersection/intersection-loops-manager.ts.
@@ -134,9 +128,14 @@ export class IntersectionLoopsManager {
   setGUI(gui: GUI, name = "IntersectionLoopsManager") {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
-    Object.entries(this.intersectionLoopsList).forEach(([k, ils]) => {
+    Object.entries(this.crossSections).forEach(([k, cs]) => {
       // _updateGroup: Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-      ils.setGUI(folder, `intersectionLoops${k}`, k, this._updateGroup);
+      cs.intersectionLoops.setGUI(
+        folder,
+        `intersectionLoops${k}`,
+        k,
+        this._updateGroup
+      );
     });
   }
 
@@ -179,8 +178,7 @@ export class IntersectionLoopsManager {
     plane: FreePlane | VerticalPlane,
     intersectionLoops: IntersectionLoops
   ) {
-    this.planes[key] = plane;
-    this.intersectionLoopsList[key] = intersectionLoops;
+    this.crossSections[key] = { plane, intersectionLoops };
     this._addGroup(key); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
   }
 
@@ -192,8 +190,7 @@ export class IntersectionLoopsManager {
    */
   removePlaneAndIntersectionLoops(key: string) {
     this._removeGroup(key); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loops-manager.ts.
-    delete this.planes[key];
-    delete this.intersectionLoopsList[key];
+    delete this.crossSections[key];
   }
 
   /**
@@ -212,10 +209,10 @@ export class IntersectionLoopsManager {
    * @return  A reference to this intersection loops manager.
    */
   copy(source: IntersectionLoopsManager): this {
-    this.planes = objectMap(source.planes, (v) => v.clone());
-    this.intersectionLoopsList = objectMap(source.intersectionLoopsList, (v) =>
-      v.clone()
-    );
+    this.crossSections = objectMap(source.crossSections, (v) => ({
+      plane: v.plane.clone(),
+      intersectionLoops: v.intersectionLoops.clone(),
+    }));
 
     return this;
   }
@@ -227,10 +224,10 @@ export class IntersectionLoopsManager {
    */
   toJSON(): IntersectionLoopsManagerJSON {
     return {
-      planes: objectMap(this.planes, (v) => v.toJSON()),
-      intersectionLoopsList: objectMap(this.intersectionLoopsList, (v) =>
-        v.toJSON()
-      ),
+      crossSections: objectMap(this.crossSections, (v) => ({
+        plane: v.plane.toJSON(),
+        intersectionLoops: v.intersectionLoops.toJSON(),
+      })),
     };
   }
 
@@ -241,22 +238,26 @@ export class IntersectionLoopsManager {
    * @return  A reference to this intersection loops manager.
    */
   fromJSON(json: IntersectionLoopsManagerJSON): this {
-    this.planes = objectMap(json.planes, (v) => {
-      if (v.type === "FreePlane") {
-        return new FreePlane().fromJSON(v as FreePlaneJSON);
-      } else if (v.type === "VerticalPlane") {
-        return new VerticalPlane().fromJSON(v as VerticalPlaneJSON);
+    this.crossSections = objectMap(json.crossSections, (v) => {
+      let plane: FreePlane | VerticalPlane;
+      if (v.plane.type === "FreePlane") {
+        plane = new FreePlane().fromJSON(v.plane as FreePlaneJSON);
+      } else if (v.plane.type === "VerticalPlane") {
+        plane = new VerticalPlane().fromJSON(v.plane as VerticalPlaneJSON);
       } else {
         console.error(`\
-!(v.type === "FreePlane") && !(v.type === "VerticalPlane")
-- v: ${JSON.stringify(v)}
+!(v.plane.type === "FreePlane") && !(v.plane.type === "VerticalPlane")
+- v.plane: ${JSON.stringify(v.plane)}
 `);
-        return new FreePlane();
+        plane = new FreePlane();
       }
+      return {
+        plane,
+        intersectionLoops: new IntersectionLoops().fromJSON(
+          v.intersectionLoops
+        ),
+      };
     });
-    this.intersectionLoopsList = objectMap(json.intersectionLoopsList, (v) =>
-      new IntersectionLoops().fromJSON(v)
-    );
 
     return this;
   }
@@ -266,8 +267,11 @@ export class IntersectionLoopsManager {
  * The {@link IntersectionLoopsManager} JSON interface.
  */
 export interface IntersectionLoopsManagerJSON {
-  /** {@link IntersectionLoopsManager#planes} */
-  planes: { [k: string]: FreePlaneJSON | VerticalPlaneJSON };
-  /** {@link IntersectionLoopsManager#intersectionLoopsList} */
-  intersectionLoopsList: { [k: string]: IntersectionLoopsJSON };
+  /** {@link IntersectionLoopsManager#crossSections} */
+  crossSections: {
+    [k: string]: {
+      plane: FreePlaneJSON | VerticalPlaneJSON;
+      intersectionLoops: IntersectionLoopsJSON;
+    };
+  };
 }
