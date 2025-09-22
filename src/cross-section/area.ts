@@ -192,7 +192,7 @@ export class Area {
       plane,
       ilp: new IntersectionLoopPicker(
         this.planeToAllIls(plane),
-        plane.getDefaultOption()
+        plane.defaultOption
       ),
     };
     this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.

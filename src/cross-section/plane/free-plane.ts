@@ -20,6 +20,11 @@ export class FreePlane extends Plane {
   type: string;
 
   /**
+   * The default option for the intersection loop picker.
+   */
+  defaultOption: IntersectionLoopPicker["option"];
+
+  /**
    * The normal direction of the plane. Must be a unit vector.
    */
   normal: THREE.Vector3;
@@ -43,6 +48,7 @@ export class FreePlane extends Plane {
   ) {
     super(inverted);
     this.type = "FreePlane";
+    this.defaultOption = "all";
     this.normal = normal;
     this.point = point;
   }
@@ -95,13 +101,6 @@ export class FreePlane extends Plane {
    */
   getPoint(): THREE.Vector3 {
     return this.point;
-  }
-
-  /**
-   * Get the default option for the intersection loop picker.
-   */
-  getDefaultOption(): IntersectionLoopPicker["option"] {
-    return "all";
   }
 
   /**

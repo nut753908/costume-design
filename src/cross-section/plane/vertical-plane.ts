@@ -20,6 +20,11 @@ export class VerticalPlane extends Plane {
   type: string;
 
   /**
+   * The default option for the intersection loop picker.
+   */
+  defaultOption: IntersectionLoopPicker["option"];
+
+  /**
    * The curve.
    */
   curve: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3;
@@ -45,6 +50,7 @@ export class VerticalPlane extends Plane {
   ) {
     super(inverted);
     this.type = "VerticalPlane";
+    this.defaultOption = "including plane";
     this.curve = curve;
     this.u = u;
   }
@@ -86,13 +92,6 @@ export class VerticalPlane extends Plane {
    */
   getPoint(): THREE.Vector3 {
     return this.curve.getPointAt(this.u);
-  }
-
-  /**
-   * Get the default option for the intersection loop picker.
-   */
-  getDefaultOption(): IntersectionLoopPicker["option"] {
-    return "including plane";
   }
 
   /**

@@ -5,7 +5,6 @@ import {
   type PlaneHelperWithCallbacks,
 } from "src/object-3d/plane-helper";
 import * as THREE from "three";
-import type { IntersectionLoopPicker } from "../intersection/intersection-loop-picker";
 
 /**
  * Abstract class for FreePlane and VerticalPlane.
@@ -124,9 +123,4 @@ export abstract class Plane {
     const point = this.getPoint();
     return new THREE.Plane().setFromNormalAndCoplanarPoint(normal, point);
   }
-
-  /**
-   * Get the default option for the intersection loop picker.
-   */
-  abstract getDefaultOption(): IntersectionLoopPicker["option"];
 }
