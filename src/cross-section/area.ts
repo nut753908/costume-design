@@ -190,7 +190,10 @@ export class Area {
   addCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this.crossSections[key] = {
       plane,
-      ilp: new IntersectionLoopPicker(this.planeToAllIls(plane)),
+      ilp: new IntersectionLoopPicker(
+        this.planeToAllIls(plane),
+        plane.getDefaultOption()
+      ),
     };
     this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.

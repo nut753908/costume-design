@@ -1,6 +1,7 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/main/gui";
 import * as THREE from "three";
+import type { IntersectionLoopPicker } from "../intersection/intersection-loop-picker";
 import { Plane } from "./plane";
 
 /**
@@ -85,6 +86,13 @@ export class VerticalPlane extends Plane {
    */
   getPoint(): THREE.Vector3 {
     return this.curve.getPointAt(this.u);
+  }
+
+  /**
+   * Get the default option for the intersection loop picker.
+   */
+  getDefaultOption(): IntersectionLoopPicker["option"] {
+    return "including plane";
   }
 
   /**
