@@ -150,7 +150,7 @@ export class Area {
     this._updateGUI = () => {
       deleteFolder(gui, "Area");
       const folder = gui.addFolder("Area");
-      folder.add(this, "thickness", 0, 1, 0.0001);
+      folder.add(this, "thickness", 0, 0.01, 0.0001);
       Object.entries(this.crossSections).forEach(([k, cs]) => {
         cs.ilp.setGUI(folder, `intersection loops${k}`);
       });
