@@ -27,28 +27,6 @@ describe("IntersectionLoop", () => {
     expect(il.closed).toBe(true);
   });
 
-  test("backVs()", () => {
-    const intersections = [
-      new EdgeIntersection(1, 3, 0.5, true),
-      new EdgeIntersection(0, 3, 0.75, true),
-      new EdgeIntersection(0, 4, 0.25, true),
-      new VertexIntersection(2, true),
-    ];
-    const il = new IntersectionLoop(intersections, true);
-    expect(il.backVs).toEqual([1, 0, 2]);
-  });
-
-  test("frontVs()", () => {
-    const intersections = [
-      new EdgeIntersection(1, 3, 0.5, true),
-      new EdgeIntersection(0, 3, 0.75, true),
-      new EdgeIntersection(0, 4, 0.25, true),
-      new VertexIntersection(2, true),
-    ];
-    const il = new IntersectionLoop(intersections, true);
-    expect(il.frontVs).toEqual([3, 4, 2]);
-  });
-
   test("getPoints()", () => {
     const intersections = [
       new EdgeIntersection(1, 3, 0.5, true),

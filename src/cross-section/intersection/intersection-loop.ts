@@ -51,22 +51,6 @@ export class IntersectionLoop {
   }
 
   /**
-   * Get the vertex indices as the back vertex of each edges.
-   * Duplicate indices are removed and made unique.
-   */
-  get backVs(): number[] {
-    return [...new Set(this.intersections.map((i) => i.backV))];
-  }
-
-  /**
-   * Get the vertex indices as the front vertex of each edges.
-   * Duplicate indices are removed and made unique.
-   */
-  get frontVs(): number[] {
-    return [...new Set(this.intersections.map((i) => i.frontV))];
-  }
-
-  /**
    * Get the points.
    *
    * @param positions - The results of geometry.getAttribute("position").
