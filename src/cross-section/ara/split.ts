@@ -88,7 +88,6 @@ export function splitGeometryUsingIls(
   return { geometry: newGeometry, ils: newIls };
 }
 
-// TODO: test
 /**
  * Split geometry using an intersection loop.
  *
@@ -131,17 +130,24 @@ export function splitGeometryUsingIl(
     });
 
   // Set indexLists.
+  if (il.closed) {
+    il.intersections.push(il.intersections[0]);
+    newIl.intersections.push(newIl.intersections[0]);
+  }
   for (let i = 0, l = il.intersections.length - 1; i < l; i++) {
     const v0 = il.intersections[i];
     const v1 = il.intersections[i + 1];
+    if (v0 instanceof VertexIntersection && v1 instanceof VertexIntersection) {
+      continue;
+    }
 
     // Remove from indexLists.
     const indicesV0 = indicesMap[v0.toString()];
     const indicesMap2 = createIndicesMap(indicesV0);
     const indicesV1 = indicesMap2[v1.toString()];
-    if (indicesV1.length !== 1) {
+    if (indicesV1 === undefined || indicesV1.length !== 1) {
       console.error(`
-indicesV1.length !== 1
+indicesV1 === undefined || indicesV1.length !== 1
 indexLists: ${JSON.stringify(indexLists)}
 indicesMap: ${JSON.stringify(indicesMap)}
 i: ${i}
@@ -174,12 +180,16 @@ indicesV1: ${JSON.stringify(indicesV1)}
     if (v0 instanceof EdgeIntersection && v1 instanceof EdgeIntersection) {
       const newV0 = newIl.intersections[i] as VertexIntersection;
       const newV1 = newIl.intersections[i + 1] as VertexIntersection;
+      const newPositions = new THREE.Float32BufferAttribute(
+        positionLists.flat(),
+        3
+      );
       if (v0.frontV === v1.frontV) {
         indexLists.push([v0.frontV, newV0.v, newV1.v]);
-        const pointNewV0 = getPoint(positions, newV0.v);
-        const pointNewV1 = getPoint(positions, newV1.v);
-        const pointV0BackV = getPoint(positions, v0.backV);
-        const pointV1BackV = getPoint(positions, v1.backV);
+        const pointNewV0 = getPoint(newPositions, newV0.v);
+        const pointNewV1 = getPoint(newPositions, newV1.v);
+        const pointV0BackV = getPoint(newPositions, v0.backV);
+        const pointV1BackV = getPoint(newPositions, v1.backV);
         const diff1 = pointNewV0.clone().sub(pointV1BackV);
         const diff2 = pointNewV1.clone().sub(pointV0BackV);
         if (diff1.length() < diff2.length()) {
@@ -194,10 +204,10 @@ indicesV1: ${JSON.stringify(indicesV1)}
       } else {
         // This case: v0.backV === v1.backV
         indexLists.push([newV0.v, v0.backV, newV1.v]);
-        const pointNewV0 = getPoint(positions, newV0.v);
-        const pointNewV1 = getPoint(positions, newV1.v);
-        const pointV0FrontV = getPoint(positions, v0.frontV);
-        const pointV1FrontV = getPoint(positions, v1.frontV);
+        const pointNewV0 = getPoint(newPositions, newV0.v);
+        const pointNewV1 = getPoint(newPositions, newV1.v);
+        const pointV0FrontV = getPoint(newPositions, v0.frontV);
+        const pointV1FrontV = getPoint(newPositions, v1.frontV);
         const diff1 = pointNewV0.clone().sub(pointV1FrontV);
         const diff2 = pointNewV1.clone().sub(pointV0FrontV);
         if (diff1.length() < diff2.length()) {
@@ -226,8 +236,12 @@ indicesV1: ${JSON.stringify(indicesV1)}
       indexLists.push([v0.v, v1.backV, newV1.v]);
     }
   }
+  if (il.closed) {
+    il.intersections.pop();
+    newIl.intersections.pop();
+  }
 
-  newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 3));
+  newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
   newGeometry.setAttribute(
     "position",
     new THREE.Float32BufferAttribute(positionLists.flat(), 3)
