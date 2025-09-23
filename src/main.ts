@@ -94,7 +94,7 @@ async function init() {
     positions = geometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    indices = geometry.getIndex() as THREE.BufferAttribute;
+    indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);

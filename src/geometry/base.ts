@@ -94,7 +94,7 @@ export function correctNPolygonIndices(
 export function mergeIndices(
   positions: THREE.Float32BufferAttribute,
   indices: THREE.Uint16BufferAttribute
-): THREE.BufferAttribute {
+): THREE.Uint16BufferAttribute {
   const EPS = Number.EPSILON;
   const map: number[] = Array(positions.count)
     .fill(0)
