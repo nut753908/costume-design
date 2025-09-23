@@ -1,23 +1,22 @@
 import type * as THREE from "three";
 
 /**
- * Convert to the triangular polygon indices.
+ * Convert to lists.
  *
- * @param indices - The results of geometry.getIndex().
- * @return  The triangular polygon indices.
+ * @param attribute - The results of geometry.getIndex() or geometry.getAttribute(...).
+ * @param itemSize - The lists[*] size.
+ * @return  The lists.
  */
-export function convertToTriangularPolygonIndices(
-  indices: THREE.BufferAttribute
-): [number, number, number][] {
-  const triangularPolygonIndices: [number, number, number][] = [];
-  for (let i = 0, l = indices.count; i < l; i += 3) {
-    triangularPolygonIndices.push([
-      indices.array[i],
-      indices.array[i + 1],
-      indices.array[i + 2],
-    ]);
+export function convertToLists(
+  attribute: THREE.BufferAttribute,
+  itemSize: number
+): number[][] {
+  const jList = [...Array(itemSize).keys()];
+  const lists: number[][] = [];
+  for (let i = 0, l = attribute.count; i < l; i += itemSize) {
+    lists.push(jList.map((j) => attribute.array[i + j]));
   }
-  return triangularPolygonIndices;
+  return lists;
 }
 
 /**

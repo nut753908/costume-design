@@ -1,6 +1,6 @@
 import { createAllEdges } from "src/cross-section/centerline/edges";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
-import { convertToTriangularPolygonIndices } from "src/cross-section/intersection/indices";
+import { convertToLists } from "src/cross-section/intersection/indices";
 import { createAllIntersections } from "src/cross-section/intersection/intersections";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
 import { FreePlane } from "src/cross-section/plane/free-plane";
@@ -37,8 +37,8 @@ describe("createAllIntersections()", () => {
     [4, 8, 7],
   ].flat();
   const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-  const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-  const allEdges = createAllEdges(triangularPolygonIndices);
+  const nPolygonIndices = convertToLists(indices, 3);
+  const allEdges = createAllEdges(nPolygonIndices);
 
   test("normal:[0,1,0], point:[0,0,0]", () => {
     /**

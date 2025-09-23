@@ -1,7 +1,7 @@
 import { createAllEdges } from "src/cross-section/centerline/edges";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import {
-  convertToTriangularPolygonIndices,
+  convertToLists,
   createIndicesMap,
 } from "src/cross-section/intersection/indices";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
@@ -51,9 +51,9 @@ describe("createAllIntersectionLoops()", () => {
       [10, 8, 11],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
 
     test("all intersections", () => {
       const plane = new FreePlane(
@@ -147,9 +147,9 @@ describe("createAllIntersectionLoops()", () => {
       [4, 6, 7],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
 
     test("all intersections", () => {
       const plane = new FreePlane(
@@ -234,9 +234,9 @@ describe("createAllIntersectionLoops()", () => {
       [4, 8, 7],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
 
     test("all intersections", () => {
       /**
@@ -333,9 +333,9 @@ describe("createAllIntersectionLoops()", () => {
       ])
       .flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
 
     const plane = new FreePlane(
       new THREE.Vector3(0, 1, 0),

@@ -4,10 +4,7 @@ import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import { createAllEdges } from "./centerline/edges";
-import {
-  convertToTriangularPolygonIndices,
-  createIndicesMap,
-} from "./intersection/indices";
+import { convertToLists, createIndicesMap } from "./intersection/indices";
 import type { IntersectionLoop } from "./intersection/intersection-loop";
 import {
   IntersectionLoopPicker,
@@ -168,9 +165,9 @@ export class Area {
     positions: THREE.BufferAttribute,
     indices: THREE.BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
-    const triangularPolygonIndices = convertToTriangularPolygonIndices(indices);
-    const allEdges = createAllEdges(triangularPolygonIndices);
-    const indicesMap = createIndicesMap(triangularPolygonIndices);
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
     return (plane: FreePlane | VerticalPlane) => {
       const allIntersections = createAllIntersections(
         plane,

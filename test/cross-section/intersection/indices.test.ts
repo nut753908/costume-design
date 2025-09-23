@@ -1,11 +1,11 @@
 import {
-  convertToTriangularPolygonIndices,
+  convertToLists,
   createIndicesMap,
 } from "src/cross-section/intersection/indices";
 import * as THREE from "three";
 import { expect, test } from "vitest";
 
-test("convertToTriangularPolygonIndices()", () => {
+test("convertToLists()", () => {
   /**
    * flat layout:
    *   6 7 8
@@ -33,7 +33,7 @@ test("convertToTriangularPolygonIndices()", () => {
     [4, 5, 8],
     [4, 8, 7],
   ];
-  expect(convertToTriangularPolygonIndices(indices)).toEqual(expected);
+  expect(convertToLists(indices, 3)).toEqual(expected);
 });
 
 test("createIndicesMap()", () => {
@@ -54,7 +54,7 @@ test("createIndicesMap()", () => {
     [4, 8, 7],
   ].flat();
   const indices = new THREE.Uint16BufferAttribute(array, 1);
-  const nPolygonIndices = convertToTriangularPolygonIndices(indices);
+  const nPolygonIndices = convertToLists(indices, 3);
   const expected = {
     // To avoid formatting when saving in vscode, use Array(...) instead of [...].
     // biome-ignore-start lint/style/useArrayLiterals: To avoid formatting.
