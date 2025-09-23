@@ -22,12 +22,13 @@ import {
 describe("addIntersections()", () => {
   describe("plane(flat) example", () => {
     let spy: MockInstance;
+    let indices: THREE.Uint16BufferAttribute;
+    let positions: THREE.Float32BufferAttribute;
+    let geometry: THREE.BufferGeometry;
 
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
-    });
 
-    test("one cross section", () => {
       /**
        * flat layout:
        *   2(0, 1) 3(1, 1)
@@ -37,14 +38,14 @@ describe("addIntersections()", () => {
         [0, 1, 3],
         [0, 3, 2],
       ].flat();
-      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+      indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const positionsArray = [
         [0, 0, 0],
         [1, 0, 0],
         [0, 1, 0],
         [1, 1, 0],
       ].flat();
-      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+      positions = new THREE.Float32BufferAttribute(positionsArray, 3);
       const normalsArray = [
         new THREE.Vector3(-1, -1, 0).normalize().toArray(),
         new THREE.Vector3(1, -1, 0).normalize().toArray(),
@@ -55,16 +56,18 @@ describe("addIntersections()", () => {
       const uvsArray = [
         [0, 0],
         [0.1, 0],
-        [0.1, 0],
+        [0, 0.1],
         [0.1, 0.1],
       ].flat();
       const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
+      geometry = new THREE.BufferGeometry();
       geometry.setIndex(indices);
       geometry.setAttribute("position", positions);
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
+    });
 
+    test("one cross section", () => {
       const css: Area["crossSections"] = {
         a: {
           plane: new FreePlane(
@@ -153,12 +156,12 @@ describe("addIntersections()", () => {
       const newUvsArray = [
         [0, 0],
         [0.1, 0],
-        [0.1, 0],
+        [0, 0.1],
         [0.1, 0.1],
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added
-        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added
-        [0 + (0.1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
+        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
+        [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0,0.05]
       ].flat();
       const newUvs = new THREE.Float32BufferAttribute(newUvsArray, 2);
       const newGeometry = new THREE.BufferGeometry();
@@ -244,43 +247,6 @@ describe("addIntersections()", () => {
     });
 
     test("two non-intersecting cross sections", () => {
-      /**
-       * flat layout:
-       *   2(0, 1) 3(1, 1)
-       *   0(0, 0) 1(1, 0)  ◤1 ◢0
-       */
-      const indicesArray = [
-        [0, 1, 3],
-        [0, 3, 2],
-      ].flat();
-      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-      const positionsArray = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [0, 1, 0],
-        [1, 1, 0],
-      ].flat();
-      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-      const normalsArray = [
-        new THREE.Vector3(-1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(-1, 1, 0).normalize().toArray(),
-        new THREE.Vector3(1, 1, 0).normalize().toArray(),
-      ].flat();
-      const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-      const uvsArray = [
-        [0, 0],
-        [0.1, 0],
-        [0, 0.1],
-        [0.1, 0.1],
-      ].flat();
-      const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
-      geometry.setIndex(indices);
-      geometry.setAttribute("position", positions);
-      geometry.setAttribute("normal", normals);
-      geometry.setAttribute("uv", uvs);
-
       const css: Area["crossSections"] = {
         a: {
           plane: new FreePlane(
@@ -539,43 +505,6 @@ describe("addIntersections()", () => {
     });
 
     test("two intersecting cross sections", () => {
-      /**
-       * flat layout:
-       *   2(0, 1) 3(1, 1)
-       *   0(0, 0) 1(1, 0)  ◤1 ◢0
-       */
-      const indicesArray = [
-        [0, 1, 3],
-        [0, 3, 2],
-      ].flat();
-      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-      const positionsArray = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [0, 1, 0],
-        [1, 1, 0],
-      ].flat();
-      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-      const normalsArray = [
-        new THREE.Vector3(-1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(-1, 1, 0).normalize().toArray(),
-        new THREE.Vector3(1, 1, 0).normalize().toArray(),
-      ].flat();
-      const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-      const uvsArray = [
-        [0, 0],
-        [0.1, 0],
-        [0, 0.1],
-        [0.1, 0.1],
-      ].flat();
-      const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
-      geometry.setIndex(indices);
-      geometry.setAttribute("position", positions);
-      geometry.setAttribute("normal", normals);
-      geometry.setAttribute("uv", uvs);
-
       const css: Area["crossSections"] = {
         a: {
           plane: new FreePlane(
@@ -851,13 +780,11 @@ describe("addIntersections()", () => {
 
 describe("splitGeometryUsingIls()", () => {
   let spy: MockInstance;
+  let geometry: THREE.BufferGeometry;
 
   beforeEach(() => {
     spy = vi.spyOn(console, "error");
-  });
 
-  // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
-  test("three triangular pyramids example", () => {
     const indicesArray = [
       [0, 1, 2],
       [0, 1, 3],
@@ -926,12 +853,15 @@ describe("splitGeometryUsingIls()", () => {
       [0.7, 0.1],
     ].flat();
     const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-    const geometry = new THREE.BufferGeometry();
+    geometry = new THREE.BufferGeometry();
     geometry.setIndex(indices);
     geometry.setAttribute("position", positions);
     geometry.setAttribute("normal", normals);
     geometry.setAttribute("uv", uvs);
+  });
 
+  // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
+  test("three triangular pyramids example", () => {
     const ils = [
       new IntersectionLoop(
         [
@@ -1222,12 +1152,11 @@ describe("splitGeometryUsingIl()", () => {
   // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
+    let geometry: THREE.BufferGeometry;
 
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
-    });
 
-    test("all intersections are edges", () => {
       const indicesArray = [
         [0, 1, 2],
         [0, 1, 3],
@@ -1296,12 +1225,14 @@ describe("splitGeometryUsingIl()", () => {
         [0.7, 0.1],
       ].flat();
       const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
+      geometry = new THREE.BufferGeometry();
       geometry.setIndex(indices);
       geometry.setAttribute("position", positions);
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
+    });
 
+    test("all intersections are edges", () => {
       const il = new IntersectionLoop(
         [
           new EdgeIntersection(1, 3, 0.5),
@@ -1501,80 +1432,6 @@ describe("splitGeometryUsingIl()", () => {
     });
 
     test("one intersection is a vertex, two intersections are edges", () => {
-      const indicesArray = [
-        [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
-        //
-        [4, 5, 6],
-        [4, 5, 7],
-        [5, 6, 7],
-        [6, 4, 7],
-        //
-        [8, 9, 10],
-        [8, 9, 11],
-        [9, 10, 11],
-        [10, 8, 11],
-      ].flat();
-      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-      const positionsArray = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [0, 0, 1],
-        [0, 1, 0],
-        //
-        [2, 0.5, 0.5],
-        [3, 0, 0],
-        [3, 0, 1],
-        [3, 1, 0.5],
-        //
-        [4, 0.5, 0],
-        [5, 0, 0.5],
-        [4, 0.5, 1],
-        [5, 1, 0.5],
-      ].flat();
-      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-      const normalsArray = [
-        new THREE.Vector3(-1, -1, -1).normalize().toArray(),
-        new THREE.Vector3(3, -1, -1).normalize().toArray(),
-        new THREE.Vector3(-1, -1, 3).normalize().toArray(),
-        new THREE.Vector3(-1, 3, -1).normalize().toArray(),
-        //
-        new THREE.Vector3(-6, 1, 0).normalize().toArray(),
-        new THREE.Vector3(2, -3, -4).normalize().toArray(),
-        new THREE.Vector3(2, -3, 4).normalize().toArray(),
-        new THREE.Vector3(2, 5, 0).normalize().toArray(),
-        //
-        new THREE.Vector3(-1, 0, -1).normalize().toArray(),
-        new THREE.Vector3(1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(-1, 0, 1).normalize().toArray(),
-        new THREE.Vector3(1, 1, 0).normalize().toArray(),
-      ].flat();
-      const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-      const uvsArray = [
-        [0.1, 0],
-        [0.2, 0.2],
-        [0, 0.2],
-        [0.1, 0.1],
-        //
-        [0.4, 0],
-        [0.5, 0.2],
-        [0.3, 0.2],
-        [0.4, 0.1],
-        //
-        [0.7, 0],
-        [0.8, 0.2],
-        [0.6, 0.2],
-        [0.7, 0.1],
-      ].flat();
-      const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
-      geometry.setIndex(indices);
-      geometry.setAttribute("position", positions);
-      geometry.setAttribute("normal", normals);
-      geometry.setAttribute("uv", uvs);
-
       const il = new IntersectionLoop(
         [
           new EdgeIntersection(5, 7, 0.5),
@@ -1763,80 +1620,6 @@ describe("splitGeometryUsingIl()", () => {
     });
 
     test("two intersection are vertices, one intersections is an edge", () => {
-      const indicesArray = [
-        [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
-        //
-        [4, 5, 6],
-        [4, 5, 7],
-        [5, 6, 7],
-        [6, 4, 7],
-        //
-        [8, 9, 10],
-        [8, 9, 11],
-        [9, 10, 11],
-        [10, 8, 11],
-      ].flat();
-      const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
-      const positionsArray = [
-        [0, 0, 0],
-        [1, 0, 0],
-        [0, 0, 1],
-        [0, 1, 0],
-        //
-        [2, 0.5, 0.5],
-        [3, 0, 0],
-        [3, 0, 1],
-        [3, 1, 0.5],
-        //
-        [4, 0.5, 0],
-        [5, 0, 0.5],
-        [4, 0.5, 1],
-        [5, 1, 0.5],
-      ].flat();
-      const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-      const normalsArray = [
-        new THREE.Vector3(-1, -1, -1).normalize().toArray(),
-        new THREE.Vector3(3, -1, -1).normalize().toArray(),
-        new THREE.Vector3(-1, -1, 3).normalize().toArray(),
-        new THREE.Vector3(-1, 3, -1).normalize().toArray(),
-        //
-        new THREE.Vector3(-6, 1, 0).normalize().toArray(),
-        new THREE.Vector3(2, -3, -4).normalize().toArray(),
-        new THREE.Vector3(2, -3, 4).normalize().toArray(),
-        new THREE.Vector3(2, 5, 0).normalize().toArray(),
-        //
-        new THREE.Vector3(-1, 0, -1).normalize().toArray(),
-        new THREE.Vector3(1, -1, 0).normalize().toArray(),
-        new THREE.Vector3(-1, 0, 1).normalize().toArray(),
-        new THREE.Vector3(1, 1, 0).normalize().toArray(),
-      ].flat();
-      const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-      const uvsArray = [
-        [0.1, 0],
-        [0.2, 0.2],
-        [0, 0.2],
-        [0.1, 0.1],
-        //
-        [0.4, 0],
-        [0.5, 0.2],
-        [0.3, 0.2],
-        [0.4, 0.1],
-        //
-        [0.7, 0],
-        [0.8, 0.2],
-        [0.6, 0.2],
-        [0.7, 0.1],
-      ].flat();
-      const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
-      geometry.setIndex(indices);
-      geometry.setAttribute("position", positions);
-      geometry.setAttribute("normal", normals);
-      geometry.setAttribute("uv", uvs);
-
       const il = new IntersectionLoop(
         [
           new EdgeIntersection(9, 11, 0.5),
@@ -2015,12 +1798,11 @@ describe("splitGeometryUsingIl()", () => {
 
   describe("plane(flat) example", () => {
     let spy: MockInstance;
+    let geometry: THREE.BufferGeometry;
 
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
-    });
 
-    test("check if il.closed is false", () => {
       /**
        * flat layout:
        *   2(0, 1) 3(1, 1)
@@ -2052,12 +1834,14 @@ describe("splitGeometryUsingIl()", () => {
         [0.1, 0.1],
       ].flat();
       const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
-      const geometry = new THREE.BufferGeometry();
+      geometry = new THREE.BufferGeometry();
       geometry.setIndex(indices);
       geometry.setAttribute("position", positions);
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
+    });
 
+    test("check if il.closed is false", () => {
       const il = new IntersectionLoop(
         [
           new EdgeIntersection(1, 3, 0.5),
