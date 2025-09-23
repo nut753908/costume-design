@@ -186,6 +186,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Returns a new intersection loop picker with copied values from this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A clone of this instance.
    */
@@ -195,6 +196,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Copies the values of the given intersection loop picker to this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param source - The intersection loop picker to copy.
    * @return  A reference to this intersection loop picker.
@@ -209,6 +211,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Serializes the intersection loop picker into JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A JSON object representing the serialized intersection loop picker.
    */
@@ -222,6 +225,7 @@ export class IntersectionLoopPicker {
 
   /**
    * Deserializes the intersection loop picker from the given JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param json - The JSON holding the serialized intersection loop picker.
    * @return  A reference to this intersection loop picker.

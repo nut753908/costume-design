@@ -221,6 +221,7 @@ export class Area {
 
   /**
    * Returns a new area with copied values from this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A clone of this instance.
    */
@@ -230,6 +231,7 @@ export class Area {
 
   /**
    * Copies the values of the given area to this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param source - The area to copy.
    * @return  A reference to this area.
@@ -246,6 +248,7 @@ export class Area {
 
   /**
    * Serializes the area into JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A JSON object representing the serialized area.
    */
@@ -261,6 +264,7 @@ export class Area {
 
   /**
    * Deserializes the area from the given JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param json - The JSON holding the serialized area.
    * @return  A reference to this area.
