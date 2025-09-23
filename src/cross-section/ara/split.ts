@@ -14,7 +14,9 @@ export function addIntersections(
   geometry: THREE.BufferGeometry,
   area: Area
 ): { geometry: THREE.BufferGeometry; area: Area } {
-  const positions = geometry.getAttribute("position") as THREE.BufferAttribute;
+  const positions = geometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
 
   // Set newGeometry.
   let newGeometry = geometry.clone();
@@ -52,8 +54,10 @@ export function getIls(
   plane: FreePlane | VerticalPlane,
   ilIndices: number[]
 ): IntersectionLoop[] {
-  const positions = geometry.getAttribute("position") as THREE.BufferAttribute;
-  const indices = geometry.getIndex() as THREE.BufferAttribute;
+  const positions = geometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
   const allIls = planeToAllIls(plane);
   return ilIndices.map((_, i) => allIls[i]);

@@ -38,7 +38,7 @@ export class EdgeLoopStack {
    * @param positions - The results of geometry.getAttribute("position").
    * @return  The points.
    */
-  getPoints(positions: THREE.BufferAttribute): THREE.Vector3[][] {
+  getPoints(positions: THREE.Float32BufferAttribute): THREE.Vector3[][] {
     return this.vertices.map((list) => list.map((v) => getPoint(positions, v)));
   }
 
