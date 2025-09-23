@@ -163,7 +163,7 @@ export class Area {
    */
   static createPlaneToAllIls(
     positions: THREE.Float32BufferAttribute,
-    indices: THREE.BufferAttribute
+    indices: THREE.Uint16BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
     const nPolygonIndices = convertToLists(indices, 3);
     const allEdges = createAllEdges(nPolygonIndices);
