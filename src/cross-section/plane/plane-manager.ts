@@ -252,6 +252,7 @@ if (!this.planeKeys.includes(key))
 
   /**
    * Returns a new plane manager with copied values from this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A clone of this instance.
    */
@@ -261,6 +262,7 @@ if (!this.planeKeys.includes(key))
 
   /**
    * Copies the values of the given plane manager to this instance.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param source - The plane manager to copy.
    * @return  A reference to this plane manager.
@@ -275,6 +277,7 @@ if (!this.planeKeys.includes(key))
 
   /**
    * Serializes the plane manager into JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @return  A JSON object representing the serialized plane manager.
    */
@@ -288,6 +291,7 @@ if (!this.planeKeys.includes(key))
 
   /**
    * Deserializes the plane manager from the given JSON.
+   * (NOTE: Secret fields are not supported.)
    *
    * @param json - The JSON holding the serialized plane manager.
    * @return  A reference to this plane manager.

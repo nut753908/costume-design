@@ -3,37 +3,72 @@ import {
   createIndicesMap,
 } from "src/cross-section/intersection/indices";
 import * as THREE from "three";
-import { expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
-test("convertToLists()", () => {
-  /**
-   * flat layout:
-   *   6 7 8
-   *   3 4 5
-   *   0 1 2
-   */
-  const array = [
-    [0, 1, 4],
-    [0, 4, 3],
-    [1, 2, 5],
-    [1, 5, 4],
-    [3, 4, 7],
-    [3, 7, 6],
-    [4, 5, 8],
-    [4, 8, 7],
-  ].flat();
-  const indices = new THREE.Uint16BufferAttribute(array, 1);
-  const expected = [
-    [0, 1, 4],
-    [0, 4, 3],
-    [1, 2, 5],
-    [1, 5, 4],
-    [3, 4, 7],
-    [3, 7, 6],
-    [4, 5, 8],
-    [4, 8, 7],
-  ];
-  expect(convertToLists(indices, 3)).toEqual(expected);
+describe("convertToLists()", () => {
+  test("indices", () => {
+    /**
+     * flat layout:
+     *   6 7 8
+     *   3 4 5
+     *   0 1 2
+     */
+    const array = [
+      [0, 1, 4],
+      [0, 4, 3],
+      [1, 2, 5],
+      [1, 5, 4],
+      [3, 4, 7],
+      [3, 7, 6],
+      [4, 5, 8],
+      [4, 8, 7],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(array, 1);
+    const expected = [
+      [0, 1, 4],
+      [0, 4, 3],
+      [1, 2, 5],
+      [1, 5, 4],
+      [3, 4, 7],
+      [3, 7, 6],
+      [4, 5, 8],
+      [4, 8, 7],
+    ];
+    expect(convertToLists(indices, 3)).toEqual(expected);
+  });
+
+  test("positions", () => {
+    /**
+     * flat layout:
+     *   6 7 8
+     *   3 4 5
+     *   0 1 2
+     */
+    const array = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [2, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      [2, 1, 0],
+      [0, 2, 0],
+      [1, 2, 0],
+      [2, 2, 0],
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(array, 3);
+    const expected = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [2, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      [2, 1, 0],
+      [0, 2, 0],
+      [1, 2, 0],
+      [2, 2, 0],
+    ];
+    expect(convertToLists(positions, 3)).toEqual(expected);
+  });
 });
 
 test("createIndicesMap()", () => {
