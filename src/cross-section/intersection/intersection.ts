@@ -27,6 +27,16 @@ export abstract class Intersection {
   abstract getPoint(positions: THREE.BufferAttribute): THREE.Vector3;
 
   /**
+   * Get the normal on the point.
+   */
+  abstract getNormal(normals: THREE.BufferAttribute): THREE.Vector3;
+
+  /**
+   * Get the uv on the point.
+   */
+  abstract getUv(uvs: THREE.BufferAttribute): THREE.Vector2;
+
+  /**
    * Return `true` if this intersection is equal with the given one.
    *
    * @param i - The intersection to test for equality.

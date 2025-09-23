@@ -1,5 +1,5 @@
 import { getPoint } from "src/cross-section/centerline/points";
-import type * as THREE from "three";
+import * as THREE from "three";
 import { EdgeIntersection } from "./edge-intersection";
 import { Intersection, type IntersectionJSON } from "./intersection";
 
@@ -53,6 +53,26 @@ export class VertexIntersection extends Intersection {
    */
   getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
     return getPoint(positions, this.v);
+  }
+
+  /**
+   * Get the normal on the point.
+   *
+   * @param normals - The results of geometry.getAttribute("normal").
+   * @return  The normal on the point.
+   */
+  getNormal(normals: THREE.BufferAttribute): THREE.Vector3 {
+    return this.getPoint(normals).normalize();
+  }
+
+  /**
+   * Get the uv on the point.
+   *
+   * @param uvs - The results of geometry.getAttribute("uv").
+   * @return  The uv on the point.
+   */
+  getUv(uvs: THREE.BufferAttribute): THREE.Vector2 {
+    return new THREE.Vector2(uvs.array[2 * this.v], uvs.array[2 * this.v + 1]);
   }
 
   /**
