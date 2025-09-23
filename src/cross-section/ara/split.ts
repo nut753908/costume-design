@@ -175,11 +175,11 @@ indicesV1: ${JSON.stringify(indicesV1)}
         const diff1 = pointNewV0.clone().sub(pointV1BackV);
         const diff2 = pointNewV1.clone().sub(pointV0BackV);
         if (diff1.length() < diff2.length()) {
-          // use diff1(＼) as the diagonal
+          // Use diff1(＼) as the diagonal.
           indexLists.push([newV0.v, v1.backV, newV1.v]);
           indexLists.push([newV0.v, v0.backV, v1.backV]);
         } else {
-          // use diff2(／) as the diagonal
+          // Use diff2(／) as the diagonal.
           indexLists.push([newV0.v, v0.backV, newV1.v]);
           indexLists.push([v0.backV, v1.backV, newV1.v]);
         }
@@ -193,11 +193,11 @@ indicesV1: ${JSON.stringify(indicesV1)}
         const diff1 = pointNewV0.clone().sub(pointV1FrontV);
         const diff2 = pointNewV1.clone().sub(pointV0FrontV);
         if (diff1.length() < diff2.length()) {
-          // use diff1(／) as the diagonal
+          // Use diff1(／) as the diagonal.
           indexLists.push([v0.frontV, newV0.v, v1.frontV]);
           indexLists.push([newV0.v, newV1.v, v1.frontV]);
         } else {
-          // use diff2(＼) as the diagonal
+          // Use diff2(＼) as the diagonal.
           indexLists.push([v0.frontV, newV1.v, v1.frontV]);
           indexLists.push([v0.frontV, newV0.v, newV1.v]);
         }
