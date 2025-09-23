@@ -21,7 +21,7 @@ export function createLinesGroup(
       | THREE.CurvePath<THREE.Vector3>
       | THREE.CatmullRomCurve3;
   },
-  positions: THREE.BufferAttribute,
+  positions: THREE.Float32BufferAttribute,
   ms: Materials
 ): THREE.Group {
   const group = new THREE.Group();

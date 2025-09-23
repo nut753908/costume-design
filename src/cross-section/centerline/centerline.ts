@@ -12,7 +12,7 @@ import { getCentroids } from "./points";
  */
 export function createBaseCenterlines(
   nPolygonIndices: number[][],
-  positions: THREE.BufferAttribute
+  positions: THREE.Float32BufferAttribute
 ): { [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3 } {
   const stacks = createAllEdgeLoopStacks(nPolygonIndices);
   if (stacks.length !== 56) return {};

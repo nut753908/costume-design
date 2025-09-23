@@ -78,7 +78,7 @@ export class IntersectionLoopPicker {
    */
   createGroup(
     plane: FreePlane | VerticalPlane,
-    positions: THREE.BufferAttribute,
+    positions: THREE.Float32BufferAttribute,
     ms: Materials
   ): THREE.Group {
     const group = new THREE.Group();
@@ -88,12 +88,14 @@ export class IntersectionLoopPicker {
     this._updateGroup = () => {
       disposeGroup(group);
       group.clear();
-      this.pickIntersectionLoops(plane, positions).forEach((il) => {
-        const geometry = new THREE.BufferGeometry();
-        geometry.setFromPoints(il.getPoints(positions));
-        group.add(new THREE.Points(geometry, ms.points.points));
-        group.add(new THREE.Line(geometry, ms.points.line));
-      });
+      this.getIlIndices(plane, positions)
+        .map((i) => this.intersectionLoops[i])
+        .forEach((il) => {
+          const geometry = new THREE.BufferGeometry();
+          geometry.setFromPoints(il.getPoints(positions));
+          group.add(new THREE.Points(geometry, ms.points.points));
+          group.add(new THREE.Line(geometry, ms.points.line));
+        });
     };
     this._updateGroup();
 
@@ -155,24 +157,30 @@ export class IntersectionLoopPicker {
   }
 
   /**
-   * Pick intersection loops.
+   * Get the intersection loop indices.
    *
    * @param positions - The results of geometry.getAttribute("position").
    */
-  pickIntersectionLoops(
+  getIlIndices(
     plane: FreePlane | VerticalPlane,
-    positions: THREE.BufferAttribute
-  ): IntersectionLoop[] {
+    positions: THREE.Float32BufferAttribute
+  ): number[] {
     const list = this.intersectionLoops;
     switch (this.option) {
       case "all":
-        return list;
+        return list.map((_, i) => i);
       case "including plane":
-        return list.filter((v) => v.inLoop(plane, positions));
+        return list
+          .map<[boolean, number]>((v, i) => [v.inLoop(plane, positions), i])
+          .filter((v) => v[0])
+          .map((v) => v[1]);
       case "excluding plane":
-        return list.filter((v) => !v.inLoop(plane, positions));
+        return list
+          .map<[boolean, number]>((v, i) => [!v.inLoop(plane, positions), i])
+          .filter((v) => v[0])
+          .map((v) => v[1]);
       case "some":
-        return this.indices.filter((i) => i < list.length).map((i) => list[i]);
+        return this.indices.filter((i) => i < list.length);
     }
   }
 

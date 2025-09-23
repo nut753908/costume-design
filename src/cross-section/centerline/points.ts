@@ -8,7 +8,7 @@ import * as THREE from "three";
  * @return  The point.
  */
 export function getPoint(
-  positions: THREE.BufferAttribute,
+  positions: THREE.Float32BufferAttribute,
   index: number
 ): THREE.Vector3 {
   return new THREE.Vector3(

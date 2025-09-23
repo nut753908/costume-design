@@ -14,7 +14,7 @@ import { VertexIntersection } from "./vertex-intersection";
 export function createAllIntersections(
   plane: FreePlane | VerticalPlane,
   allEdges: Edge[],
-  positions: THREE.BufferAttribute
+  positions: THREE.Float32BufferAttribute
 ): (EdgeIntersection | VertexIntersection)[] {
   const intersections: (EdgeIntersection | VertexIntersection)[] = [];
   const refP = plane.getPoint();

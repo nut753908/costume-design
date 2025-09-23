@@ -62,7 +62,7 @@ export type BufferGeometryWithNPolygonIndices = THREE.BufferGeometry &
  */
 export function correctNPolygonIndices(
   nPolygonPositions: number[][],
-  positions: THREE.BufferAttribute,
+  positions: THREE.Float32BufferAttribute,
   nPolygonIndices: number[][]
 ): number[][] {
   const EPS = Number.EPSILON;
@@ -92,9 +92,9 @@ export function correctNPolygonIndices(
  * @return  The indices merged at the same position.
  */
 export function mergeIndices(
-  positions: THREE.BufferAttribute,
-  indices: THREE.BufferAttribute
-): THREE.BufferAttribute {
+  positions: THREE.Float32BufferAttribute,
+  indices: THREE.Uint16BufferAttribute
+): THREE.Uint16BufferAttribute {
   const EPS = Number.EPSILON;
   const map: number[] = Array(positions.count)
     .fill(0)

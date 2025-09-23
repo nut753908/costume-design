@@ -43,8 +43,8 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
-let positions: THREE.BufferAttribute;
-let indices: THREE.BufferAttribute;
+let positions: THREE.Float32BufferAttribute;
+let indices: THREE.Uint16BufferAttribute;
 
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
@@ -94,7 +94,7 @@ async function init() {
     positions = geometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    indices = geometry.getIndex() as THREE.BufferAttribute;
+    indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);

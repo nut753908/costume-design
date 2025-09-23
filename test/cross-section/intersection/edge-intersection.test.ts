@@ -24,6 +24,30 @@ describe("EdgeIntersection", () => {
     );
   });
 
+  test("getNormal()", () => {
+    const vi = new EdgeIntersection(0, 1, 0.5, true);
+    const array = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    const normals = new THREE.Float32BufferAttribute(array, 3);
+    const normal = vi.getNormal(normals);
+    const expected = new THREE.Vector3(
+      0 + (3 - 0) * 0.5,
+      1 + (4 - 1) * 0.5,
+      2 + (5 - 2) * 0.5
+    ).normalize();
+    expect(normal.x).toBeCloseTo(expected.x);
+    expect(normal.y).toBeCloseTo(expected.y);
+    expect(normal.z).toBeCloseTo(expected.z);
+  });
+
+  test("getUv()", () => {
+    const vi = new EdgeIntersection(0, 1, 0.5, true);
+    const array = [0, 1, 2, 3, 4, 5];
+    const uvs = new THREE.Float32BufferAttribute(array, 2);
+    const uv = vi.getUv(uvs);
+    const expected = new THREE.Vector2(0 + (2 - 0) * 0.5, 1 + (3 - 1) * 0.5);
+    expect(uv).toEqual(expected);
+  });
+
   describe("equals()", () => {
     test("if (!(i instanceof EdgeIntersection))", () => {
       const ei = new EdgeIntersection(0, 1, 0.5);

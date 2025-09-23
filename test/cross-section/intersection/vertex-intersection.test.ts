@@ -30,6 +30,24 @@ describe("VertexIntersection", () => {
     expect(vi.getPoint(positions)).toEqual(new THREE.Vector3(0, 1, 2));
   });
 
+  test("getNormal()", () => {
+    const vi = new VertexIntersection(0, true);
+    const array = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    const normals = new THREE.Float32BufferAttribute(array, 3);
+    const normal = vi.getNormal(normals);
+    const expected = new THREE.Vector3(0, 1, 2).normalize();
+    expect(normal.x).toBeCloseTo(expected.x);
+    expect(normal.y).toBeCloseTo(expected.y);
+    expect(normal.z).toBeCloseTo(expected.z);
+  });
+
+  test("getUv()", () => {
+    const vi = new VertexIntersection(0, true);
+    const array = [0, 1, 2, 3, 4, 5];
+    const uvs = new THREE.Float32BufferAttribute(array, 2);
+    expect(vi.getUv(uvs)).toEqual(new THREE.Vector2(0, 1));
+  });
+
   describe("equals()", () => {
     test("if (!(i instanceof VertexIntersection))", () => {
       const vi = new VertexIntersection(0);

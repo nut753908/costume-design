@@ -1,6 +1,7 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/main/gui";
 import * as THREE from "three";
+import type { IntersectionLoopPicker } from "../intersection/intersection-loop-picker";
 import { Plane } from "./plane";
 
 /**
@@ -17,6 +18,11 @@ import { Plane } from "./plane";
  */
 export class FreePlane extends Plane {
   type: string;
+
+  /**
+   * The default option for the intersection loop picker.
+   */
+  defaultOption: IntersectionLoopPicker["option"];
 
   /**
    * The normal direction of the plane. Must be a unit vector.
@@ -42,6 +48,7 @@ export class FreePlane extends Plane {
   ) {
     super(inverted);
     this.type = "FreePlane";
+    this.defaultOption = "all";
     this.normal = normal;
     this.point = point;
   }

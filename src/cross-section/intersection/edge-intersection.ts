@@ -1,5 +1,5 @@
 import { getPoint } from "src/cross-section/centerline/points";
-import type * as THREE from "three";
+import * as THREE from "three";
 import { Intersection, type IntersectionJSON } from "./intersection";
 import { VertexIntersection } from "./vertex-intersection";
 
@@ -51,9 +51,38 @@ export class EdgeIntersection extends Intersection {
    * @param positions - The results of geometry.getAttribute("position").
    * @return  The point.
    */
-  getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
+  getPoint(positions: THREE.Float32BufferAttribute): THREE.Vector3 {
     const back = getPoint(positions, this.backV);
     const front = getPoint(positions, this.frontV);
+    const diff = front.clone().sub(back);
+    return back.clone().add(diff.multiplyScalar(this.u));
+  }
+
+  /**
+   * Get the normal on the point.
+   *
+   * @param normals - The results of geometry.getAttribute("normal").
+   * @return  The normal on the point.
+   */
+  getNormal(normals: THREE.Float32BufferAttribute): THREE.Vector3 {
+    return this.getPoint(normals).normalize();
+  }
+
+  /**
+   * Get the uv on the point.
+   *
+   * @param uvs - The results of geometry.getAttribute("uv").
+   * @return  The uv on the point.
+   */
+  getUv(uvs: THREE.Float32BufferAttribute): THREE.Vector2 {
+    const back = new THREE.Vector2(
+      uvs.array[2 * this.backV],
+      uvs.array[2 * this.backV + 1]
+    );
+    const front = new THREE.Vector2(
+      uvs.array[2 * this.frontV],
+      uvs.array[2 * this.frontV + 1]
+    );
     const diff = front.clone().sub(back);
     return back.clone().add(diff.multiplyScalar(this.u));
   }

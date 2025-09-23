@@ -30,7 +30,7 @@ describe("IntersectionLoopPicker", () => {
     expect(IntersectionLoopPicker.getOptions()).toContain("some");
   });
 
-  describe("pickIntersectionLoops()", () => {
+  describe("getIlIndices()", () => {
     // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
     describe("three triangular pyramids example", () => {
       const positionsArray = [
@@ -101,9 +101,7 @@ describe("IntersectionLoopPicker", () => {
 
       test('case "all"', () => {
         const ilp = new IntersectionLoopPicker(intersectionLoops, "all");
-        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual(
-          intersectionLoops
-        );
+        expect(ilp.getIlIndices(plane, positions)).toEqual([0, 1, 2]);
       });
 
       test('case "including plane"', () => {
@@ -111,9 +109,7 @@ describe("IntersectionLoopPicker", () => {
           intersectionLoops,
           "including plane"
         );
-        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
-          intersectionLoops[0],
-        ]);
+        expect(ilp.getIlIndices(plane, positions)).toEqual([0]);
       });
 
       test('case "excluding plane"', () => {
@@ -121,10 +117,7 @@ describe("IntersectionLoopPicker", () => {
           intersectionLoops,
           "excluding plane"
         );
-        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
-          intersectionLoops[1],
-          intersectionLoops[2],
-        ]);
+        expect(ilp.getIlIndices(plane, positions)).toEqual([1, 2]);
       });
 
       test('case "some"', () => {
@@ -133,10 +126,7 @@ describe("IntersectionLoopPicker", () => {
           "some",
           [0, 2, 3]
         );
-        expect(ilp.pickIntersectionLoops(plane, positions)).toEqual([
-          intersectionLoops[0],
-          intersectionLoops[2],
-        ]);
+        expect(ilp.getIlIndices(plane, positions)).toEqual([0, 2]);
       });
     });
   });
