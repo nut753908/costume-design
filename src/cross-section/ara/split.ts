@@ -5,10 +5,7 @@ import { EdgeIntersection } from "../intersection/edge-intersection";
 import { convertToLists, createIndicesMap } from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import { VertexIntersection } from "../intersection/vertex-intersection";
-import type { FreePlane } from "../plane/free-plane";
-import type { VerticalPlane } from "../plane/vertical-plane";
 
-// TODO: test
 /**
  * Add intersections.
  *
@@ -18,53 +15,39 @@ export function addIntersections(
   geometry: THREE.BufferGeometry,
   area: Area
 ): { geometry: THREE.BufferGeometry; area: Area } {
-  const positions = geometry.getAttribute(
-    "position"
-  ) as THREE.Float32BufferAttribute;
-
   // Set newGeometry.
   let newGeometry = geometry.clone();
   Object.entries(area.crossSections).forEach(([_, v]) => {
-    const ils = getIls(
-      newGeometry,
-      v.plane,
-      v.ilp.getIlIndices(v.plane, positions)
-    );
+    const positions = newGeometry.getAttribute(
+      "position"
+    ) as THREE.Float32BufferAttribute;
+    const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
+    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const allIls = planeToAllIls(v.plane);
+    const ilIndices = v.ilp.getIlIndices(v.plane, positions);
+
+    const ils = ilIndices.map((i) => allIls[i]);
     const obj = splitGeometryUsingIls(newGeometry, ils);
     newGeometry = obj.geometry;
   });
 
   // Set newArea.
   const newArea = area.clone();
+  const positions = newGeometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
+  const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
   Object.entries(newArea.crossSections).forEach(([_, v]) => {
+    const allIls = planeToAllIls(v.plane);
     const ilIndices = v.ilp.getIlIndices(v.plane, positions);
-    const ils = getIls(newGeometry, v.plane, ilIndices);
-    ilIndices.forEach((i, i2) => {
-      v.ilp.intersectionLoops[i] = ils[i2];
+
+    ilIndices.forEach((i) => {
+      v.ilp.intersectionLoops[i] = allIls[i];
     });
   });
 
   return { geometry: newGeometry, area: newArea };
-}
-
-// TODO: test
-/**
- * Get intersection loops.
- *
- * @param ilIndices - The indices of the intersection loops with a plane.
- */
-export function getIls(
-  geometry: THREE.BufferGeometry,
-  plane: FreePlane | VerticalPlane,
-  ilIndices: number[]
-): IntersectionLoop[] {
-  const positions = geometry.getAttribute(
-    "position"
-  ) as THREE.Float32BufferAttribute;
-  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
-  const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
-  const allIls = planeToAllIls(plane);
-  return ilIndices.map((_, i) => allIls[i]);
 }
 
 /**
