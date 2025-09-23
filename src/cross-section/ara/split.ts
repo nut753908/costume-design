@@ -67,7 +67,6 @@ export function getIls(
   return ilIndices.map((_, i) => allIls[i]);
 }
 
-// TODO: test
 /**
  * Split geometry using intersection loops.
  *
