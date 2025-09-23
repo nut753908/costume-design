@@ -29,12 +29,12 @@ export abstract class Intersection {
   /**
    * Get the normal on the point.
    */
-  abstract getNormal(normals: THREE.BufferAttribute): THREE.Vector3;
+  abstract getNormal(normals: THREE.Float32BufferAttribute): THREE.Vector3;
 
   /**
    * Get the uv on the point.
    */
-  abstract getUv(uvs: THREE.BufferAttribute): THREE.Vector2;
+  abstract getUv(uvs: THREE.Float32BufferAttribute): THREE.Vector2;
 
   /**
    * Return `true` if this intersection is equal with the given one.

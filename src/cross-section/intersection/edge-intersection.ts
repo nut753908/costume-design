@@ -64,7 +64,7 @@ export class EdgeIntersection extends Intersection {
    * @param normals - The results of geometry.getAttribute("normal").
    * @return  The normal on the point.
    */
-  getNormal(normals: THREE.BufferAttribute): THREE.Vector3 {
+  getNormal(normals: THREE.Float32BufferAttribute): THREE.Vector3 {
     return this.getPoint(normals).normalize();
   }
 
@@ -74,7 +74,7 @@ export class EdgeIntersection extends Intersection {
    * @param uvs - The results of geometry.getAttribute("uv").
    * @return  The uv on the point.
    */
-  getUv(uvs: THREE.BufferAttribute): THREE.Vector2 {
+  getUv(uvs: THREE.Float32BufferAttribute): THREE.Vector2 {
     const back = new THREE.Vector2(
       uvs.array[2 * this.backV],
       uvs.array[2 * this.backV + 1]
