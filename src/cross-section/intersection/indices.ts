@@ -1,7 +1,7 @@
 import type * as THREE from "three";
 
 /**
- * Convert to lists.
+ * Convert to the lists.
  *
  * @param attribute - The results of geometry.getIndex() or geometry.getAttribute(...).
  * @param itemSize - The lists[*] size.
