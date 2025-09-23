@@ -51,7 +51,7 @@ export class EdgeIntersection extends Intersection {
    * @param positions - The results of geometry.getAttribute("position").
    * @return  The point.
    */
-  getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
+  getPoint(positions: THREE.Float32BufferAttribute): THREE.Vector3 {
     const back = getPoint(positions, this.backV);
     const front = getPoint(positions, this.frontV);
     const diff = front.clone().sub(back);

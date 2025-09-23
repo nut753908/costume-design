@@ -43,7 +43,7 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
-let positions: THREE.BufferAttribute;
+let positions: THREE.Float32BufferAttribute;
 let indices: THREE.BufferAttribute;
 
 let pm: PlaneManager;

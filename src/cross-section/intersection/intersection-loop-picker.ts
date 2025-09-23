@@ -78,7 +78,7 @@ export class IntersectionLoopPicker {
    */
   createGroup(
     plane: FreePlane | VerticalPlane,
-    positions: THREE.BufferAttribute,
+    positions: THREE.Float32BufferAttribute,
     ms: Materials
   ): THREE.Group {
     const group = new THREE.Group();
@@ -163,7 +163,7 @@ export class IntersectionLoopPicker {
    */
   getIlIndices(
     plane: FreePlane | VerticalPlane,
-    positions: THREE.BufferAttribute
+    positions: THREE.Float32BufferAttribute
   ): number[] {
     const list = this.intersectionLoops;
     switch (this.option) {

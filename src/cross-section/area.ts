@@ -104,7 +104,7 @@ export class Area {
    * Create the intersection loop pickers group.
    */
   createIlpsGroup(
-    positions: THREE.BufferAttribute,
+    positions: THREE.Float32BufferAttribute,
     ms: Materials
   ): THREE.Group {
     const parent = new THREE.Group();
@@ -162,7 +162,7 @@ export class Area {
    * @param indices - The results of geometry.getIndex().
    */
   static createPlaneToAllIls(
-    positions: THREE.BufferAttribute,
+    positions: THREE.Float32BufferAttribute,
     indices: THREE.BufferAttribute
   ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
     const nPolygonIndices = convertToLists(indices, 3);

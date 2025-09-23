@@ -51,7 +51,7 @@ export class VertexIntersection extends Intersection {
    * @param positions - The results of geometry.getAttribute("position").
    * @return  The point.
    */
-  getPoint(positions: THREE.BufferAttribute): THREE.Vector3 {
+  getPoint(positions: THREE.Float32BufferAttribute): THREE.Vector3 {
     return getPoint(positions, this.v);
   }
 

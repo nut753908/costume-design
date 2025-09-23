@@ -69,7 +69,7 @@ export function createAllIntersectionLoops(
  */
 export function sortIntersectionLoops(
   intersectionLoops: IntersectionLoop[],
-  positions: THREE.BufferAttribute
+  positions: THREE.Float32BufferAttribute
 ): IntersectionLoop[] {
   return intersectionLoops
     .map<[IntersectionLoop, THREE.Vector3]>((il) => [

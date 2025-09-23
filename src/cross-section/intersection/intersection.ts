@@ -24,7 +24,7 @@ export abstract class Intersection {
   /**
    * Get the point.
    */
-  abstract getPoint(positions: THREE.BufferAttribute): THREE.Vector3;
+  abstract getPoint(positions: THREE.Float32BufferAttribute): THREE.Vector3;
 
   /**
    * Get the normal on the point.

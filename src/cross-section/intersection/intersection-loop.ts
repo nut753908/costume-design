@@ -56,7 +56,7 @@ export class IntersectionLoop {
    * @param positions - The results of geometry.getAttribute("position").
    * @return  The points.
    */
-  getPoints(positions: THREE.BufferAttribute): THREE.Vector3[] {
+  getPoints(positions: THREE.Float32BufferAttribute): THREE.Vector3[] {
     return this.intersections.map((i) => i.getPoint(positions));
   }
 
@@ -67,7 +67,7 @@ export class IntersectionLoop {
    */
   inLoop(
     plane: FreePlane | VerticalPlane,
-    positions: THREE.BufferAttribute
+    positions: THREE.Float32BufferAttribute
   ): boolean {
     if (!this.closed) return false;
     const normal = plane.getNormal();
