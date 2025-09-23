@@ -13,7 +13,7 @@ export function convertToLists(
 ): number[][] {
   const jList = [...Array(itemSize).keys()];
   const lists: number[][] = [];
-  for (let i = 0, l = attribute.count; i < l; i += itemSize) {
+  for (let i = 0, l = attribute.array.length; i < l; i += itemSize) {
     lists.push(jList.map((j) => attribute.array[i + j]));
   }
   return lists;
