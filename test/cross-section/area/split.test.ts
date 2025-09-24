@@ -264,7 +264,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        topRow: {
+        upperRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -428,7 +428,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        topRow: {
+        upperRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
