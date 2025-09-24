@@ -329,13 +329,16 @@ describe("findAdjacentFacesWithinArea()", () => {
         const foundFaces: number[][] = [];
         const expectedFoundVertices: number[] = [4, 5, 6, 7, 8, 9, 10, 3, 2];
         const expectedFoundFaces: number[][] = [
+          [7, 4, 8],
           [4, 5, 8],
+          [8, 5, 9],
           [9, 5, 6],
+          [9, 6, 10],
           [3, 7, 8],
           [3, 9, 2],
           [2, 9, 10],
           [3, 8, 9],
-        ]; // TODO: fix
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -388,10 +391,10 @@ describe("findAdjacentFacesWithinArea()", () => {
         const foundFaces: number[][] = [];
         const expectedFoundVertices: number[] = [4, 5, 6, 7, 8, 9, 10];
         const expectedFoundFaces: number[][] = [
-          [4, 5, 8],
-          [9, 5, 6],
           [7, 4, 8],
+          [4, 5, 8],
           [8, 5, 9],
+          [9, 5, 6],
           [9, 6, 10],
         ];
         findAdjacentFacesWithinArea(
@@ -512,9 +515,11 @@ describe("findAdjacentFacesWithinArea()", () => {
           [1, 0, 5],
           [5, 0, 6],
           [7, 4, 8],
+          [4, 5, 8],
           [8, 5, 9],
           [9, 6, 10],
-        ]; // TODO: fix
+          [9, 5, 6],
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -619,16 +624,22 @@ describe("findAdjacentFacesWithinArea()", () => {
 
         const foundVertices: number[] = [];
         const foundFaces: number[][] = [];
-        const expectedFoundVertices: number[] = [4, 5, 9, 6, 7, 8, 10, 11, 3]; // TODO: fix
+        const expectedFoundVertices: number[] = [
+          4, 5, 9, 6, 7, 8, 10, 11, 3, 2, 1,
+        ];
         const expectedFoundFaces: number[][] = [
           [3, 4, 5],
           [5, 11, 3],
           [5, 9, 10],
+          [5, 10, 11],
           [9, 6, 10],
+          [6, 2, 10],
+          [10, 2, 11],
+          [1, 7, 5],
+          [4, 1, 5],
           [7, 8, 5],
           [5, 8, 9],
-          [5, 10, 11],
-        ]; // TODO: fix
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -682,19 +693,20 @@ describe("findAdjacentFacesWithinArea()", () => {
         const foundVertices: number[] = [];
         const foundFaces: number[][] = [];
         const expectedFoundVertices: number[] = [
-          4, 5, 9, 6, 7, 8, 10, 11, 3, 0, 2,
+          4, 5, 9, 6, 7, 8, 10, 11, 3, 2, 0,
         ];
         const expectedFoundFaces: number[][] = [
           [3, 4, 5],
           [5, 11, 3],
           [5, 9, 10],
+          [5, 10, 11],
           [9, 6, 10],
+          [6, 2, 10],
+          [10, 2, 11],
           [7, 0, 8],
           [8, 0, 6],
           [8, 6, 9],
-          [10, 2, 11],
-          [6, 2, 10],
-        ]; // TODO: fix
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -747,16 +759,22 @@ describe("findAdjacentFacesWithinArea()", () => {
 
         const foundVertices: number[] = [];
         const foundFaces: number[][] = [];
-        const expectedFoundVertices: number[] = [4, 5, 9, 6, 7, 8, 10, 11, 1]; // TODO: fix
+        const expectedFoundVertices: number[] = [
+          4, 5, 9, 6, 7, 8, 10, 11, 1, 0, 3,
+        ];
         const expectedFoundFaces: number[][] = [
           [4, 1, 5],
           [1, 7, 5],
+          [7, 8, 5],
           [5, 8, 9],
           [8, 6, 9],
-          [7, 8, 5],
+          [8, 0, 6],
+          [7, 0, 8],
           [5, 9, 10],
           [5, 10, 11],
-        ]; // TODO: fix
+          [5, 11, 3],
+          [3, 4, 5],
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -815,14 +833,15 @@ describe("findAdjacentFacesWithinArea()", () => {
         const expectedFoundFaces: number[][] = [
           [4, 1, 5],
           [1, 7, 5],
+          [7, 8, 5],
           [5, 8, 9],
           [8, 6, 9],
-          [7, 0, 8],
           [8, 0, 6],
+          [7, 0, 8],
           [9, 6, 10],
-          [10, 2, 11],
           [6, 2, 10],
-        ]; // TODO: fix
+          [10, 2, 11],
+        ];
         findAdjacentFacesWithinArea(
           area,
           foundVertices,
@@ -911,8 +930,10 @@ describe("findFirstFaces()", () => {
     const expectedFoundVertices: number[] = [9, 10, 11, 12, 13];
     const expectedFirstFaces: number[][] = [
       [5, 10, 9],
+      [4, 10, 5],
       [4, 11, 10],
       [4, 12, 11],
+      [3, 12, 4],
       [3, 13, 12],
     ];
     findFirstFaces(plane, il, foundVertices, firstFaces, indicesMap, positions);
@@ -1008,13 +1029,17 @@ describe("findFirstFaces()", () => {
     const expectedFoundVertices: number[] = [8, 9, 10, 11, 12, 13, 14, 15];
     const expectedFirstFaces: number[][] = [
       [5, 8, 9],
+      [15, 8, 5],
+      [5, 9, 4],
       [9, 10, 4],
       [4, 10, 11],
+      [4, 11, 7],
       [11, 12, 7],
       [7, 12, 13],
+      [7, 13, 6],
       [13, 14, 6],
       [6, 14, 15],
-      [15, 8, 5],
+      [6, 15, 5],
     ];
     findFirstFaces(plane, il, foundVertices, firstFaces, indicesMap, positions);
     expect(foundVertices).toEqual(expectedFoundVertices);

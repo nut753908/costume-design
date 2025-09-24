@@ -59,32 +59,25 @@ export function findFirstFaces(
   indicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
-  // Add to foundVertices.
-  const vertices = il.intersections
-    .map((v) => (v as VertexIntersection).v)
-    .map((v) => {
-      if (!foundVertices.includes(v)) foundVertices.push(v);
-      return v;
-    });
-
-  // Add to firstFaces.
+  // Add to foundVertices, firstFaces.
   const refP = plane.getPoint();
   const normal = plane.getNormal();
-  if (il.closed) vertices.push(vertices[0]);
-  for (let i = 0, l = vertices.length - 1; i < l; i++) {
-    const v0 = vertices[i];
-    const v1 = vertices[i + 1];
-    const faces = indicesMap[`${v0},${v1}`];
+  const vertices = il.intersections.map((v) => (v as VertexIntersection).v);
+  vertices.forEach((v) => {
+    if (!foundVertices.includes(v)) foundVertices.push(v);
+    const faces = indicesMap[`${v}`];
     faces.forEach((f) => {
-      const v2 = f.find((v) => v !== v0 && v !== v1);
-      if (v2 === undefined) return;
-      const p = getPoint(positions, v2);
-      const diff = p.clone().sub(refP);
-      const dot = normal.dot(diff);
-      if (dot > 0) firstFaces.push(f); // added
+      f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
+        const p = getPoint(positions, v2);
+        const diff = p.clone().sub(refP);
+        const dot = normal.dot(diff);
+        if (dot > 0 && !firstFaces.includes(f)) {
+          firstFaces.push(f); // added
+          return;
+        }
+      });
     });
-  }
-  if (il.closed) vertices.pop();
+  });
 }
 
 /**
