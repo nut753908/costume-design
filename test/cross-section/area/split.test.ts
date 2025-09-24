@@ -69,7 +69,7 @@ describe("addIntersections()", () => {
 
     test("one cross section", () => {
       const css: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -171,7 +171,7 @@ describe("addIntersections()", () => {
       newGeometry.setAttribute("uv", newUvs);
 
       const newCss: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -248,7 +248,7 @@ describe("addIntersections()", () => {
 
     test("two non-intersecting cross sections", () => {
       const css: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -264,7 +264,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        b: {
+        topRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -412,7 +412,7 @@ describe("addIntersections()", () => {
       newGeometry.setAttribute("uv", newUvs);
 
       const newCss: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -428,7 +428,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        b: {
+        topRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -506,7 +506,7 @@ describe("addIntersections()", () => {
 
     test("two intersecting cross sections", () => {
       const css: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -522,7 +522,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        c: {
+        leftColumn: {
           plane: new FreePlane(
             new THREE.Vector3(1, 0, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -682,7 +682,7 @@ describe("addIntersections()", () => {
       newGeometry.setAttribute("uv", newUvs);
 
       const newCss: Area["crossSections"] = {
-        a: {
+        centerRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
@@ -699,7 +699,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        c: {
+        leftColumn: {
           plane: new FreePlane(
             new THREE.Vector3(1, 0, 0),
             new THREE.Vector3(0.25, 0.75, 0)

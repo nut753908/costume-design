@@ -6,7 +6,6 @@ import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
 
-// TODO: test
 /**
  * Find adjacent faces within the area.
  *
@@ -17,8 +16,8 @@ import type { VerticalPlane } from "../plane/vertical-plane";
  */
 export function findAdjacentFacesWithinArea(
   area: Area,
-  foundFaces: number[][],
   foundVertices: number[],
+  foundFaces: number[][],
   indicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
@@ -28,8 +27,8 @@ export function findAdjacentFacesWithinArea(
   Object.values(area.crossSections).forEach((cs) => {
     cs.ilp.intersectionLoops.forEach((il) => {
       findFirstFaces(
-        il,
         cs.plane,
+        il,
         foundVertices,
         firstFaces,
         indicesMap,
@@ -44,7 +43,6 @@ export function findAdjacentFacesWithinArea(
   });
 }
 
-// TODO: test
 /**
  * Find first faces.
  *
@@ -54,16 +52,20 @@ export function findAdjacentFacesWithinArea(
  * @param positions - The results of geometry.getAttribute("position").
  */
 export function findFirstFaces(
-  il: IntersectionLoop,
   plane: FreePlane | VerticalPlane,
+  il: IntersectionLoop,
   foundVertices: number[],
   firstFaces: number[][],
   indicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
   // Add to foundVertices.
-  const vertices = il.intersections.map((v) => (v as VertexIntersection).v);
-  foundVertices.push(...vertices);
+  const vertices = il.intersections
+    .map((v) => (v as VertexIntersection).v)
+    .map((v) => {
+      if (!foundVertices.includes(v)) foundVertices.push(v);
+      return v;
+    });
 
   // Add to firstFaces.
   const refP = plane.getPoint();
@@ -85,7 +87,6 @@ export function findFirstFaces(
   if (il.closed) vertices.pop();
 }
 
-// TODO: test
 /**
  * Find adjacent faces recursively.
  *
@@ -94,24 +95,24 @@ export function findFirstFaces(
  * @param foundFaces - The found faces. Each face found is added to this.
  * @param indicesMap - The indices map. The key is a string of one or two vertices.
  */
-function findAdjacentFaces(
+export function findAdjacentFaces(
   face: number[],
   foundVertices: number[],
   foundFaces: number[][],
   indicesMap: { [k: string]: number[][] }
 ) {
-  // Add to foundVertices.
+  // Add to foundFaces.
+  if (foundFaces.includes(face)) return;
+  foundFaces.push(face);
+
   face.forEach((v) => {
+    // Add to foundVertices.
     if (foundVertices.includes(v)) return;
     foundVertices.push(v);
 
-    // Add to foundFaces.
+    // Repeat the same for the next face.
     const faces = indicesMap[`${v}`];
     faces.forEach((f) => {
-      if (foundFaces.includes(f)) return;
-      foundFaces.push(f);
-
-      // Repeat the same for the next face.
       findAdjacentFaces(f, foundVertices, foundFaces, indicesMap);
     });
   });
