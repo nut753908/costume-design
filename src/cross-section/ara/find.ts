@@ -59,12 +59,14 @@ export function findFirstFaces(
   indicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
-  // Add to foundVertices, firstFaces.
   const refP = plane.getPoint();
   const normal = plane.getNormal();
   const vertices = il.intersections.map((v) => (v as VertexIntersection).v);
   vertices.forEach((v) => {
+    // Add to foundVertices.
     if (!foundVertices.includes(v)) foundVertices.push(v);
+
+    // Add to firstFaces.
     const faces = indicesMap[`${v}`];
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
