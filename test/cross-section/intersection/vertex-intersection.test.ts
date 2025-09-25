@@ -13,16 +13,6 @@ describe("VertexIntersection", () => {
     expect(vi.checked).toBe(true);
   });
 
-  test("backV()", () => {
-    const vi = new VertexIntersection(0, true);
-    expect(vi.backV).toBe(0);
-  });
-
-  test("frontV()", () => {
-    const vi = new VertexIntersection(0, true);
-    expect(vi.frontV).toBe(0);
-  });
-
   test("getPoints()", () => {
     const vi = new VertexIntersection(0, true);
     const array = [0, 1, 2, 3, 4, 5, 6, 7, 8];

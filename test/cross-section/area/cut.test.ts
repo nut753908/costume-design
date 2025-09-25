@@ -1,9 +1,9 @@
-import { Area } from "src/cross-section/ara/area";
+import { Area } from "src/cross-section/area/area";
 import {
   cutGeometryUsingIl,
   cutGeometryUsingIls,
   cutGeometryUsingIlsWithinArea,
-} from "src/cross-section/ara/cut";
+} from "src/cross-section/area/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
@@ -20,7 +20,7 @@ import {
 } from "vitest";
 
 describe("cutGeometryUsingIlsWithinArea()", () => {
-  describe("plane(flat) example", () => {
+  describe("example of a plane (flat)", () => {
     let spy: MockInstance;
     let indices: THREE.Uint16BufferAttribute;
     let positions: THREE.Float32BufferAttribute;
@@ -864,7 +864,7 @@ describe("cutGeometryUsingIls()", () => {
     geometry.setAttribute("uv", uvs);
   });
 
-  // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
+  // This example is imported from test/cross-section/area/find.test.ts.
   test("three triangular pyramids example", () => {
     const ils = [
       new IntersectionLoop(
@@ -1153,7 +1153,7 @@ describe("cutGeometryUsingIls()", () => {
 });
 
 describe("cutGeometryUsingIl()", () => {
-  // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
+  // This example is imported from test/cross-section/area/find.test.ts.
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
@@ -1812,7 +1812,7 @@ describe("cutGeometryUsingIl()", () => {
     });
   });
 
-  describe("plane(flat) example", () => {
+  describe("example of a plane (flat)", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
 

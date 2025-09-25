@@ -9,7 +9,7 @@ import { Area } from "./area";
 /**
  * Cut geometry using intersection loops within the area.
  *
- * @return  The geometry and the area with cutting faces.
+ * @return  The geometry and the area after cutting faces.
  */
 export function cutGeometryUsingIlsWithinArea(
   geometry: THREE.BufferGeometry,

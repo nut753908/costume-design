@@ -32,20 +32,6 @@ export class VertexIntersection extends Intersection {
   }
 
   /**
-   * Get the vertex index as the back vertex of the edge.
-   */
-  get backV(): number {
-    return this.v;
-  }
-
-  /**
-   * Get the vertex index as the front vertex of the edge.
-   */
-  get frontV(): number {
-    return this.v;
-  }
-
-  /**
    * Get the point.
    *
    * @param positions - The results of geometry.getAttribute("position").
