@@ -27,7 +27,7 @@ export function addIntersections(
     const ilIndices = v.ilp.getIlIndices(v.plane, positions);
 
     const ils = ilIndices.map((i) => allIls[i]);
-    const obj = splitGeometryUsingIls(newGeometry, ils);
+    const obj = cutGeometryUsingIls(newGeometry, ils);
     newGeometry = obj.geometry;
   });
 
@@ -51,19 +51,19 @@ export function addIntersections(
 }
 
 /**
- * Split geometry using intersection loops.
+ * Cut geometry using intersection loops.
  *
  * @param ils - The intersection loops with a plane.
- * @return  The geometry and the intersection loops after splitting faces.
+ * @return  The geometry and the intersection loops after cutting faces.
  */
-export function splitGeometryUsingIls(
+export function cutGeometryUsingIls(
   geometry: THREE.BufferGeometry,
   ils: IntersectionLoop[]
 ): { geometry: THREE.BufferGeometry; ils: IntersectionLoop[] } {
   let newGeometry = geometry;
   const newIls: IntersectionLoop[] = [];
   ils.forEach((il) => {
-    const obj = splitGeometryUsingIl(newGeometry, il);
+    const obj = cutGeometryUsingIl(newGeometry, il);
     newGeometry = obj.geometry;
     newIls.push(obj.il);
   });
@@ -71,12 +71,12 @@ export function splitGeometryUsingIls(
 }
 
 /**
- * Split geometry using an intersection loop.
+ * Cut geometry using an intersection loop.
  *
  * @param il - The intersection loop with a plane.
- * @return  The geometry and the intersection loop after splitting faces.
+ * @return  The geometry and the intersection loop after cutting faces.
  */
-export function splitGeometryUsingIl(
+export function cutGeometryUsingIl(
   geometry: THREE.BufferGeometry,
   il: IntersectionLoop
 ): { geometry: THREE.BufferGeometry; il: IntersectionLoop } {
