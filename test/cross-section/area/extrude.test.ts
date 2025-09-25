@@ -1,4 +1,5 @@
 import {
+  concatGeometries,
   extrudePositions,
   findBoundaries,
   flipNormals,
@@ -397,5 +398,203 @@ describe("findBoundaries()", () => {
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
     });
+  });
+});
+
+describe("concatGeometries()", () => {
+  // This example is imported from test/cross-section/area/cut.test.ts.
+  test("three triangular pyramids example", () => {
+    const indices1Array = [
+      [0, 1, 2],
+      [0, 1, 3],
+      [1, 2, 3],
+      [2, 0, 3],
+    ].flat();
+    const indices1 = new THREE.Uint16BufferAttribute(indices1Array, 1);
+    const positions1Array = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 0, 1],
+      [0, 1, 0],
+    ].flat();
+    const positions1 = new THREE.Float32BufferAttribute(positions1Array, 3);
+    const normals1Array = [
+      new THREE.Vector3(-1, -1, -1).normalize().toArray(),
+      new THREE.Vector3(3, -1, -1).normalize().toArray(),
+      new THREE.Vector3(-1, -1, 3).normalize().toArray(),
+      new THREE.Vector3(-1, 3, -1).normalize().toArray(),
+    ].flat();
+    const normals1 = new THREE.Float32BufferAttribute(normals1Array, 3);
+    const uvs1Array = [
+      [0.1, 0],
+      [0.2, 0.2],
+      [0, 0.2],
+      [0.1, 0.1],
+    ].flat();
+    const uvs1 = new THREE.Float32BufferAttribute(uvs1Array, 2);
+    const geometry1 = new THREE.BufferGeometry();
+    geometry1.setIndex(indices1);
+    geometry1.setAttribute("position", positions1);
+    geometry1.setAttribute("normal", normals1);
+    geometry1.setAttribute("uv", uvs1);
+
+    const indices2Array = [
+      [0, 1, 2],
+      [0, 1, 3],
+      [1, 2, 3],
+      [2, 0, 3],
+    ].flat();
+    const indices2 = new THREE.Uint16BufferAttribute(indices2Array, 1);
+    const positions2Array = [
+      [2, 0.5, 0.5],
+      [3, 0, 0],
+      [3, 0, 1],
+      [3, 1, 0.5],
+    ].flat();
+    const positions2 = new THREE.Float32BufferAttribute(positions2Array, 3);
+    const normals2Array = [
+      new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+      new THREE.Vector3(2, -3, -4).normalize().toArray(),
+      new THREE.Vector3(2, -3, 4).normalize().toArray(),
+      new THREE.Vector3(2, 5, 0).normalize().toArray(),
+    ].flat();
+    const normals2 = new THREE.Float32BufferAttribute(normals2Array, 3);
+    const uvs2Array = [
+      [0.4, 0],
+      [0.5, 0.2],
+      [0.3, 0.2],
+      [0.4, 0.1],
+    ].flat();
+    const uvs2 = new THREE.Float32BufferAttribute(uvs2Array, 2);
+    const geometry2 = new THREE.BufferGeometry();
+    geometry2.setIndex(indices2);
+    geometry2.setAttribute("position", positions2);
+    geometry2.setAttribute("normal", normals2);
+    geometry2.setAttribute("uv", uvs2);
+
+    const indices3Array = [
+      [0, 1, 2],
+      [0, 1, 3],
+      [1, 2, 3],
+      [2, 0, 3],
+    ].flat();
+    const indices3 = new THREE.Uint16BufferAttribute(indices3Array, 1);
+    const positions3Array = [
+      [4, 0.5, 0],
+      [5, 0, 0.5],
+      [4, 0.5, 1],
+      [5, 1, 0.5],
+    ].flat();
+    const positions3 = new THREE.Float32BufferAttribute(positions3Array, 3);
+    const normals3Array = [
+      new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+      new THREE.Vector3(1, -1, 0).normalize().toArray(),
+      new THREE.Vector3(-1, 0, 1).normalize().toArray(),
+      new THREE.Vector3(1, 1, 0).normalize().toArray(),
+    ].flat();
+    const normals3 = new THREE.Float32BufferAttribute(normals3Array, 3);
+    const uvs3Array = [
+      [0.7, 0],
+      [0.8, 0.2],
+      [0.6, 0.2],
+      [0.7, 0.1],
+    ].flat();
+    const uvs3 = new THREE.Float32BufferAttribute(uvs3Array, 2);
+    const geometry3 = new THREE.BufferGeometry();
+    geometry3.setIndex(indices3);
+    geometry3.setAttribute("position", positions3);
+    geometry3.setAttribute("normal", normals3);
+    geometry3.setAttribute("uv", uvs3);
+
+    const expectedIndicesArray = [
+      [0, 1, 2],
+      [0, 1, 3],
+      [1, 2, 3],
+      [2, 0, 3],
+      //
+      [4, 5, 6],
+      [4, 5, 7],
+      [5, 6, 7],
+      [6, 4, 7],
+      //
+      [8, 9, 10],
+      [8, 9, 11],
+      [9, 10, 11],
+      [10, 8, 11],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      1
+    );
+    const expectedPositionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 0, 1],
+      [0, 1, 0],
+      //
+      [2, 0.5, 0.5],
+      [3, 0, 0],
+      [3, 0, 1],
+      [3, 1, 0.5],
+      //
+      [4, 0.5, 0],
+      [5, 0, 0.5],
+      [4, 0.5, 1],
+      [5, 1, 0.5],
+    ].flat();
+    const expectedPositions = new THREE.Float32BufferAttribute(
+      expectedPositionsArray,
+      3
+    );
+    const expectedNormalsArray = [
+      new THREE.Vector3(-1, -1, -1).normalize().toArray(),
+      new THREE.Vector3(3, -1, -1).normalize().toArray(),
+      new THREE.Vector3(-1, -1, 3).normalize().toArray(),
+      new THREE.Vector3(-1, 3, -1).normalize().toArray(),
+      //
+      new THREE.Vector3(-6, 1, 0)
+        .normalize()
+        .toArray(),
+      new THREE.Vector3(2, -3, -4).normalize().toArray(),
+      new THREE.Vector3(2, -3, 4).normalize().toArray(),
+      new THREE.Vector3(2, 5, 0).normalize().toArray(),
+      //
+      new THREE.Vector3(-1, 0, -1)
+        .normalize()
+        .toArray(),
+      new THREE.Vector3(1, -1, 0).normalize().toArray(),
+      new THREE.Vector3(-1, 0, 1).normalize().toArray(),
+      new THREE.Vector3(1, 1, 0).normalize().toArray(),
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    const expectedUvsArray = [
+      [0.1, 0],
+      [0.2, 0.2],
+      [0, 0.2],
+      [0.1, 0.1],
+      //
+      [0.4, 0],
+      [0.5, 0.2],
+      [0.3, 0.2],
+      [0.4, 0.1],
+      //
+      [0.7, 0],
+      [0.8, 0.2],
+      [0.6, 0.2],
+      [0.7, 0.1],
+    ].flat();
+    const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+    const expectedGeometry = new THREE.BufferGeometry();
+    expectedGeometry.setIndex(expectedIndices);
+    expectedGeometry.setAttribute("position", expectedPositions);
+    expectedGeometry.setAttribute("normal", expectedNormals);
+    expectedGeometry.setAttribute("uv", expectedUvs);
+
+    const actualGeometry = concatGeometries([geometry1, geometry2, geometry3]);
+    actualGeometry.uuid = expectedGeometry.uuid;
+    expect(actualGeometry).toEqual(expectedGeometry);
   });
 });
