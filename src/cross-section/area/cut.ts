@@ -80,17 +80,14 @@ export function cutGeometryUsingIl(
   geometry: THREE.BufferGeometry,
   il: IntersectionLoop
 ): { geometry: THREE.BufferGeometry; il: IntersectionLoop } {
-  const newGeometry = geometry.clone();
-  const newIl = il.clone();
-
-  const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
-  const positions = newGeometry.getAttribute(
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+  const positions = geometry.getAttribute(
     "position"
   ) as THREE.Float32BufferAttribute;
-  const normals = newGeometry.getAttribute(
+  const normals = geometry.getAttribute(
     "normal"
   ) as THREE.Float32BufferAttribute;
-  const uvs = newGeometry.getAttribute("uv") as THREE.Float32BufferAttribute;
+  const uvs = geometry.getAttribute("uv") as THREE.Float32BufferAttribute;
 
   const indexLists = convertToLists(indices, 3);
   const positionLists = convertToLists(positions, 3);
@@ -100,6 +97,7 @@ export function cutGeometryUsingIl(
   const indicesMap = createIndicesMap(indexLists);
 
   // Set newIl, positionLists, normalLists, uvLists.
+  const newIl = il.clone();
   let count = positions.count;
   il.intersections
     .filter((v) => v instanceof EdgeIntersection)
@@ -223,6 +221,7 @@ indicesV1: ${JSON.stringify(indicesV1)}
     newIl.intersections.pop();
   }
 
+  const newGeometry = new THREE.BufferGeometry();
   newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
   newGeometry.setAttribute(
     "position",
