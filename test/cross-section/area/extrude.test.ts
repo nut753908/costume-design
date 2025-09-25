@@ -36,7 +36,7 @@ positions.array.length !== normals.array.length
       spy = vi.spyOn(console, "error");
     });
 
-    // Import from test/cross-section/intersection/intersection-loops.test.ts.
+    // Import from test/cross-section/area/find.test.ts.
     test("plane(flat) example", () => {
       /**
        * flat layout:
@@ -210,7 +210,7 @@ describe("flipNormals()", () => {
     expect(normals).toEqual(expectedNormals);
   });
 
-  // Import from test/cross-section/intersection/intersection-loops.test.ts.
+  // Import from test/cross-section/area/find.test.ts.
   test("cube example", () => {
     const SQRT1_3 = Math.sqrt(1 / 3);
     const SQRT1_2 = Math.SQRT1_2;
