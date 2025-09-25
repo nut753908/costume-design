@@ -8,7 +8,6 @@ import { EdgeLoop } from "../centerline/edge-loop";
  * @param positions - The results of geometry.getAttribute("position").
  * @param normals - The results of geometry.getAttribute("normal").
  * @param displacement - The extrusion displacement in the normal direction.
- * @returns
  */
 export function extrudePositions(
   positions: THREE.Float32BufferAttribute,
