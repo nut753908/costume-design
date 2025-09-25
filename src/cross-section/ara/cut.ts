@@ -7,11 +7,11 @@ import { VertexIntersection } from "../intersection/vertex-intersection";
 import { Area } from "./area";
 
 /**
- * Add intersections.
+ * Cut geometry using intersection loops within the area.
  *
- * @return  The geometry and the cross sections with added intersections.
+ * @return  The geometry and the area with cutting faces.
  */
-export function addIntersections(
+export function cutGeometryUsingIlsWithinArea(
   geometry: THREE.BufferGeometry,
   area: Area
 ): { geometry: THREE.BufferGeometry; area: Area } {

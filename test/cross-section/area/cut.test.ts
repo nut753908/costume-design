@@ -1,8 +1,8 @@
 import { Area } from "src/cross-section/ara/area";
 import {
-  addIntersections,
   cutGeometryUsingIl,
   cutGeometryUsingIls,
+  cutGeometryUsingIlsWithinArea,
 } from "src/cross-section/ara/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
@@ -19,7 +19,7 @@ import {
   vi,
 } from "vitest";
 
-describe("addIntersections()", () => {
+describe("cutGeometryUsingIlsWithinArea()", () => {
   describe("plane(flat) example", () => {
     let spy: MockInstance;
     let indices: THREE.Uint16BufferAttribute;
@@ -89,7 +89,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
@@ -284,7 +284,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
@@ -542,7 +542,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
