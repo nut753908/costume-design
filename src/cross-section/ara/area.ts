@@ -3,20 +3,20 @@ import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { createAllEdges } from "./centerline/edges";
-import { convertToLists, createIndicesMap } from "./intersection/indices";
-import type { IntersectionLoop } from "./intersection/intersection-loop";
+import { createAllEdges } from "../centerline/edges";
+import { convertToLists, createIndicesMap } from "../intersection/indices";
+import type { IntersectionLoop } from "../intersection/intersection-loop";
 import {
   IntersectionLoopPicker,
   type IntersectionLoopPickerJSON,
-} from "./intersection/intersection-loop-picker";
+} from "../intersection/intersection-loop-picker";
 import {
   createAllIntersectionLoops,
   sortIntersectionLoops,
-} from "./intersection/intersection-loops";
-import { createAllIntersections } from "./intersection/intersections";
-import { FreePlane, type FreePlaneJSON } from "./plane/free-plane";
-import { VerticalPlane, type VerticalPlaneJSON } from "./plane/vertical-plane";
+} from "../intersection/intersection-loops";
+import { createAllIntersections } from "../intersection/intersections";
+import { FreePlane, type FreePlaneJSON } from "../plane/free-plane";
+import { VerticalPlane, type VerticalPlaneJSON } from "../plane/vertical-plane";
 
 /**
  * The area divided by cross sections.

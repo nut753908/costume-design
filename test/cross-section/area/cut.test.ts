@@ -1,9 +1,9 @@
+import { Area } from "src/cross-section/ara/area";
 import {
-  addIntersections,
-  splitGeometryUsingIl,
-  splitGeometryUsingIls,
-} from "src/cross-section/ara/split";
-import { Area } from "src/cross-section/area";
+  cutGeometryUsingIl,
+  cutGeometryUsingIls,
+  cutGeometryUsingIlsWithinArea,
+} from "src/cross-section/ara/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
@@ -19,7 +19,7 @@ import {
   vi,
 } from "vitest";
 
-describe("addIntersections()", () => {
+describe("cutGeometryUsingIlsWithinArea()", () => {
   describe("plane(flat) example", () => {
     let spy: MockInstance;
     let indices: THREE.Uint16BufferAttribute;
@@ -89,7 +89,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
@@ -264,7 +264,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        topRow: {
+        upperRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -284,7 +284,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
@@ -428,7 +428,7 @@ describe("addIntersections()", () => {
             ),
           ]),
         },
-        topRow: {
+        upperRow: {
           plane: new FreePlane(
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.25, 0.75, 0)
@@ -542,7 +542,7 @@ describe("addIntersections()", () => {
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
-      const obj = addIntersections(inputGeometry, inputArea);
+      const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputArea.toJSON()).toEqual(area.toJSON());
@@ -778,7 +778,7 @@ describe("addIntersections()", () => {
   });
 });
 
-describe("splitGeometryUsingIls()", () => {
+describe("cutGeometryUsingIls()", () => {
   let spy: MockInstance;
   let geometry: THREE.BufferGeometry;
 
@@ -894,7 +894,7 @@ describe("splitGeometryUsingIls()", () => {
     ];
     const inputGeometry = geometry.clone();
     const inputIls = ils.map((il) => il.clone());
-    const obj = splitGeometryUsingIls(inputGeometry, inputIls);
+    const obj = cutGeometryUsingIls(inputGeometry, inputIls);
     inputGeometry.uuid = geometry.uuid;
     expect(inputGeometry).toEqual(geometry);
     expect(inputIls).toEqual(ils);
@@ -1152,7 +1152,7 @@ describe("splitGeometryUsingIls()", () => {
   });
 });
 
-describe("splitGeometryUsingIl()", () => {
+describe("cutGeometryUsingIl()", () => {
   // This example is imported from test/cross-section/intersection/intersection-loop.test.ts.
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
@@ -1251,7 +1251,7 @@ describe("splitGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = splitGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1454,7 +1454,7 @@ describe("splitGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = splitGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1644,7 +1644,7 @@ describe("splitGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = splitGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1868,7 +1868,7 @@ describe("splitGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = splitGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);

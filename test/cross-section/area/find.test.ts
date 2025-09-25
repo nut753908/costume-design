@@ -1,9 +1,9 @@
+import { Area } from "src/cross-section/ara/area";
 import {
   findAdjacentFaces,
   findAdjacentFacesWithinArea,
   findFirstFaces,
 } from "src/cross-section/ara/find";
-import { Area } from "src/cross-section/area";
 import {
   convertToLists,
   createIndicesMap,
@@ -288,7 +288,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       const nPolygonIndices = convertToLists(indices, 3);
       const indicesMap = createIndicesMap(nPolygonIndices);
 
-      test("center row:↑, top row:↑", () => {
+      test("center row:↑, upper row:↑", () => {
         const area = new Area(Area.createPlaneToAllIls(positions, indices), {
           centerRow: {
             plane: new FreePlane(
@@ -306,7 +306,7 @@ describe("findAdjacentFacesWithinArea()", () => {
               ),
             ]),
           },
-          topRow: {
+          upperRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
               new THREE.Vector3(0.25, 0.75, 0)
@@ -350,7 +350,7 @@ describe("findAdjacentFacesWithinArea()", () => {
         expect(foundFaces).toEqual(expectedFoundFaces);
       });
 
-      test("center row:↑, top row:↓", () => {
+      test("center row:↑, upper row:↓", () => {
         const area = new Area(Area.createPlaneToAllIls(positions, indices), {
           centerRow: {
             plane: new FreePlane(
@@ -368,7 +368,7 @@ describe("findAdjacentFacesWithinArea()", () => {
               ),
             ]),
           },
-          topRow: {
+          upperRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1
               new THREE.Vector3(0.25, 0.75, 0)
@@ -408,7 +408,7 @@ describe("findAdjacentFacesWithinArea()", () => {
         expect(foundFaces).toEqual(expectedFoundFaces);
       });
 
-      test("center row:↓, top row:↑", () => {
+      test("center row:↓, upper row:↑", () => {
         const area = new Area(Area.createPlaneToAllIls(positions, indices), {
           centerRow: {
             plane: new FreePlane(
@@ -426,7 +426,7 @@ describe("findAdjacentFacesWithinArea()", () => {
               ),
             ]),
           },
-          topRow: {
+          upperRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
               new THREE.Vector3(0.25, 0.75, 0)
@@ -470,7 +470,7 @@ describe("findAdjacentFacesWithinArea()", () => {
         expect(foundFaces).toEqual(expectedFoundFaces);
       });
 
-      test("center row:↓, top row:↓", () => {
+      test("center row:↓, upper row:↓", () => {
         const area = new Area(Area.createPlaneToAllIls(positions, indices), {
           centerRow: {
             plane: new FreePlane(
@@ -488,7 +488,7 @@ describe("findAdjacentFacesWithinArea()", () => {
               ),
             ]),
           },
-          topRow: {
+          upperRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1
               new THREE.Vector3(0.25, 0.75, 0)

@@ -1,10 +1,10 @@
 import type * as THREE from "three";
-import type { Area } from "../area";
 import { getPoint } from "../centerline/points";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
+import type { Area } from "./area";
 
 /**
  * Find adjacent faces within the area.
@@ -59,12 +59,14 @@ export function findFirstFaces(
   indicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
-  // Add to foundVertices, firstFaces.
   const refP = plane.getPoint();
   const normal = plane.getNormal();
   const vertices = il.intersections.map((v) => (v as VertexIntersection).v);
   vertices.forEach((v) => {
+    // Add to foundVertices.
     if (!foundVertices.includes(v)) foundVertices.push(v);
+
+    // Add to firstFaces.
     const faces = indicesMap[`${v}`];
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
