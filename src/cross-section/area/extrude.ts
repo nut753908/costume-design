@@ -22,10 +22,8 @@ positions.array.length !== normals.array.length
 `);
     return;
   }
-  for (let i = 0, l = positions.array.length; i < l; i += 3) {
+  for (let i = 0, l = positions.array.length; i < l; i++) {
     positions.array[i] += normals.array[i] * displacement;
-    positions.array[i + 1] += normals.array[i + 1] * displacement;
-    positions.array[i + 2] += normals.array[i + 2] * displacement;
   }
 }
 
