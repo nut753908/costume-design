@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { Edge } from "../centerline/edge";
+import { EdgeLoop } from "../centerline/edge-loop";
 
 /**
  * Extrude the positions.
@@ -43,4 +45,59 @@ export function flipNormals(normals: THREE.Float32BufferAttribute) {
   for (let i = 0, l = normals.array.length; i < l; i++) {
     normals.array[i] *= -1;
   }
+}
+
+/**
+ * Find the boundaries as edge loops with only one face per edge.
+ *
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ */
+export function findBoundaries(
+  allEdges: Edge[],
+  indicesMap: { [k: string]: number[][] }
+): EdgeLoop[] {
+  const edges = allEdges.filter(
+    (e) => indicesMap[`${e.v1},${e.v2}`].length === 1
+  );
+  const els: EdgeLoop[] = []; // edgeLoops
+  // e: edge
+  edges.forEach((e) => {
+    if (e.checked) return;
+    e.checked = true;
+    const vertices = [e.v1];
+    let count = 0;
+    let opened = true;
+    whileLoop: while (true) {
+      // console.log(vertices);
+      count += 1;
+      if (count > 1000) {
+        console.error("whileLoop: count > 1000");
+        break;
+      }
+      for (let i = 0, l = edges.length; i < l; i++) {
+        const e2 = edges[i]; // edge2
+        if (e.v2 === vertices[0]) {
+          opened = false;
+          break whileLoop;
+        }
+        if (e2.checked) continue;
+        if (e.equals(e2)) continue;
+        if (e.v2 === e2.v1) {
+          vertices.push(e.v2);
+          e2.checked = true;
+          e = e2.clone();
+          continue whileLoop;
+        }
+        if (e.v2 === e2.v2) {
+          vertices.push(e.v2);
+          e2.checked = true;
+          e = new Edge(e2.v2, e2.v1);
+          continue whileLoop;
+        }
+      }
+    }
+    const el = new EdgeLoop(vertices, !opened); // edgeLoop
+    els.push(el);
+  });
+  return els;
 }
