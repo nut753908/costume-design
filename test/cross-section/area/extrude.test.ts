@@ -380,7 +380,7 @@ describe("findBoundaries()", () => {
       expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    test("triangular prism example", () => {
+    test("example of a triangular prism (no top or bottom)", () => {
       const indicesArray = [
         [0, 1, 4],
         [0, 4, 3],
