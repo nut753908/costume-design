@@ -99,15 +99,14 @@ export function cutGeometryUsingIl(
   // Set newIl, positionLists, normalLists, uvLists.
   const newIl = il.clone();
   let count = positions.count;
-  il.intersections
-    .filter((v) => v instanceof EdgeIntersection)
-    .forEach((v, i) => {
-      newIl.intersections[i] = new VertexIntersection(count);
-      count += 1;
-      positionLists.push(v.getPoint(positions).toArray());
-      normalLists.push(v.getNormal(normals).toArray());
-      uvLists.push(v.getUv(uvs).toArray());
-    });
+  il.intersections.forEach((v, i) => {
+    if (!(v instanceof EdgeIntersection)) return;
+    newIl.intersections[i] = new VertexIntersection(count);
+    count += 1;
+    positionLists.push(v.getPoint(positions).toArray());
+    normalLists.push(v.getNormal(normals).toArray());
+    uvLists.push(v.getUv(uvs).toArray());
+  });
 
   // Set indexLists.
   if (il.closed) {
