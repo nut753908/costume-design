@@ -68,7 +68,6 @@ export function findBoundaries(
     let count = 0;
     let opened = true;
     whileLoop: while (true) {
-      // console.log(vertices);
       count += 1;
       if (count > 1000) {
         console.error("whileLoop: count > 1000");
@@ -95,6 +94,8 @@ export function findBoundaries(
           continue whileLoop;
         }
       }
+      console.error("next edge not found");
+      break;
     }
     const el = new EdgeLoop(vertices, !opened); // edgeLoop
     els.push(el);

@@ -283,7 +283,7 @@ describe("findBoundaries()", () => {
         expect(v).toBe("whileLoop: count > 1000");
       })
       .mockImplementationOnce((v) => {
-        expect(v).toBe("whileLoop: count > 1000");
+        expect(v).toBe("next edge not found");
       });
     /**
      * top view flat layout:
