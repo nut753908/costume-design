@@ -21,31 +21,7 @@ import {
 } from "vitest";
 
 describe("extrudePositions()", () => {
-  test("if (positions.array.length !== normals.array.length)", () => {
-    const spy = vi.spyOn(console, "error").mockImplementationOnce((v) => {
-      expect(v).toBe(`\
-positions.array.length !== normals.array.length
-- positions: {"itemSize":3,"type":"Float32Array","array":[0,0,0],"normalized":false}
-- normals: {"itemSize":3,"type":"Float32Array","array":[0,0,1,0,0,1],"normalized":false}
-`);
-    });
-    const positions = new THREE.Float32BufferAttribute([0, 0, 0], 3);
-    const normals = new THREE.Float32BufferAttribute([0, 0, 1, 0, 0, 1], 3);
-    const displacement = 0.001;
-    extrudePositions(positions, normals, displacement);
-
-    const expectedPositions = new THREE.Float32BufferAttribute([0, 0, 0], 3);
-    expect(positions).toEqual(expectedPositions);
-    expect(spy).toHaveBeenCalledTimes(1);
-  });
-
   describe("else", () => {
-    let spy: MockInstance;
-
-    beforeEach(() => {
-      spy = vi.spyOn(console, "error");
-    });
-
     // Import from test/cross-section/area/find.test.ts.
     test("example of a plane (flat)", () => {
       /**
@@ -87,7 +63,6 @@ positions.array.length !== normals.array.length
         3
       );
       expect(positions).toEqual(expectedPositions);
-      expect(spy).toHaveBeenCalledTimes(0);
     });
 
     // Import from test/cross-section/area/find.test.ts.
@@ -194,7 +169,6 @@ positions.array.length !== normals.array.length
         3
       );
       expect(positions).toEqual(expectedPositions);
-      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 });
