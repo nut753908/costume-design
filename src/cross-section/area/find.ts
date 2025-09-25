@@ -117,12 +117,13 @@ export function findAdjacentFaces(
 }
 
 /**
- * Create geometry from the found faces.
+ * Limit the scope of the geometry to the vertices and faces found.
  *
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param foundFaces - The found faces. Each face found is added to this.
+ * @return  The geometry with limited extent.
  */
-export function createGeometryfromFoundFaces(
+export function limitGeometryExtent(
   foundVertices: number[],
   foundFaces: number[][],
   geometry: THREE.BufferGeometry
