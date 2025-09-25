@@ -305,10 +305,7 @@ describe("findBoundaries()", () => {
     const allEdges = createAllEdges(nPolygonIndices);
     const indicesMap = createIndicesMap(nPolygonIndices);
     const expected: EdgeLoop[] = [
-      new EdgeLoop(
-        [...Array(1001)].map((_, i) => i),
-        false
-      ),
+      new EdgeLoop([...Array(1001).keys()], false),
       new EdgeLoop([1001], false),
     ];
     expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
