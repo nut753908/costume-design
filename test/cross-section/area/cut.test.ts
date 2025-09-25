@@ -20,7 +20,7 @@ import {
 } from "vitest";
 
 describe("cutGeometryUsingIlsWithinArea()", () => {
-  describe("plane(flat) example", () => {
+  describe("example of a plane (flat)", () => {
     let spy: MockInstance;
     let indices: THREE.Uint16BufferAttribute;
     let positions: THREE.Float32BufferAttribute;
@@ -1812,7 +1812,7 @@ describe("cutGeometryUsingIl()", () => {
     });
   });
 
-  describe("plane(flat) example", () => {
+  describe("example of a plane (flat)", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
 

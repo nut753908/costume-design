@@ -17,7 +17,7 @@ import { describe, expect, test } from "vitest";
 
 describe("findAdjacentFacesWithinArea()", () => {
   // Import from test/cross-section/intersection/intersection-loops.test.ts.
-  test("plane(flat) example", () => {
+  test("example of a plane (flat)", () => {
     /**
      * flat layout:
      *   6(-1, 1) 7(0, 1) 8(1, 1)
@@ -240,7 +240,7 @@ describe("findAdjacentFacesWithinArea()", () => {
   });
 
   // Import from test/cross-section/area/split.test.ts.
-  describe("plane(flat) example2", () => {
+  describe("example of a plane (flat)2", () => {
     describe("two non-intersecting cross sections", () => {
       /**
        * flat layout:
@@ -858,7 +858,7 @@ describe("findAdjacentFacesWithinArea()", () => {
 
 describe("findFirstFaces()", () => {
   // Import from test/cross-section/intersection/intersection-loops.test.ts.
-  test("plane(flat) example", () => {
+  test("example of a plane (flat)", () => {
     /**
      * flat layout:
      *   6(-1, 1) 7(0, 1) 8(1, 1)
@@ -1049,7 +1049,7 @@ describe("findFirstFaces()", () => {
 
 describe("findAdjacentFaces()", () => {
   // Import from test/cross-section/intersection/intersection-loops.test.ts.
-  test("plane(flat) example", () => {
+  test("example of a plane (flat)", () => {
     /**
      * flat layout:
      *   6(-1, 1) 7(0, 1) 8(1, 1)

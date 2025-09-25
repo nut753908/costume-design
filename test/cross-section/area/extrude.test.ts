@@ -46,7 +46,7 @@ positions.array.length !== normals.array.length
     });
 
     // Import from test/cross-section/area/find.test.ts.
-    test("plane(flat) example", () => {
+    test("example of a plane (flat)", () => {
       /**
        * flat layout:
        *   6(-1, 1) 7(0, 1) 8(1, 1)
@@ -200,7 +200,7 @@ positions.array.length !== normals.array.length
 
 describe("flipNormals()", () => {
   // Import from test/cross-section/area/find.test.ts.
-  test("plane(flat) example", () => {
+  test("example of a plane (flat)", () => {
     /**
      * flat layout:
      *   6(-1, 1) 7(0, 1) 8(1, 1)
@@ -323,7 +323,7 @@ describe("findBoundaries()", () => {
     });
 
     // Import from test/cross-section/area/find.test.ts.
-    test("plane(flat) example", () => {
+    test("example of a plane (flat)", () => {
       /**
        * flat layout:
        *   6(-1, 1) 7(0, 1) 8(1, 1)
