@@ -1,5 +1,6 @@
-import type * as THREE from "three";
+import * as THREE from "three";
 import { getPoint } from "../centerline/points";
+import { convertToLists } from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
@@ -113,4 +114,53 @@ export function findAdjacentFaces(
       findAdjacentFaces(f, foundVertices, foundFaces, indicesMap);
     });
   });
+}
+
+/**
+ * Create geometry from the found faces.
+ *
+ * @param foundVertices - The found vertices. Each vertex found is added to this.
+ * @param foundFaces - The found faces. Each face found is added to this.
+ */
+export function createGeometryfromFoundFaces(
+  foundVertices: number[],
+  foundFaces: number[][],
+  geometry: THREE.BufferGeometry
+): THREE.BufferGeometry {
+  const positions = geometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const normals = geometry.getAttribute(
+    "normal"
+  ) as THREE.Float32BufferAttribute;
+  const uvs = geometry.getAttribute("uv") as THREE.Float32BufferAttribute;
+
+  const positionLists = convertToLists(positions, 3);
+  const normalLists = convertToLists(normals, 3);
+  const uvLists = convertToLists(uvs, 2);
+
+  const map = Object.fromEntries(foundVertices.map((v, i) => [v, i]));
+  const newIndexLists = foundFaces.map((f) => f.map((v) => map[v]));
+  const newPositionList = foundVertices.map((v) => positionLists[v]);
+  const newNormalLists = foundVertices.map((v) => normalLists[v]);
+  const newUvLists = foundVertices.map((v) => uvLists[v]);
+
+  const newGeometry = new THREE.BufferGeometry();
+  newGeometry.setIndex(
+    new THREE.Uint16BufferAttribute(newIndexLists.flat(), 1)
+  );
+  newGeometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(newPositionList.flat(), 3)
+  );
+  newGeometry.setAttribute(
+    "normal",
+    new THREE.Float32BufferAttribute(newNormalLists.flat(), 3)
+  );
+  newGeometry.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(newUvLists.flat(), 2)
+  );
+
+  return newGeometry;
 }

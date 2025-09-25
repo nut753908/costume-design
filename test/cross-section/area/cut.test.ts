@@ -1446,9 +1446,9 @@ describe("cutGeometryUsingIl()", () => {
     test("one intersection is a vertex, two intersections are edges", () => {
       const il = new IntersectionLoop(
         [
+          new VertexIntersection(4), // change index: 2 -> 0 (for check order)
           new EdgeIntersection(5, 7, 0.5),
           new EdgeIntersection(6, 7, 0.5),
-          new VertexIntersection(4),
         ],
         true
       );
@@ -1475,13 +1475,13 @@ describe("cutGeometryUsingIl()", () => {
         [9, 10, 11],
         [10, 8, 11],
         //
+        [4, 12, 7], // added
+        [4, 5, 12], // added
         [7, 12, 13], // added
         [12, 5, 13], // added
         [5, 6, 13], // added
         [7, 13, 4], // added
         [13, 6, 4], // added
-        [4, 12, 7], // added
-        [4, 5, 12], // added
       ].flat();
       const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
       const newPositionsArray = [
@@ -1573,9 +1573,9 @@ describe("cutGeometryUsingIl()", () => {
 
       const newIl = new IntersectionLoop(
         [
+          new VertexIntersection(4), // change index: 2 -> 0 (for check order)
           new VertexIntersection(12),
           new VertexIntersection(13),
-          new VertexIntersection(4),
         ],
         true
       );

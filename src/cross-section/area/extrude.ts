@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
 
+// TODO: add extrudeGeometry()
+
 /**
  * Extrude the positions.
  *
@@ -22,16 +24,8 @@ positions.array.length !== normals.array.length
 `);
     return;
   }
-  for (let i = 0, l = positions.array.length; i < l; i += 3) {
-    const normal = new THREE.Vector3(
-      normals.array[i],
-      normals.array[i + 1],
-      normals.array[i + 2]
-    );
-    const diff = normal.clone().multiplyScalar(displacement);
-    positions.array[i] += diff.x;
-    positions.array[i + 1] += diff.y;
-    positions.array[i + 2] += diff.z;
+  for (let i = 0, l = positions.array.length; i < l; i++) {
+    positions.array[i] += normals.array[i] * displacement;
   }
 }
 
@@ -100,4 +94,53 @@ export function findBoundaries(
     els.push(el);
   });
   return els;
+}
+
+// TODO: add createSideGeometry()
+
+/**
+ * Concatenate geometries.
+ *
+ * @param geometries - The geometries to concatenate.
+ * @returns  The concatenated geometry.
+ */
+export function concatGeometries(
+  geometries: THREE.BufferGeometry[]
+): THREE.BufferGeometry {
+  const indicesArrays: number[][] = [];
+  const positionsArrays: number[][] = [];
+  const normalsArrays: number[][] = [];
+  const uvsArrays: number[][] = [];
+
+  let count = 0;
+  geometries.forEach((g) => {
+    const indices = g.getIndex() as THREE.Uint16BufferAttribute;
+    const positions = g.getAttribute("position");
+    const normals = g.getAttribute("normal");
+    const uvs = g.getAttribute("uv");
+
+    indicesArrays.push(Array.from(indices.array.map((v) => v + count)));
+    positionsArrays.push(Array.from(positions.array));
+    normalsArrays.push(Array.from(normals.array));
+    uvsArrays.push(Array.from(uvs.array));
+
+    // NOTE: positions, normals and uvs counts are not compared here.
+    count += positions.count;
+  });
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setIndex(new THREE.Uint16BufferAttribute(indicesArrays.flat(), 1));
+  geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positionsArrays.flat(), 3)
+  );
+  geometry.setAttribute(
+    "normal",
+    new THREE.Float32BufferAttribute(normalsArrays.flat(), 3)
+  );
+  geometry.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(uvsArrays.flat(), 2)
+  );
+  return geometry;
 }

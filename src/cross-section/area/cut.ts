@@ -16,7 +16,7 @@ export function cutGeometryUsingIlsWithinArea(
   area: Area
 ): { geometry: THREE.BufferGeometry; area: Area } {
   // Set newGeometry.
-  let newGeometry = geometry.clone();
+  let newGeometry = geometry;
   Object.entries(area.crossSections).forEach(([_, v]) => {
     const positions = newGeometry.getAttribute(
       "position"
@@ -80,17 +80,14 @@ export function cutGeometryUsingIl(
   geometry: THREE.BufferGeometry,
   il: IntersectionLoop
 ): { geometry: THREE.BufferGeometry; il: IntersectionLoop } {
-  const newGeometry = geometry.clone();
-  const newIl = il.clone();
-
-  const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
-  const positions = newGeometry.getAttribute(
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+  const positions = geometry.getAttribute(
     "position"
   ) as THREE.Float32BufferAttribute;
-  const normals = newGeometry.getAttribute(
+  const normals = geometry.getAttribute(
     "normal"
   ) as THREE.Float32BufferAttribute;
-  const uvs = newGeometry.getAttribute("uv") as THREE.Float32BufferAttribute;
+  const uvs = geometry.getAttribute("uv") as THREE.Float32BufferAttribute;
 
   const indexLists = convertToLists(indices, 3);
   const positionLists = convertToLists(positions, 3);
@@ -100,16 +97,16 @@ export function cutGeometryUsingIl(
   const indicesMap = createIndicesMap(indexLists);
 
   // Set newIl, positionLists, normalLists, uvLists.
+  const newIl = il.clone();
   let count = positions.count;
-  il.intersections
-    .filter((v) => v instanceof EdgeIntersection)
-    .forEach((v, i) => {
-      newIl.intersections[i] = new VertexIntersection(count);
-      count += 1;
-      positionLists.push(v.getPoint(positions).toArray());
-      normalLists.push(v.getNormal(normals).toArray());
-      uvLists.push(v.getUv(uvs).toArray());
-    });
+  il.intersections.forEach((v, i) => {
+    if (!(v instanceof EdgeIntersection)) return;
+    newIl.intersections[i] = new VertexIntersection(count);
+    count += 1;
+    positionLists.push(v.getPoint(positions).toArray());
+    normalLists.push(v.getNormal(normals).toArray());
+    uvLists.push(v.getUv(uvs).toArray());
+  });
 
   // Set indexLists.
   if (il.closed) {
@@ -223,6 +220,7 @@ indicesV1: ${JSON.stringify(indicesV1)}
     newIl.intersections.pop();
   }
 
+  const newGeometry = new THREE.BufferGeometry();
   newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
   newGeometry.setAttribute(
     "position",
