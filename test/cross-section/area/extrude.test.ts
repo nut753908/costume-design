@@ -90,7 +90,7 @@ positions.array.length !== normals.array.length
     });
 
     // Import from test/cross-section/area/find.test.ts.
-    test("upper half cube example", () => {
+    test("example of an upper half cube (bottomless)", () => {
       const SQRT1_3 = Math.sqrt(1 / 3);
       const SQRT1_2 = Math.SQRT1_2;
 
@@ -220,7 +220,7 @@ describe("flipNormals()", () => {
   });
 
   // Import from test/cross-section/area/find.test.ts.
-  test("upper half cube example", () => {
+  test("example of an upper half cube (bottomless)", () => {
     const SQRT1_3 = Math.sqrt(1 / 3);
     const SQRT1_2 = Math.SQRT1_2;
 
@@ -352,7 +352,7 @@ describe("findBoundaries()", () => {
     });
 
     // Import from test/cross-section/area/find.test.ts.
-    test("upper half cube example", () => {
+    test("example of an upper half cube (bottomless)", () => {
       const indicesArray = [
         [5, 8, 9],
         [4, 5, 6],
