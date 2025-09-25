@@ -1,7 +1,7 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import { Area, type AreaJSON } from "./cross-section/ara/area";
+import { Area, type AreaJSON } from "./cross-section/area/area";
 import { createBaseCenterlines } from "./cross-section/centerline/centerline";
 import {
   PlaneManager,

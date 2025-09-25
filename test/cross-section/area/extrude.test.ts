@@ -2,7 +2,7 @@ import {
   extrudePositions,
   findBoundaries,
   flipNormals,
-} from "src/cross-section/ara/extrude";
+} from "src/cross-section/area/extrude";
 import { EdgeLoop } from "src/cross-section/centerline/edge-loop";
 import { createAllEdges } from "src/cross-section/centerline/edges";
 import {

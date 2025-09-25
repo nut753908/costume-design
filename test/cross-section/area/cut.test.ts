@@ -1,9 +1,9 @@
-import { Area } from "src/cross-section/ara/area";
+import { Area } from "src/cross-section/area/area";
 import {
   cutGeometryUsingIl,
   cutGeometryUsingIls,
   cutGeometryUsingIlsWithinArea,
-} from "src/cross-section/ara/cut";
+} from "src/cross-section/area/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";

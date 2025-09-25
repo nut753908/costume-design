@@ -1,9 +1,9 @@
-import { Area } from "src/cross-section/ara/area";
+import { Area } from "src/cross-section/area/area";
 import {
   findAdjacentFaces,
   findAdjacentFacesWithinArea,
   findFirstFaces,
-} from "src/cross-section/ara/find";
+} from "src/cross-section/area/find";
 import {
   convertToLists,
   createIndicesMap,
