@@ -9,6 +9,7 @@ import type { Area } from "./area";
 /**
  * Find adjacent faces within the area.
  *
+ * @param area - The area after cutting faces.
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param foundFaces - The found faces. Each face found is added to this.
  * @param indicesMap - The indices map. The key is a string of one or two vertices.
@@ -46,6 +47,7 @@ export function findAdjacentFacesWithinArea(
 /**
  * Find first faces.
  *
+ * @param il - The intersection loop after cutting faces.
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param firstFaces - The first faces. The adjacent faces of the intersection loop in the normal direction of the plane are added to this.
  * @param indicesMap - The indices map. The key is a string of one or two vertices.
