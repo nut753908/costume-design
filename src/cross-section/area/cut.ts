@@ -16,7 +16,7 @@ export function cutGeometryUsingIlsWithinArea(
   area: Area
 ): { geometry: THREE.BufferGeometry; area: Area } {
   // Set newGeometry.
-  let newGeometry = geometry.clone();
+  let newGeometry = geometry;
   Object.entries(area.crossSections).forEach(([_, v]) => {
     const positions = newGeometry.getAttribute(
       "position"
