@@ -1,10 +1,10 @@
 import type * as THREE from "three";
-import type { Area } from "../area";
 import { getPoint } from "../centerline/points";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
+import type { Area } from "./area";
 
 /**
  * Find adjacent faces within the area.

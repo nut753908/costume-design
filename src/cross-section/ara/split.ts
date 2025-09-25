@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import { Area } from "../area";
 import { getPoint } from "../centerline/points";
 import { EdgeIntersection } from "../intersection/edge-intersection";
 import { convertToLists, createIndicesMap } from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import { VertexIntersection } from "../intersection/vertex-intersection";
+import { Area } from "./area";
 
 /**
  * Add intersections.
