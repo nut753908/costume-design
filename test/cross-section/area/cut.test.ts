@@ -3,7 +3,7 @@ import {
   addIntersections,
   splitGeometryUsingIl,
   splitGeometryUsingIls,
-} from "src/cross-section/ara/split";
+} from "src/cross-section/ara/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
