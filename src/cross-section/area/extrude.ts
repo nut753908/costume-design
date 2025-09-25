@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
 
+// TODO: add extrudeGeometry()
+
 /**
  * Extrude the positions.
  *
@@ -93,6 +95,8 @@ export function findBoundaries(
   });
   return els;
 }
+
+// TODO: add createSideGeometry()
 
 /**
  * Concatenate geometries.
