@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import type * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
 
@@ -23,15 +23,9 @@ positions.array.length !== normals.array.length
     return;
   }
   for (let i = 0, l = positions.array.length; i < l; i += 3) {
-    const normal = new THREE.Vector3(
-      normals.array[i],
-      normals.array[i + 1],
-      normals.array[i + 2]
-    );
-    const diff = normal.clone().multiplyScalar(displacement);
-    positions.array[i] += diff.x;
-    positions.array[i + 1] += diff.y;
-    positions.array[i + 2] += diff.z;
+    positions.array[i] += normals.array[i] * displacement;
+    positions.array[i + 1] += normals.array[i + 1] * displacement;
+    positions.array[i + 2] += normals.array[i + 2] * displacement;
   }
 }
 
