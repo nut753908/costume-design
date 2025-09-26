@@ -125,8 +125,8 @@ export class Area {
     // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._updateAreaGroup = () => {
       const obj = cutGeometryUsingIlsWithinArea(baseGeometry, this);
-      const limitedGeometry = findGeometryWithinArea(obj.geometry, obj.area);
-      const extrudedGeometry = extrudeGeometry(limitedGeometry, this.thickness);
+      const foundGeometry = findGeometryWithinArea(obj.geometry, obj.area);
+      const extrudedGeometry = extrudeGeometry(foundGeometry, this.thickness);
 
       if (
         "geometry" in group.children[0] &&
