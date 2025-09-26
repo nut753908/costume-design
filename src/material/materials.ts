@@ -51,6 +51,12 @@ export function createMaterials(gui: GUI): Materials {
     ),
   };
 
+  const areaFolder = folder.addFolder("area").close();
+  const area = {
+    line: createLineMaterial(areaFolder, "line"),
+    toon: createToonMaterial(areaFolder, "toon", 0xfcd7e9, 0xf8c1de),
+  };
+
   return {
     base,
     line,
@@ -58,6 +64,7 @@ export function createMaterials(gui: GUI): Materials {
     cp,
     curve,
     tube,
+    area,
   };
 }
 
@@ -82,6 +89,10 @@ export interface Materials {
     line: THREE.LineBasicMaterial;
   };
   tube: {
+    line: THREE.LineBasicMaterial;
+    toon: THREE.ShaderMaterial;
+  };
+  area: {
     line: THREE.LineBasicMaterial;
     toon: THREE.ShaderMaterial;
   };

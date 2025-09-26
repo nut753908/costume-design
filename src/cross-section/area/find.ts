@@ -99,6 +99,8 @@ export function findFirstFaces(
 
     // Add to firstFaces.
     const faces = indicesMap[`${v}`];
+    // TODO: fix this bug
+    if (faces === undefined) console.log(il); // debug codes
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
         const p = getPoint(positions, v2);

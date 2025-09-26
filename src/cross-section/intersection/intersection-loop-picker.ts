@@ -107,7 +107,7 @@ export class IntersectionLoopPicker {
    *
    * @param name - The intersection loop picker folder name used in the GUI.
    */
-  setGUI(gui: GUI, name = "IntersectionLoopPicker") {
+  setGUI(gui: GUI, name = "IntersectionLoopPicker", updateCallback = () => {}) {
     const ils = this;
 
     const checklist = Object.fromEntries(
@@ -137,6 +137,7 @@ export class IntersectionLoopPicker {
     function uS() /* updateSelection */ {
       updateHidden();
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      updateCallback();
     }
     function uI(i: string) /* updateIndices */ {
       const index = ils.indices.indexOf(Number(i));
@@ -146,6 +147,7 @@ export class IntersectionLoopPicker {
         if (index !== -1) ils.indices.splice(index, 1);
       }
       ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      updateCallback();
     }
   }
 

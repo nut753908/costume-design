@@ -19,6 +19,7 @@ export function createAllIntersections(
   const intersections: (EdgeIntersection | VertexIntersection)[] = [];
   const refP = plane.getPoint();
   const normal = plane.getNormal();
+  const EPS = 0.001; // TODO: adjust correctly
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const e = allEdges[i];
     const p1 = getPoint(positions, e.v1);
@@ -29,10 +30,10 @@ export function createAllIntersections(
     const front2 = normal.dot(diff2);
     const back1 = -front1;
     const back2 = -front2;
-    if (back1 > 0 && front2 > 0) {
+    if (back1 > EPS && front2 > EPS) {
       const u = back1 / (back1 + front2);
       intersections.push(new EdgeIntersection(e.v1, e.v2, u));
-    } else if (back2 > 0 && front1 > 0) {
+    } else if (back2 > EPS && front1 > EPS) {
       const u = back2 / (back2 + front1);
       intersections.push(new EdgeIntersection(e.v2, e.v1, u));
     }
@@ -41,7 +42,7 @@ export function createAllIntersections(
     const p = getPoint(positions, i);
     const diff = p.clone().sub(refP);
     const front = normal.dot(diff);
-    if (front === 0) intersections.push(new VertexIntersection(i));
+    if (Math.abs(front) < EPS) intersections.push(new VertexIntersection(i));
   }
   return intersections;
 }

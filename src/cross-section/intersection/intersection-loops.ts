@@ -33,6 +33,8 @@ export function createAllIntersectionLoops(
           console.error("whileLoop: count > 1000");
           break;
         }
+        if (indicesMap[i2.toString()] === undefined)
+          console.log(indicesMap, i2); // debug codes
         const indicesMap2 = createIndicesMap(indicesMap[i2.toString()]);
         for (let j = 0; j < l; j++) {
           const i3 = allIntersections[j]; // intersection3
