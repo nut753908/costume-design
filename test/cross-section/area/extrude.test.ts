@@ -21,6 +21,81 @@ import {
   vi,
 } from "vitest";
 
+describe("flipNormals()", () => {
+  // Import from test/cross-section/area/find.test.ts.
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   6(-1, 1) 7(0, 1) 8(1, 1)
+     *   3(-1, 0) 4(0, 0) 5(1, 0)
+     *   0(-1,-1) 1(0,-1) 2(1,-1)
+     */
+    const normalsArray = Array(9).fill([0, 0, 1]).flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    flipNormals(normals);
+
+    const expectedNormalsArray = Array(9).fill([-0, -0, -1]).flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    expect(normals).toEqual(expectedNormals);
+  });
+
+  // Import from test/cross-section/area/find.test.ts.
+  test("example of an upper half cube (bottomless)", () => {
+    const SQRT1_3 = Math.sqrt(1 / 3);
+    const SQRT1_2 = Math.SQRT1_2;
+
+    const normalsArray = [
+      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, SQRT1_3],
+      //
+      [SQRT1_2, 0, -SQRT1_2],
+      [0, 0, -1],
+      [-SQRT1_2, 0, -SQRT1_2],
+      [-1, 0, 0],
+      [-SQRT1_2, 0, SQRT1_2],
+      [0, 0, 1],
+      [SQRT1_2, 0, SQRT1_2],
+      [1, 0, 0],
+    ].flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    flipNormals(normals);
+
+    const expectedNormalsArray = [
+      [SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, -SQRT1_3],
+      //
+      [-SQRT1_2, -0, SQRT1_2],
+      [-0, -0, 1],
+      [SQRT1_2, -0, SQRT1_2],
+      [1, -0, -0],
+      [SQRT1_2, -0, -SQRT1_2],
+      [-0, -0, -1],
+      [-SQRT1_2, -0, -SQRT1_2],
+      [-1, -0, -0],
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    expect(normals).toEqual(expectedNormals);
+  });
+});
+
 describe("extrudePositions()", () => {
   describe("else", () => {
     // Import from test/cross-section/area/find.test.ts.
@@ -171,81 +246,6 @@ describe("extrudePositions()", () => {
       );
       expect(positions).toEqual(expectedPositions);
     });
-  });
-});
-
-describe("flipNormals()", () => {
-  // Import from test/cross-section/area/find.test.ts.
-  test("example of a plane (flat)", () => {
-    /**
-     * flat layout:
-     *   6(-1, 1) 7(0, 1) 8(1, 1)
-     *   3(-1, 0) 4(0, 0) 5(1, 0)
-     *   0(-1,-1) 1(0,-1) 2(1,-1)
-     */
-    const normalsArray = Array(9).fill([0, 0, 1]).flat();
-    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-    flipNormals(normals);
-
-    const expectedNormalsArray = Array(9).fill([-0, -0, -1]).flat();
-    const expectedNormals = new THREE.Float32BufferAttribute(
-      expectedNormalsArray,
-      3
-    );
-    expect(normals).toEqual(expectedNormals);
-  });
-
-  // Import from test/cross-section/area/find.test.ts.
-  test("example of an upper half cube (bottomless)", () => {
-    const SQRT1_3 = Math.sqrt(1 / 3);
-    const SQRT1_2 = Math.SQRT1_2;
-
-    const normalsArray = [
-      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, SQRT1_3],
-      //
-      [SQRT1_2, 0, -SQRT1_2],
-      [0, 0, -1],
-      [-SQRT1_2, 0, -SQRT1_2],
-      [-1, 0, 0],
-      [-SQRT1_2, 0, SQRT1_2],
-      [0, 0, 1],
-      [SQRT1_2, 0, SQRT1_2],
-      [1, 0, 0],
-    ].flat();
-    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-    flipNormals(normals);
-
-    const expectedNormalsArray = [
-      [SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, -SQRT1_3],
-      //
-      [-SQRT1_2, -0, SQRT1_2],
-      [-0, -0, 1],
-      [SQRT1_2, -0, SQRT1_2],
-      [1, -0, -0],
-      [SQRT1_2, -0, -SQRT1_2],
-      [-0, -0, -1],
-      [-SQRT1_2, -0, -SQRT1_2],
-      [-1, -0, -0],
-    ].flat();
-    const expectedNormals = new THREE.Float32BufferAttribute(
-      expectedNormalsArray,
-      3
-    );
-    expect(normals).toEqual(expectedNormals);
   });
 });
 

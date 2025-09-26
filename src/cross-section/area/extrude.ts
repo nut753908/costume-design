@@ -6,6 +6,17 @@ import { convertToLists } from "../intersection/indices";
 // TODO: add extrudeGeometry()
 
 /**
+ * Flip the normals.
+ *
+ * @param normals - The results of geometry.getAttribute("normal").
+ */
+export function flipNormals(normals: THREE.Float32BufferAttribute) {
+  for (let i = 0, l = normals.array.length; i < l; i++) {
+    normals.array[i] *= -1;
+  }
+}
+
+/**
  * Extrude the positions.
  *
  * @param positions - The results of geometry.getAttribute("position").
@@ -20,17 +31,6 @@ export function extrudePositions(
   // NOTE: positions and normals counts are not compared here.
   for (let i = 0, l = positions.array.length; i < l; i++) {
     positions.array[i] += normals.array[i] * displacement;
-  }
-}
-
-/**
- * Flip the normals.
- *
- * @param normals - The results of geometry.getAttribute("normal").
- */
-export function flipNormals(normals: THREE.Float32BufferAttribute) {
-  for (let i = 0, l = normals.array.length; i < l; i++) {
-    normals.array[i] *= -1;
   }
 }
 
