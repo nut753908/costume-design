@@ -16,6 +16,7 @@ export function extrudePositions(
   normals: THREE.Float32BufferAttribute,
   displacement: number
 ) {
+  // NOTE: positions and normals counts are not compared here.
   for (let i = 0, l = positions.array.length; i < l; i++) {
     positions.array[i] += normals.array[i] * displacement;
   }
