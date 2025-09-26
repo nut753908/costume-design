@@ -54,6 +54,7 @@ export function createMaterials(gui: GUI): Materials {
   const areaFolder = folder.addFolder("area").close();
   const area = {
     line: createLineMaterial(areaFolder, "line"),
+    // TODO: fix area color
     toon: createToonMaterial(areaFolder, "toon", 0xfcd7e9, 0xf8c1de),
   };
 
