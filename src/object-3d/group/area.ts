@@ -1,0 +1,25 @@
+import type { Area } from "src/cross-section/area/area";
+import { createEmptyGeometry } from "src/geometry/empty";
+import type { Materials } from "src/material/materials";
+import * as THREE from "three";
+
+/**
+ * @param baseGeometry - The base geometry.
+ * @param ms - The materials.
+ */
+export function createAreaGroup(
+  area: Area,
+  baseGeometry: THREE.BufferGeometry,
+  ms: Materials
+): THREE.Group {
+  const group = new THREE.Group();
+
+  const geometry = createEmptyGeometry();
+
+  group.add(new THREE.LineSegments(geometry, ms.area.line));
+  group.add(new THREE.Mesh(geometry, ms.area.toon));
+
+  area.createAreaGroup(baseGeometry, group);
+
+  return group;
+}

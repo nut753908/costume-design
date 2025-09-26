@@ -25,6 +25,7 @@ import {
   createArrowHelper,
 } from "./object-3d/arrow-helper";
 import { createAxesHelper } from "./object-3d/axes-helper";
+import { createAreaGroup } from "./object-3d/group/area";
 import { createBaseGroup } from "./object-3d/group/base";
 import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import {
@@ -51,6 +52,8 @@ let planesGroup: THREE.Group;
 
 let area: Area;
 let ilpsGroup: THREE.Group;
+let baseGeometry: BufferGeometryWithNPolygonIndices;
+let areaGroup: THREE.Group;
 
 let loading = false;
 const undos: {
@@ -88,13 +91,13 @@ async function init() {
     scene.add(baseGroup);
 
     if (!("geometry" in baseGroup.children[0])) return;
-    const geometry = baseGroup.children[0]
+    baseGeometry = baseGroup.children[0]
       .geometry as BufferGeometryWithNPolygonIndices;
-    const nPolygonIndices = geometry.nPolygonIndices;
-    positions = geometry.getAttribute(
+    const nPolygonIndices = baseGeometry.nPolygonIndices;
+    positions = baseGeometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+    indices = baseGeometry.getIndex() as THREE.Uint16BufferAttribute;
 
     const lines = createBaseCenterlines(nPolygonIndices, positions);
     const linesGroup = createLinesGroup(lines, positions, ms);
@@ -113,6 +116,8 @@ async function init() {
     area.setGUI(gui);
     ilpsGroup = area.createIlpsGroup(positions, ms);
     scene.add(ilpsGroup);
+    areaGroup = createAreaGroup(area, baseGeometry, ms);
+    scene.add(areaGroup);
   });
 
   save();
@@ -143,6 +148,8 @@ function loadLastUndo() {
 
   scene.remove(ilpsGroup);
   disposeGroup(ilpsGroup);
+  scene.remove(areaGroup);
+  disposeGroup(areaGroup);
 
   const obj = undos[undos.length - 1];
 
@@ -158,6 +165,8 @@ function loadLastUndo() {
   area.setGUI(gui);
   ilpsGroup = area.createIlpsGroup(positions, ms);
   scene.add(ilpsGroup);
+  areaGroup = createAreaGroup(area, baseGeometry, ms);
+  scene.add(areaGroup);
 
   gui.load(obj.gui);
   loadClosed(gui, obj.closed);
