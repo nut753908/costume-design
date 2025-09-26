@@ -42,7 +42,7 @@ export function createAllIntersections(
     const p = getPoint(positions, i);
     const diff = p.clone().sub(refP);
     const front = normal.dot(diff);
-    if (Math.abs(front) < EPS) intersections.push(new VertexIntersection(i));
+    if (Math.abs(front) <= EPS) intersections.push(new VertexIntersection(i));
   }
   return intersections;
 }
