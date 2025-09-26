@@ -1,5 +1,7 @@
 import {
   concatGeometries,
+  createSideGeometry,
+  extrudeGeometry,
   extrudePositions,
   findBoundaries,
   flipNormals,
@@ -20,32 +22,237 @@ import {
   vi,
 } from "vitest";
 
-describe("extrudePositions()", () => {
-  test("if (positions.array.length !== normals.array.length)", () => {
-    const spy = vi.spyOn(console, "error").mockImplementationOnce((v) => {
-      expect(v).toBe(`\
-positions.array.length !== normals.array.length
-- positions: {"itemSize":3,"type":"Float32Array","array":[0,0,0],"normalized":false}
-- normals: {"itemSize":3,"type":"Float32Array","array":[0,0,1,0,0,1],"normalized":false}
-`);
-    });
-    const positions = new THREE.Float32BufferAttribute([0, 0, 0], 3);
-    const normals = new THREE.Float32BufferAttribute([0, 0, 1, 0, 0, 1], 3);
-    const displacement = 0.001;
-    extrudePositions(positions, normals, displacement);
+describe("extrudeGeometry()", () => {
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   2(0, 1) 3(1, 1)
+     *   0(0, 0) 1(1, 0)
+     */
+    const SQRT1_2 = Math.SQRT1_2;
 
-    const expectedPositions = new THREE.Float32BufferAttribute([0, 0, 0], 3);
-    expect(positions).toEqual(expectedPositions);
-    expect(spy).toHaveBeenCalledTimes(1);
+    const indicesArray = [
+      [0, 1, 3],
+      [0, 3, 2],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    const positionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+    const normalsArray = [
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+    ].flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    const uvsArray = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+    ].flat();
+    const uvs = new THREE.Float32BufferAttribute(uvsArray, 3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setIndex(indices);
+    geometry.setAttribute("position", positions);
+    geometry.setAttribute("normal", normals);
+    geometry.setAttribute("uv", uvs);
+
+    const displacement = 0.001;
+
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
+
+    const actualGeometry = extrudeGeometry(
+      geometry,
+      displacement,
+      allEdges,
+      indicesMap
+    );
+
+    const expectedIndicesArray = [
+      [0, 1, 3],
+      [0, 3, 2],
+      //
+      [4, 5, 7],
+      [4, 7, 6],
+      //
+      [8, 12, 9],
+      [12, 13, 9],
+      [9, 13, 10],
+      [13, 14, 10],
+      [10, 14, 11],
+      [14, 15, 11],
+      [11, 15, 8],
+      [15, 12, 8],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      1
+    );
+    const expectedPositionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      //
+      [0, 0, displacement],
+      [1, 0, displacement],
+      [0, 1, displacement],
+      [1, 1, displacement],
+      //
+      [0, 0, 0],
+      [1, 0, 0],
+      [1, 1, 0],
+      [0, 1, 0],
+      [0, 0, displacement],
+      [1, 0, displacement],
+      [1, 1, displacement],
+      [0, 1, displacement],
+    ].flat();
+    const expectedPositions = new THREE.Float32BufferAttribute(
+      expectedPositionsArray,
+      3
+    );
+    const expectedNormalsArray = [
+      [-0, -0, -1],
+      [-0, -0, -1],
+      [-0, -0, -1],
+      [-0, -0, -1],
+      //
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      //
+      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, SQRT1_2, 0],
+      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, SQRT1_2, 0],
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    const expectedUvsArray = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      //
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      //
+      [0, 0 / 4],
+      [0, 1 / 4],
+      [0, 2 / 4],
+      [0, 3 / 4],
+      [1, 0 / 4],
+      [1, 1 / 4],
+      [1, 2 / 4],
+      [1, 3 / 4],
+    ].flat();
+    const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+    const expectedGeometry = new THREE.BufferGeometry();
+    expectedGeometry.setIndex(expectedIndices);
+    expectedGeometry.setAttribute("position", expectedPositions);
+    expectedGeometry.setAttribute("normal", expectedNormals);
+    expectedGeometry.setAttribute("uv", expectedUvs);
+
+    actualGeometry.uuid = expectedGeometry.uuid;
+    expect(actualGeometry).toEqual(expectedGeometry);
+  });
+});
+
+describe("flipNormals()", () => {
+  // Import from test/cross-section/area/find.test.ts.
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   6(-1, 1) 7(0, 1) 8(1, 1)
+     *   3(-1, 0) 4(0, 0) 5(1, 0)
+     *   0(-1,-1) 1(0,-1) 2(1,-1)
+     */
+    const normalsArray = Array(9).fill([0, 0, 1]).flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    flipNormals(normals);
+
+    const expectedNormalsArray = Array(9).fill([-0, -0, -1]).flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    expect(normals).toEqual(expectedNormals);
   });
 
+  // Import from test/cross-section/area/find.test.ts.
+  test("example of an upper half cube (bottomless)", () => {
+    const SQRT1_3 = Math.sqrt(1 / 3);
+    const SQRT1_2 = Math.SQRT1_2;
+
+    const normalsArray = [
+      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, SQRT1_3],
+      //
+      [SQRT1_2, 0, -SQRT1_2],
+      [0, 0, -1],
+      [-SQRT1_2, 0, -SQRT1_2],
+      [-1, 0, 0],
+      [-SQRT1_2, 0, SQRT1_2],
+      [0, 0, 1],
+      [SQRT1_2, 0, SQRT1_2],
+      [1, 0, 0],
+    ].flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    flipNormals(normals);
+
+    const expectedNormalsArray = [
+      [SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, SQRT1_3],
+      [-SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, SQRT1_3],
+      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
+      [SQRT1_3, -SQRT1_3, -SQRT1_3],
+      //
+      [-SQRT1_2, -0, SQRT1_2],
+      [-0, -0, 1],
+      [SQRT1_2, -0, SQRT1_2],
+      [1, -0, -0],
+      [SQRT1_2, -0, -SQRT1_2],
+      [-0, -0, -1],
+      [-SQRT1_2, -0, -SQRT1_2],
+      [-1, -0, -0],
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    expect(normals).toEqual(expectedNormals);
+  });
+});
+
+describe("extrudePositions()", () => {
   describe("else", () => {
-    let spy: MockInstance;
-
-    beforeEach(() => {
-      spy = vi.spyOn(console, "error");
-    });
-
     // Import from test/cross-section/area/find.test.ts.
     test("example of a plane (flat)", () => {
       /**
@@ -87,7 +294,6 @@ positions.array.length !== normals.array.length
         3
       );
       expect(positions).toEqual(expectedPositions);
-      expect(spy).toHaveBeenCalledTimes(0);
     });
 
     // Import from test/cross-section/area/find.test.ts.
@@ -194,83 +400,7 @@ positions.array.length !== normals.array.length
         3
       );
       expect(positions).toEqual(expectedPositions);
-      expect(spy).toHaveBeenCalledTimes(0);
     });
-  });
-});
-
-describe("flipNormals()", () => {
-  // Import from test/cross-section/area/find.test.ts.
-  test("example of a plane (flat)", () => {
-    /**
-     * flat layout:
-     *   6(-1, 1) 7(0, 1) 8(1, 1)
-     *   3(-1, 0) 4(0, 0) 5(1, 0)
-     *   0(-1,-1) 1(0,-1) 2(1,-1)
-     */
-    const normalsArray = Array(9).fill([0, 0, 1]).flat();
-    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-    flipNormals(normals);
-
-    const expectedNormalsArray = Array(9).fill([-0, -0, -1]).flat();
-    const expectedNormals = new THREE.Float32BufferAttribute(
-      expectedNormalsArray,
-      3
-    );
-    expect(normals).toEqual(expectedNormals);
-  });
-
-  // Import from test/cross-section/area/find.test.ts.
-  test("example of an upper half cube (bottomless)", () => {
-    const SQRT1_3 = Math.sqrt(1 / 3);
-    const SQRT1_2 = Math.SQRT1_2;
-
-    const normalsArray = [
-      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, SQRT1_3],
-      //
-      [SQRT1_2, 0, -SQRT1_2],
-      [0, 0, -1],
-      [-SQRT1_2, 0, -SQRT1_2],
-      [-1, 0, 0],
-      [-SQRT1_2, 0, SQRT1_2],
-      [0, 0, 1],
-      [SQRT1_2, 0, SQRT1_2],
-      [1, 0, 0],
-    ].flat();
-    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
-    flipNormals(normals);
-
-    const expectedNormalsArray = [
-      [SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, SQRT1_3],
-      [-SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, SQRT1_3],
-      [-SQRT1_3, -SQRT1_3, -SQRT1_3],
-      [SQRT1_3, -SQRT1_3, -SQRT1_3],
-      //
-      [-SQRT1_2, -0, SQRT1_2],
-      [-0, -0, 1],
-      [SQRT1_2, -0, SQRT1_2],
-      [1, -0, -0],
-      [SQRT1_2, -0, -SQRT1_2],
-      [-0, -0, -1],
-      [-SQRT1_2, -0, -SQRT1_2],
-      [-1, -0, -0],
-    ].flat();
-    const expectedNormals = new THREE.Float32BufferAttribute(
-      expectedNormalsArray,
-      3
-    );
-    expect(normals).toEqual(expectedNormals);
   });
 });
 
@@ -397,6 +527,440 @@ describe("findBoundaries()", () => {
       ];
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
+    });
+  });
+});
+
+describe("createSideGeometry()", () => {
+  describe("if (boundary.closed)", () => {
+    test("example of a plane (flat)", () => {
+      /**
+       * flat layout:
+       *   2(0, 1) 3(1, 1)
+       *   0(0, 0) 1(1, 0)
+       */
+      const SQRT1_2 = Math.SQRT1_2;
+      const displacement = 0.001;
+
+      const boundary = new EdgeLoop([0, 1, 3], false); // (NOTE: The reality is different.)
+      const innerPositionsArray = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+      ].flat();
+      const innerPositions = new THREE.Float32BufferAttribute(
+        innerPositionsArray,
+        3
+      );
+      const outerPositionsArray = [
+        [0, 0, displacement],
+        [1, 0, displacement],
+        [0, 1, displacement],
+        [1, 1, displacement],
+      ].flat();
+      const outerPositions = new THREE.Float32BufferAttribute(
+        outerPositionsArray,
+        3
+      );
+      const actualGeometry = createSideGeometry(
+        boundary,
+        innerPositions,
+        outerPositions
+      );
+
+      const expectedIndicesArray = [
+        [0, 3, 1],
+        [3, 4, 1],
+        [1, 4, 2],
+        [4, 5, 2],
+      ].flat();
+      const expectedIndices = new THREE.Uint16BufferAttribute(
+        expectedIndicesArray,
+        1
+      );
+      const expectedPositionsArray = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        //
+        [0, 0, displacement],
+        [1, 0, displacement],
+        [1, 1, displacement],
+      ].flat();
+      const expectedPositions = new THREE.Float32BufferAttribute(
+        expectedPositionsArray,
+        3
+      );
+      const expectedNormalsArray = [
+        [0, -1, 0],
+        [SQRT1_2, -SQRT1_2, 0],
+        [1, 0, -0],
+        //
+        [0, -1, 0],
+        [SQRT1_2, -SQRT1_2, 0],
+        [1, 0, -0],
+      ].flat();
+      const expectedNormals = new THREE.Float32BufferAttribute(
+        expectedNormalsArray,
+        3
+      );
+      const expectedUvsArray = [
+        [0, 0 / 3],
+        [0, 1 / 3],
+        [0, 2 / 3],
+        //
+        [1, 0 / 3],
+        [1, 1 / 3],
+        [1, 2 / 3],
+      ].flat();
+      const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+      const expectedGeometry = new THREE.BufferGeometry();
+      expectedGeometry.setIndex(expectedIndices);
+      expectedGeometry.setAttribute("position", expectedPositions);
+      expectedGeometry.setAttribute("normal", expectedNormals);
+      expectedGeometry.setAttribute("uv", expectedUvs);
+
+      actualGeometry.uuid = expectedGeometry.uuid;
+      expect(actualGeometry).toEqual(expectedGeometry);
+    });
+  });
+
+  describe("else", () => {
+    // Import from test/cross-section/area/find.test.ts.
+    test("example of a plane (flat)", () => {
+      /**
+       * flat layout:
+       *   6(-1, 1) 7(0, 1) 8(1, 1)
+       *   3(-1, 0) 4(0, 0) 5(1, 0)
+       *   0(-1,-1) 1(0,-1) 2(1,-1)
+       */
+      const SQRT1_2 = Math.SQRT1_2;
+      const displacement = 0.001;
+
+      const boundary = new EdgeLoop([0, 1, 2, 5, 8, 7, 6, 3], true);
+      const innerPositionsArray = [
+        [-1, -1, 0],
+        [0, -1, 0],
+        [1, -1, 0],
+        [-1, 0, 0],
+        [0, 0, 0],
+        [1, 0, 0],
+        [-1, 1, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+      ].flat();
+      const innerPositions = new THREE.Float32BufferAttribute(
+        innerPositionsArray,
+        3
+      );
+      const outerPositionsArray = [
+        [-1, -1, displacement],
+        [0, -1, displacement],
+        [1, -1, displacement],
+        [-1, 0, displacement],
+        [0, 0, displacement],
+        [1, 0, displacement],
+        [-1, 1, displacement],
+        [0, 1, displacement],
+        [1, 1, displacement],
+      ].flat();
+      const outerPositions = new THREE.Float32BufferAttribute(
+        outerPositionsArray,
+        3
+      );
+      const actualGeometry = createSideGeometry(
+        boundary,
+        innerPositions,
+        outerPositions
+      );
+
+      const expectedIndicesArray = [
+        [0, 8, 1],
+        [8, 9, 1],
+        [1, 9, 2],
+        [9, 10, 2],
+        [2, 10, 3],
+        [10, 11, 3],
+        [3, 11, 4],
+        [11, 12, 4],
+        [4, 12, 5],
+        [12, 13, 5],
+        [5, 13, 6],
+        [13, 14, 6],
+        [6, 14, 7],
+        [14, 15, 7],
+        [7, 15, 0],
+        [15, 8, 0],
+      ].flat();
+      const expectedIndices = new THREE.Uint16BufferAttribute(
+        expectedIndicesArray,
+        1
+      );
+      const expectedPositionsArray = [
+        [-1, -1, 0],
+        [0, -1, 0],
+        [1, -1, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [0, 1, 0],
+        [-1, 1, 0],
+        [-1, 0, 0],
+        //
+        [-1, -1, displacement],
+        [0, -1, displacement],
+        [1, -1, displacement],
+        [1, 0, displacement],
+        [1, 1, displacement],
+        [0, 1, displacement],
+        [-1, 1, displacement],
+        [-1, 0, displacement],
+      ].flat();
+      const expectedPositions = new THREE.Float32BufferAttribute(
+        expectedPositionsArray,
+        3
+      );
+      const expectedNormalsArray = [
+        [-SQRT1_2, -SQRT1_2, 0],
+        [0, -1, 0],
+        [SQRT1_2, -SQRT1_2, 0],
+        [1, 0, 0],
+        [SQRT1_2, SQRT1_2, -0],
+        [0, 1, 0],
+        [-SQRT1_2, SQRT1_2, 0],
+        [-1, 0, 0],
+        //
+        [-SQRT1_2, -SQRT1_2, 0],
+        [0, -1, 0],
+        [SQRT1_2, -SQRT1_2, 0],
+        [1, 0, 0],
+        [SQRT1_2, SQRT1_2, -0],
+        [0, 1, 0],
+        [-SQRT1_2, SQRT1_2, 0],
+        [-1, 0, 0],
+      ].flat();
+      const expectedNormals = new THREE.Float32BufferAttribute(
+        expectedNormalsArray,
+        3
+      );
+      const expectedUvsArray = [
+        [0, 0 / 8],
+        [0, 1 / 8],
+        [0, 2 / 8],
+        [0, 3 / 8],
+        [0, 4 / 8],
+        [0, 5 / 8],
+        [0, 6 / 8],
+        [0, 7 / 8],
+        //
+        [1, 0 / 8],
+        [1, 1 / 8],
+        [1, 2 / 8],
+        [1, 3 / 8],
+        [1, 4 / 8],
+        [1, 5 / 8],
+        [1, 6 / 8],
+        [1, 7 / 8],
+      ].flat();
+      const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+      const expectedGeometry = new THREE.BufferGeometry();
+      expectedGeometry.setIndex(expectedIndices);
+      expectedGeometry.setAttribute("position", expectedPositions);
+      expectedGeometry.setAttribute("normal", expectedNormals);
+      expectedGeometry.setAttribute("uv", expectedUvs);
+
+      actualGeometry.uuid = expectedGeometry.uuid;
+      expect(actualGeometry).toEqual(expectedGeometry);
+    });
+
+    // Import from test/cross-section/area/find.test.ts.
+    test("example of an upper half cube (bottomless)", () => {
+      const SQRT1_3 = Math.sqrt(1 / 3);
+      const SQRT1_2 = Math.SQRT1_2;
+      const displacement = 0.001;
+
+      const boundary = new EdgeLoop([8, 9, 10, 11, 12, 13, 14, 15], true);
+      const innerPositionsArray = [
+        [0, 0, 0],
+        [1, 0, 0],
+        [1, 0, 1],
+        [0, 0, 1],
+        [0, 1, 0],
+        [1, 1, 0],
+        [1, 1, 1],
+        [0, 1, 1],
+        //
+        [1, 0.5, 0],
+        [0.5, 0.5, 0],
+        [0, 0.5, 0],
+        [0, 0.5, 0.5],
+        [0, 0.5, 1],
+        [0.5, 0.5, 1],
+        [1, 0.5, 1],
+        [1, 0.5, 0.5],
+      ].flat();
+      const innerPositions = new THREE.Float32BufferAttribute(
+        innerPositionsArray,
+        3
+      );
+      const outerPositionsArray = [
+        [
+          0 - SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+        ],
+        [
+          1 + SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+        ],
+        [
+          1 + SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+        ],
+        [
+          0 - SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+        ],
+        [
+          0 - SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+        ],
+        [
+          1 + SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+          0 - SQRT1_3 * displacement,
+        ],
+        [
+          1 + SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+        ],
+        [
+          0 - SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+          1 + SQRT1_3 * displacement,
+        ],
+        //
+        [1 + SQRT1_2 * displacement, 0.5, 0 - SQRT1_2 * displacement],
+        [0.5, 0.5, 0 - displacement],
+        [0 - SQRT1_2 * displacement, 0.5, 0 - SQRT1_2 * displacement],
+        [0 - displacement, 0.5, 0.5],
+        [0 - SQRT1_2 * displacement, 0.5, 1 + SQRT1_2 * displacement],
+        [0.5, 0.5, 1 + displacement],
+        [1 + SQRT1_2 * displacement, 0.5, 1 + SQRT1_2 * displacement],
+        [1 + displacement, 0.5, 0.5],
+      ].flat();
+      const outerPositions = new THREE.Float32BufferAttribute(
+        outerPositionsArray,
+        3
+      );
+      const actualGeometry = createSideGeometry(
+        boundary,
+        innerPositions,
+        outerPositions
+      );
+
+      const expectedIndicesArray = [
+        [0, 8, 1],
+        [8, 9, 1],
+        [1, 9, 2],
+        [9, 10, 2],
+        [2, 10, 3],
+        [10, 11, 3],
+        [3, 11, 4],
+        [11, 12, 4],
+        //
+        [4, 12, 5],
+        [12, 13, 5],
+        [5, 13, 6],
+        [13, 14, 6],
+        [6, 14, 7],
+        [14, 15, 7],
+        [7, 15, 0],
+        [15, 8, 0],
+      ].flat();
+      const expectedIndices = new THREE.Uint16BufferAttribute(
+        expectedIndicesArray,
+        1
+      );
+      const expectedPositionsArray = [
+        [1, 0.5, 0],
+        [0.5, 0.5, 0],
+        [0, 0.5, 0],
+        [0, 0.5, 0.5],
+        [0, 0.5, 1],
+        [0.5, 0.5, 1],
+        [1, 0.5, 1],
+        [1, 0.5, 0.5],
+        //
+        [1 + SQRT1_2 * displacement, 0.5, 0 - SQRT1_2 * displacement],
+        [0.5, 0.5, 0 - displacement],
+        [0 - SQRT1_2 * displacement, 0.5, 0 - SQRT1_2 * displacement],
+        [0 - displacement, 0.5, 0.5],
+        [0 - SQRT1_2 * displacement, 0.5, 1 + SQRT1_2 * displacement],
+        [0.5, 0.5, 1 + displacement],
+        [1 + SQRT1_2 * displacement, 0.5, 1 + SQRT1_2 * displacement],
+        [1 + displacement, 0.5, 0.5],
+      ].flat();
+      const expectedPositions = new THREE.Float32BufferAttribute(
+        expectedPositionsArray,
+        3
+      );
+      const expectedNormalsArray = [
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        //
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+        [0, -1, 0],
+      ].flat();
+      const expectedNormals = new THREE.Float32BufferAttribute(
+        expectedNormalsArray,
+        3
+      );
+      const expectedUvsArray = [
+        [0, 0 / 8],
+        [0, 1 / 8],
+        [0, 2 / 8],
+        [0, 3 / 8],
+        [0, 4 / 8],
+        [0, 5 / 8],
+        [0, 6 / 8],
+        [0, 7 / 8],
+        //
+        [1, 0 / 8],
+        [1, 1 / 8],
+        [1, 2 / 8],
+        [1, 3 / 8],
+        [1, 4 / 8],
+        [1, 5 / 8],
+        [1, 6 / 8],
+        [1, 7 / 8],
+      ].flat();
+      const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+      const expectedGeometry = new THREE.BufferGeometry();
+      expectedGeometry.setIndex(expectedIndices);
+      expectedGeometry.setAttribute("position", expectedPositions);
+      expectedGeometry.setAttribute("normal", expectedNormals);
+      expectedGeometry.setAttribute("uv", expectedUvs);
+
+      actualGeometry.uuid = expectedGeometry.uuid;
+      expect(actualGeometry).toEqual(expectedGeometry);
     });
   });
 });

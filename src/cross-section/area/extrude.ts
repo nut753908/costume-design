@@ -1,8 +1,58 @@
 import * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
+import { convertToLists } from "../intersection/indices";
 
-// TODO: add extrudeGeometry()
+/**
+ * Extrude geometry.
+ *
+ * @param geometry - The geometry to extrude.
+ * @param displacement - The extrusion displacement in the normal direction.
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @returns  The extruded geometry.
+ */
+export function extrudeGeometry(
+  geometry: THREE.BufferGeometry,
+  displacement: number,
+  allEdges: Edge[],
+  indicesMap: { [k: string]: number[][] }
+): THREE.BufferGeometry {
+  const innerGeometry = geometry.clone();
+  const innerPositions = innerGeometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const innerNormals = innerGeometry.getAttribute(
+    "normal"
+  ) as THREE.Float32BufferAttribute;
+  flipNormals(innerNormals);
+
+  const outerGeometry = geometry.clone();
+  const outerPositions = outerGeometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const outerNormals = outerGeometry.getAttribute(
+    "normal"
+  ) as THREE.Float32BufferAttribute;
+  extrudePositions(outerPositions, outerNormals, displacement);
+
+  const boundaries = findBoundaries(allEdges, indicesMap);
+  const sideGeometries = boundaries.map((boundary) =>
+    createSideGeometry(boundary, innerPositions, outerPositions)
+  );
+
+  return concatGeometries([innerGeometry, outerGeometry, ...sideGeometries]);
+}
+
+/**
+ * Flip the normals.
+ *
+ * @param normals - The results of geometry.getAttribute("normal").
+ */
+export function flipNormals(normals: THREE.Float32BufferAttribute) {
+  for (let i = 0, l = normals.array.length; i < l; i++) {
+    normals.array[i] *= -1;
+  }
+}
 
 /**
  * Extrude the positions.
@@ -16,27 +66,9 @@ export function extrudePositions(
   normals: THREE.Float32BufferAttribute,
   displacement: number
 ) {
-  if (positions.array.length !== normals.array.length) {
-    console.error(`\
-positions.array.length !== normals.array.length
-- positions: ${JSON.stringify(positions)}
-- normals: ${JSON.stringify(normals)}
-`);
-    return;
-  }
+  // NOTE: positions and normals counts are not compared here.
   for (let i = 0, l = positions.array.length; i < l; i++) {
     positions.array[i] += normals.array[i] * displacement;
-  }
-}
-
-/**
- * Flip the normals.
- *
- * @param normals - The results of geometry.getAttribute("normal").
- */
-export function flipNormals(normals: THREE.Float32BufferAttribute) {
-  for (let i = 0, l = normals.array.length; i < l; i++) {
-    normals.array[i] *= -1;
   }
 }
 
@@ -96,7 +128,142 @@ export function findBoundaries(
   return els;
 }
 
-// TODO: add createSideGeometry()
+/**
+ * Create the side geometry between the inner and outer boundaries.
+ * (NOTE: innerPositions and outerPositions counts are not compared here.)
+ *
+ * @param boundary - the boundary as edge loop with only one face per edge.
+ * @param innerPositions - The boundary positions before extruding.
+ * @param outerPositions - The boundary positions after extruding.
+ * @return  The side geometry.
+ */
+export function createSideGeometry(
+  boundary: EdgeLoop,
+  innerPositions: THREE.Float32BufferAttribute,
+  outerPositions: THREE.Float32BufferAttribute
+): THREE.BufferGeometry {
+  // Set indicesArrays.
+  const count = boundary.vertices.length;
+  const indicesArrays: number[][] = [];
+  for (let i = 0, l = count - 1; i < l; i++) {
+    const a = i;
+    const b = count + i;
+    const c = count + i + 1;
+    const d = i + 1;
+    indicesArrays.push([a, b, d]);
+    indicesArrays.push([b, c, d]);
+  }
+  // (i = count - 1)
+  if (boundary.closed) {
+    const a = count - 1;
+    const b = count + count - 1;
+    const c = count;
+    const d = 0;
+    indicesArrays.push([a, b, d]);
+    indicesArrays.push([b, c, d]);
+  }
+
+  // Set positionsArrays.
+  const _ipLists = convertToLists(innerPositions, 3); // _innerPositionLists
+  const _opLists = convertToLists(outerPositions, 3); // _outerPositionLists
+  const ipLists = boundary.vertices.map((v) => _ipLists[v]); // innerPositionLists
+  const opLists = boundary.vertices.map((v) => _opLists[v]); // outerPositionLists
+  const positionsArrays: number[][] = [];
+  positionsArrays.push(...ipLists); // inner
+  positionsArrays.push(...opLists); // outer
+
+  // Set normalsArrays.
+  const nLists: number[][] = []; // normalLists
+  // (i = 0)
+  if (boundary.closed) {
+    const ip1 = new THREE.Vector3().fromArray(ipLists[count - 1]);
+    const ip2 = new THREE.Vector3().fromArray(ipLists[0]);
+    const ip3 = new THREE.Vector3().fromArray(ipLists[1]);
+    const op2 = new THREE.Vector3().fromArray(opLists[0]);
+    const right = ip3.clone().sub(ip2);
+    const up = op2.clone().sub(ip2);
+    const left = ip1.clone().sub(ip2);
+    const n1 = right.clone().cross(up).normalize();
+    const n2 = up.clone().cross(left).normalize();
+    const n12 = n1.clone().add(n2).normalize();
+    nLists.push(n12.toArray());
+  } else {
+    const ip2 = new THREE.Vector3().fromArray(ipLists[0]);
+    const ip3 = new THREE.Vector3().fromArray(ipLists[1]);
+    const op2 = new THREE.Vector3().fromArray(opLists[0]);
+    const right = ip3.clone().sub(ip2);
+    const up = op2.clone().sub(ip2);
+    const n1 = right.clone().cross(up).normalize();
+    nLists.push(n1.toArray());
+  }
+  for (let i = 1, l = count - 1; i < l; i++) {
+    const ip1 = new THREE.Vector3().fromArray(ipLists[i - 1]);
+    const ip2 = new THREE.Vector3().fromArray(ipLists[i]);
+    const ip3 = new THREE.Vector3().fromArray(ipLists[i + 1]);
+    const op2 = new THREE.Vector3().fromArray(opLists[i]);
+    const right = ip3.clone().sub(ip2);
+    const up = op2.clone().sub(ip2);
+    const left = ip1.clone().sub(ip2);
+    const n1 = right.clone().cross(up).normalize();
+    const n2 = up.clone().cross(left).normalize();
+    const n12 = n1.clone().add(n2).normalize();
+    nLists.push(n12.toArray());
+  }
+  // (i = count - 1)
+  if (boundary.closed) {
+    const ip1 = new THREE.Vector3().fromArray(ipLists[count - 2]);
+    const ip2 = new THREE.Vector3().fromArray(ipLists[count - 1]);
+    const ip3 = new THREE.Vector3().fromArray(ipLists[0]);
+    const op2 = new THREE.Vector3().fromArray(opLists[count - 1]);
+    const right = ip3.clone().sub(ip2);
+    const up = op2.clone().sub(ip2);
+    const left = ip1.clone().sub(ip2);
+    const n1 = right.clone().cross(up).normalize();
+    const n2 = up.clone().cross(left).normalize();
+    const n12 = n1.clone().add(n2).normalize();
+    nLists.push(n12.toArray());
+  } else {
+    const ip1 = new THREE.Vector3().fromArray(ipLists[count - 2]);
+    const ip2 = new THREE.Vector3().fromArray(ipLists[count - 1]);
+    const op2 = new THREE.Vector3().fromArray(opLists[count - 1]);
+    const up = op2.clone().sub(ip2);
+    const left = ip1.clone().sub(ip2);
+    const n2 = up.clone().cross(left).normalize();
+    nLists.push(n2.toArray());
+  }
+  const normalsArrays: number[][] = [];
+  normalsArrays.push(...nLists); // inner
+  normalsArrays.push(...nLists); // outer
+
+  // Set uvsArrays.
+  const iuLists: number[][] = []; // innerUvLists
+  const ouLists: number[][] = []; // outerUvLists
+  for (let i = 0, l = count; i < l; i++) {
+    const division = i / count;
+    iuLists.push([0, division]);
+    ouLists.push([1, division]);
+  }
+  const uvsArrays: number[][] = [];
+  uvsArrays.push(...iuLists); // inner
+  uvsArrays.push(...ouLists); // outer
+
+  // Set geometry.
+  const geometry = new THREE.BufferGeometry();
+  geometry.setIndex(new THREE.Uint16BufferAttribute(indicesArrays.flat(), 1));
+  geometry.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(positionsArrays.flat(), 3)
+  );
+  geometry.setAttribute(
+    "normal",
+    new THREE.Float32BufferAttribute(normalsArrays.flat(), 3)
+  );
+  geometry.setAttribute(
+    "uv",
+    new THREE.Float32BufferAttribute(uvsArrays.flat(), 2)
+  );
+  return geometry;
+}
 
 /**
  * Concatenate geometries.

@@ -1,9 +1,9 @@
 import { Area } from "src/cross-section/area/area";
 import {
-  createGeometryfromFoundFaces,
   findAdjacentFaces,
   findAdjacentFacesWithinArea,
   findFirstFaces,
+  limitGeometryExtent,
 } from "src/cross-section/area/find";
 import {
   convertToLists,
@@ -1136,7 +1136,7 @@ describe("findAdjacentFaces()", () => {
   });
 });
 
-describe("createGeometryfromFoundFaces()", () => {
+describe("limitGeometryExtent()", () => {
   // Import from test/cross-section/intersection/intersection-loops.test.ts.
   test("cube example (no top or bottom)", () => {
     const indicesArray = [
@@ -1194,7 +1194,7 @@ describe("createGeometryfromFoundFaces()", () => {
       [1, 2, 6],
       [1, 6, 5],
     ];
-    const actualGeometry = createGeometryfromFoundFaces(
+    const actualGeometry = limitGeometryExtent(
       foundVertices,
       foundFaces,
       geometry
