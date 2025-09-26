@@ -64,17 +64,7 @@ describe("extrudeGeometry()", () => {
     geometry.setAttribute("uv", uvs);
 
     const displacement = 0.001;
-
-    const nPolygonIndices = convertToLists(indices, 3);
-    const allEdges = createAllEdges(nPolygonIndices);
-    const indicesMap = createIndicesMap(nPolygonIndices);
-
-    const actualGeometry = extrudeGeometry(
-      geometry,
-      displacement,
-      allEdges,
-      indicesMap
-    );
+    const actualGeometry = extrudeGeometry(geometry, displacement);
 
     const expectedIndicesArray = [
       [0, 1, 3],

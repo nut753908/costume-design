@@ -1,21 +1,19 @@
 import * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
-import { convertToLists } from "../intersection/indices";
+import { createAllEdges } from "../centerline/edges";
+import { convertToLists, createIndicesMap } from "../intersection/indices";
 
 /**
  * Extrude geometry.
  *
  * @param geometry - The geometry to extrude.
  * @param displacement - The extrusion displacement in the normal direction.
- * @param indicesMap - The indices map. The key is a string of one or two vertices.
  * @returns  The extruded geometry.
  */
 export function extrudeGeometry(
   geometry: THREE.BufferGeometry,
-  displacement: number,
-  allEdges: Edge[],
-  indicesMap: { [k: string]: number[][] }
+  displacement: number
 ): THREE.BufferGeometry {
   const innerGeometry = geometry.clone();
   const innerPositions = innerGeometry.getAttribute(
@@ -35,6 +33,10 @@ export function extrudeGeometry(
   ) as THREE.Float32BufferAttribute;
   extrudePositions(outerPositions, outerNormals, displacement);
 
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+  const nPolygonIndices = convertToLists(indices, 3);
+  const allEdges = createAllEdges(nPolygonIndices);
+  const indicesMap = createIndicesMap(nPolygonIndices);
   const boundaries = findBoundaries(allEdges, indicesMap);
   const sideGeometries = boundaries.map((boundary) =>
     createSideGeometry(boundary, innerPositions, outerPositions)
