@@ -3,7 +3,45 @@ import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
 import { convertToLists } from "../intersection/indices";
 
-// TODO: add extrudeGeometry()
+/**
+ * Extrude geometry.
+ *
+ * @param geometry - The geometry to extrude.
+ * @param displacement - The extrusion displacement in the normal direction.
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @returns  The extruded geometry.
+ */
+export function extrudeGeometry(
+  geometry: THREE.BufferGeometry,
+  displacement: number,
+  allEdges: Edge[],
+  indicesMap: { [k: string]: number[][] }
+): THREE.BufferGeometry {
+  const innerGeometry = geometry.clone();
+  const innerPositions = innerGeometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const innerNormals = innerGeometry.getAttribute(
+    "normal"
+  ) as THREE.Float32BufferAttribute;
+  flipNormals(innerNormals);
+
+  const outerGeometry = geometry.clone();
+  const outerPositions = outerGeometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  const outerNormals = outerGeometry.getAttribute(
+    "normal"
+  ) as THREE.Float32BufferAttribute;
+  extrudePositions(outerPositions, outerNormals, displacement);
+
+  const boundaries = findBoundaries(allEdges, indicesMap);
+  const sideGeometries = boundaries.map((boundary) =>
+    createSideGeometry(boundary, innerPositions, outerPositions)
+  );
+
+  return concatGeometries([innerGeometry, outerGeometry, ...sideGeometries]);
+}
 
 /**
  * Flip the normals.

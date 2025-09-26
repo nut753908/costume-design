@@ -1,6 +1,7 @@
 import {
   concatGeometries,
   createSideGeometry,
+  extrudeGeometry,
   extrudePositions,
   findBoundaries,
   flipNormals,
@@ -20,6 +21,160 @@ import {
   test,
   vi,
 } from "vitest";
+
+describe("extrudeGeometry()", () => {
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   2(0, 1) 3(1, 1)
+     *   0(0, 0) 1(1, 0)
+     */
+    const SQRT1_2 = Math.SQRT1_2;
+
+    const indicesArray = [
+      [0, 1, 3],
+      [0, 3, 2],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    const positionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+    const normalsArray = [
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+    ].flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    const uvsArray = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+    ].flat();
+    const uvs = new THREE.Float32BufferAttribute(uvsArray, 3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setIndex(indices);
+    geometry.setAttribute("position", positions);
+    geometry.setAttribute("normal", normals);
+    geometry.setAttribute("uv", uvs);
+
+    const displacement = 0.001;
+
+    const nPolygonIndices = convertToLists(indices, 3);
+    const allEdges = createAllEdges(nPolygonIndices);
+    const indicesMap = createIndicesMap(nPolygonIndices);
+
+    const actualGeometry = extrudeGeometry(
+      geometry,
+      displacement,
+      allEdges,
+      indicesMap
+    );
+
+    const expectedIndicesArray = [
+      [0, 1, 3],
+      [0, 3, 2],
+      //
+      [4, 5, 7],
+      [4, 7, 6],
+      //
+      [8, 12, 9],
+      [12, 13, 9],
+      [9, 13, 10],
+      [13, 14, 10],
+      [10, 14, 11],
+      [14, 15, 11],
+      [11, 15, 8],
+      [15, 12, 8],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      1
+    );
+    const expectedPositionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      //
+      [0, 0, displacement],
+      [1, 0, displacement],
+      [0, 1, displacement],
+      [1, 1, displacement],
+      //
+      [0, 0, 0],
+      [1, 0, 0],
+      [1, 1, 0],
+      [0, 1, 0],
+      [0, 0, displacement],
+      [1, 0, displacement],
+      [1, 1, displacement],
+      [0, 1, displacement],
+    ].flat();
+    const expectedPositions = new THREE.Float32BufferAttribute(
+      expectedPositionsArray,
+      3
+    );
+    const expectedNormalsArray = [
+      [-0, -0, -1],
+      [-0, -0, -1],
+      [-0, -0, -1],
+      [-0, -0, -1],
+      //
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      [0, 0, 1],
+      //
+      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, SQRT1_2, 0],
+      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, SQRT1_2, 0],
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    const expectedUvsArray = [
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      //
+      [0, 0],
+      [1, 0],
+      [0, 1],
+      [1, 1],
+      //
+      [0, 0 / 4],
+      [0, 1 / 4],
+      [0, 2 / 4],
+      [0, 3 / 4],
+      [1, 0 / 4],
+      [1, 1 / 4],
+      [1, 2 / 4],
+      [1, 3 / 4],
+    ].flat();
+    const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+    const expectedGeometry = new THREE.BufferGeometry();
+    expectedGeometry.setIndex(expectedIndices);
+    expectedGeometry.setAttribute("position", expectedPositions);
+    expectedGeometry.setAttribute("normal", expectedNormals);
+    expectedGeometry.setAttribute("uv", expectedUvs);
+
+    actualGeometry.uuid = expectedGeometry.uuid;
+    expect(actualGeometry).toEqual(expectedGeometry);
+  });
+});
 
 describe("flipNormals()", () => {
   // Import from test/cross-section/area/find.test.ts.
