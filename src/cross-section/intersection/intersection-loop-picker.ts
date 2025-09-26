@@ -106,15 +106,16 @@ export class IntersectionLoopPicker {
    * Set GUI.
    *
    * @param name - The intersection loop picker folder name used in the GUI.
+   * @param updateCallback - The callback that is invoked after updating ilp.
    */
   setGUI(gui: GUI, name = "IntersectionLoopPicker", updateCallback = () => {}) {
-    const ils = this;
+    const ilp = this;
 
     const checklist = Object.fromEntries(
-      [...Array(ils.intersectionLoops.length)].map((_, i) => [i, false])
+      [...Array(ilp.intersectionLoops.length)].map((_, i) => [i, false])
     );
-    ils.indices
-      .filter((i) => i < ils.intersectionLoops.length)
+    ilp.indices
+      .filter((i) => i < ilp.intersectionLoops.length)
       .forEach((i) => {
         checklist[i] = true;
       });
@@ -122,7 +123,7 @@ export class IntersectionLoopPicker {
     deleteFolder(gui, name);
     const folder = gui.addFolder(name);
     folder
-      .add(ils, "option")
+      .add(ilp, "option")
       .options(IntersectionLoopPicker.getOptions())
       .onChange(uS);
     const iFolder = folder.addFolder("indices");
@@ -132,21 +133,21 @@ export class IntersectionLoopPicker {
     updateHidden();
 
     function updateHidden() {
-      ils.option === "some" ? iFolder.show() : iFolder.hide();
+      ilp.option === "some" ? iFolder.show() : iFolder.hide();
     }
     function uS() /* updateSelection */ {
       updateHidden();
-      ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      ilp._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback();
     }
     function uI(i: string) /* updateIndices */ {
-      const index = ils.indices.indexOf(Number(i));
+      const index = ilp.indices.indexOf(Number(i));
       if (checklist[i]) {
-        if (index === -1) ils.indices.push(Number(i));
+        if (index === -1) ilp.indices.push(Number(i));
       } else {
-        if (index !== -1) ils.indices.splice(index, 1);
+        if (index !== -1) ilp.indices.splice(index, 1);
       }
-      ils._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      ilp._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
       updateCallback();
     }
   }
