@@ -33,8 +33,11 @@ export function createAllIntersectionLoops(
           console.error("whileLoop: count > 1000");
           break;
         }
+        // TODO: fix this bug that occured when some intersections are missing in the intersection loop.
+        //       (this bug also prevents adding vertical planes.)
+        //       (this bug also prevents selecting "including plane" or "some" options in the intersection loop picker.)
         if (indicesMap[i2.toString()] === undefined)
-          console.log(indicesMap, i2); // debug codes
+          console.log(indicesMap, i2); // debug code
         const indicesMap2 = createIndicesMap(indicesMap[i2.toString()]);
         for (let j = 0; j < l; j++) {
           const i3 = allIntersections[j]; // intersection3

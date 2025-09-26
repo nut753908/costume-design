@@ -121,6 +121,9 @@ export class Area {
    * @param baseGeometry - The base geometry.
    */
   createAreaGroup(baseGeometry: THREE.BufferGeometry, group: THREE.Group) {
+    // TODO: draw the geometry near cross sections correctly
+    // TODO: draw the back geometry correctly (it's currently inverted)
+    // TODO: draw the side geometries correctly
     // TODO: improve slow processing speed
     // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._updateAreaGroup = () => {
