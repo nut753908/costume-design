@@ -1,11 +1,39 @@
 import * as THREE from "three";
 import { getPoint } from "../centerline/points";
-import { convertToLists } from "../intersection/indices";
+import { convertToLists, createIndicesMap } from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
 import type { Area } from "./area";
+
+/**
+ * Find geometry within the area.
+ *
+ * @param area - The area after cutting faces.
+ * @returns  The geometry within the area.
+ */
+export function findGeometryWithinArea(
+  geometry: THREE.BufferGeometry,
+  area: Area
+): THREE.BufferGeometry {
+  const foundVertices: number[] = [];
+  const foundFaces: number[][] = [];
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+  const nPolygonIndices = convertToLists(indices, 3);
+  const indicesMap = createIndicesMap(nPolygonIndices);
+  const positions = geometry.getAttribute(
+    "position"
+  ) as THREE.Float32BufferAttribute;
+  findAdjacentFacesWithinArea(
+    area,
+    foundVertices,
+    foundFaces,
+    indicesMap,
+    positions
+  );
+  return limitGeometryExtent(foundVertices, foundFaces, geometry);
+}
 
 /**
  * Find adjacent faces within the area.

@@ -3,6 +3,7 @@ import {
   findAdjacentFaces,
   findAdjacentFacesWithinArea,
   findFirstFaces,
+  findGeometryWithinArea,
   limitGeometryExtent,
 } from "src/cross-section/area/find";
 import {
@@ -15,6 +16,175 @@ import { VertexIntersection } from "src/cross-section/intersection/vertex-inters
 import { FreePlane } from "src/cross-section/plane/free-plane";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
+
+describe("findGeometryWithinArea()", () => {
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   2(0, 1) 3(1, 1)
+     *   0(0, 0) 1(1, 0)  ◤1 ◢0
+     */
+    const indicesArray = [
+      // [0, 1, 3], // removed
+      // [0, 3, 2], // removed
+      //
+      [3, 4, 5], // added
+      [4, 1, 5], // added
+      [1, 0, 5], // added
+      [5, 0, 6], // added
+      [3, 5, 2], // added
+      [5, 6, 2], // added
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+    const positionsArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      //
+      [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+      [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+      [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+    const n0 = new THREE.Vector3(-1, -1, 0).normalize();
+    const n1 = new THREE.Vector3(1, -1, 0).normalize();
+    const n2 = new THREE.Vector3(-1, 1, 0).normalize();
+    const n3 = new THREE.Vector3(1, 1, 0).normalize();
+    const normalsArray = [
+      n0.toArray(),
+      n1.toArray(),
+      n2.toArray(),
+      n3.toArray(),
+      //
+      new THREE.Vector3(
+        n1.x + (n3.x - n1.x) * 0.5,
+        n1.y + (n3.y - n1.y) * 0.5,
+        n1.z + (n3.z - n1.z) * 0.5
+      )
+        .normalize()
+        .toArray(), // added
+      new THREE.Vector3(
+        n0.x + (n3.x - n0.x) * 0.5,
+        n0.y + (n3.y - n0.y) * 0.5,
+        n0.z + (n3.z - n0.z) * 0.5
+      )
+        .normalize()
+        .toArray(), // added
+      new THREE.Vector3(
+        n0.x + (n2.x - n0.x) * 0.5,
+        n0.y + (n2.y - n0.y) * 0.5,
+        n0.z + (n2.z - n0.z) * 0.5
+      )
+        .normalize()
+        .toArray(), // added
+    ].flat();
+    const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
+    const uvsArray = [
+      [0, 0],
+      [0.1, 0],
+      [0, 0.1],
+      [0.1, 0.1],
+      //
+      [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
+      [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
+      [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0,0.05]
+    ].flat();
+    const uvs = new THREE.Float32BufferAttribute(uvsArray, 2);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setIndex(indices);
+    geometry.setAttribute("position", positions);
+    geometry.setAttribute("normal", normals);
+    geometry.setAttribute("uv", uvs);
+
+    const css: Area["crossSections"] = {
+      centerRow: {
+        plane: new FreePlane(
+          new THREE.Vector3(0, 1, 0),
+          new THREE.Vector3(0.5, 0.5, 0)
+        ),
+        ilp: new IntersectionLoopPicker([
+          new IntersectionLoop(
+            [
+              new VertexIntersection(4, true),
+              new VertexIntersection(5, true),
+              new VertexIntersection(6, true),
+            ],
+            false
+          ),
+        ]),
+      },
+    };
+    const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
+    const actualGeometry = findGeometryWithinArea(geometry, area);
+
+    const expectedIndicesArray = [
+      [3, 0, 1],
+      [3, 1, 4],
+      [1, 2, 4],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      1
+    );
+    const expectedPositionsArray = [
+      [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5],
+      [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5],
+      [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5],
+      [1, 1, 0],
+      [0, 1, 0],
+    ].flat();
+    const expectedPositions = new THREE.Float32BufferAttribute(
+      expectedPositionsArray,
+      3
+    );
+    const expectedNormalsArray = [
+      new THREE.Vector3(
+        n1.x + (n3.x - n1.x) * 0.5,
+        n1.y + (n3.y - n1.y) * 0.5,
+        n1.z + (n3.z - n1.z) * 0.5
+      )
+        .normalize()
+        .toArray(),
+      new THREE.Vector3(
+        n0.x + (n3.x - n0.x) * 0.5,
+        n0.y + (n3.y - n0.y) * 0.5,
+        n0.z + (n3.z - n0.z) * 0.5
+      )
+        .normalize()
+        .toArray(),
+      new THREE.Vector3(
+        n0.x + (n2.x - n0.x) * 0.5,
+        n0.y + (n2.y - n0.y) * 0.5,
+        n0.z + (n2.z - n0.z) * 0.5
+      )
+        .normalize()
+        .toArray(),
+      n3.toArray(),
+      n2.toArray(),
+    ].flat();
+    const expectedNormals = new THREE.Float32BufferAttribute(
+      expectedNormalsArray,
+      3
+    );
+    const expectedUvsArray = [
+      [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5],
+      [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5],
+      [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5],
+      [0.1, 0.1],
+      [0, 0.1],
+    ].flat();
+    const expectedUvs = new THREE.Float32BufferAttribute(expectedUvsArray, 2);
+    const expectedGeometry = new THREE.BufferGeometry();
+    expectedGeometry.setIndex(expectedIndices);
+    expectedGeometry.setAttribute("position", expectedPositions);
+    expectedGeometry.setAttribute("normal", expectedNormals);
+    expectedGeometry.setAttribute("uv", expectedUvs);
+
+    actualGeometry.uuid = expectedGeometry.uuid;
+    expect(actualGeometry).toEqual(expectedGeometry);
+  });
+});
 
 describe("findAdjacentFacesWithinArea()", () => {
   // Import from test/cross-section/intersection/intersection-loops.test.ts.
