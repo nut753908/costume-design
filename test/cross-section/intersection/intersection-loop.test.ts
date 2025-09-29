@@ -154,10 +154,10 @@ describe("IntersectionLoop", () => {
             "(intersections) reversed:%o",
             (reversed) => {
               const intersections = [
-                new EdgeIntersection(0, 3, 0.5, true),
                 new EdgeIntersection(1, 2, 0.5, true),
-                new EdgeIntersection(5, 6, 0.5, true),
+                new EdgeIntersection(0, 3, 0.5, true),
                 new EdgeIntersection(4, 7, 0.5, true),
+                new EdgeIntersection(5, 6, 0.5, true),
               ];
               const il = new IntersectionLoop(
                 reversed ? intersections.toReversed() : intersections,
@@ -281,10 +281,10 @@ describe("IntersectionLoop", () => {
             "(intersections) reversed:%o",
             (reversed) => {
               const intersections = [
-                new EdgeIntersection(0, 3, 0.5, true),
                 new EdgeIntersection(1, 2, 0.5, true),
-                new EdgeIntersection(5, 6, 0.5, true),
+                new EdgeIntersection(0, 3, 0.5, true),
                 new EdgeIntersection(4, 7, 0.5, true),
+                new EdgeIntersection(5, 6, 0.5, true),
               ];
               const il = new IntersectionLoop(
                 reversed ? intersections.toReversed() : intersections,
