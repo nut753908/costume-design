@@ -36,19 +36,19 @@ describe("createAllIntersectionLoops()", () => {
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
       [0, 1, 2],
-      [0, 3, 1],
-      [1, 3, 2],
-      [2, 3, 0],
+      [0, 1, 3],
+      [1, 2, 3],
+      [2, 0, 3],
       //
       [4, 5, 6],
-      [4, 7, 5],
-      [5, 7, 6],
-      [6, 7, 4],
+      [4, 5, 7],
+      [5, 6, 7],
+      [6, 4, 7],
       //
       [8, 9, 10],
-      [8, 11, 9],
-      [9, 11, 10],
-      [10, 11, 8],
+      [8, 9, 11],
+      [9, 10, 11],
+      [10, 8, 11],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -61,8 +61,8 @@ describe("createAllIntersectionLoops()", () => {
         new THREE.Vector3(0, 0.5, 0)
       );
       const expected = [
-        new EdgeIntersection(0, 3, 0.5),
         new EdgeIntersection(1, 3, 0.5),
+        new EdgeIntersection(0, 3, 0.5),
         new EdgeIntersection(2, 3, 0.5),
         new EdgeIntersection(5, 7, 0.5),
         new EdgeIntersection(6, 7, 0.5),
@@ -90,8 +90,8 @@ describe("createAllIntersectionLoops()", () => {
       const expected = [
         new IntersectionLoop(
           [
-            new EdgeIntersection(0, 3, 0.5, true),
             new EdgeIntersection(1, 3, 0.5, true),
+            new EdgeIntersection(0, 3, 0.5, true),
             new EdgeIntersection(2, 3, 0.5, true),
           ],
           true
@@ -135,16 +135,16 @@ describe("createAllIntersectionLoops()", () => {
     const indicesArray = [
       [0, 1, 2],
       [0, 2, 3],
-      [0, 4, 5],
-      [0, 5, 1],
-      [1, 5, 6],
-      [1, 6, 2],
-      [2, 6, 7],
-      [2, 7, 3],
-      [3, 7, 4],
-      [3, 4, 0],
-      [7, 6, 5],
-      [7, 5, 4],
+      [0, 1, 5],
+      [0, 5, 4],
+      [1, 2, 6],
+      [1, 6, 5],
+      [2, 3, 7],
+      [2, 7, 6],
+      [3, 0, 4],
+      [3, 4, 7],
+      [4, 5, 6],
+      [4, 6, 7],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -157,13 +157,13 @@ describe("createAllIntersectionLoops()", () => {
         new THREE.Vector3(0, 0.5, 0)
       );
       const expected = [
-        new EdgeIntersection(0, 4, 0.5),
-        new EdgeIntersection(0, 5, 0.5),
         new EdgeIntersection(1, 5, 0.5),
-        new EdgeIntersection(1, 6, 0.5),
+        new EdgeIntersection(0, 5, 0.5),
+        new EdgeIntersection(0, 4, 0.5),
         new EdgeIntersection(2, 6, 0.5),
-        new EdgeIntersection(2, 7, 0.5),
+        new EdgeIntersection(1, 6, 0.5),
         new EdgeIntersection(3, 7, 0.5),
+        new EdgeIntersection(2, 7, 0.5),
         new EdgeIntersection(3, 4, 0.5),
       ];
       expect(createAllIntersections(plane, allEdges, positions)).toEqual(
@@ -185,14 +185,14 @@ describe("createAllIntersectionLoops()", () => {
       const expected = [
         new IntersectionLoop(
           [
-            new EdgeIntersection(0, 4, 0.5, true),
-            new EdgeIntersection(0, 5, 0.5, true),
             new EdgeIntersection(1, 5, 0.5, true),
-            new EdgeIntersection(1, 6, 0.5, true),
-            new EdgeIntersection(2, 6, 0.5, true),
-            new EdgeIntersection(2, 7, 0.5, true),
-            new EdgeIntersection(3, 7, 0.5, true),
+            new EdgeIntersection(0, 5, 0.5, true),
+            new EdgeIntersection(0, 4, 0.5, true),
             new EdgeIntersection(3, 4, 0.5, true),
+            new EdgeIntersection(3, 7, 0.5, true),
+            new EdgeIntersection(2, 7, 0.5, true),
+            new EdgeIntersection(2, 6, 0.5, true),
+            new EdgeIntersection(1, 6, 0.5, true),
           ],
           true
         ),
