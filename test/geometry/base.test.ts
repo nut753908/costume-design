@@ -12,9 +12,9 @@ describe("correctNPolygonIndices()", () => {
     ];
     const nPolygonIndices = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
     ];
 
     test("if the order of positions is the same", () => {
@@ -29,9 +29,9 @@ describe("correctNPolygonIndices()", () => {
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
         [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
+        [0, 3, 1],
+        [1, 3, 2],
+        [2, 3, 0],
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -50,9 +50,9 @@ describe("correctNPolygonIndices()", () => {
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
         [3, 2, 1],
-        [3, 2, 0],
-        [2, 1, 0],
-        [1, 3, 0],
+        [3, 0, 2],
+        [2, 0, 1],
+        [1, 0, 3],
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -73,11 +73,11 @@ describe("correctNPolygonIndices()", () => {
     ];
     const nPolygonIndices = [
       [0, 1, 2, 3],
-      [0, 1, 5, 4],
-      [1, 2, 6, 5],
-      [2, 3, 7, 6],
-      [3, 0, 4, 7],
-      [4, 5, 6, 7],
+      [0, 4, 5, 1],
+      [1, 5, 6, 2],
+      [2, 6, 7, 3],
+      [3, 7, 4, 0],
+      [7, 6, 5, 4],
     ];
 
     test("if the order of positions is the same", () => {
@@ -96,11 +96,11 @@ describe("correctNPolygonIndices()", () => {
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
         [0, 1, 2, 3],
-        [0, 1, 5, 4],
-        [1, 2, 6, 5],
-        [2, 3, 7, 6],
-        [3, 0, 4, 7],
-        [4, 5, 6, 7],
+        [0, 4, 5, 1],
+        [1, 5, 6, 2],
+        [2, 6, 7, 3],
+        [3, 7, 4, 0],
+        [7, 6, 5, 4],
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
@@ -123,11 +123,11 @@ describe("correctNPolygonIndices()", () => {
       const positions = new THREE.Float32BufferAttribute(array, 3);
       const expected = [
         [7, 6, 5, 4],
-        [7, 6, 2, 3],
-        [6, 5, 1, 2],
-        [5, 4, 0, 1],
-        [4, 7, 3, 0],
-        [3, 2, 1, 0],
+        [7, 3, 2, 6],
+        [6, 2, 1, 5],
+        [5, 1, 0, 4],
+        [4, 0, 3, 7],
+        [0, 1, 2, 3],
       ];
       expect(
         correctNPolygonIndices(nPolygonPositions, positions, nPolygonIndices)
