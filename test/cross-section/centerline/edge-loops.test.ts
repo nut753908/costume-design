@@ -27,12 +27,12 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
     ];
     const expected: EdgeLoop[] = [];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
@@ -47,19 +47,19 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3  0
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 0, 10, 13],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
-      [13, 10, 20, 23],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10, 0],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
+      [13, 23, 20, 10],
     ];
     const expected: EdgeLoop[] = [
-      new EdgeLoop([11, 10, 13, 12], true),
-      new EdgeLoop([0, 1, 2, 3], true),
-      new EdgeLoop([21, 20, 23, 22], true),
+      new EdgeLoop([10, 11, 12, 13], true),
+      new EdgeLoop([1, 0, 3, 2], true),
+      new EdgeLoop([20, 21, 22, 23], true),
     ];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
     expect(spy).toHaveBeenCalledTimes(0);
@@ -72,9 +72,9 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
     ];
     const expected: EdgeLoop[] = [];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
@@ -88,14 +88,14 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3  0
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 0, 10, 13],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10, 0],
     ];
     const expected: EdgeLoop[] = [
-      new EdgeLoop([0, 1, 2, 3], true),
-      new EdgeLoop([11, 10, 13, 12], true),
+      new EdgeLoop([10, 11, 12, 13], true),
+      new EdgeLoop([1, 0, 3, 2], true),
     ];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
     expect(spy).toHaveBeenCalledTimes(0);
@@ -110,15 +110,15 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
-      [20, 21, 31, 30],
-      [21, 22, 32, 31],
-      [22, 23, 33, 32],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
+      [20, 30, 31, 21],
+      [21, 31, 32, 22],
+      [22, 32, 33, 23],
     ];
     const expected: EdgeLoop[] = [];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
@@ -135,32 +135,32 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3  0
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 0, 10, 13],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
-      [13, 10, 20, 23],
-      [20, 21, 31, 30],
-      [21, 22, 32, 31],
-      [22, 23, 33, 32],
-      [23, 20, 30, 33],
-      [30, 31, 1, 0],
-      [31, 32, 2, 1],
-      [32, 33, 3, 2],
-      [33, 30, 0, 3],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10, 0],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
+      [13, 23, 20, 10],
+      [20, 30, 31, 21],
+      [21, 31, 32, 22],
+      [22, 32, 33, 23],
+      [23, 33, 30, 20],
+      [30, 0, 1, 31],
+      [31, 1, 2, 32],
+      [32, 2, 3, 33],
+      [33, 3, 0, 30],
     ];
     const expected: EdgeLoop[] = [
-      new EdgeLoop([0, 1, 2, 3], true),
-      new EdgeLoop([1, 11, 21, 31], true),
-      new EdgeLoop([11, 10, 13, 12], true),
-      new EdgeLoop([10, 0, 30, 20], true),
-      new EdgeLoop([2, 12, 22, 32], true),
-      new EdgeLoop([3, 13, 23, 33], true),
-      new EdgeLoop([21, 20, 23, 22], true),
-      new EdgeLoop([31, 30, 33, 32], true),
+      new EdgeLoop([0, 10, 20, 30], true),
+      new EdgeLoop([10, 11, 12, 13], true),
+      new EdgeLoop([11, 1, 31, 21], true),
+      new EdgeLoop([1, 0, 3, 2], true),
+      new EdgeLoop([12, 2, 32, 22], true),
+      new EdgeLoop([13, 3, 33, 23], true),
+      new EdgeLoop([20, 21, 22, 23], true),
+      new EdgeLoop([30, 31, 32, 33], true),
     ];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
     expect(spy).toHaveBeenCalledTimes(0);
@@ -174,17 +174,17 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3  0
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 0, 10, 13],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10, 0],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
     ];
     const expected: EdgeLoop[] = [
-      new EdgeLoop([0, 1, 2, 3], true),
-      new EdgeLoop([13, 12, 11, 10], true),
+      new EdgeLoop([10, 11, 12, 13], true),
+      new EdgeLoop([1, 0, 3, 2], true),
     ];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
     expect(spy).toHaveBeenCalledTimes(0);
@@ -198,18 +198,18 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3  0
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 0, 10, 13],
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
-      [13, 10, 23], // interpolate with triangles
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10, 0],
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
+      [13, 23, 10], // interpolate with triangles
     ];
     const expected: EdgeLoop[] = [
-      new EdgeLoop([0, 1, 2, 3], true),
-      new EdgeLoop([13, 12, 11, 10], true),
+      new EdgeLoop([10, 11, 12, 13], true),
+      new EdgeLoop([1, 0, 3, 2], true),
     ];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
     expect(spy).toHaveBeenCalledTimes(0);
@@ -223,14 +223,14 @@ describe("createAllEdgeLoops()", () => {
      *    0  1  2  3
      */
     const nPolygonIndices = [
-      [0, 1, 11, 10],
-      [1, 2, 12, 11],
-      [2, 3, 13, 12],
-      [3, 10, 13], // interpolate with triangles
-      [10, 11, 21, 20],
-      [11, 12, 22, 21],
-      [12, 13, 23, 22],
-      [13, 10, 23], // interpolate with triangles
+      [0, 10, 11, 1],
+      [1, 11, 12, 2],
+      [2, 12, 13, 3],
+      [3, 13, 10], // interpolate with triangles
+      [10, 20, 21, 11],
+      [11, 21, 22, 12],
+      [12, 22, 23, 13],
+      [13, 23, 10], // interpolate with triangles
     ];
     const expected: EdgeLoop[] = [];
     expect(createAllEdgeLoops(nPolygonIndices)).toEqual(expected);
@@ -240,25 +240,25 @@ describe("createAllEdgeLoops()", () => {
 
 test("createEdgeLoopsMap()", () => {
   const els = [
-    new EdgeLoop([0, 1, 2, 3], false),
     new EdgeLoop([10, 11, 12, 13], true),
+    new EdgeLoop([1, 0, 3, 2], false),
     new EdgeLoop([0, 1, 22], false),
   ];
   const expected = {
-    "0,1": [els[0], els[2]],
-    "1,0": [els[0], els[2]],
-    "1,2": [els[0]],
-    "2,1": [els[0]],
-    "2,3": [els[0]],
-    "3,2": [els[0]],
-    "10,11": [els[1]],
-    "11,10": [els[1]],
-    "11,12": [els[1]],
-    "12,11": [els[1]],
-    "12,13": [els[1]],
-    "13,12": [els[1]],
-    "13,10": [els[1]],
-    "10,13": [els[1]],
+    "10,11": [els[0]],
+    "11,10": [els[0]],
+    "11,12": [els[0]],
+    "12,11": [els[0]],
+    "12,13": [els[0]],
+    "13,12": [els[0]],
+    "13,10": [els[0]],
+    "10,13": [els[0]],
+    "1,0": [els[1], els[2]],
+    "0,1": [els[1], els[2]],
+    "0,3": [els[1]],
+    "3,0": [els[1]],
+    "3,2": [els[1]],
+    "2,3": [els[1]],
     "1,22": [els[2]],
     "22,1": [els[2]],
   };
