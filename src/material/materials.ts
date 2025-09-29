@@ -45,8 +45,8 @@ export function createMaterials(gui: GUI): Materials {
     toon: createToonMaterial(
       tubeFolder,
       "toon",
-      0xfcd7e9,
-      0xf8c1de,
+      0xe7d3cc,
+      0xe3c4b7,
       THREE.DoubleSide
     ),
   };
@@ -54,8 +54,7 @@ export function createMaterials(gui: GUI): Materials {
   const areaFolder = folder.addFolder("area").close();
   const area = {
     line: createLineMaterial(areaFolder, "line"),
-    // TODO: fix area color
-    toon: createToonMaterial(areaFolder, "toon", 0xfcd7e9, 0xf8c1de),
+    toon: createToonMaterial(areaFolder, "toon", 0x313c43, 0x2a353c),
   };
 
   return {
