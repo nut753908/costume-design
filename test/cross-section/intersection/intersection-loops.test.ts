@@ -208,8 +208,8 @@ describe("createAllIntersectionLoops()", () => {
     /**
      * flat layout:
      *   6(-1, 1) 7(0, 1) 8(1, 1)
-     *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤5 ◢4  ◤7 ◢6
-     *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤1 ◢0  ◤3 ◢2
+     *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤4 ◢5  ◤6 ◢7
+     *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤0 ◢1  ◤2 ◢3
      */
     const positionsArray = [
       [-1, -1, 0],
@@ -224,14 +224,14 @@ describe("createAllIntersectionLoops()", () => {
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
-      [0, 1, 4],
-      [0, 4, 3],
-      [1, 2, 5],
-      [1, 5, 4],
-      [3, 4, 7],
-      [3, 7, 6],
-      [4, 5, 8],
-      [4, 8, 7],
+      [0, 3, 4],
+      [0, 4, 1],
+      [1, 4, 5],
+      [1, 5, 2],
+      [3, 6, 7],
+      [3, 7, 4],
+      [4, 7, 8],
+      [4, 8, 5],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -242,19 +242,19 @@ describe("createAllIntersectionLoops()", () => {
       /**
        * flat layout:
        *   6(-1, 1) 7(0, 1) 8(1, 1)
-       *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤5 ◢4  ◤7 ◢6
-       *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤1 ◢0  ◤3 ◢2
+       *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤4 ◢5  ◤6 ◢7
+       *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤0 ◢1  ◤2 ◢3
        */
       const plane = new FreePlane(
         new THREE.Vector3(0, 1, 0),
         new THREE.Vector3(0, 0.5, 0)
       );
       const expected = [
-        new EdgeIntersection(4, 7, 0.5),
-        new EdgeIntersection(3, 7, 0.5),
         new EdgeIntersection(3, 6, 0.5),
-        new EdgeIntersection(5, 8, 0.5),
+        new EdgeIntersection(3, 7, 0.5),
+        new EdgeIntersection(4, 7, 0.5),
         new EdgeIntersection(4, 8, 0.5),
+        new EdgeIntersection(5, 8, 0.5),
       ];
       expect(createAllIntersections(plane, allEdges, positions)).toEqual(
         expected
@@ -266,8 +266,8 @@ describe("createAllIntersectionLoops()", () => {
       /**
        * flat layout:
        *   6(-1, 1) 7(0, 1) 8(1, 1)
-       *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤5 ◢4  ◤7 ◢6
-       *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤1 ◢0  ◤3 ◢2
+       *   3(-1, 0) 4(0, 0) 5(1, 0)  ◤4 ◢5  ◤6 ◢7
+       *   0(-1,-1) 1(0,-1) 2(1,-1)  ◤0 ◢1  ◤2 ◢3
        */
       const plane = new FreePlane(
         new THREE.Vector3(0, 1, 0),
@@ -281,11 +281,11 @@ describe("createAllIntersectionLoops()", () => {
       const expected = [
         new IntersectionLoop(
           [
-            new EdgeIntersection(5, 8, 0.5, true),
-            new EdgeIntersection(4, 8, 0.5, true),
-            new EdgeIntersection(4, 7, 0.5, true),
-            new EdgeIntersection(3, 7, 0.5, true),
             new EdgeIntersection(3, 6, 0.5, true),
+            new EdgeIntersection(3, 7, 0.5, true),
+            new EdgeIntersection(4, 7, 0.5, true),
+            new EdgeIntersection(4, 8, 0.5, true),
+            new EdgeIntersection(5, 8, 0.5, true),
           ],
           false
         ),
