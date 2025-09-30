@@ -28,12 +28,12 @@ describe("findGeometryWithinArea()", () => {
       // [0, 2, 3], // removed
       // [0, 3, 1], // removed
       //
-      [4, 0, 5], // added
-      [2, 5, 3], // added
-      [2, 4, 5], // added
-      [3, 5, 6], // added
-      [5, 1, 6], // added
-      [5, 0, 1], // added
+      [0, 4, 5], // added
+      [4, 2, 5], // added
+      [2, 3, 5], // added
+      [5, 3, 6], // added
+      [0, 5, 1], // added
+      [5, 6, 1], // added
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const positionsArray = [
@@ -119,9 +119,9 @@ describe("findGeometryWithinArea()", () => {
     const actualGeometry = findGeometryWithinArea(geometry, area);
 
     const expectedIndicesArray = [
-      [3, 0, 1],
-      [3, 1, 4],
-      [4, 1, 2],
+      [0, 3, 1],
+      [3, 4, 1],
+      [1, 4, 2],
     ].flat();
     const expectedIndices = new THREE.Uint16BufferAttribute(
       expectedIndicesArray,
@@ -205,11 +205,11 @@ describe("findAdjacentFacesWithinArea()", () => {
       [0, 1, 0],
       [1, 1, 0],
       //
-      [1, -0.5, 0], // added
-      [0.5, -0.5, 0], // added
-      [0, -0.5, 0], // added
-      [-0.5, -0.5, 0], // added
       [-1, -0.5, 0], // added
+      [-0.5, -0.5, 0], // added
+      [0, -0.5, 0], // added
+      [0.5, -0.5, 0], // added
+      [1, -0.5, 0], // added
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
@@ -222,18 +222,18 @@ describe("findAdjacentFacesWithinArea()", () => {
       [4, 7, 8],
       [4, 8, 5],
       //
-      [9, 0, 10], // added
-      [3, 10, 4], // added
-      [3, 9, 10], // added
-      [4, 10, 11], // added
-      [10, 1, 11], // added
-      [10, 0, 1], // added
-      [11, 1, 12], // added
-      [4, 12, 5], // added
-      [4, 11, 12], // added
-      [5, 12, 13], // added
-      [12, 2, 13], // added
-      [12, 1, 2], // added
+      [0, 9, 10], // added
+      [9, 3, 10], // added
+      [3, 4, 10], // added
+      [10, 4, 11], // added
+      [0, 10, 1], // added
+      [10, 11, 1], // added
+      [1, 11, 12], // added
+      [11, 4, 12], // added
+      [4, 5, 12], // added
+      [12, 5, 13], // added
+      [1, 12, 2], // added
+      [12, 13, 2], // added
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -266,16 +266,16 @@ describe("findAdjacentFacesWithinArea()", () => {
       9, 10, 11, 12, 13, 3, 6, 7, 4, 8, 5,
     ];
     const expectedFoundFaces: number[][] = [
-      [3, 9, 10],
+      [9, 3, 10],
       [3, 6, 7],
       [3, 7, 4],
       [4, 7, 8],
       [4, 8, 5],
-      [4, 12, 5],
-      [5, 12, 13],
-      [3, 10, 4],
-      [4, 10, 11],
-      [4, 11, 12],
+      [4, 5, 12],
+      [12, 5, 13],
+      [3, 4, 10],
+      [10, 4, 11],
+      [11, 4, 12],
     ];
     findAdjacentFacesWithinArea(
       area,
@@ -299,14 +299,14 @@ describe("findAdjacentFacesWithinArea()", () => {
       [1, 1, 1],
       [0, 1, 1],
       //
-      [1, 0.5, 0], // added
-      [0.5, 0.5, 0], // added
       [0, 0.5, 0], // added
-      [0, 0.5, 0.5], // added
-      [0, 0.5, 1], // added
-      [0.5, 0.5, 1], // added
-      [1, 0.5, 1], // added
+      [0.5, 0.5, 0], // added
+      [1, 0.5, 0], // added
       [1, 0.5, 0.5], // added
+      [1, 0.5, 1], // added
+      [0.5, 0.5, 1], // added
+      [0, 0.5, 1], // added
+      [0, 0.5, 0.5], // added
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
@@ -323,30 +323,30 @@ describe("findAdjacentFacesWithinArea()", () => {
       [7, 6, 5],
       [7, 5, 4],
       //
-      [8, 0, 9], // added
-      [4, 9, 5], // added
-      [4, 8, 9], // added
-      [5, 9, 10], // added
-      [9, 1, 10], // added
-      [9, 0, 1], // added
-      [10, 1, 11], // added
-      [5, 11, 6], // added
-      [5, 10, 11], // added
-      [6, 11, 12], // added
-      [11, 2, 12], // added
-      [11, 1, 2], // added
-      [12, 2, 13], // added
-      [6, 13, 7], // added
-      [6, 12, 13], // added
-      [7, 13, 14], // added
-      [13, 3, 14], // added
-      [13, 2, 3], // added
-      [14, 3, 15], // added
-      [7, 15, 4], // added
-      [7, 14, 15], // added
-      [4, 15, 8], // added
-      [15, 0, 8], // added
-      [15, 3, 0], // added
+      [0, 8, 9], // added
+      [8, 4, 9], // added
+      [4, 5, 9], // added
+      [9, 5, 10], // added
+      [0, 9, 1], // added
+      [9, 10, 1], // added
+      [1, 10, 11], // added
+      [10, 5, 11], // added
+      [5, 6, 11], // added
+      [11, 6, 12], // added
+      [1, 11, 2], // added
+      [11, 12, 2], // added
+      [2, 12, 13], // added
+      [12, 6, 13], // added
+      [6, 7, 13], // added
+      [13, 7, 14], // added
+      [2, 13, 3], // added
+      [13, 14, 3], // added
+      [3, 14, 15], // added
+      [14, 7, 15], // added
+      [7, 4, 15], // added
+      [15, 4, 8], // added
+      [3, 15, 0], // added
+      [15, 8, 0], // added
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -382,20 +382,20 @@ describe("findAdjacentFacesWithinArea()", () => {
       8, 9, 10, 11, 12, 13, 14, 15, 4, 7, 6, 5,
     ];
     const expectedFoundFaces: number[][] = [
-      [4, 8, 9],
+      [8, 4, 9],
       [7, 5, 4],
       [7, 6, 5],
-      [5, 11, 6],
-      [4, 9, 5],
-      [5, 9, 10],
-      [5, 10, 11],
-      [6, 11, 12],
-      [6, 13, 7],
-      [6, 12, 13],
-      [7, 13, 14],
-      [7, 15, 4],
-      [7, 14, 15],
-      [4, 15, 8],
+      [5, 6, 11],
+      [4, 5, 9],
+      [9, 5, 10],
+      [10, 5, 11],
+      [11, 6, 12],
+      [12, 6, 13],
+      [6, 7, 13],
+      [13, 7, 14],
+      [14, 7, 15],
+      [7, 4, 15],
+      [15, 4, 8],
     ];
     findAdjacentFacesWithinArea(
       area,
@@ -716,36 +716,36 @@ describe("findAdjacentFacesWithinArea()", () => {
         [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0.5,0.5,0]
         [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [1,0.5,0]
         //
-        [0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
-        [0 + (1 - 0) * 0.25, 0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
-        [0 + (0.5 - 0) * 0.5, 0.5 + (0.5 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
-        [0 + (0.5 - 0) * 0.5, 1 + (0.5 - 1) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (1 - 0) * 0.25, 1 + (1 - 1) * 0.25, 0 + (0 - 0) * 0.25], // added
+        [0 + (0.5 - 0) * 0.5, 1 + (0.5 - 1) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0 + (0.5 - 0) * 0.5, 0.5 + (0.5 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0 + (1 - 0) * 0.25, 0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
+        [0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
       ].flat();
       const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
       const indicesArray = [
         // [0, 2, 3], // removed
         // [0, 3, 1], // removed
         //
-        // [4, 0, 5], // added -> removed
-        // [2, 5, 3], // added -> removed
-        // [2, 4, 5], // added -> removed
-        [3, 5, 6], // added
-        [5, 1, 6], // added
-        // [5, 0, 1], // added -> removed
+        // [0, 4, 5], // added -> removed
+        // [4, 2, 5], // added -> removed
+        // [2, 3, 5], // added -> removed
+        [5, 3, 6], // added
+        // [0, 5, 1], // added -> removed
+        [5, 6, 1], // added
         //
-        [7, 0, 8], // added
-        [1, 7, 5], // added
-        [7, 8, 5], // added
-        [5, 8, 9], // added
-        [8, 4, 9], // added
-        [8, 0, 4], // added
-        [5, 9, 10], // added
-        [9, 4, 10], // added
-        [4, 2, 10], // added
-        [10, 2, 11], // added
-        [5, 11, 3], // added
-        [5, 10, 11], // added
+        [2, 7, 8], // added
+        [7, 3, 5], // added
+        [7, 5, 8], // added
+        [8, 5, 9], // added
+        [2, 8, 4], // added
+        [8, 9, 4], // added
+        [9, 5, 10], // added
+        [4, 9, 10], // added
+        [4, 10, 0], // added
+        [0, 10, 11], // added
+        [10, 5, 11], // added
+        [5, 1, 11], // added
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
@@ -796,17 +796,17 @@ describe("findAdjacentFacesWithinArea()", () => {
           4, 5, 9, 6, 7, 8, 10, 11, 2, 3, 1,
         ];
         const expectedFoundFaces: number[][] = [
-          [9, 4, 10],
-          [4, 2, 10],
-          [10, 2, 11],
-          [3, 5, 6],
-          [5, 11, 3],
-          [5, 9, 10],
-          [5, 10, 11],
-          [1, 7, 5],
-          [5, 1, 6],
-          [7, 8, 5],
-          [5, 8, 9],
+          [2, 8, 4],
+          [2, 7, 8],
+          [8, 9, 4],
+          [5, 3, 6],
+          [7, 3, 5],
+          [7, 5, 8],
+          [8, 5, 9],
+          [9, 5, 10],
+          [10, 5, 11],
+          [5, 1, 11],
+          [5, 6, 1],
         ];
         findAdjacentFacesWithinArea(
           area,
@@ -864,16 +864,16 @@ describe("findAdjacentFacesWithinArea()", () => {
           4, 5, 9, 6, 7, 8, 10, 11, 2, 3, 0,
         ];
         const expectedFoundFaces: number[][] = [
-          [9, 4, 10],
-          [4, 2, 10],
-          [10, 2, 11],
-          [3, 5, 6],
-          [5, 11, 3],
-          [5, 9, 10],
-          [5, 10, 11],
-          [7, 0, 8],
-          [8, 0, 4],
-          [8, 4, 9],
+          [2, 8, 4],
+          [2, 7, 8],
+          [8, 9, 4],
+          [5, 3, 6],
+          [7, 3, 5],
+          [7, 5, 8],
+          [8, 5, 9],
+          [4, 9, 10],
+          [4, 10, 0],
+          [0, 10, 11],
         ];
         findAdjacentFacesWithinArea(
           area,
@@ -931,17 +931,17 @@ describe("findAdjacentFacesWithinArea()", () => {
           4, 5, 9, 6, 7, 8, 10, 11, 0, 1, 3,
         ];
         const expectedFoundFaces: number[][] = [
-          [8, 4, 9],
-          [8, 0, 4],
-          [7, 0, 8],
-          [5, 1, 6],
-          [1, 7, 5],
-          [7, 8, 5],
-          [5, 8, 9],
-          [5, 9, 10],
-          [5, 10, 11],
-          [5, 11, 3],
-          [3, 5, 6],
+          [4, 9, 10],
+          [4, 10, 0],
+          [0, 10, 11],
+          [5, 6, 1],
+          [5, 1, 11],
+          [9, 5, 10],
+          [10, 5, 11],
+          [7, 3, 5],
+          [5, 3, 6],
+          [7, 5, 8],
+          [8, 5, 9],
         ];
         findAdjacentFacesWithinArea(
           area,
@@ -999,16 +999,16 @@ describe("findAdjacentFacesWithinArea()", () => {
           4, 5, 9, 6, 7, 8, 10, 11, 0, 1, 2,
         ];
         const expectedFoundFaces: number[][] = [
-          [8, 4, 9],
-          [8, 0, 4],
-          [7, 0, 8],
-          [5, 1, 6],
-          [1, 7, 5],
-          [7, 8, 5],
-          [5, 8, 9],
-          [9, 4, 10],
-          [4, 2, 10],
-          [10, 2, 11],
+          [4, 9, 10],
+          [4, 10, 0],
+          [0, 10, 11],
+          [5, 6, 1],
+          [5, 1, 11],
+          [9, 5, 10],
+          [10, 5, 11],
+          [2, 7, 8],
+          [2, 8, 4],
+          [8, 9, 4],
         ];
         findAdjacentFacesWithinArea(
           area,
@@ -1043,11 +1043,11 @@ describe("findFirstFaces()", () => {
       [0, 1, 0],
       [1, 1, 0],
       //
-      [1, -0.5, 0], // added
-      [0.5, -0.5, 0], // added
-      [0, -0.5, 0], // added
-      [-0.5, -0.5, 0], // added
       [-1, -0.5, 0], // added
+      [-0.5, -0.5, 0], // added
+      [0, -0.5, 0], // added
+      [0.5, -0.5, 0], // added
+      [1, -0.5, 0], // added
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
@@ -1060,18 +1060,18 @@ describe("findFirstFaces()", () => {
       [4, 7, 8],
       [4, 8, 5],
       //
-      [9, 0, 10], // added
-      [3, 10, 4], // added
-      [3, 9, 10], // added
-      [4, 10, 11], // added
-      [10, 1, 11], // added
-      [10, 0, 1], // added
-      [11, 1, 12], // added
-      [4, 12, 5], // added
-      [4, 11, 12], // added
-      [5, 12, 13], // added
-      [12, 2, 13], // added
-      [12, 1, 2], // added
+      [0, 9, 10], // added
+      [9, 3, 10], // added
+      [3, 4, 10], // added
+      [10, 4, 11], // added
+      [0, 10, 1], // added
+      [10, 11, 1], // added
+      [1, 11, 12], // added
+      [11, 4, 12], // added
+      [4, 5, 12], // added
+      [12, 5, 13], // added
+      [1, 12, 2], // added
+      [12, 13, 2], // added
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -1096,12 +1096,12 @@ describe("findFirstFaces()", () => {
     const firstFaces: number[][] = [];
     const expectedFoundVertices: number[] = [9, 10, 11, 12, 13];
     const expectedFirstFaces: number[][] = [
-      [3, 9, 10],
-      [3, 10, 4],
-      [4, 10, 11],
-      [4, 11, 12],
-      [4, 12, 5],
-      [5, 12, 13],
+      [9, 3, 10],
+      [3, 4, 10],
+      [10, 4, 11],
+      [11, 4, 12],
+      [4, 5, 12],
+      [12, 5, 13],
     ];
     findFirstFaces(plane, il, foundVertices, firstFaces, indicesMap, positions);
     expect(foundVertices).toEqual(expectedFoundVertices);
@@ -1119,14 +1119,14 @@ describe("findFirstFaces()", () => {
       [1, 1, 1],
       [0, 1, 1],
       //
-      [1, 0.5, 0], // added
-      [0.5, 0.5, 0], // added
       [0, 0.5, 0], // added
-      [0, 0.5, 0.5], // added
-      [0, 0.5, 1], // added
-      [0.5, 0.5, 1], // added
-      [1, 0.5, 1], // added
+      [0.5, 0.5, 0], // added
+      [1, 0.5, 0], // added
       [1, 0.5, 0.5], // added
+      [1, 0.5, 1], // added
+      [0.5, 0.5, 1], // added
+      [0, 0.5, 1], // added
+      [0, 0.5, 0.5], // added
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
     const indicesArray = [
@@ -1143,30 +1143,30 @@ describe("findFirstFaces()", () => {
       [7, 6, 5],
       [7, 5, 4],
       //
-      [8, 0, 9], // added
-      [4, 9, 5], // added
-      [4, 8, 9], // added
-      [5, 9, 10], // added
-      [9, 1, 10], // added
-      [9, 0, 1], // added
-      [10, 1, 11], // added
-      [5, 11, 6], // added
-      [5, 10, 11], // added
-      [6, 11, 12], // added
-      [11, 2, 12], // added
-      [11, 1, 2], // added
-      [12, 2, 13], // added
-      [6, 13, 7], // added
-      [6, 12, 13], // added
-      [7, 13, 14], // added
-      [13, 3, 14], // added
-      [13, 2, 3], // added
-      [14, 3, 15], // added
-      [7, 15, 4], // added
-      [7, 14, 15], // added
-      [4, 15, 8], // added
-      [15, 0, 8], // added
-      [15, 3, 0], // added
+      [0, 8, 9], // added
+      [8, 4, 9], // added
+      [4, 5, 9], // added
+      [9, 5, 10], // added
+      [0, 9, 1], // added
+      [9, 10, 1], // added
+      [1, 10, 11], // added
+      [10, 5, 11], // added
+      [5, 6, 11], // added
+      [11, 6, 12], // added
+      [1, 11, 2], // added
+      [11, 12, 2], // added
+      [2, 12, 13], // added
+      [12, 6, 13], // added
+      [6, 7, 13], // added
+      [13, 7, 14], // added
+      [2, 13, 3], // added
+      [13, 14, 3], // added
+      [3, 14, 15], // added
+      [14, 7, 15], // added
+      [7, 4, 15], // added
+      [15, 4, 8], // added
+      [3, 15, 0], // added
+      [15, 8, 0], // added
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const nPolygonIndices = convertToLists(indices, 3);
@@ -1194,18 +1194,18 @@ describe("findFirstFaces()", () => {
     const firstFaces: number[][] = [];
     const expectedFoundVertices: number[] = [8, 9, 10, 11, 12, 13, 14, 15];
     const expectedFirstFaces: number[][] = [
-      [4, 8, 9],
-      [4, 15, 8],
-      [4, 9, 5],
-      [5, 9, 10],
-      [5, 10, 11],
-      [5, 11, 6],
-      [6, 11, 12],
-      [6, 12, 13],
-      [6, 13, 7],
-      [7, 13, 14],
-      [7, 14, 15],
-      [7, 15, 4],
+      [8, 4, 9],
+      [15, 4, 8],
+      [4, 5, 9],
+      [9, 5, 10],
+      [10, 5, 11],
+      [5, 6, 11],
+      [11, 6, 12],
+      [12, 6, 13],
+      [6, 7, 13],
+      [13, 7, 14],
+      [14, 7, 15],
+      [7, 4, 15],
     ];
     findFirstFaces(plane, il, foundVertices, firstFaces, indicesMap, positions);
     expect(foundVertices).toEqual(expectedFoundVertices);
