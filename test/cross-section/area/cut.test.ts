@@ -32,11 +32,11 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       /**
        * flat layout:
        *   2(0, 1) 3(1, 1)
-       *   0(0, 0) 1(1, 0)  ◤1 ◢0
+       *   0(0, 0) 1(1, 0)  ◤0 ◢1
        */
       const indicesArray = [
-        [0, 1, 3],
-        [0, 3, 2],
+        [0, 2, 3],
+        [0, 3, 1],
       ].flat();
       indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const positionsArray = [
@@ -77,9 +77,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ilp: new IntersectionLoopPicker([
             new IntersectionLoop(
               [
-                new EdgeIntersection(1, 3, 0.5),
-                new EdgeIntersection(0, 3, 0.5),
                 new EdgeIntersection(0, 2, 0.5),
+                new EdgeIntersection(0, 3, 0.5),
+                new EdgeIntersection(1, 3, 0.5),
               ],
               false
             ),
@@ -95,15 +95,15 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       expect(inputArea.toJSON()).toEqual(area.toJSON());
 
       const newIndicesArray = [
-        // [0, 1, 3], // removed
-        // [0, 3, 2], // removed
+        // [0, 2, 3], // removed
+        // [0, 3, 1], // removed
         //
-        [3, 4, 5], // added
-        [4, 1, 5], // added
-        [1, 0, 5], // added
-        [5, 0, 6], // added
-        [3, 5, 2], // added
-        [5, 6, 2], // added
+        [4, 0, 5], // added
+        [2, 5, 3], // added
+        [2, 4, 5], // added
+        [3, 5, 6], // added
+        [5, 1, 6], // added
+        [5, 0, 1], // added
       ].flat();
       const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
       const newPositionsArray = [
@@ -112,9 +112,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 1, 0],
         [1, 1, 0],
         //
-        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
-        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
       ].flat();
       const newPositions = new THREE.Float32BufferAttribute(
         newPositionsArray,
@@ -131,9 +131,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         n3.toArray(),
         //
         new THREE.Vector3(
-          n1.x + (n3.x - n1.x) * 0.5,
-          n1.y + (n3.y - n1.y) * 0.5,
-          n1.z + (n3.z - n1.z) * 0.5
+          n0.x + (n2.x - n0.x) * 0.5,
+          n0.y + (n2.y - n0.y) * 0.5,
+          n0.z + (n2.z - n0.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -145,9 +145,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n0.x + (n2.x - n0.x) * 0.5,
-          n0.y + (n2.y - n0.y) * 0.5,
-          n0.z + (n2.z - n0.z) * 0.5
+          n1.x + (n3.x - n1.x) * 0.5,
+          n1.y + (n3.y - n1.y) * 0.5,
+          n1.z + (n3.z - n1.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -159,9 +159,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 0.1],
         [0.1, 0.1],
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
-        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
         [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0,0.05]
+        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
+        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
       ].flat();
       const newUvs = new THREE.Float32BufferAttribute(newUvsArray, 2);
       const newGeometry = new THREE.BufferGeometry();
@@ -256,9 +256,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ilp: new IntersectionLoopPicker([
             new IntersectionLoop(
               [
-                new EdgeIntersection(1, 3, 0.5),
-                new EdgeIntersection(0, 3, 0.5),
                 new EdgeIntersection(0, 2, 0.5),
+                new EdgeIntersection(0, 3, 0.5),
+                new EdgeIntersection(1, 3, 0.5),
               ],
               false
             ),
@@ -272,9 +272,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ilp: new IntersectionLoopPicker([
             new IntersectionLoop(
               [
-                new EdgeIntersection(1, 3, 0.75),
-                new EdgeIntersection(0, 3, 0.75),
                 new EdgeIntersection(0, 2, 0.75),
+                new EdgeIntersection(0, 3, 0.75),
+                new EdgeIntersection(1, 3, 0.75),
               ],
               false
             ),
@@ -290,23 +290,23 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       expect(inputArea.toJSON()).toEqual(area.toJSON());
 
       const newIndicesArray = [
-        // [0, 1, 3], // removed
-        // [0, 3, 2], // removed
+        // [0, 2, 3], // removed
+        // [0, 3, 1], // removed
         //
-        // [3, 4, 5], // added -> removed
-        [4, 1, 5], // added
-        [1, 0, 5], // added
-        [5, 0, 6], // added
-        // [3, 5, 2], // added -> removed
-        // [5, 6, 2], // added -> removed
+        [4, 0, 5], // added
+        // [2, 5, 3], // added -> removed
+        // [2, 4, 5], // added -> removed
+        // [3, 5, 6], // added -> removed
+        [5, 1, 6], // added
+        [5, 0, 1], // added
         //
-        [3, 7, 8], // added
+        [2, 7, 8], // added
         [7, 4, 8], // added
         [4, 5, 8], // added
         [8, 5, 9], // added
-        [3, 9, 2], // added
-        [3, 8, 9], // added
-        [2, 9, 10], // added
+        [2, 9, 3], // added
+        [2, 8, 9], // added
+        [3, 9, 10], // added
         [9, 6, 10], // added
         [9, 5, 6], // added
       ].flat();
@@ -317,14 +317,14 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 1, 0],
         [1, 1, 0],
         //
-        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [  1,0.5,0]
-        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0.5,0.5,0]
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [  0,0.5,0]
+        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0.5,0.5,0]
+        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [  1,0.5,0]
         //
-        [1 + (1 - 1) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
-        [0.5 + (1 - 0.5) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
-        [0.5 + (0 - 0.5) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0.5 + (0 - 0.5) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0.5 + (1 - 0.5) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [1 + (1 - 1) * 0.5, 0.5 + (1 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
       ].flat();
       const newPositions = new THREE.Float32BufferAttribute(
         newPositionsArray,
@@ -335,9 +335,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       const n2 = new THREE.Vector3(-1, 1, 0).normalize();
       const n3 = new THREE.Vector3(1, 1, 0).normalize();
       const n4 = new THREE.Vector3(
-        n1.x + (n3.x - n1.x) * 0.5,
-        n1.y + (n3.y - n1.y) * 0.5,
-        n1.z + (n3.z - n1.z) * 0.5
+        n0.x + (n2.x - n0.x) * 0.5,
+        n0.y + (n2.y - n0.y) * 0.5,
+        n0.z + (n2.z - n0.z) * 0.5
       ).normalize();
       const n5 = new THREE.Vector3(
         n0.x + (n3.x - n0.x) * 0.5,
@@ -345,9 +345,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         n0.z + (n3.z - n0.z) * 0.5
       ).normalize();
       const n6 = new THREE.Vector3(
-        n0.x + (n2.x - n0.x) * 0.5,
-        n0.y + (n2.y - n0.y) * 0.5,
-        n0.z + (n2.z - n0.z) * 0.5
+        n1.x + (n3.x - n1.x) * 0.5,
+        n1.y + (n3.y - n1.y) * 0.5,
+        n1.z + (n3.z - n1.z) * 0.5
       ).normalize();
       const newNormalsArray = [
         n0.toArray(),
@@ -360,16 +360,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         n6.toArray(), // added
         //
         new THREE.Vector3(
-          n4.x + (n3.x - n4.x) * 0.5,
-          n4.y + (n3.y - n4.y) * 0.5,
-          n4.z + (n3.z - n4.z) * 0.5
-        )
-          .normalize()
-          .toArray(), // added
-        new THREE.Vector3(
-          n5.x + (n3.x - n5.x) * 0.5,
-          n5.y + (n3.y - n5.y) * 0.5,
-          n5.z + (n3.z - n5.z) * 0.5
+          n4.x + (n2.x - n4.x) * 0.5,
+          n4.y + (n2.y - n4.y) * 0.5,
+          n4.z + (n2.z - n4.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -381,9 +374,16 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n6.x + (n2.x - n6.x) * 0.5,
-          n6.y + (n2.y - n6.y) * 0.5,
-          n6.z + (n2.z - n6.z) * 0.5
+          n5.x + (n3.x - n5.x) * 0.5,
+          n5.y + (n3.y - n5.y) * 0.5,
+          n5.z + (n3.z - n5.z) * 0.5
+        )
+          .normalize()
+          .toArray(), // added
+        new THREE.Vector3(
+          n6.x + (n3.x - n6.x) * 0.5,
+          n6.y + (n3.y - n6.y) * 0.5,
+          n6.z + (n3.z - n6.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -395,14 +395,14 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 0.1],
         [0.1, 0.1],
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
-        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
         [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0,0.05]
+        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
+        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
-        [0.05 + (0.1 - 0.05) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
-        [0.05 + (0 - 0.05) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
+        [0.05 + (0 - 0.05) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
+        [0.05 + (0.1 - 0.05) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
+        [0.1 + (0.1 - 0.1) * 0.5, 0.05 + (0.1 - 0.05) * 0.5], // added
       ].flat();
       const newUvs = new THREE.Float32BufferAttribute(newUvsArray, 2);
       const newGeometry = new THREE.BufferGeometry();
@@ -514,9 +514,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ilp: new IntersectionLoopPicker([
             new IntersectionLoop(
               [
-                new EdgeIntersection(1, 3, 0.5),
-                new EdgeIntersection(0, 3, 0.5),
                 new EdgeIntersection(0, 2, 0.5),
+                new EdgeIntersection(0, 3, 0.5),
+                new EdgeIntersection(1, 3, 0.5),
               ],
               false
             ),
@@ -530,9 +530,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ilp: new IntersectionLoopPicker([
             new IntersectionLoop(
               [
-                new EdgeIntersection(0, 1, 0.25),
-                new EdgeIntersection(0, 3, 0.25),
                 new EdgeIntersection(2, 3, 0.25),
+                new EdgeIntersection(0, 3, 0.25),
+                new EdgeIntersection(0, 1, 0.25),
               ],
               false
             ),
@@ -548,25 +548,25 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       expect(inputArea.toJSON()).toEqual(area.toJSON());
 
       const newIndicesArray = [
-        // [0, 1, 3], // removed
-        // [0, 3, 2], // removed
+        // [0, 2, 3], // removed
+        // [0, 3, 1], // removed
         //
-        [3, 4, 5], // added
-        [4, 1, 5], // added
-        // [1, 0, 5], // added -> removed
-        // [5, 0, 6], // added -> removed
-        // [3, 5, 2], // added -> removed
-        // [5, 6, 2], // added -> removed
+        // [4, 0, 5], // added -> removed
+        // [2, 5, 3], // added -> removed
+        // [2, 4, 5], // added -> removed
+        [3, 5, 6], // added
+        [5, 1, 6], // added
+        // [5, 0, 1], // added -> removed
         //
         [7, 0, 8], // added
         [1, 7, 5], // added
         [7, 8, 5], // added
         [5, 8, 9], // added
-        [8, 6, 9], // added
-        [8, 0, 6], // added
+        [8, 4, 9], // added
+        [8, 0, 4], // added
         [5, 9, 10], // added
-        [9, 6, 10], // added
-        [6, 2, 10], // added
+        [9, 4, 10], // added
+        [4, 2, 10], // added
         [10, 2, 11], // added
         [5, 11, 3], // added
         [5, 10, 11], // added
@@ -578,12 +578,12 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 1, 0],
         [1, 1, 0],
         //
-        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [1,0.5,0]
-        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0.5,0.5,0]
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0,0.5,0]
+        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [0.5,0.5,0]
+        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added [1,0.5,0]
         //
         [0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
-        [0 + (1 - 0) * 0.25, 0 + (1 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
+        [0 + (0.5 - 0) * 0.5, 0 + (0.5 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0.5 - 0) * 0.5, 0.5 + (0.5 - 0.5) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0.5 - 0) * 0.5, 1 + (0.5 - 1) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (1 - 0) * 0.25, 1 + (1 - 1) * 0.25, 0 + (0 - 0) * 0.25], // added
@@ -597,9 +597,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
       const n2 = new THREE.Vector3(-1, 1, 0).normalize();
       const n3 = new THREE.Vector3(1, 1, 0).normalize();
       const n4 = new THREE.Vector3(
-        n1.x + (n3.x - n1.x) * 0.5,
-        n1.y + (n3.y - n1.y) * 0.5,
-        n1.z + (n3.z - n1.z) * 0.5
+        n0.x + (n2.x - n0.x) * 0.5,
+        n0.y + (n2.y - n0.y) * 0.5,
+        n0.z + (n2.z - n0.z) * 0.5
       ).normalize();
       const n5 = new THREE.Vector3(
         n0.x + (n3.x - n0.x) * 0.5,
@@ -607,9 +607,9 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         n0.z + (n3.z - n0.z) * 0.5
       ).normalize();
       const n6 = new THREE.Vector3(
-        n0.x + (n2.x - n0.x) * 0.5,
-        n0.y + (n2.y - n0.y) * 0.5,
-        n0.z + (n2.z - n0.z) * 0.5
+        n1.x + (n3.x - n1.x) * 0.5,
+        n1.y + (n3.y - n1.y) * 0.5,
+        n1.z + (n3.z - n1.z) * 0.5
       ).normalize();
       const newNormalsArray = [
         n0.toArray(),
@@ -629,16 +629,16 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n0.x + (n3.x - n0.x) * 0.25,
-          n0.y + (n3.y - n0.y) * 0.25,
-          n0.z + (n3.z - n0.z) * 0.25
+          n0.x + (n5.x - n0.x) * 0.5,
+          n0.y + (n5.y - n0.y) * 0.5,
+          n0.z + (n5.z - n0.z) * 0.5
         )
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n6.x + (n5.x - n6.x) * 0.5,
-          n6.y + (n5.y - n6.y) * 0.5,
-          n6.z + (n5.z - n6.z) * 0.5
+          n4.x + (n5.x - n4.x) * 0.5,
+          n4.y + (n5.y - n4.y) * 0.5,
+          n4.z + (n5.z - n4.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -664,12 +664,12 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         [0, 0.1],
         [0.1, 0.1],
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
-        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
         [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0,0.05]
+        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.05,0.05]
+        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added [0.1,0.05]
         //
         [0 + (0.1 - 0) * 0.25, 0 + (0 - 0) * 0.25], // added
-        [0 + (0.1 - 0) * 0.25, 0 + (0.1 - 0) * 0.25], // added
+        [0 + (0.05 - 0) * 0.5, 0 + (0.05 - 0) * 0.5], // added
         [0 + (0.05 - 0) * 0.5, 0.05 + (0.05 - 0.05) * 0.5], // added
         [0 + (0.05 - 0) * 0.5, 0.1 + (0.05 - 0.1) * 0.5], // added
         [0 + (0.1 - 0) * 0.25, 0.1 + (0.1 - 0.1) * 0.25], // added
@@ -691,8 +691,8 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
             new IntersectionLoop(
               [
                 new VertexIntersection(4, true),
-                new VertexIntersection(5, true),
                 new VertexIntersection(9, true),
+                new VertexIntersection(5, true),
                 new VertexIntersection(6, true),
               ],
               false
@@ -787,19 +787,19 @@ describe("cutGeometryUsingIls()", () => {
 
     const indicesArray = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
       //
       [4, 5, 6],
-      [4, 5, 7],
-      [5, 6, 7],
-      [6, 4, 7],
+      [4, 7, 5],
+      [5, 7, 6],
+      [6, 7, 4],
       //
       [8, 9, 10],
-      [8, 9, 11],
-      [9, 10, 11],
-      [10, 8, 11],
+      [8, 11, 9],
+      [9, 11, 10],
+      [10, 11, 8],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
     const positionsArray = [
@@ -864,13 +864,12 @@ describe("cutGeometryUsingIls()", () => {
     geometry.setAttribute("uv", uvs);
   });
 
-  // This example is imported from test/cross-section/area/find.test.ts.
   test("three triangular pyramids example", () => {
     const ils = [
       new IntersectionLoop(
         [
-          new EdgeIntersection(1, 3, 0.5),
           new EdgeIntersection(0, 3, 0.5),
+          new EdgeIntersection(1, 3, 0.5),
           new EdgeIntersection(2, 3, 0.5),
         ],
         true
@@ -901,29 +900,29 @@ describe("cutGeometryUsingIls()", () => {
 
     const newIndicesArray = [
       [0, 1, 2],
-      // [0, 1, 3], // removed
-      // [1, 2, 3], // removed
-      // [2, 0, 3], // removed
+      // [0, 3, 1], // removed
+      // [1, 3, 2], // removed
+      // [2, 3, 0], // removed
       //
       [4, 5, 6],
-      // [4, 5, 7], // removed
-      // [5, 6, 7], // removed
-      // [6, 4, 7], // removed
+      // [4, 7, 5], // removed
+      // [5, 7, 6], // removed
+      // [6, 7, 4], // removed
       //
       [8, 9, 10],
-      // [8, 9, 11], // removed
-      // [9, 10, 11], // removed
-      [10, 8, 11],
+      // [8, 11, 9], // removed
+      // [9, 11, 10], // removed
+      [10, 11, 8],
       //
       [3, 12, 13], // added
       [12, 0, 13], // added
-      [12, 1, 0], // added
+      [0, 1, 13], // added
       [3, 13, 14], // added
-      [13, 0, 14], // added
-      [0, 2, 14], // added
+      [13, 1, 14], // added
+      [1, 2, 14], // added
       [3, 14, 12], // added
-      [14, 2, 12], // added
-      [2, 1, 12], // added
+      [14, 0, 12], // added
+      [14, 2, 0], // added
       //
       [7, 15, 16], // added
       [15, 5, 16], // added
@@ -955,8 +954,8 @@ describe("cutGeometryUsingIls()", () => {
       [4, 0.5, 1],
       [5, 1, 0.5],
       //
-      [1 + (0 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
       [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+      [1 + (0 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
       [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 1 + (0 - 1) * 0.5], // added
       //
       [3 + (3 - 3) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0.5 - 0) * 0.5], // added
@@ -994,16 +993,16 @@ describe("cutGeometryUsingIls()", () => {
       n11.toArray(),
       //
       new THREE.Vector3(
-        n1.x + (n3.x - n1.x) * 0.5,
-        n1.y + (n3.y - n1.y) * 0.5,
-        n1.z + (n3.z - n1.z) * 0.5
+        n0.x + (n3.x - n0.x) * 0.5,
+        n0.y + (n3.y - n0.y) * 0.5,
+        n0.z + (n3.z - n0.z) * 0.5
       )
         .normalize()
         .toArray(), // added
       new THREE.Vector3(
-        n0.x + (n3.x - n0.x) * 0.5,
-        n0.y + (n3.y - n0.y) * 0.5,
-        n0.z + (n3.z - n0.z) * 0.5
+        n1.x + (n3.x - n1.x) * 0.5,
+        n1.y + (n3.y - n1.y) * 0.5,
+        n1.z + (n3.z - n1.z) * 0.5
       )
         .normalize()
         .toArray(), // added
@@ -1055,8 +1054,8 @@ describe("cutGeometryUsingIls()", () => {
       [0.6, 0.2],
       [0.7, 0.1],
       //
-      [0.2 + (0.1 - 0.2) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
       [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added
+      [0.2 + (0.1 - 0.2) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
       [0 + (0.1 - 0) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
       //
       [0.5 + (0.4 - 0.5) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
@@ -1153,7 +1152,6 @@ describe("cutGeometryUsingIls()", () => {
 });
 
 describe("cutGeometryUsingIl()", () => {
-  // This example is imported from test/cross-section/area/find.test.ts.
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
@@ -1163,19 +1161,19 @@ describe("cutGeometryUsingIl()", () => {
 
       const indicesArray = [
         [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
+        [0, 3, 1],
+        [1, 3, 2],
+        [2, 3, 0],
         //
         [4, 5, 6],
-        [4, 5, 7],
-        [5, 6, 7],
-        [6, 4, 7],
+        [4, 7, 5],
+        [5, 7, 6],
+        [6, 7, 4],
         //
         [8, 9, 10],
-        [8, 9, 11],
-        [9, 10, 11],
-        [10, 8, 11],
+        [8, 11, 9],
+        [9, 11, 10],
+        [10, 11, 8],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const positionsArray = [
@@ -1243,8 +1241,8 @@ describe("cutGeometryUsingIl()", () => {
     test("all intersections are edges", () => {
       const il = new IntersectionLoop(
         [
-          new EdgeIntersection(1, 3, 0.5),
           new EdgeIntersection(0, 3, 0.5),
+          new EdgeIntersection(1, 3, 0.5),
           new EdgeIntersection(2, 3, 0.5),
         ],
         true
@@ -1258,29 +1256,29 @@ describe("cutGeometryUsingIl()", () => {
 
       const newIndicesArray = [
         [0, 1, 2],
-        // [0, 1, 3], // removed
-        // [1, 2, 3], // removed
-        // [2, 0, 3], // removed
+        // [0, 3, 1], // removed
+        // [1, 3, 2], // removed
+        // [2, 3, 0], // removed
         //
         [4, 5, 6],
-        [4, 5, 7],
-        [5, 6, 7],
-        [6, 4, 7],
+        [4, 7, 5],
+        [5, 7, 6],
+        [6, 7, 4],
         //
         [8, 9, 10],
-        [8, 9, 11],
-        [9, 10, 11],
-        [10, 8, 11],
+        [8, 11, 9],
+        [9, 11, 10],
+        [10, 11, 8],
         //
         [3, 12, 13], // added
         [12, 0, 13], // added
-        [12, 1, 0], // added
+        [0, 1, 13], // added
         [3, 13, 14], // added
-        [13, 0, 14], // added
-        [0, 2, 14], // added
+        [13, 1, 14], // added
+        [1, 2, 14], // added
         [3, 14, 12], // added
-        [14, 2, 12], // added
-        [2, 1, 12], // added
+        [14, 0, 12], // added
+        [14, 2, 0], // added
       ].flat();
       const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
       const newPositionsArray = [
@@ -1299,8 +1297,8 @@ describe("cutGeometryUsingIl()", () => {
         [4, 0.5, 1],
         [5, 1, 0.5],
         //
-        [1 + (0 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [1 + (0 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 1 + (0 - 1) * 0.5], // added
       ].flat();
       const newPositions = new THREE.Float32BufferAttribute(
@@ -1332,16 +1330,16 @@ describe("cutGeometryUsingIl()", () => {
         new THREE.Vector3(1, 1, 0).normalize().toArray(),
         //
         new THREE.Vector3(
-          n1.x + (n3.x - n1.x) * 0.5,
-          n1.y + (n3.y - n1.y) * 0.5,
-          n1.z + (n3.z - n1.z) * 0.5
+          n0.x + (n3.x - n0.x) * 0.5,
+          n0.y + (n3.y - n0.y) * 0.5,
+          n0.z + (n3.z - n0.z) * 0.5
         )
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n0.x + (n3.x - n0.x) * 0.5,
-          n0.y + (n3.y - n0.y) * 0.5,
-          n0.z + (n3.z - n0.z) * 0.5
+          n1.x + (n3.x - n1.x) * 0.5,
+          n1.y + (n3.y - n1.y) * 0.5,
+          n1.z + (n3.z - n1.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -1370,8 +1368,8 @@ describe("cutGeometryUsingIl()", () => {
         [0.6, 0.2],
         [0.7, 0.1],
         //
-        [0.2 + (0.1 - 0.2) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
         [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added
+        [0.2 + (0.1 - 0.2) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
         [0 + (0.1 - 0) * 0.5, 0.2 + (0.1 - 0.2) * 0.5], // added
       ].flat();
       const newUvs = new THREE.Float32BufferAttribute(newUvsArray, 2);
@@ -1461,19 +1459,19 @@ describe("cutGeometryUsingIl()", () => {
 
       const newIndicesArray = [
         [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
+        [0, 3, 1],
+        [1, 3, 2],
+        [2, 3, 0],
         //
         [4, 5, 6],
-        // [4, 5, 7], // removed
-        // [5, 6, 7], // removed
-        // [6, 4, 7], // removed
+        // [4, 7, 5], // removed
+        // [5, 7, 6], // removed
+        // [6, 7, 4], // removed
         //
         [8, 9, 10],
-        [8, 9, 11],
-        [9, 10, 11],
-        [10, 8, 11],
+        [8, 11, 9],
+        [9, 11, 10],
+        [10, 11, 8],
         //
         [4, 12, 7], // added
         [4, 5, 12], // added
@@ -1651,19 +1649,19 @@ describe("cutGeometryUsingIl()", () => {
 
       const newIndicesArray = [
         [0, 1, 2],
-        [0, 1, 3],
-        [1, 2, 3],
-        [2, 0, 3],
+        [0, 3, 1],
+        [1, 3, 2],
+        [2, 3, 0],
         //
         [4, 5, 6],
-        [4, 5, 7],
-        [5, 6, 7],
-        [6, 4, 7],
+        [4, 7, 5],
+        [5, 7, 6],
+        [6, 7, 4],
         //
         [8, 9, 10],
-        // [8, 9, 11], // removed
-        // [9, 10, 11], // removed
-        [10, 8, 11], // removed
+        // [8, 11, 9], // removed
+        // [9, 11, 10], // removed
+        [10, 11, 8], // removed
         //
         [11, 12, 8], // added
         [12, 9, 8], // added
@@ -1822,11 +1820,11 @@ describe("cutGeometryUsingIl()", () => {
       /**
        * flat layout:
        *   2(0, 1) 3(1, 1)
-       *   0(0, 0) 1(1, 0)  ◤1 ◢0
+       *   0(0, 0) 1(1, 0)  ◤0 ◢1
        */
       const indicesArray = [
-        [0, 1, 3],
-        [0, 3, 2],
+        [0, 2, 3],
+        [0, 3, 1],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const positionsArray = [
@@ -1860,9 +1858,9 @@ describe("cutGeometryUsingIl()", () => {
     test("check if il.closed is false", () => {
       const il = new IntersectionLoop(
         [
-          new EdgeIntersection(1, 3, 0.5),
-          new EdgeIntersection(0, 3, 0.5),
           new EdgeIntersection(0, 2, 0.5),
+          new EdgeIntersection(0, 3, 0.5),
+          new EdgeIntersection(1, 3, 0.5),
         ],
         false
       );
@@ -1874,15 +1872,15 @@ describe("cutGeometryUsingIl()", () => {
       expect(inputIl).toEqual(il);
 
       const newIndicesArray = [
-        // [0, 1, 3], // removed
-        // [0, 3, 2], // removed
+        // [0, 2, 3], // removed
+        // [0, 3, 1], // removed
         //
-        [3, 4, 5], // added
-        [4, 1, 5], // added
-        [1, 0, 5], // added
-        [5, 0, 6], // added
-        [3, 5, 2], // added
-        [5, 6, 2], // added
+        [4, 0, 5], // added
+        [2, 5, 3], // added
+        [2, 4, 5], // added
+        [3, 5, 6], // added
+        [5, 1, 6], // added
+        [5, 0, 1], // added
       ].flat();
       const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
       const newPositionsArray = [
@@ -1891,9 +1889,9 @@ describe("cutGeometryUsingIl()", () => {
         [0, 1, 0],
         [1, 1, 0],
         //
-        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
-        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [0 + (1 - 0) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
+        [1 + (1 - 1) * 0.5, 0 + (1 - 0) * 0.5, 0 + (0 - 0) * 0.5], // added
       ].flat();
       const newPositions = new THREE.Float32BufferAttribute(
         newPositionsArray,
@@ -1910,9 +1908,9 @@ describe("cutGeometryUsingIl()", () => {
         n3.toArray(),
         //
         new THREE.Vector3(
-          n1.x + (n3.x - n1.x) * 0.5,
-          n1.y + (n3.y - n1.y) * 0.5,
-          n1.z + (n3.z - n1.z) * 0.5
+          n0.x + (n2.x - n0.x) * 0.5,
+          n0.y + (n2.y - n0.y) * 0.5,
+          n0.z + (n2.z - n0.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -1924,9 +1922,9 @@ describe("cutGeometryUsingIl()", () => {
           .normalize()
           .toArray(), // added
         new THREE.Vector3(
-          n0.x + (n2.x - n0.x) * 0.5,
-          n0.y + (n2.y - n0.y) * 0.5,
-          n0.z + (n2.z - n0.z) * 0.5
+          n1.x + (n3.x - n1.x) * 0.5,
+          n1.y + (n3.y - n1.y) * 0.5,
+          n1.z + (n3.z - n1.z) * 0.5
         )
           .normalize()
           .toArray(), // added
@@ -1938,9 +1936,9 @@ describe("cutGeometryUsingIl()", () => {
         [0, 0.1],
         [0.1, 0.1],
         //
-        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added
-        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added
         [0 + (0 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added
+        [0 + (0.1 - 0) * 0.5, 0 + (0.1 - 0) * 0.5], // added
+        [0.1 + (0.1 - 0.1) * 0.5, 0 + (0.1 - 0) * 0.5], // added
       ].flat();
       const newUvs = new THREE.Float32BufferAttribute(newUvsArray, 2);
       const newGeometry = new THREE.BufferGeometry();

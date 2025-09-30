@@ -32,8 +32,8 @@ describe("extrudeGeometry()", () => {
     const SQRT1_2 = Math.SQRT1_2;
 
     const indicesArray = [
-      [0, 1, 3],
-      [0, 3, 2],
+      [0, 2, 3],
+      [0, 3, 1],
     ].flat();
     const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
     const positionsArray = [
@@ -43,6 +43,7 @@ describe("extrudeGeometry()", () => {
       [1, 1, 0],
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
+    // TODO: change 1 to -1
     const normalsArray = [
       [0, 0, 1],
       [0, 0, 1],
@@ -67,11 +68,11 @@ describe("extrudeGeometry()", () => {
     const actualGeometry = extrudeGeometry(geometry, displacement);
 
     const expectedIndicesArray = [
-      [0, 1, 3],
-      [0, 3, 2],
+      [0, 2, 3],
+      [0, 3, 1],
       //
-      [4, 5, 7],
-      [4, 7, 6],
+      [4, 6, 7],
+      [4, 7, 5],
       //
       [8, 12, 9],
       [12, 13, 9],
@@ -98,13 +99,13 @@ describe("extrudeGeometry()", () => {
       [1, 1, displacement],
       //
       [0, 0, 0],
-      [1, 0, 0],
-      [1, 1, 0],
       [0, 1, 0],
+      [1, 1, 0],
+      [1, 0, 0],
       [0, 0, displacement],
-      [1, 0, displacement],
-      [1, 1, displacement],
       [0, 1, displacement],
+      [1, 1, displacement],
+      [1, 0, displacement],
     ].flat();
     const expectedPositions = new THREE.Float32BufferAttribute(
       expectedPositionsArray,
@@ -121,13 +122,13 @@ describe("extrudeGeometry()", () => {
       [0, 0, 1],
       [0, 0, 1],
       //
-      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, -SQRT1_2, 0],
-      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
-      [-SQRT1_2, -SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, -SQRT1_2, 0],
-      [SQRT1_2, SQRT1_2, -0],
+      [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
     ].flat();
     const expectedNormals = new THREE.Float32BufferAttribute(
@@ -167,7 +168,6 @@ describe("extrudeGeometry()", () => {
 });
 
 describe("flipNormals()", () => {
-  // Import from test/cross-section/area/find.test.ts.
   test("example of a plane (flat)", () => {
     /**
      * flat layout:
@@ -187,7 +187,6 @@ describe("flipNormals()", () => {
     expect(normals).toEqual(expectedNormals);
   });
 
-  // Import from test/cross-section/area/find.test.ts.
   test("example of an upper half cube (bottomless)", () => {
     const SQRT1_3 = Math.sqrt(1 / 3);
     const SQRT1_2 = Math.SQRT1_2;
@@ -243,7 +242,6 @@ describe("flipNormals()", () => {
 
 describe("extrudePositions()", () => {
   describe("else", () => {
-    // Import from test/cross-section/area/find.test.ts.
     test("example of a plane (flat)", () => {
       /**
        * flat layout:
@@ -286,7 +284,6 @@ describe("extrudePositions()", () => {
       expect(positions).toEqual(expectedPositions);
     });
 
-    // Import from test/cross-section/area/find.test.ts.
     test("example of an upper half cube (bottomless)", () => {
       const SQRT1_3 = Math.sqrt(1 / 3);
       const SQRT1_2 = Math.SQRT1_2;
@@ -396,7 +393,6 @@ describe("extrudePositions()", () => {
 
 describe("findBoundaries()", () => {
   // NOTE: This testing is expensive to perform.
-  // Import from test/cross-section/intersection/intersection-loops.test.ts.
   test("if (count > 1000)", () => {
     const spy = vi
       .spyOn(console, "error")
@@ -440,7 +436,6 @@ describe("findBoundaries()", () => {
       spy = vi.spyOn(console, "error");
     });
 
-    // Import from test/cross-section/area/find.test.ts.
     test("example of a plane (flat)", () => {
       /**
        * flat layout:
@@ -449,43 +444,42 @@ describe("findBoundaries()", () => {
        *   0(-1,-1) 1(0,-1) 2(1,-1)
        */
       const indicesArray = [
-        [0, 1, 4],
-        [0, 4, 3],
-        [1, 2, 5],
-        [1, 5, 4],
-        [3, 4, 7],
-        [3, 7, 6],
-        [4, 5, 8],
-        [4, 8, 7],
+        [0, 3, 4],
+        [0, 4, 1],
+        [1, 4, 5],
+        [1, 5, 2],
+        [3, 6, 7],
+        [3, 7, 4],
+        [4, 7, 8],
+        [4, 8, 5],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
       const allEdges = createAllEdges(nPolygonIndices);
       const indicesMap = createIndicesMap(nPolygonIndices);
       const expected: EdgeLoop[] = [
-        new EdgeLoop([0, 1, 2, 5, 8, 7, 6, 3], true),
+        new EdgeLoop([0, 3, 6, 7, 8, 5, 2, 1], true),
       ];
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    // Import from test/cross-section/area/find.test.ts.
     test("example of an upper half cube (bottomless)", () => {
       const indicesArray = [
-        [5, 8, 9],
-        [4, 5, 6],
-        [4, 6, 7],
-        [7, 13, 6],
-        [4, 11, 7],
-        [11, 12, 7],
-        [7, 12, 13],
-        [13, 14, 6],
-        [6, 14, 15],
-        [6, 15, 5],
-        [5, 9, 4],
-        [9, 10, 4],
-        [4, 10, 11],
-        [15, 8, 5],
+        [4, 8, 9],
+        [7, 5, 4],
+        [7, 6, 5],
+        [5, 11, 6],
+        [4, 9, 5],
+        [5, 9, 10],
+        [5, 10, 11],
+        [6, 11, 12],
+        [6, 13, 7],
+        [6, 12, 13],
+        [7, 13, 14],
+        [7, 15, 4],
+        [7, 14, 15],
+        [4, 15, 8],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
@@ -498,22 +492,23 @@ describe("findBoundaries()", () => {
       expect(spy).toHaveBeenCalledTimes(0);
     });
 
+    // TODO: turn a triangular prism into a cube
     test("example of a triangular prism (no top or bottom)", () => {
       const indicesArray = [
-        [0, 1, 4],
-        [0, 4, 3],
-        [1, 2, 5],
-        [1, 5, 4],
-        [2, 0, 3],
-        [2, 3, 5],
+        [0, 3, 4],
+        [0, 4, 1],
+        [1, 4, 5],
+        [1, 5, 2],
+        [2, 5, 3],
+        [2, 3, 0],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
       const allEdges = createAllEdges(nPolygonIndices);
       const indicesMap = createIndicesMap(nPolygonIndices);
       const expected: EdgeLoop[] = [
-        new EdgeLoop([0, 1, 2], true),
-        new EdgeLoop([4, 3, 5], true),
+        new EdgeLoop([3, 4, 5], true),
+        new EdgeLoop([1, 0, 2], true),
       ];
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
@@ -617,7 +612,6 @@ describe("createSideGeometry()", () => {
   });
 
   describe("else", () => {
-    // Import from test/cross-section/area/find.test.ts.
     test("example of a plane (flat)", () => {
       /**
        * flat layout:
@@ -763,7 +757,6 @@ describe("createSideGeometry()", () => {
       expect(actualGeometry).toEqual(expectedGeometry);
     });
 
-    // Import from test/cross-section/area/find.test.ts.
     test("example of an upper half cube (bottomless)", () => {
       const SQRT1_3 = Math.sqrt(1 / 3);
       const SQRT1_2 = Math.SQRT1_2;
@@ -956,13 +949,12 @@ describe("createSideGeometry()", () => {
 });
 
 describe("concatGeometries()", () => {
-  // This example is imported from test/cross-section/area/cut.test.ts.
   test("three triangular pyramids example", () => {
     const indices1Array = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
     ].flat();
     const indices1 = new THREE.Uint16BufferAttribute(indices1Array, 1);
     const positions1Array = [
@@ -994,9 +986,9 @@ describe("concatGeometries()", () => {
 
     const indices2Array = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
     ].flat();
     const indices2 = new THREE.Uint16BufferAttribute(indices2Array, 1);
     const positions2Array = [
@@ -1028,9 +1020,9 @@ describe("concatGeometries()", () => {
 
     const indices3Array = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
     ].flat();
     const indices3 = new THREE.Uint16BufferAttribute(indices3Array, 1);
     const positions3Array = [
@@ -1062,19 +1054,19 @@ describe("concatGeometries()", () => {
 
     const expectedIndicesArray = [
       [0, 1, 2],
-      [0, 1, 3],
-      [1, 2, 3],
-      [2, 0, 3],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
       //
       [4, 5, 6],
-      [4, 5, 7],
-      [5, 6, 7],
-      [6, 4, 7],
+      [4, 7, 5],
+      [5, 7, 6],
+      [6, 7, 4],
       //
       [8, 9, 10],
-      [8, 9, 11],
-      [9, 10, 11],
-      [10, 8, 11],
+      [8, 11, 9],
+      [9, 11, 10],
+      [10, 11, 8],
     ].flat();
     const expectedIndices = new THREE.Uint16BufferAttribute(
       expectedIndicesArray,
