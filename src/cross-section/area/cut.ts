@@ -113,6 +113,7 @@ export function cutGeometryUsingIl(
     il.intersections.push(il.intersections[0]);
     newIl.intersections.push(newIl.intersections[0]);
   }
+  // TODO: handle counterclockwise as well as clockwise
   for (let i = 0, l = il.intersections.length - 1; i < l; i++) {
     const v0 = il.intersections[i];
     const v1 = il.intersections[i + 1];
@@ -164,7 +165,7 @@ indicesV1: ${JSON.stringify(indicesV1)}
         3
       );
       if (v0.frontV === v1.frontV) {
-        indexLists.push([v0.frontV, newV0.v, newV1.v]);
+        indexLists.push([newV0.v, v0.frontV, newV1.v]);
         const pointNewV0 = getPoint(newPositions, newV0.v);
         const pointNewV1 = getPoint(newPositions, newV1.v);
         const pointV0BackV = getPoint(newPositions, v0.backV);
@@ -173,16 +174,16 @@ indicesV1: ${JSON.stringify(indicesV1)}
         const diff2 = pointNewV1.clone().sub(pointV0BackV);
         if (diff1.length() < diff2.length()) {
           // Use diff1(＼) as the diagonal.
-          indexLists.push([newV0.v, v1.backV, newV1.v]);
-          indexLists.push([newV0.v, v0.backV, v1.backV]);
+          indexLists.push([v0.backV, newV0.v, v1.backV]);
+          indexLists.push([newV0.v, newV1.v, v1.backV]);
         } else {
           // Use diff2(／) as the diagonal.
-          indexLists.push([newV0.v, v0.backV, newV1.v]);
-          indexLists.push([v0.backV, v1.backV, newV1.v]);
+          indexLists.push([v0.backV, newV0.v, newV1.v]);
+          indexLists.push([v0.backV, newV1.v, v1.backV]);
         }
       } else {
         // This case: v0.backV === v1.backV
-        indexLists.push([newV0.v, v0.backV, newV1.v]);
+        indexLists.push([v0.backV, newV0.v, newV1.v]);
         const pointNewV0 = getPoint(newPositions, newV0.v);
         const pointNewV1 = getPoint(newPositions, newV1.v);
         const pointV0FrontV = getPoint(newPositions, v0.frontV);
@@ -191,12 +192,12 @@ indicesV1: ${JSON.stringify(indicesV1)}
         const diff2 = pointNewV1.clone().sub(pointV0FrontV);
         if (diff1.length() < diff2.length()) {
           // Use diff1(／) as the diagonal.
-          indexLists.push([v0.frontV, newV0.v, v1.frontV]);
-          indexLists.push([newV0.v, newV1.v, v1.frontV]);
+          indexLists.push([newV0.v, v0.frontV, v1.frontV]);
+          indexLists.push([newV0.v, v1.frontV, newV1.v]);
         } else {
           // Use diff2(＼) as the diagonal.
-          indexLists.push([v0.frontV, newV1.v, v1.frontV]);
-          indexLists.push([v0.frontV, newV0.v, newV1.v]);
+          indexLists.push([newV0.v, v0.frontV, newV1.v]);
+          indexLists.push([v0.frontV, v1.frontV, newV1.v]);
         }
       }
     } else if (
@@ -204,15 +205,15 @@ indicesV1: ${JSON.stringify(indicesV1)}
       v1 instanceof VertexIntersection
     ) {
       const newV0 = newIl.intersections[i] as VertexIntersection;
-      indexLists.push([v0.frontV, newV0.v, v1.v]);
-      indexLists.push([newV0.v, v0.backV, v1.v]);
+      indexLists.push([newV0.v, v0.frontV, v1.v]);
+      indexLists.push([v0.backV, newV0.v, v1.v]);
     } else if (
       v0 instanceof VertexIntersection &&
       v1 instanceof EdgeIntersection
     ) {
       const newV1 = newIl.intersections[i + 1] as VertexIntersection;
-      indexLists.push([v0.v, newV1.v, v1.frontV]);
-      indexLists.push([v0.v, v1.backV, newV1.v]);
+      indexLists.push([v0.v, v1.frontV, newV1.v]);
+      indexLists.push([v0.v, newV1.v, v1.backV]);
     }
   }
   if (il.closed) {
