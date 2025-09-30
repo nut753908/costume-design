@@ -825,12 +825,16 @@ describe("cutGeometryUsingIls()", () => {
       new THREE.Vector3(-1, -1, 3).normalize().toArray(),
       new THREE.Vector3(-1, 3, -1).normalize().toArray(),
       //
-      new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+      new THREE.Vector3(-6, 1, 0)
+        .normalize()
+        .toArray(),
       new THREE.Vector3(2, -3, -4).normalize().toArray(),
       new THREE.Vector3(2, -3, 4).normalize().toArray(),
       new THREE.Vector3(2, 5, 0).normalize().toArray(),
       //
-      new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+      new THREE.Vector3(-1, 0, -1)
+        .normalize()
+        .toArray(),
       new THREE.Vector3(1, -1, 0).normalize().toArray(),
       new THREE.Vector3(-1, 0, 1).normalize().toArray(),
       new THREE.Vector3(1, 1, 0).normalize().toArray(),
@@ -1197,12 +1201,16 @@ describe("cutGeometryUsingIl()", () => {
         new THREE.Vector3(-1, -1, 3).normalize().toArray(),
         new THREE.Vector3(-1, 3, -1).normalize().toArray(),
         //
-        new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+        new THREE.Vector3(-6, 1, 0)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(2, -3, -4).normalize().toArray(),
         new THREE.Vector3(2, -3, 4).normalize().toArray(),
         new THREE.Vector3(2, 5, 0).normalize().toArray(),
         //
-        new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+        new THREE.Vector3(-1, 0, -1)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(1, -1, 0).normalize().toArray(),
         new THREE.Vector3(-1, 0, 1).normalize().toArray(),
         new THREE.Vector3(1, 1, 0).normalize().toArray(),
@@ -1309,12 +1317,16 @@ describe("cutGeometryUsingIl()", () => {
         n2.toArray(),
         n3.toArray(),
         //
-        new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+        new THREE.Vector3(-6, 1, 0)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(2, -3, -4).normalize().toArray(),
         new THREE.Vector3(2, -3, 4).normalize().toArray(),
         new THREE.Vector3(2, 5, 0).normalize().toArray(),
         //
-        new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+        new THREE.Vector3(-1, 0, -1)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(1, -1, 0).normalize().toArray(),
         new THREE.Vector3(-1, 0, 1).normalize().toArray(),
         new THREE.Vector3(1, 1, 0).normalize().toArray(),
@@ -1510,7 +1522,9 @@ describe("cutGeometryUsingIl()", () => {
         n6.toArray(),
         n7.toArray(),
         //
-        new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+        new THREE.Vector3(-1, 0, -1)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(1, -1, 0).normalize().toArray(),
         new THREE.Vector3(-1, 0, 1).normalize().toArray(),
         new THREE.Vector3(1, 1, 0).normalize().toArray(),
@@ -1689,7 +1703,9 @@ describe("cutGeometryUsingIl()", () => {
         new THREE.Vector3(-1, -1, 3).normalize().toArray(),
         new THREE.Vector3(-1, 3, -1).normalize().toArray(),
         //
-        new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+        new THREE.Vector3(-6, 1, 0)
+          .normalize()
+          .toArray(),
         new THREE.Vector3(2, -3, -4).normalize().toArray(),
         new THREE.Vector3(2, -3, 4).normalize().toArray(),
         new THREE.Vector3(2, 5, 0).normalize().toArray(),

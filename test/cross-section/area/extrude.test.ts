@@ -1098,12 +1098,16 @@ describe("concatGeometries()", () => {
       new THREE.Vector3(-1, -1, 3).normalize().toArray(),
       new THREE.Vector3(-1, 3, -1).normalize().toArray(),
       //
-      new THREE.Vector3(-6, 1, 0).normalize().toArray(),
+      new THREE.Vector3(-6, 1, 0)
+        .normalize()
+        .toArray(),
       new THREE.Vector3(2, -3, -4).normalize().toArray(),
       new THREE.Vector3(2, -3, 4).normalize().toArray(),
       new THREE.Vector3(2, 5, 0).normalize().toArray(),
       //
-      new THREE.Vector3(-1, 0, -1).normalize().toArray(),
+      new THREE.Vector3(-1, 0, -1)
+        .normalize()
+        .toArray(),
       new THREE.Vector3(1, -1, 0).normalize().toArray(),
       new THREE.Vector3(-1, 0, 1).normalize().toArray(),
       new THREE.Vector3(1, 1, 0).normalize().toArray(),
