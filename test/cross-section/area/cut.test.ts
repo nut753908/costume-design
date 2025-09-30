@@ -864,7 +864,6 @@ describe("cutGeometryUsingIls()", () => {
     geometry.setAttribute("uv", uvs);
   });
 
-  // This example is imported from test/cross-section/area/find.test.ts.
   test("three triangular pyramids example", () => {
     const ils = [
       new IntersectionLoop(
@@ -1153,7 +1152,6 @@ describe("cutGeometryUsingIls()", () => {
 });
 
 describe("cutGeometryUsingIl()", () => {
-  // This example is imported from test/cross-section/area/find.test.ts.
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
