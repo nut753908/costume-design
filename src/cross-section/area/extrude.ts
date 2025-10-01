@@ -168,8 +168,8 @@ export function createSideGeometry(
     const b = count + i;
     const c = count + i + 1;
     const d = i + 1;
-    indicesArrays.push([a, b, c]);
-    indicesArrays.push([a, c, d]);
+    indicesArrays.push([c, b, a]);
+    indicesArrays.push([d, c, a]);
   }
   // (i = count - 1)
   if (boundary.closed) {
@@ -177,8 +177,8 @@ export function createSideGeometry(
     const b = count + count - 1;
     const c = count;
     const d = 0;
-    indicesArrays.push([a, b, c]);
-    indicesArrays.push([a, c, d]);
+    indicesArrays.push([c, b, a]);
+    indicesArrays.push([d, c, a]);
   }
 
   // Set positionsArrays.
