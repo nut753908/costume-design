@@ -4,6 +4,7 @@ import {
   extrudeGeometry,
   extrudePositions,
   findBoundaries,
+  flipIndices,
   flipNormals,
 } from "src/cross-section/area/extrude";
 import { EdgeLoop } from "src/cross-section/centerline/edge-loop";
@@ -43,12 +44,11 @@ describe("extrudeGeometry()", () => {
       [1, 1, 0],
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-    // TODO: change 1 to -1
     const normalsArray = [
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
     ].flat();
     const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
     const uvsArray = [
@@ -68,20 +68,20 @@ describe("extrudeGeometry()", () => {
     const actualGeometry = extrudeGeometry(geometry, displacement);
 
     const expectedIndicesArray = [
-      [0, 2, 3],
-      [0, 3, 1],
+      [3, 2, 0],
+      [1, 3, 0],
       //
       [4, 6, 7],
       [4, 7, 5],
       //
-      [8, 12, 9],
-      [12, 13, 9],
-      [9, 13, 10],
-      [13, 14, 10],
-      [10, 14, 11],
-      [14, 15, 11],
-      [11, 15, 8],
-      [15, 12, 8],
+      [12, 8, 13],
+      [8, 9, 13],
+      [13, 9, 14],
+      [9, 10, 14],
+      [14, 10, 15],
+      [10, 11, 15],
+      [15, 11, 12],
+      [11, 8, 12],
     ].flat();
     const expectedIndices = new THREE.Uint16BufferAttribute(
       expectedIndicesArray,
@@ -93,43 +93,43 @@ describe("extrudeGeometry()", () => {
       [0, 1, 0],
       [1, 1, 0],
       //
-      [0, 0, displacement],
-      [1, 0, displacement],
-      [0, 1, displacement],
-      [1, 1, displacement],
+      [0, 0, -displacement],
+      [1, 0, -displacement],
+      [0, 1, -displacement],
+      [1, 1, -displacement],
       //
       [0, 0, 0],
       [0, 1, 0],
       [1, 1, 0],
       [1, 0, 0],
-      [0, 0, displacement],
-      [0, 1, displacement],
-      [1, 1, displacement],
-      [1, 0, displacement],
+      [0, 0, -displacement],
+      [0, 1, -displacement],
+      [1, 1, -displacement],
+      [1, 0, -displacement],
     ].flat();
     const expectedPositions = new THREE.Float32BufferAttribute(
       expectedPositionsArray,
       3
     );
     const expectedNormalsArray = [
-      [-0, -0, -1],
-      [-0, -0, -1],
-      [-0, -0, -1],
-      [-0, -0, -1],
+      [-0, -0, 1],
+      [-0, -0, 1],
+      [-0, -0, 1],
+      [-0, -0, 1],
       //
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
       //
-      [SQRT1_2, SQRT1_2, 0],
-      [SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
     ].flat();
     const expectedNormals = new THREE.Float32BufferAttribute(
       expectedNormalsArray,
@@ -164,6 +164,88 @@ describe("extrudeGeometry()", () => {
 
     actualGeometry.uuid = expectedGeometry.uuid;
     expect(actualGeometry).toEqual(expectedGeometry);
+  });
+});
+
+describe("flipIndices()", () => {
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   6(-1, 1) 7(0, 1) 8(1, 1)
+     *   3(-1, 0) 4(0, 0) 5(1, 0)
+     *   0(-1,-1) 1(0,-1) 2(1,-1)
+     */
+    const indicesArray = [
+      [0, 3, 4],
+      [0, 4, 1],
+      [1, 4, 5],
+      [1, 5, 2],
+      [3, 6, 7],
+      [3, 7, 4],
+      [4, 7, 8],
+      [4, 8, 5],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    flipIndices(indices);
+
+    const expectedIndicesArray = [
+      [4, 3, 0],
+      [1, 4, 0],
+      [5, 4, 1],
+      [2, 5, 1],
+      [7, 6, 3],
+      [4, 7, 3],
+      [8, 7, 4],
+      [5, 8, 4],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      3
+    );
+    expect(indices).toEqual(expectedIndices);
+  });
+
+  test("example of an upper half cube (bottomless)", () => {
+    const indicesArray = [
+      [4, 8, 9],
+      [7, 5, 4],
+      [7, 6, 5],
+      [5, 11, 6],
+      [4, 9, 5],
+      [5, 9, 10],
+      [5, 10, 11],
+      [6, 11, 12],
+      [6, 13, 7],
+      [6, 12, 13],
+      [7, 13, 14],
+      [7, 15, 4],
+      [7, 14, 15],
+      [4, 15, 8],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    flipIndices(indices);
+
+    const expectedIndicesArray = [
+      [9, 8, 4],
+      [4, 5, 7],
+      [5, 6, 7],
+      [6, 11, 5],
+      [5, 9, 4],
+      [10, 9, 5],
+      [11, 10, 5],
+      [12, 11, 6],
+      [7, 13, 6],
+      [13, 12, 6],
+      [14, 13, 7],
+      [4, 15, 7],
+      [15, 14, 7],
+      [8, 15, 4],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      3
+    );
+    expect(indices).toEqual(expectedIndices);
   });
 });
 
@@ -555,10 +637,10 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [0, 3, 1],
-        [3, 4, 1],
-        [1, 4, 2],
-        [4, 5, 2],
+        [3, 0, 4],
+        [0, 1, 4],
+        [4, 1, 5],
+        [1, 2, 5],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,
@@ -660,22 +742,22 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [0, 8, 1],
-        [8, 9, 1],
-        [1, 9, 2],
-        [9, 10, 2],
-        [2, 10, 3],
-        [10, 11, 3],
-        [3, 11, 4],
-        [11, 12, 4],
-        [4, 12, 5],
-        [12, 13, 5],
-        [5, 13, 6],
-        [13, 14, 6],
-        [6, 14, 7],
-        [14, 15, 7],
-        [7, 15, 0],
-        [15, 8, 0],
+        [8, 0, 9],
+        [0, 1, 9],
+        [9, 1, 10],
+        [1, 2, 10],
+        [10, 2, 11],
+        [2, 3, 11],
+        [11, 3, 12],
+        [3, 4, 12],
+        [12, 4, 13],
+        [4, 5, 13],
+        [13, 5, 14],
+        [5, 6, 14],
+        [14, 6, 15],
+        [6, 7, 15],
+        [15, 7, 8],
+        [7, 0, 8],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,
@@ -848,23 +930,22 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [0, 8, 1],
-        [8, 9, 1],
-        [1, 9, 2],
-        [9, 10, 2],
-        [2, 10, 3],
-        [10, 11, 3],
-        [3, 11, 4],
-        [11, 12, 4],
-        //
-        [4, 12, 5],
-        [12, 13, 5],
-        [5, 13, 6],
-        [13, 14, 6],
-        [6, 14, 7],
-        [14, 15, 7],
-        [7, 15, 0],
-        [15, 8, 0],
+        [8, 0, 9],
+        [0, 1, 9],
+        [9, 1, 10],
+        [1, 2, 10],
+        [10, 2, 11],
+        [2, 3, 11],
+        [11, 3, 12],
+        [3, 4, 12],
+        [12, 4, 13],
+        [4, 5, 13],
+        [13, 5, 14],
+        [5, 6, 14],
+        [14, 6, 15],
+        [6, 7, 15],
+        [15, 7, 8],
+        [7, 0, 8],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,

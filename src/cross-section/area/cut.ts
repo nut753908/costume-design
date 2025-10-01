@@ -27,7 +27,7 @@ export function cutGeometryUsingIlsWithinArea(
     const ilIndices = v.ilp.getIlIndices(v.plane, positions);
 
     const ils = ilIndices.map((i) => allIls[i]);
-    const obj = cutGeometryUsingIls(newGeometry, ils);
+    const obj = cutGeometryUsingIls(newGeometry, ils, v.plane.getNormal());
     newGeometry = obj.geometry;
   });
 
@@ -54,16 +54,18 @@ export function cutGeometryUsingIlsWithinArea(
  * Cut geometry using intersection loops.
  *
  * @param ils - The intersection loops with a plane.
+ * @param normal - The normal direction of the intersection loop plane.
  * @return  The geometry and the intersection loops after cutting faces.
  */
 export function cutGeometryUsingIls(
   geometry: THREE.BufferGeometry,
-  ils: IntersectionLoop[]
+  ils: IntersectionLoop[],
+  normal: THREE.Vector3
 ): { geometry: THREE.BufferGeometry; ils: IntersectionLoop[] } {
   let newGeometry = geometry;
   const newIls: IntersectionLoop[] = [];
   ils.forEach((il) => {
-    const obj = cutGeometryUsingIl(newGeometry, il);
+    const obj = cutGeometryUsingIl(newGeometry, il, normal);
     newGeometry = obj.geometry;
     newIls.push(obj.il);
   });
@@ -74,11 +76,13 @@ export function cutGeometryUsingIls(
  * Cut geometry using an intersection loop.
  *
  * @param il - The intersection loop with a plane.
+ * @param normal - The normal direction of the intersection loop plane.
  * @return  The geometry and the intersection loop after cutting faces.
  */
 export function cutGeometryUsingIl(
   geometry: THREE.BufferGeometry,
-  il: IntersectionLoop
+  il: IntersectionLoop,
+  normal: THREE.Vector3
 ): { geometry: THREE.BufferGeometry; il: IntersectionLoop } {
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const positions = geometry.getAttribute(
@@ -109,11 +113,15 @@ export function cutGeometryUsingIl(
   });
 
   // Set indexLists.
+  const isCounterclockwise = il.isCounterclockwise(normal, positions);
+  if (isCounterclockwise) {
+    il.intersections.reverse();
+    newIl.intersections.reverse();
+  }
   if (il.closed) {
     il.intersections.push(il.intersections[0]);
     newIl.intersections.push(newIl.intersections[0]);
   }
-  // TODO: handle counterclockwise as well as clockwise
   for (let i = 0, l = il.intersections.length - 1; i < l; i++) {
     const v0 = il.intersections[i];
     const v1 = il.intersections[i + 1];
@@ -219,6 +227,10 @@ indicesV1: ${JSON.stringify(indicesV1)}
   if (il.closed) {
     il.intersections.pop();
     newIl.intersections.pop();
+  }
+  if (isCounterclockwise) {
+    il.intersections.reverse();
+    newIl.intersections.reverse();
   }
 
   const newGeometry = new THREE.BufferGeometry();
