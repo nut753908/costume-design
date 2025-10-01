@@ -574,23 +574,24 @@ describe("findBoundaries()", () => {
       expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    // TODO: turn a triangular prism into a cube
-    test("example of a triangular prism (no top or bottom)", () => {
+    test("example of a cube (no top or bottom)", () => {
       const indicesArray = [
-        [0, 3, 4],
-        [0, 4, 1],
-        [1, 4, 5],
-        [1, 5, 2],
-        [2, 5, 3],
-        [2, 3, 0],
+        [0, 4, 5],
+        [0, 5, 1],
+        [1, 5, 6],
+        [1, 6, 2],
+        [2, 6, 7],
+        [2, 7, 3],
+        [3, 7, 4],
+        [3, 4, 0],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
       const allEdges = createAllEdges(nPolygonIndices);
       const indicesMap = createIndicesMap(nPolygonIndices);
       const expected: EdgeLoop[] = [
-        new EdgeLoop([3, 4, 5], true),
-        new EdgeLoop([1, 0, 2], true),
+        new EdgeLoop([4, 5, 6, 7], true),
+        new EdgeLoop([1, 0, 3, 2], true),
       ];
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
