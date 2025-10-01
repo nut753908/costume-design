@@ -44,12 +44,11 @@ describe("extrudeGeometry()", () => {
       [1, 1, 0],
     ].flat();
     const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
-    // TODO: change 1 to -1
     const normalsArray = [
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
     ].flat();
     const normals = new THREE.Float32BufferAttribute(normalsArray, 3);
     const uvsArray = [
@@ -94,43 +93,43 @@ describe("extrudeGeometry()", () => {
       [0, 1, 0],
       [1, 1, 0],
       //
-      [0, 0, displacement],
-      [1, 0, displacement],
-      [0, 1, displacement],
-      [1, 1, displacement],
+      [0, 0, -displacement],
+      [1, 0, -displacement],
+      [0, 1, -displacement],
+      [1, 1, -displacement],
       //
       [0, 0, 0],
       [0, 1, 0],
       [1, 1, 0],
       [1, 0, 0],
-      [0, 0, displacement],
-      [0, 1, displacement],
-      [1, 1, displacement],
-      [1, 0, displacement],
+      [0, 0, -displacement],
+      [0, 1, -displacement],
+      [1, 1, -displacement],
+      [1, 0, -displacement],
     ].flat();
     const expectedPositions = new THREE.Float32BufferAttribute(
       expectedPositionsArray,
       3
     );
     const expectedNormalsArray = [
-      [-0, -0, -1],
-      [-0, -0, -1],
-      [-0, -0, -1],
-      [-0, -0, -1],
+      [-0, -0, 1],
+      [-0, -0, 1],
+      [-0, -0, 1],
+      [-0, -0, 1],
       //
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
-      [0, 0, 1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
+      [0, 0, -1],
       //
-      [SQRT1_2, SQRT1_2, 0],
-      [SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, SQRT1_2, 0],
       [SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, -SQRT1_2, 0],
       [-SQRT1_2, SQRT1_2, 0],
+      [SQRT1_2, SQRT1_2, 0],
+      [SQRT1_2, -SQRT1_2, 0],
     ].flat();
     const expectedNormals = new THREE.Float32BufferAttribute(
       expectedNormalsArray,
