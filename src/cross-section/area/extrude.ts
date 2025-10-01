@@ -16,12 +16,14 @@ export function extrudeGeometry(
   displacement: number
 ): THREE.BufferGeometry {
   const innerGeometry = geometry.clone();
+  const innerIndices = innerGeometry.getIndex() as THREE.Uint16BufferAttribute;
   const innerPositions = innerGeometry.getAttribute(
     "position"
   ) as THREE.Float32BufferAttribute;
   const innerNormals = innerGeometry.getAttribute(
     "normal"
   ) as THREE.Float32BufferAttribute;
+  flipIndices(innerIndices);
   flipNormals(innerNormals);
 
   const outerGeometry = geometry.clone();
@@ -43,6 +45,20 @@ export function extrudeGeometry(
   );
 
   return concatGeometries([innerGeometry, outerGeometry, ...sideGeometries]);
+}
+
+/**
+ * Flip the indices.
+ * (NOTE: indices must be a triangular polygon.)
+ *
+ * @param indices - The results of geometry.getIndex().
+ */
+export function flipIndices(indices: THREE.Uint16BufferAttribute) {
+  for (let i = 0, l = indices.array.length; i < l; i += 3) {
+    const i0 = indices.array[i];
+    indices.array[i] = indices.array[i + 2];
+    indices.array[i + 2] = i0;
+  }
 }
 
 /**

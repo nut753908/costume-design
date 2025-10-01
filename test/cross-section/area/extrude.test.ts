@@ -4,6 +4,7 @@ import {
   extrudeGeometry,
   extrudePositions,
   findBoundaries,
+  flipIndices,
   flipNormals,
 } from "src/cross-section/area/extrude";
 import { EdgeLoop } from "src/cross-section/centerline/edge-loop";
@@ -68,8 +69,8 @@ describe("extrudeGeometry()", () => {
     const actualGeometry = extrudeGeometry(geometry, displacement);
 
     const expectedIndicesArray = [
-      [0, 2, 3],
-      [0, 3, 1],
+      [3, 2, 0],
+      [1, 3, 0],
       //
       [4, 6, 7],
       [4, 7, 5],
@@ -164,6 +165,88 @@ describe("extrudeGeometry()", () => {
 
     actualGeometry.uuid = expectedGeometry.uuid;
     expect(actualGeometry).toEqual(expectedGeometry);
+  });
+});
+
+describe("flipIndices()", () => {
+  test("example of a plane (flat)", () => {
+    /**
+     * flat layout:
+     *   6(-1, 1) 7(0, 1) 8(1, 1)
+     *   3(-1, 0) 4(0, 0) 5(1, 0)
+     *   0(-1,-1) 1(0,-1) 2(1,-1)
+     */
+    const indicesArray = [
+      [0, 3, 4],
+      [0, 4, 1],
+      [1, 4, 5],
+      [1, 5, 2],
+      [3, 6, 7],
+      [3, 7, 4],
+      [4, 7, 8],
+      [4, 8, 5],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    flipIndices(indices);
+
+    const expectedIndicesArray = [
+      [4, 3, 0],
+      [1, 4, 0],
+      [5, 4, 1],
+      [2, 5, 1],
+      [7, 6, 3],
+      [4, 7, 3],
+      [8, 7, 4],
+      [5, 8, 4],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      3
+    );
+    expect(indices).toEqual(expectedIndices);
+  });
+
+  test("example of an upper half cube (bottomless)", () => {
+    const indicesArray = [
+      [4, 8, 9],
+      [7, 5, 4],
+      [7, 6, 5],
+      [5, 11, 6],
+      [4, 9, 5],
+      [5, 9, 10],
+      [5, 10, 11],
+      [6, 11, 12],
+      [6, 13, 7],
+      [6, 12, 13],
+      [7, 13, 14],
+      [7, 15, 4],
+      [7, 14, 15],
+      [4, 15, 8],
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 3);
+    flipIndices(indices);
+
+    const expectedIndicesArray = [
+      [9, 8, 4],
+      [4, 5, 7],
+      [5, 6, 7],
+      [6, 11, 5],
+      [5, 9, 4],
+      [10, 9, 5],
+      [11, 10, 5],
+      [12, 11, 6],
+      [7, 13, 6],
+      [13, 12, 6],
+      [14, 13, 7],
+      [4, 15, 7],
+      [15, 14, 7],
+      [8, 15, 4],
+    ].flat();
+    const expectedIndices = new THREE.Uint16BufferAttribute(
+      expectedIndicesArray,
+      3
+    );
+    expect(indices).toEqual(expectedIndices);
   });
 });
 
