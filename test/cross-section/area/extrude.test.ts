@@ -74,14 +74,14 @@ describe("extrudeGeometry()", () => {
       [4, 6, 7],
       [4, 7, 5],
       //
-      [12, 8, 13],
-      [8, 9, 13],
-      [13, 9, 14],
-      [9, 10, 14],
-      [14, 10, 15],
-      [10, 11, 15],
-      [15, 11, 12],
-      [11, 8, 12],
+      [8, 12, 13],
+      [8, 13, 9],
+      [9, 13, 14],
+      [9, 14, 10],
+      [10, 14, 15],
+      [10, 15, 11],
+      [11, 15, 12],
+      [11, 12, 8],
     ].flat();
     const expectedIndices = new THREE.Uint16BufferAttribute(
       expectedIndicesArray,
@@ -574,23 +574,24 @@ describe("findBoundaries()", () => {
       expect(spy).toHaveBeenCalledTimes(0);
     });
 
-    // TODO: turn a triangular prism into a cube
-    test("example of a triangular prism (no top or bottom)", () => {
+    test("example of a cube (no top or bottom)", () => {
       const indicesArray = [
-        [0, 3, 4],
-        [0, 4, 1],
-        [1, 4, 5],
-        [1, 5, 2],
-        [2, 5, 3],
-        [2, 3, 0],
+        [0, 4, 5],
+        [0, 5, 1],
+        [1, 5, 6],
+        [1, 6, 2],
+        [2, 6, 7],
+        [2, 7, 3],
+        [3, 7, 4],
+        [3, 4, 0],
       ].flat();
       const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
       const nPolygonIndices = convertToLists(indices, 3);
       const allEdges = createAllEdges(nPolygonIndices);
       const indicesMap = createIndicesMap(nPolygonIndices);
       const expected: EdgeLoop[] = [
-        new EdgeLoop([3, 4, 5], true),
-        new EdgeLoop([1, 0, 2], true),
+        new EdgeLoop([4, 5, 6, 7], true),
+        new EdgeLoop([1, 0, 3, 2], true),
       ];
       expect(findBoundaries(allEdges, indicesMap)).toEqual(expected);
       expect(spy).toHaveBeenCalledTimes(0);
@@ -637,10 +638,10 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [3, 0, 4],
-        [0, 1, 4],
-        [4, 1, 5],
-        [1, 2, 5],
+        [0, 3, 4],
+        [0, 4, 1],
+        [1, 4, 5],
+        [1, 5, 2],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,
@@ -742,22 +743,22 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [8, 0, 9],
-        [0, 1, 9],
-        [9, 1, 10],
-        [1, 2, 10],
-        [10, 2, 11],
-        [2, 3, 11],
-        [11, 3, 12],
-        [3, 4, 12],
-        [12, 4, 13],
-        [4, 5, 13],
-        [13, 5, 14],
-        [5, 6, 14],
-        [14, 6, 15],
-        [6, 7, 15],
-        [15, 7, 8],
-        [7, 0, 8],
+        [0, 8, 9],
+        [0, 9, 1],
+        [1, 9, 10],
+        [1, 10, 2],
+        [2, 10, 11],
+        [2, 11, 3],
+        [3, 11, 12],
+        [3, 12, 4],
+        [4, 12, 13],
+        [4, 13, 5],
+        [5, 13, 14],
+        [5, 14, 6],
+        [6, 14, 15],
+        [6, 15, 7],
+        [7, 15, 8],
+        [7, 8, 0],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,
@@ -930,22 +931,22 @@ describe("createSideGeometry()", () => {
       );
 
       const expectedIndicesArray = [
-        [8, 0, 9],
-        [0, 1, 9],
-        [9, 1, 10],
-        [1, 2, 10],
-        [10, 2, 11],
-        [2, 3, 11],
-        [11, 3, 12],
-        [3, 4, 12],
-        [12, 4, 13],
-        [4, 5, 13],
-        [13, 5, 14],
-        [5, 6, 14],
-        [14, 6, 15],
-        [6, 7, 15],
-        [15, 7, 8],
-        [7, 0, 8],
+        [0, 8, 9],
+        [0, 9, 1],
+        [1, 9, 10],
+        [1, 10, 2],
+        [2, 10, 11],
+        [2, 11, 3],
+        [3, 11, 12],
+        [3, 12, 4],
+        [4, 12, 13],
+        [4, 13, 5],
+        [5, 13, 14],
+        [5, 14, 6],
+        [6, 14, 15],
+        [6, 15, 7],
+        [7, 15, 8],
+        [7, 8, 0],
       ].flat();
       const expectedIndices = new THREE.Uint16BufferAttribute(
         expectedIndicesArray,

@@ -408,7 +408,7 @@ describe("findAdjacentFacesWithinArea()", () => {
     expect(foundFaces).toEqual(expectedFoundFaces);
   });
 
-  describe("example of a plane (flat)2", () => {
+  describe("example of a plane (flat) - version 2", () => {
     describe("two non-intersecting cross sections", () => {
       /**
        * flat layout:
@@ -1300,7 +1300,7 @@ describe("findAdjacentFaces()", () => {
 });
 
 describe("limitGeometryExtent()", () => {
-  test("cube example (no top or bottom)", () => {
+  test("example of a cube (no top or bottom)", () => {
     const indicesArray = [
       [0, 4, 5],
       [0, 5, 1],
