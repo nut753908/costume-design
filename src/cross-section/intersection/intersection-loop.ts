@@ -61,6 +61,31 @@ export class IntersectionLoop {
   }
 
   /**
+   * Whether the intersection loop is counterclockwise.
+   *
+   * @param normal - The normal direction of the intersection loop plane.
+   * @param positions - The results of geometry.getAttribute("position").
+   */
+  isCounterclockwise(
+    normal: THREE.Vector3,
+    positions: THREE.Float32BufferAttribute
+  ): boolean {
+    if (!this.closed) return false;
+    if (this.intersections.length <= 2) return false;
+    const points = this.getPoints(positions);
+    const p0 = points[0];
+    const area = new THREE.Vector3();
+    for (let i = 1, l = points.length - 1; i < l; i++) {
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const diff01 = p1.clone().sub(p0);
+      const diff12 = p2.clone().sub(p1);
+      area.add(diff01.clone().cross(diff12)); // Dividing by 2 is omitted.
+    }
+    return area.dot(normal) > 0;
+  }
+
+  /**
    * Get whether the reference point of the plane is inside the intersection loop.
    *
    * @param positions - The results of geometry.getAttribute("position").

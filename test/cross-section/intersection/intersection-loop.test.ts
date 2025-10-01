@@ -51,6 +51,60 @@ describe("IntersectionLoop", () => {
     ]);
   });
 
+  describe("isCounterclockwise()", () => {
+    const normal = new THREE.Vector3(0, 0, 1);
+    const ccArray = [
+      [0, 0, 0],
+      [1, 0, 0],
+      [1, 1, 0],
+      [0, 1, 0],
+    ].flat(); // counterclockwiseArray
+    const ccPositions = new THREE.Float32BufferAttribute(ccArray, 3); // counterclockwisePositions
+    const cArray = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [1, 1, 0],
+      [1, 0, 0],
+    ].flat(); // clockwiseArray
+    const cPositions = new THREE.Float32BufferAttribute(cArray, 3); // clockwisePositions
+    const intersections = [
+      new VertexIntersection(0, true),
+      new VertexIntersection(1, true),
+      new VertexIntersection(2, true),
+      new VertexIntersection(3, true),
+    ];
+    const il = new IntersectionLoop(intersections, true);
+
+    test("if (!this.closed)", () => {
+      const il2 = il.clone();
+      il2.closed = false;
+      expect(il2.isCounterclockwise(normal, ccPositions)).toBeFalsy();
+    });
+
+    describe("if (this.intersections.length <= 2)", () => {
+      test.each([
+        [0, false],
+        [1, false],
+        [2, false],
+        [3, true],
+      ])("length:%i, expected:%j", (length, expected) => {
+        const il2 = il.clone();
+        il2.intersections = il.intersections.slice(0, length);
+        expect(il2.isCounterclockwise(normal, ccPositions)).toBe(expected);
+      });
+    });
+
+    describe("else", () => {
+      test("counterclockwise", () => {
+        expect(il.isCounterclockwise(normal, ccPositions)).toBeTruthy();
+      });
+
+      test("clockwise", () => {
+        expect(il.isCounterclockwise(normal, cPositions)).toBeFalsy();
+      });
+    });
+  });
+
   describe("inLoop()", () => {
     describe("cube example", () => {
       const array = [
