@@ -863,6 +863,7 @@ describe("cutGeometryUsingIls()", () => {
     geometry.setAttribute("normal", normals);
     geometry.setAttribute("uv", uvs);
   });
+  const normal = new THREE.Vector3(0, 1, 0);
 
   test("three triangular pyramids example", () => {
     const ils = [
@@ -893,7 +894,7 @@ describe("cutGeometryUsingIls()", () => {
     ];
     const inputGeometry = geometry.clone();
     const inputIls = ils.map((il) => il.clone());
-    const obj = cutGeometryUsingIls(inputGeometry, inputIls);
+    const obj = cutGeometryUsingIls(inputGeometry, inputIls, normal);
     inputGeometry.uuid = geometry.uuid;
     expect(inputGeometry).toEqual(geometry);
     expect(inputIls).toEqual(ils);
@@ -1238,6 +1239,7 @@ describe("cutGeometryUsingIl()", () => {
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
     });
+    const normal = new THREE.Vector3(0, 1, 0);
 
     test("all intersections are edges", () => {
       const il = new IntersectionLoop(
@@ -1250,7 +1252,7 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1453,7 +1455,7 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1643,7 +1645,7 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
@@ -1856,6 +1858,7 @@ describe("cutGeometryUsingIl()", () => {
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
     });
+    const normal = new THREE.Vector3(0, 1, 0);
 
     test("check if il.closed is false", () => {
       const il = new IntersectionLoop(
@@ -1868,7 +1871,7 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl);
+      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
