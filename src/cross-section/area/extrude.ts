@@ -148,19 +148,19 @@ export function createSideGeometry(
   const count = boundary.vertices.length;
   const indicesArrays: number[][] = [];
   for (let i = 0, l = count - 1; i < l; i++) {
-    const a = i;
-    const b = count + i;
-    const c = count + i + 1;
-    const d = i + 1;
+    const a = count + i;
+    const b = i;
+    const c = i + 1;
+    const d = count + i + 1;
     indicesArrays.push([a, b, d]);
     indicesArrays.push([b, c, d]);
   }
   // (i = count - 1)
   if (boundary.closed) {
-    const a = count - 1;
-    const b = count + count - 1;
-    const c = count;
-    const d = 0;
+    const a = count + count - 1;
+    const b = count - 1;
+    const c = 0;
+    const d = count;
     indicesArrays.push([a, b, d]);
     indicesArrays.push([b, c, d]);
   }
