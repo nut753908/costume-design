@@ -933,11 +933,10 @@ describe("cutGeometryUsingIls()", () => {
       [4, 7, 15], // added
       [4, 15, 5], // added
       //
-      // TODO: correct counterclockwise
-      [17, 11, 8], // added
-      [9, 17, 8], // added
-      [10, 11, 17], // added
-      [10, 17, 9], // added
+      [8, 11, 17], // added
+      [8, 17, 9], // added
+      [17, 11, 10], // added
+      [9, 17, 10], // added
     ].flat();
     const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
     const newPositionsArray = [
@@ -1666,11 +1665,10 @@ describe("cutGeometryUsingIl()", () => {
         // [9, 11, 10], // removed
         [10, 11, 8], // removed
         //
-        // TODO: correct counterclockwise
-        [12, 11, 8], // added
-        [9, 12, 8], // added
-        [10, 11, 12], // added
-        [10, 12, 9], // added
+        [8, 11, 12], // added
+        [8, 12, 9], // added
+        [12, 11, 10], // added
+        [9, 12, 10], // added
       ].flat();
       const newIndices = new THREE.Uint16BufferAttribute(newIndicesArray, 1);
       const newPositionsArray = [

@@ -113,12 +113,15 @@ export function cutGeometryUsingIl(
   });
 
   // Set indexLists.
+  const isCounterclockwise = il.isCounterclockwise(normal, positions);
+  if (isCounterclockwise) {
+    il.intersections.reverse();
+    newIl.intersections.reverse();
+  }
   if (il.closed) {
     il.intersections.push(il.intersections[0]);
     newIl.intersections.push(newIl.intersections[0]);
   }
-  // TODO: handle counterclockwise as well as clockwise
-  const isCounterclockwise = il.isCounterclockwise(normal, positions);
   for (let i = 0, l = il.intersections.length - 1; i < l; i++) {
     const v0 = il.intersections[i];
     const v1 = il.intersections[i + 1];
@@ -224,6 +227,10 @@ indicesV1: ${JSON.stringify(indicesV1)}
   if (il.closed) {
     il.intersections.pop();
     newIl.intersections.pop();
+  }
+  if (isCounterclockwise) {
+    il.intersections.reverse();
+    newIl.intersections.reverse();
   }
 
   const newGeometry = new THREE.BufferGeometry();
