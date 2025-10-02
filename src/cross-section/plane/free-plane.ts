@@ -86,6 +86,7 @@ export class FreePlane extends Plane {
     }
     function uI() /* updateInverted */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      updateCallback();
     }
   }
 

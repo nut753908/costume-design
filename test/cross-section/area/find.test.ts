@@ -103,16 +103,21 @@ describe("findGeometryWithinArea()", () => {
           new THREE.Vector3(0, 1, 0),
           new THREE.Vector3(0.5, 0.5, 0)
         ),
-        ilp: new IntersectionLoopPicker([
-          new IntersectionLoop(
-            [
-              new VertexIntersection(4, true),
-              new VertexIntersection(5, true),
-              new VertexIntersection(6, true),
-            ],
-            false
-          ),
-        ]),
+        ilp: new IntersectionLoopPicker(
+          [
+            new IntersectionLoop(
+              [
+                new VertexIntersection(4, true),
+                new VertexIntersection(5, true),
+                new VertexIntersection(6, true),
+              ],
+              false
+            ),
+            new IntersectionLoop(), // dummy
+          ],
+          "some",
+          [0]
+        ),
       },
     };
     const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
@@ -245,18 +250,23 @@ describe("findAdjacentFacesWithinArea()", () => {
           new THREE.Vector3(0, 1, 0),
           new THREE.Vector3(0, -0.5, 0) // y: 0.5 -> -0.5
         ),
-        ilp: new IntersectionLoopPicker([
-          new IntersectionLoop(
-            [
-              new VertexIntersection(9, true),
-              new VertexIntersection(10, true),
-              new VertexIntersection(11, true),
-              new VertexIntersection(12, true),
-              new VertexIntersection(13, true),
-            ],
-            false
-          ),
-        ]),
+        ilp: new IntersectionLoopPicker(
+          [
+            new IntersectionLoop(
+              [
+                new VertexIntersection(9, true),
+                new VertexIntersection(10, true),
+                new VertexIntersection(11, true),
+                new VertexIntersection(12, true),
+                new VertexIntersection(13, true),
+              ],
+              false
+            ),
+            new IntersectionLoop(), // dummy
+          ],
+          "some",
+          [0]
+        ),
       },
     });
 
@@ -358,21 +368,26 @@ describe("findAdjacentFacesWithinArea()", () => {
           new THREE.Vector3(0, 1, 0),
           new THREE.Vector3(0, 0.5, 0)
         ),
-        ilp: new IntersectionLoopPicker([
-          new IntersectionLoop(
-            [
-              new VertexIntersection(8, true),
-              new VertexIntersection(9, true),
-              new VertexIntersection(10, true),
-              new VertexIntersection(11, true),
-              new VertexIntersection(12, true),
-              new VertexIntersection(13, true),
-              new VertexIntersection(14, true),
-              new VertexIntersection(15, true),
-            ],
-            true
-          ),
-        ]),
+        ilp: new IntersectionLoopPicker(
+          [
+            new IntersectionLoop(
+              [
+                new VertexIntersection(8, true),
+                new VertexIntersection(9, true),
+                new VertexIntersection(10, true),
+                new VertexIntersection(11, true),
+                new VertexIntersection(12, true),
+                new VertexIntersection(13, true),
+                new VertexIntersection(14, true),
+                new VertexIntersection(15, true),
+              ],
+              true
+            ),
+            new IntersectionLoop(), // dummy
+          ],
+          "some",
+          [0]
+        ),
       },
     });
 
