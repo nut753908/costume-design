@@ -74,16 +74,21 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
           ),
-          ilp: new IntersectionLoopPicker([
-            new IntersectionLoop(
-              [
-                new EdgeIntersection(0, 2, 0.5),
-                new EdgeIntersection(0, 3, 0.5),
-                new EdgeIntersection(1, 3, 0.5),
-              ],
-              false
-            ),
-          ]),
+          ilp: new IntersectionLoopPicker(
+            [
+              new IntersectionLoop(
+                [
+                  new EdgeIntersection(0, 2, 0.5),
+                  new EdgeIntersection(0, 3, 0.5),
+                  new EdgeIntersection(1, 3, 0.5),
+                ],
+                false
+              ),
+              new IntersectionLoop(), // dummy
+            ],
+            "some",
+            [0]
+          ),
         },
       };
       const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
@@ -176,16 +181,21 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
             new THREE.Vector3(0, 1, 0),
             new THREE.Vector3(0.5, 0.5, 0)
           ),
-          ilp: new IntersectionLoopPicker([
-            new IntersectionLoop(
-              [
-                new VertexIntersection(4, true),
-                new VertexIntersection(5, true),
-                new VertexIntersection(6, true),
-              ],
-              false
-            ),
-          ]),
+          ilp: new IntersectionLoopPicker(
+            [
+              new IntersectionLoop(
+                [
+                  new VertexIntersection(4, true),
+                  new VertexIntersection(5, true),
+                  new VertexIntersection(6, true),
+                ],
+                false
+              ),
+              new IntersectionLoop(), // dummy
+            ],
+            "some",
+            [0]
+          ),
         },
       };
       const newArea = new Area(

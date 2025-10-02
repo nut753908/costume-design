@@ -55,16 +55,19 @@ export function findAdjacentFacesWithinArea(
 
   // Add to foundVertices and firstFaces.
   Object.values(area.crossSections).forEach((cs) => {
-    cs.ilp.intersectionLoops.forEach((il) => {
-      findFirstFaces(
-        cs.plane,
-        il,
-        foundVertices,
-        firstFaces,
-        indicesMap,
-        positions
-      );
-    });
+    cs.ilp
+      .getIlIndices(cs.plane, positions)
+      .map((i) => cs.ilp.intersectionLoops[i])
+      .forEach((il) => {
+        findFirstFaces(
+          cs.plane,
+          il,
+          foundVertices,
+          firstFaces,
+          indicesMap,
+          positions
+        );
+      });
   });
 
   // Add to foundVertices and foundFaces.
@@ -99,9 +102,6 @@ export function findFirstFaces(
 
     // Add to firstFaces.
     const faces = indicesMap[`${v}`];
-    // TODO: fix this bug
-    //       (this bug occurs unless selecting all the intersection loops.)
-    if (faces === undefined) console.log(il); // debug code
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
         const p = getPoint(positions, v2);
