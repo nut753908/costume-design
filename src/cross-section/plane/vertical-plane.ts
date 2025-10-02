@@ -75,6 +75,7 @@ export class VerticalPlane extends Plane {
     }
     function uI() /* updateInverted */ {
       p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      updateCallback();
     }
   }
 
