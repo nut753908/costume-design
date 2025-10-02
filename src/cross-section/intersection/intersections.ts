@@ -17,11 +17,14 @@ export function createAllIntersections(
   positions: THREE.Float32BufferAttribute
 ): (EdgeIntersection | VertexIntersection)[] {
   const intersections: (EdgeIntersection | VertexIntersection)[] = [];
+  const vSet = new Set();
   const refP = plane.getPoint();
   const normal = plane.getNormal();
-  const EPS = 0.001; // TODO: adjust correctly
+  const EPS = 1e-7;
   for (let i = 0, l = allEdges.length; i < l; i++) {
     const e = allEdges[i];
+    vSet.add(e.v1);
+    vSet.add(e.v2);
     const p1 = getPoint(positions, e.v1);
     const p2 = getPoint(positions, e.v2);
     const diff1 = p1.clone().sub(refP);
@@ -39,6 +42,7 @@ export function createAllIntersections(
     }
   }
   for (let i = 0, l = positions.count; i < l; i++) {
+    if (!vSet.has(i)) continue;
     const p = getPoint(positions, i);
     const diff = p.clone().sub(refP);
     const front = normal.dot(diff);

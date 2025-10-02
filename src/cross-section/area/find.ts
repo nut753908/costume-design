@@ -99,7 +99,8 @@ export function findFirstFaces(
 
     // Add to firstFaces.
     const faces = indicesMap[`${v}`];
-    // TODO: fix this bug (is it not happening now?)
+    // TODO: fix this bug
+    //       (this bug occurs unless selecting all the intersection loops.)
     if (faces === undefined) console.log(il); // debug code
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {

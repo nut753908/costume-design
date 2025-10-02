@@ -24,6 +24,7 @@ describe("createAllIntersections()", () => {
     [-1, 1, 0],
     [0, 1, 0],
     [1, 1, 0],
+    [1, 1, 0], // indices not contained in indicesArray are removed.
   ].flat();
   const positions = new THREE.Float32BufferAttribute(positionsArray, 3);
   const indicesArray = [
