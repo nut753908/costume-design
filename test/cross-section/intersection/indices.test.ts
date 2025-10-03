@@ -69,6 +69,39 @@ describe("convertToLists()", () => {
     ];
     expect(convertToLists(positions, 3)).toEqual(expected);
   });
+
+  test("uvs", () => {
+    /**
+     * flat layout:
+     *   6 7 8
+     *   3 4 5
+     *   0 1 2
+     */
+    const array = [
+      [0, 0],
+      [0.5, 0],
+      [1, 0],
+      [0, 0.5],
+      [0.5, 0.5],
+      [1, 0.5],
+      [0, 1],
+      [0.5, 1],
+      [1, 1],
+    ].flat();
+    const positions = new THREE.Float32BufferAttribute(array, 3);
+    const expected = [
+      [0, 0],
+      [0.5, 0],
+      [1, 0],
+      [0, 0.5],
+      [0.5, 0.5],
+      [1, 0.5],
+      [0, 1],
+      [0.5, 1],
+      [1, 1],
+    ];
+    expect(convertToLists(positions, 2)).toEqual(expected);
+  });
 });
 
 test("createIndicesMap()", () => {

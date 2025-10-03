@@ -9,12 +9,21 @@ import type * as THREE from "three";
  */
 export function convertToLists(
   attribute: THREE.BufferAttribute,
-  itemSize: number
+  itemSize: 2 | 3
 ): number[][] {
-  const jList = [...Array(itemSize).keys()];
   const lists: number[][] = [];
-  for (let i = 0, l = attribute.array.length; i < l; i += itemSize) {
-    lists.push(jList.map((j) => attribute.array[i + j]));
+  if (itemSize === 3) {
+    for (let i = 0, l = attribute.array.length; i < l; i += 3) {
+      lists.push([
+        attribute.array[i],
+        attribute.array[i + 1],
+        attribute.array[i + 2],
+      ]);
+    }
+  } else if (itemSize === 2) {
+    for (let i = 0, l = attribute.array.length; i < l; i += 2) {
+      lists.push([attribute.array[i], attribute.array[i + 1]]);
+    }
   }
   return lists;
 }
