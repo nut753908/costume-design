@@ -11,10 +11,11 @@ export function getPoint(
   positions: THREE.Float32BufferAttribute,
   index: number
 ): THREE.Vector3 {
+  const i = 3 * index;
   return new THREE.Vector3(
-    positions.array[3 * index],
-    positions.array[3 * index + 1],
-    positions.array[3 * index + 2]
+    positions.array[i],
+    positions.array[i + 1],
+    positions.array[i + 2]
   );
 }
 
