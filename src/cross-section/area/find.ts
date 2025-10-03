@@ -21,7 +21,7 @@ export function findGeometryWithinArea(
   const foundFaces: number[][] = [];
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const nPolygonIndices = convertToLists(indices, 3);
-  const indicesMap = createIndicesMap(nPolygonIndices);
+  const indicesMap = createIndicesMap(nPolygonIndices); // TODO: change to use only vertex indices map
   const positions = geometry.getAttribute(
     "position"
   ) as THREE.Float32BufferAttribute;

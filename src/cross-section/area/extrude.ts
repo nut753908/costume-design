@@ -38,7 +38,7 @@ export function extrudeGeometry(
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const nPolygonIndices = convertToLists(indices, 3);
   const allEdges = createAllEdges(nPolygonIndices);
-  const indicesMap = createIndicesMap(nPolygonIndices);
+  const indicesMap = createIndicesMap(nPolygonIndices); // TODO: change to use only edge indices map
   const boundaries = findBoundaries(allEdges, indicesMap);
   const sideGeometries = boundaries.map((boundary) =>
     createSideGeometry(boundary, innerPositions, outerPositions)

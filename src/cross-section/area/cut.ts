@@ -98,7 +98,7 @@ export function cutGeometryUsingIl(
   const normalLists = convertToLists(normals, 3);
   const uvLists = convertToLists(uvs, 2);
 
-  const indicesMap = createIndicesMap(indexLists);
+  const indicesMap = createIndicesMap(indexLists); // TODO: bring the original
 
   // Set newIl, positionLists, normalLists, uvLists.
   const newIl = il.clone();
