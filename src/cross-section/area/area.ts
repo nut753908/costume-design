@@ -122,7 +122,6 @@ export class Area {
    * @param baseGeometry - The base geometry.
    */
   createAreaGroup(baseGeometry: THREE.BufferGeometry, group: THREE.Group) {
-    // TODO: improve slow processing speed
     // This function is used by updateCrossSection() in src/cross-section/area.ts.
     this._updateAreaGroup = () => {
       const obj = cutGeometryUsingIlsWithinArea(baseGeometry, this);
