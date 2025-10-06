@@ -141,12 +141,12 @@ export class PlaneManager {
         pm.addFreePlane();
         update();
       },
-      curveKey: pm.curveKeys[0] ?? "",
+      curveKey: "",
       addVerticalPlane: () => {
         pm.addVerticalPlane(obj.curveKey);
         update();
       },
-      planeKey: pm.planeKeys[0] ?? "",
+      planeKey: "",
       removePlane: () => {
         pm.removePlane(obj.planeKey);
         obj.planeKey = "";
