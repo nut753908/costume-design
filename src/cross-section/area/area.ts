@@ -4,6 +4,7 @@ import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import { VertexNormalsHelper } from "three/examples/jsm/helpers/VertexNormalsHelper.js";
+import type { Edge } from "../centerline/edge";
 import { createAllEdges } from "../centerline/edges";
 import { convertToLists, createIndicesMap } from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
@@ -32,9 +33,14 @@ import { findGeometryWithinArea } from "./find";
  */
 export class Area {
   /**
-   * The plane to all intersection loops converter.
+   * The indices obj.
    */
-  planeToAllIls: (plane: FreePlane | VerticalPlane) => IntersectionLoop[];
+  indicesObj: {
+    nPolygonIndices: number[][];
+    allEdges: Edge[];
+    indicesMap: { [k: string]: number[][] };
+    planeToAllIls: (plane: FreePlane | VerticalPlane) => IntersectionLoop[];
+  };
 
   /**
    * The cross sections dividing the area.
@@ -97,16 +103,21 @@ export class Area {
   /**
    * Constructs a new area.
    *
-   * @param planeToAllIls - {@link Area#planeToAllIls}
+   * @param indicesObj - {@link Area#indicesObj}
    * @param crossSections - {@link Area#crossSections}
    * @param thickness - {@link Area#thickness}
    */
   constructor(
-    planeToAllIls: Area["planeToAllIls"] = () => [],
+    indicesObj: Area["indicesObj"] = {
+      nPolygonIndices: [],
+      allEdges: [],
+      indicesMap: {},
+      planeToAllIls: () => [],
+    },
     crossSections: Area["crossSections"] = {},
     thickness = 0.001
   ) {
-    this.planeToAllIls = planeToAllIls;
+    this.indicesObj = indicesObj;
     this.crossSections = crossSections;
     this.thickness = thickness;
     this._addIlpGroup = () => {};
@@ -223,19 +234,19 @@ export class Area {
   }
 
   /**
-   * Create a plane to all intersection loops converter.
+   * Create an indices obj.
    *
    * @param positions - The results of geometry.getAttribute("position").
    * @param indices - The results of geometry.getIndex().
    */
-  static createPlaneToAllIls(
+  static createIndicesObj(
     positions: THREE.Float32BufferAttribute,
     indices: THREE.Uint16BufferAttribute
-  ): (plane: FreePlane | VerticalPlane) => IntersectionLoop[] {
+  ): Area["indicesObj"] {
     const nPolygonIndices = convertToLists(indices, 3);
     const allEdges = createAllEdges(nPolygonIndices);
     const indicesMap = createIndicesMap(nPolygonIndices);
-    return (plane: FreePlane | VerticalPlane) => {
+    const planeToAllIls = (plane: FreePlane | VerticalPlane) => {
       const allIntersections = createAllIntersections(
         plane,
         allEdges,
@@ -243,6 +254,12 @@ export class Area {
       );
       const allIls = createAllIntersectionLoops(indicesMap, allIntersections);
       return sortIntersectionLoops(allIls, positions);
+    };
+    return {
+      nPolygonIndices,
+      allEdges,
+      indicesMap,
+      planeToAllIls,
     };
   }
 
@@ -255,7 +272,7 @@ export class Area {
     this.crossSections[key] = {
       plane,
       ilp: new IntersectionLoopPicker(
-        this.planeToAllIls(plane),
+        this.indicesObj.planeToAllIls(plane),
         plane.defaultOption
       ),
     };
@@ -283,7 +300,8 @@ export class Area {
    */
   updateCrossSection(key: string, plane: FreePlane | VerticalPlane) {
     this.crossSections[key].plane = plane;
-    this.crossSections[key].ilp.intersectionLoops = this.planeToAllIls(plane);
+    this.crossSections[key].ilp.intersectionLoops =
+      this.indicesObj.planeToAllIls(plane);
     this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
     this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
     this._updateAreaGroup(); // Set it in advance using createAreaGroup() in src/cross-section/area.ts.
@@ -291,7 +309,7 @@ export class Area {
 
   /**
    * Returns a new area with copied values from this instance.
-   * (NOTE: Secret fields are not supported.)
+   * (NOTE: indicesObj and secret fields are not supported.)
    *
    * @return  A clone of this instance.
    */
@@ -301,7 +319,7 @@ export class Area {
 
   /**
    * Copies the values of the given area to this instance.
-   * (NOTE: Secret fields are not supported.)
+   * (NOTE: indicesObj and secret fields are not supported.)
    *
    * @param source - The area to copy.
    * @return  A reference to this area.
@@ -318,7 +336,7 @@ export class Area {
 
   /**
    * Serializes the area into JSON.
-   * (NOTE: Secret fields are not supported.)
+   * (NOTE: indicesObj and secret fields are not supported.)
    *
    * @return  A JSON object representing the serialized area.
    */
@@ -334,7 +352,7 @@ export class Area {
 
   /**
    * Deserializes the area from the given JSON.
-   * (NOTE: Secret fields are not supported.)
+   * (NOTE: indicesObj and secret fields are not supported.)
    *
    * @param json - The JSON holding the serialized area.
    * @return  A reference to this area.
