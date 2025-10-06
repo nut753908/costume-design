@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { Edge } from "../centerline/edge";
 import { EdgeLoop } from "../centerline/edge-loop";
 import { createAllEdges } from "../centerline/edges";
-import { convertToLists, createIndicesMap } from "../intersection/indices";
+import { convertToLists, createEdgeIndicesMap } from "../intersection/indices";
 
 /**
  * Extrude geometry.
@@ -38,8 +38,8 @@ export function extrudeGeometry(
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const nPolygonIndices = convertToLists(indices, 3);
   const allEdges = createAllEdges(nPolygonIndices);
-  const indicesMap = createIndicesMap(nPolygonIndices); // TODO: change to use only edge indices map
-  const boundaries = findBoundaries(allEdges, indicesMap);
+  const edgeIndicesMap = createEdgeIndicesMap(nPolygonIndices);
+  const boundaries = findBoundaries(allEdges, edgeIndicesMap);
   const sideGeometries = boundaries.map((boundary) =>
     createSideGeometry(boundary, innerPositions, outerPositions)
   );
@@ -93,14 +93,14 @@ export function extrudePositions(
 /**
  * Find the boundaries as edge loops with only one face per edge.
  *
- * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param edgeIndicesMap - The edge-indices map. The key is a string of two vertices.
  */
 export function findBoundaries(
   allEdges: Edge[],
-  indicesMap: { [k: string]: number[][] }
+  edgeIndicesMap: { [k: string]: number[][] }
 ): EdgeLoop[] {
   const edges = allEdges.filter(
-    (e) => indicesMap[`${e.v1},${e.v2}`].length === 1
+    (e) => edgeIndicesMap[`${e.v1},${e.v2}`].length === 1
   );
   const els: EdgeLoop[] = []; // edgeLoops
   // e: edge

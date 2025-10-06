@@ -1,6 +1,9 @@
 import * as THREE from "three";
 import { getPoint } from "../centerline/points";
-import { convertToLists, createIndicesMap } from "../intersection/indices";
+import {
+  convertToLists,
+  createVertexIndicesMap,
+} from "../intersection/indices";
 import type { IntersectionLoop } from "../intersection/intersection-loop";
 import type { VertexIntersection } from "../intersection/vertex-intersection";
 import type { FreePlane } from "../plane/free-plane";
@@ -21,7 +24,7 @@ export function findGeometryWithinArea(
   const foundFaces: number[][] = [];
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const nPolygonIndices = convertToLists(indices, 3);
-  const indicesMap = createIndicesMap(nPolygonIndices); // TODO: change to use only vertex indices map
+  const vertexIndicesMap = createVertexIndicesMap(nPolygonIndices);
   const positions = geometry.getAttribute(
     "position"
   ) as THREE.Float32BufferAttribute;
@@ -29,7 +32,7 @@ export function findGeometryWithinArea(
     area,
     foundVertices,
     foundFaces,
-    indicesMap,
+    vertexIndicesMap,
     positions
   );
   return limitGeometryExtent(foundVertices, foundFaces, geometry);
@@ -41,14 +44,14 @@ export function findGeometryWithinArea(
  * @param area - The area after cutting faces.
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param foundFaces - The found faces. Each face found is added to this.
- * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param vertexIndicesMap - The vertex-indices map. The key is a string of one vertex.
  * @param positions - The results of geometry.getAttribute("position").
  */
 export function findAdjacentFacesWithinArea(
   area: Area,
   foundVertices: number[],
   foundFaces: number[][],
-  indicesMap: { [k: string]: number[][] },
+  vertexIndicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
   const firstFaces: number[][] = [];
@@ -64,7 +67,7 @@ export function findAdjacentFacesWithinArea(
           il,
           foundVertices,
           firstFaces,
-          indicesMap,
+          vertexIndicesMap,
           positions
         );
       });
@@ -72,7 +75,7 @@ export function findAdjacentFacesWithinArea(
 
   // Add to foundVertices and foundFaces.
   firstFaces.forEach((f) => {
-    findAdjacentFaces(f, foundVertices, foundFaces, indicesMap);
+    findAdjacentFaces(f, foundVertices, foundFaces, vertexIndicesMap);
   });
 }
 
@@ -82,7 +85,7 @@ export function findAdjacentFacesWithinArea(
  * @param il - The intersection loop after cutting faces.
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param firstFaces - The first faces. The adjacent faces of the intersection loop in the normal direction of the plane are added to this.
- * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param vertexIndicesMap - The vertex-indices map. The key is a string of one vertex.
  * @param positions - The results of geometry.getAttribute("position").
  */
 export function findFirstFaces(
@@ -90,7 +93,7 @@ export function findFirstFaces(
   il: IntersectionLoop,
   foundVertices: number[],
   firstFaces: number[][],
-  indicesMap: { [k: string]: number[][] },
+  vertexIndicesMap: { [k: string]: number[][] },
   positions: THREE.Float32BufferAttribute
 ) {
   const refP = plane.getPoint();
@@ -101,7 +104,7 @@ export function findFirstFaces(
     if (!foundVertices.includes(v)) foundVertices.push(v);
 
     // Add to firstFaces.
-    const faces = indicesMap[`${v}`];
+    const faces = vertexIndicesMap[`${v}`];
     faces.forEach((f) => {
       f.filter((v2) => !vertices.includes(v2)).forEach((v2) => {
         const p = getPoint(positions, v2);
@@ -122,13 +125,13 @@ export function findFirstFaces(
  * @param face - The face to start finding.
  * @param foundVertices - The found vertices. Each vertex found is added to this.
  * @param foundFaces - The found faces. Each face found is added to this.
- * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param vertexIndicesMap - The vertex-indices map. The key is a string of one vertex.
  */
 export function findAdjacentFaces(
   face: number[],
   foundVertices: number[],
   foundFaces: number[][],
-  indicesMap: { [k: string]: number[][] }
+  vertexIndicesMap: { [k: string]: number[][] }
 ) {
   // Add to foundFaces.
   if (foundFaces.includes(face)) return;
@@ -140,9 +143,9 @@ export function findAdjacentFaces(
     foundVertices.push(v);
 
     // Repeat the same for the next face.
-    const faces = indicesMap[`${v}`];
+    const faces = vertexIndicesMap[`${v}`];
     faces.forEach((f) => {
-      findAdjacentFaces(f, foundVertices, foundFaces, indicesMap);
+      findAdjacentFaces(f, foundVertices, foundFaces, vertexIndicesMap);
     });
   });
 }
