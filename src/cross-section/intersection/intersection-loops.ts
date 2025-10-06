@@ -76,8 +76,8 @@ export function sortIntersectionLoops(
       il,
       getCentroid(il.getPoints(positions)),
     ])
-    .sort((a, b) => (a[1].y < b[1].y ? -1 : a[1].y > b[1].y ? 1 : 0))
-    .sort((a, b) => (a[1].z < b[1].z ? -1 : a[1].z > b[1].z ? 1 : 0))
-    .sort((a, b) => (a[1].x < b[1].x ? -1 : a[1].x > b[1].x ? 1 : 0))
+    .sort((a, b) => a[1].y - b[1].y)
+    .sort((a, b) => a[1].z - b[1].z)
+    .sort((a, b) => a[1].x - b[1].x)
     .map(([il, _]) => il);
 }

@@ -129,6 +129,7 @@ export class PlaneManager {
     return parent;
   }
 
+  // TODO: fix bug where this GUI is removed on undo
   /**
    * Set GUI.
    */

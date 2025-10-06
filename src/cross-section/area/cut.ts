@@ -21,14 +21,33 @@ export function cutGeometryUsingIlsWithinArea(
     const positions = newGeometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
-    const allIls = planeToAllIls(v.plane);
+    let indicesObj: Area["indicesObj"];
+    let allIls: IntersectionLoop[];
+    if (newGeometry === geometry) {
+      indicesObj = area.indicesObj;
+      allIls = v.ilp.intersectionLoops;
+    } else {
+      const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
+      indicesObj = Area.createIndicesObj(positions, indices);
+      allIls = indicesObj.planeToAllIls(v.plane);
+    }
     const ilIndices = v.ilp.getIlIndices(v.plane, positions);
-
     const ils = ilIndices.map((i) => allIls[i]);
-    const obj = cutGeometryUsingIls(newGeometry, ils, v.plane.getNormal());
+
+    const indicesListToRemove: number[][] = [];
+    const obj = cutGeometryUsingIls(
+      newGeometry,
+      ils,
+      v.plane.getNormal(),
+      indicesObj.indicesMap,
+      indicesListToRemove
+    );
     newGeometry = obj.geometry;
+    removeSomeIndices(
+      newGeometry,
+      indicesObj.nPolygonIndices,
+      indicesListToRemove
+    );
   });
 
   // Set newArea.
@@ -37,9 +56,9 @@ export function cutGeometryUsingIlsWithinArea(
     "position"
   ) as THREE.Float32BufferAttribute;
   const indices = newGeometry.getIndex() as THREE.Uint16BufferAttribute;
-  const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+  const indicesObj = Area.createIndicesObj(positions, indices);
   Object.entries(newArea.crossSections).forEach(([_, v]) => {
-    const allIls = planeToAllIls(v.plane);
+    const allIls = indicesObj.planeToAllIls(v.plane);
     const ilIndices = v.ilp.getIlIndices(v.plane, positions);
 
     ilIndices.forEach((i) => {
@@ -55,17 +74,27 @@ export function cutGeometryUsingIlsWithinArea(
  *
  * @param ils - The intersection loops with a plane.
  * @param normal - The normal direction of the intersection loop plane.
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param indicesListToRemove - The indices list to remove. This is set here and will be used later.
  * @return  The geometry and the intersection loops after cutting faces.
  */
 export function cutGeometryUsingIls(
   geometry: THREE.BufferGeometry,
   ils: IntersectionLoop[],
-  normal: THREE.Vector3
+  normal: THREE.Vector3,
+  indicesMap: { [k: string]: number[][] },
+  indicesListToRemove: number[][]
 ): { geometry: THREE.BufferGeometry; ils: IntersectionLoop[] } {
   let newGeometry = geometry;
   const newIls: IntersectionLoop[] = [];
   ils.forEach((il) => {
-    const obj = cutGeometryUsingIl(newGeometry, il, normal);
+    const obj = cutGeometryUsingIl(
+      newGeometry,
+      il,
+      normal,
+      indicesMap,
+      indicesListToRemove
+    );
     newGeometry = obj.geometry;
     newIls.push(obj.il);
   });
@@ -77,12 +106,16 @@ export function cutGeometryUsingIls(
  *
  * @param il - The intersection loop with a plane.
  * @param normal - The normal direction of the intersection loop plane.
+ * @param indicesMap - The indices map. The key is a string of one or two vertices.
+ * @param indicesListToRemove - The indices list to remove. This is set here and will be used later.
  * @return  The geometry and the intersection loop after cutting faces.
  */
 export function cutGeometryUsingIl(
   geometry: THREE.BufferGeometry,
   il: IntersectionLoop,
-  normal: THREE.Vector3
+  normal: THREE.Vector3,
+  indicesMap: { [k: string]: number[][] },
+  indicesListToRemove: number[][]
 ): { geometry: THREE.BufferGeometry; il: IntersectionLoop } {
   const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
   const positions = geometry.getAttribute(
@@ -98,8 +131,6 @@ export function cutGeometryUsingIl(
   const normalLists = convertToLists(normals, 3);
   const uvLists = convertToLists(uvs, 2);
 
-  const indicesMap = createIndicesMap(indexLists);
-
   // Set newIl, positionLists, normalLists, uvLists.
   const newIl = il.clone();
   let count = positions.count;
@@ -111,6 +142,10 @@ export function cutGeometryUsingIl(
     normalLists.push(v.getNormal(normals).toArray());
     uvLists.push(v.getUv(uvs).toArray());
   });
+  const newPositions = new THREE.Float32BufferAttribute(
+    positionLists.flat(),
+    3
+  );
 
   // Set indexLists.
   const isCounterclockwise = il.isCounterclockwise(normal, positions);
@@ -147,31 +182,12 @@ indicesV1: ${JSON.stringify(indicesV1)}
 `);
       continue;
     }
-    const index = indexLists.indexOf(indicesV1[0]);
-    if (index === -1) {
-      console.error(`
-index === -1
-indexLists: ${JSON.stringify(indexLists)}
-indicesMap: ${JSON.stringify(indicesMap)}
-i: ${i}
-v0: ${JSON.stringify(v0)}
-v1: ${JSON.stringify(v1)}
-indicesV0: ${JSON.stringify(indicesV0)}
-indicesMap2: ${JSON.stringify(indicesMap2)}
-indicesV1: ${JSON.stringify(indicesV1)}
-`);
-      continue;
-    }
-    indexLists.splice(index, 1);
+    indicesListToRemove.push(indicesV1[0]);
 
     // Add to indexLists.
     if (v0 instanceof EdgeIntersection && v1 instanceof EdgeIntersection) {
       const newV0 = newIl.intersections[i] as VertexIntersection;
       const newV1 = newIl.intersections[i + 1] as VertexIntersection;
-      const newPositions = new THREE.Float32BufferAttribute(
-        positionLists.flat(),
-        3
-      );
       if (v0.frontV === v1.frontV) {
         indexLists.push([newV0.v, v0.frontV, newV1.v]);
         const pointNewV0 = getPoint(newPositions, newV0.v);
@@ -235,10 +251,7 @@ indicesV1: ${JSON.stringify(indicesV1)}
 
   const newGeometry = new THREE.BufferGeometry();
   newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
-  newGeometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(positionLists.flat(), 3)
-  );
+  newGeometry.setAttribute("position", newPositions);
   newGeometry.setAttribute(
     "normal",
     new THREE.Float32BufferAttribute(normalLists.flat(), 3)
@@ -249,4 +262,23 @@ indicesV1: ${JSON.stringify(indicesV1)}
   );
 
   return { geometry: newGeometry, il: newIl };
+}
+
+/**
+ * Remove some indices in the geometry.
+ *
+ * @param firstIndexLists - The first index list before cutting.
+ * @param indicesListToRemove - The indices list to remove. Must be set from firstIndexLists.
+ */
+export function removeSomeIndices(
+  geometry: THREE.BufferGeometry,
+  firstIndexLists: number[][],
+  indicesListToRemove: number[][]
+) {
+  const indices = geometry.getIndex() as THREE.Uint16BufferAttribute;
+  const indexList = indicesListToRemove.map((v) => firstIndexLists.indexOf(v));
+  const indexLists = convertToLists(indices, 3).filter(
+    (_, i) => !indexList.includes(i)
+  );
+  geometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
 }

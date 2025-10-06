@@ -3,8 +3,13 @@ import {
   cutGeometryUsingIl,
   cutGeometryUsingIls,
   cutGeometryUsingIlsWithinArea,
+  removeSomeIndices,
 } from "src/cross-section/area/cut";
 import { EdgeIntersection } from "src/cross-section/intersection/edge-intersection";
+import {
+  convertToLists,
+  createIndicesMap,
+} from "src/cross-section/intersection/indices";
 import { IntersectionLoop } from "src/cross-section/intersection/intersection-loop";
 import { IntersectionLoopPicker } from "src/cross-section/intersection/intersection-loop-picker";
 import { VertexIntersection } from "src/cross-section/intersection/vertex-intersection";
@@ -91,9 +96,10 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ),
         },
       };
-      const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
+      const area = new Area(Area.createIndicesObj(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
+      inputArea.indicesObj = area.indicesObj;
       const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
@@ -199,7 +205,7 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         },
       };
       const newArea = new Area(
-        Area.createPlaneToAllIls(newPositions, newIndices),
+        Area.createIndicesObj(newPositions, newIndices),
         newCss
       );
 
@@ -291,9 +297,10 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ]),
         },
       };
-      const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
+      const area = new Area(Area.createIndicesObj(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
+      inputArea.indicesObj = area.indicesObj;
       const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
@@ -457,7 +464,7 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         },
       };
       const newArea = new Area(
-        Area.createPlaneToAllIls(newPositions, newIndices),
+        Area.createIndicesObj(newPositions, newIndices),
         newCss
       );
 
@@ -549,9 +556,10 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
           ]),
         },
       };
-      const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
+      const area = new Area(Area.createIndicesObj(positions, indices), css);
       const inputGeometry = geometry.clone();
       const inputArea = area.clone();
+      inputArea.indicesObj = area.indicesObj;
       const obj = cutGeometryUsingIlsWithinArea(inputGeometry, inputArea);
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
@@ -729,7 +737,7 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
         },
       };
       const newArea = new Area(
-        Area.createPlaneToAllIls(newPositions, newIndices),
+        Area.createIndicesObj(newPositions, newIndices),
         newCss
       );
 
@@ -791,6 +799,10 @@ describe("cutGeometryUsingIlsWithinArea()", () => {
 describe("cutGeometryUsingIls()", () => {
   let spy: MockInstance;
   let geometry: THREE.BufferGeometry;
+  let normal: THREE.Vector3;
+  let nPolygonIndices: number[][];
+  let indicesMap: { [k: string]: number[][] };
+  let indicesListToDelete: number[][];
 
   beforeEach(() => {
     spy = vi.spyOn(console, "error");
@@ -872,8 +884,13 @@ describe("cutGeometryUsingIls()", () => {
     geometry.setAttribute("position", positions);
     geometry.setAttribute("normal", normals);
     geometry.setAttribute("uv", uvs);
+
+    normal = new THREE.Vector3(0, 1, 0);
+
+    nPolygonIndices = convertToLists(indices, 3);
+    indicesMap = createIndicesMap(nPolygonIndices);
+    indicesListToDelete = [];
   });
-  const normal = new THREE.Vector3(0, 1, 0);
 
   test("three triangular pyramids example", () => {
     const ils = [
@@ -904,25 +921,41 @@ describe("cutGeometryUsingIls()", () => {
     ];
     const inputGeometry = geometry.clone();
     const inputIls = ils.map((il) => il.clone());
-    const obj = cutGeometryUsingIls(inputGeometry, inputIls, normal);
+    const obj = cutGeometryUsingIls(
+      inputGeometry,
+      inputIls,
+      normal,
+      indicesMap,
+      indicesListToDelete
+    );
     inputGeometry.uuid = geometry.uuid;
     expect(inputGeometry).toEqual(geometry);
     expect(inputIls).toEqual(ils);
+    expect(indicesListToDelete).toEqual([
+      nPolygonIndices[1],
+      nPolygonIndices[2],
+      nPolygonIndices[3],
+      nPolygonIndices[6],
+      nPolygonIndices[7],
+      nPolygonIndices[5],
+      nPolygonIndices[9],
+      nPolygonIndices[10],
+    ]);
 
     const newIndicesArray = [
       [0, 1, 2],
-      // [0, 3, 1], // removed
-      // [1, 3, 2], // removed
-      // [2, 3, 0], // removed
+      [0, 3, 1], // to be removed
+      [1, 3, 2], // to be removed
+      [2, 3, 0], // to be removed
       //
       [4, 5, 6],
-      // [4, 7, 5], // removed
-      // [5, 7, 6], // removed
-      // [6, 7, 4], // removed
+      [4, 7, 5], // to be removed
+      [5, 7, 6], // to be removed
+      [6, 7, 4], // to be removed
       //
       [8, 9, 10],
-      // [8, 11, 9], // removed
-      // [9, 11, 10], // removed
+      [8, 11, 9], // to be removed
+      [9, 11, 10], // to be removed
       [10, 11, 8],
       //
       [12, 3, 13], // added
@@ -1166,6 +1199,10 @@ describe("cutGeometryUsingIl()", () => {
   describe("three triangular pyramids example", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
+    let normal: THREE.Vector3;
+    let nPolygonIndices: number[][];
+    let indicesMap: { [k: string]: number[][] };
+    let indicesListToDelete: number[][];
 
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
@@ -1247,8 +1284,13 @@ describe("cutGeometryUsingIl()", () => {
       geometry.setAttribute("position", positions);
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
+
+      normal = new THREE.Vector3(0, 1, 0);
+
+      nPolygonIndices = convertToLists(indices, 3);
+      indicesMap = createIndicesMap(nPolygonIndices);
+      indicesListToDelete = [];
     });
-    const normal = new THREE.Vector3(0, 1, 0);
 
     test("all intersections are edges", () => {
       const il = new IntersectionLoop(
@@ -1261,16 +1303,27 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
+      const obj = cutGeometryUsingIl(
+        inputGeometry,
+        inputIl,
+        normal,
+        indicesMap,
+        indicesListToDelete
+      );
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
+      expect(indicesListToDelete).toEqual([
+        nPolygonIndices[1],
+        nPolygonIndices[2],
+        nPolygonIndices[3],
+      ]);
 
       const newIndicesArray = [
         [0, 1, 2],
-        // [0, 3, 1], // removed
-        // [1, 3, 2], // removed
-        // [2, 3, 0], // removed
+        [0, 3, 1], // to be removed
+        [1, 3, 2], // to be removed
+        [2, 3, 0], // to be removed
         //
         [4, 5, 6],
         [4, 7, 5],
@@ -1464,10 +1517,21 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
+      const obj = cutGeometryUsingIl(
+        inputGeometry,
+        inputIl,
+        normal,
+        indicesMap,
+        indicesListToDelete
+      );
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
+      expect(indicesListToDelete).toEqual([
+        nPolygonIndices[6],
+        nPolygonIndices[7],
+        nPolygonIndices[5],
+      ]);
 
       const newIndicesArray = [
         [0, 1, 2],
@@ -1476,9 +1540,9 @@ describe("cutGeometryUsingIl()", () => {
         [2, 3, 0],
         //
         [4, 5, 6],
-        // [4, 7, 5], // removed
-        // [5, 7, 6], // removed
-        // [6, 7, 4], // removed
+        [4, 7, 5], // to be removed
+        [5, 7, 6], // to be removed
+        [6, 7, 4], // to be removed
         //
         [8, 9, 10],
         [8, 11, 9],
@@ -1654,10 +1718,20 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
+      const obj = cutGeometryUsingIl(
+        inputGeometry,
+        inputIl,
+        normal,
+        indicesMap,
+        indicesListToDelete
+      );
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
+      expect(indicesListToDelete).toEqual([
+        nPolygonIndices[9],
+        nPolygonIndices[10],
+      ]);
 
       const newIndicesArray = [
         [0, 1, 2],
@@ -1671,9 +1745,9 @@ describe("cutGeometryUsingIl()", () => {
         [6, 7, 4],
         //
         [8, 9, 10],
-        // [8, 11, 9], // removed
-        // [9, 11, 10], // removed
-        [10, 11, 8], // removed
+        [8, 11, 9], // to be removed
+        [9, 11, 10], // to be removed
+        [10, 11, 8],
         //
         [8, 11, 12], // added
         [8, 12, 9], // added
@@ -1825,6 +1899,10 @@ describe("cutGeometryUsingIl()", () => {
   describe("example of a plane (flat)", () => {
     let spy: MockInstance;
     let geometry: THREE.BufferGeometry;
+    let normal: THREE.Vector3;
+    let nPolygonIndices: number[][];
+    let indicesMap: { [k: string]: number[][] };
+    let indicesListToDelete: number[][];
 
     beforeEach(() => {
       spy = vi.spyOn(console, "error");
@@ -1865,8 +1943,13 @@ describe("cutGeometryUsingIl()", () => {
       geometry.setAttribute("position", positions);
       geometry.setAttribute("normal", normals);
       geometry.setAttribute("uv", uvs);
+
+      normal = new THREE.Vector3(0, 1, 0);
+
+      nPolygonIndices = convertToLists(indices, 3);
+      indicesMap = createIndicesMap(nPolygonIndices);
+      indicesListToDelete = [];
     });
-    const normal = new THREE.Vector3(0, 1, 0);
 
     test("check if il.closed is false", () => {
       const il = new IntersectionLoop(
@@ -1879,14 +1962,24 @@ describe("cutGeometryUsingIl()", () => {
       );
       const inputGeometry = geometry.clone();
       const inputIl = il.clone();
-      const obj = cutGeometryUsingIl(inputGeometry, inputIl, normal);
+      const obj = cutGeometryUsingIl(
+        inputGeometry,
+        inputIl,
+        normal,
+        indicesMap,
+        indicesListToDelete
+      );
       inputGeometry.uuid = geometry.uuid;
       expect(inputGeometry).toEqual(geometry);
       expect(inputIl).toEqual(il);
+      expect(indicesListToDelete).toEqual([
+        nPolygonIndices[0],
+        nPolygonIndices[1],
+      ]);
 
       const newIndicesArray = [
-        // [0, 2, 3], // removed
-        // [0, 3, 1], // removed
+        [0, 2, 3], // to be removed
+        [0, 3, 1], // to be removed
         //
         [0, 4, 5], // added
         [4, 2, 5], // added
@@ -2021,5 +2114,59 @@ describe("cutGeometryUsingIl()", () => {
       }
       expect(spy).toHaveBeenCalledTimes(0);
     });
+  });
+});
+
+describe("deleteSomeIndices()", () => {
+  test("three triangular pyramids example", () => {
+    const indicesArray = [
+      [0, 1, 2],
+      [0, 3, 1],
+      [1, 3, 2],
+      [2, 3, 0],
+      //
+      [4, 5, 6],
+      [4, 7, 5],
+      [5, 7, 6],
+      [6, 7, 4],
+      //
+      [8, 9, 10],
+      [8, 11, 9], // to be removed
+      [9, 11, 10], // to be removed
+      [10, 11, 8],
+      //
+      [8, 11, 12], // added
+      [8, 12, 9], // added
+      [12, 11, 10], // added
+      [9, 12, 10], // added
+    ].flat();
+    const indices = new THREE.Uint16BufferAttribute(indicesArray, 1);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setIndex(indices);
+
+    const nPolygonIndices = convertToLists(indices, 3);
+    const indicesListToDelete = [nPolygonIndices[9], nPolygonIndices[10]];
+
+    removeSomeIndices(geometry, nPolygonIndices, indicesListToDelete);
+    const indices2 = geometry.getIndex() as THREE.Uint16BufferAttribute;
+    const nPolygonIndices2 = convertToLists(indices2, 3);
+    expect(nPolygonIndices2).toEqual([
+      nPolygonIndices[0],
+      nPolygonIndices[1],
+      nPolygonIndices[2],
+      nPolygonIndices[3],
+      nPolygonIndices[4],
+      nPolygonIndices[5],
+      nPolygonIndices[6],
+      nPolygonIndices[7],
+      nPolygonIndices[8],
+      // nPolygonIndices[9], // removed
+      // nPolygonIndices[10], // removed
+      nPolygonIndices[11],
+      nPolygonIndices[12],
+      nPolygonIndices[13],
+      nPolygonIndices[14],
+      nPolygonIndices[15],
+    ]);
   });
 });

@@ -120,7 +120,7 @@ describe("findGeometryWithinArea()", () => {
         ),
       },
     };
-    const area = new Area(Area.createPlaneToAllIls(positions, indices), css);
+    const area = new Area(Area.createIndicesObj(positions, indices), css);
     const actualGeometry = findGeometryWithinArea(geometry, area);
 
     const expectedIndicesArray = [
@@ -244,7 +244,7 @@ describe("findAdjacentFacesWithinArea()", () => {
     const nPolygonIndices = convertToLists(indices, 3);
     const indicesMap = createIndicesMap(nPolygonIndices);
 
-    const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+    const area = new Area(Area.createIndicesObj(positions, indices), {
       a: {
         plane: new FreePlane(
           new THREE.Vector3(0, 1, 0),
@@ -362,7 +362,7 @@ describe("findAdjacentFacesWithinArea()", () => {
     const nPolygonIndices = convertToLists(indices, 3);
     const indicesMap = createIndicesMap(nPolygonIndices);
 
-    const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+    const area = new Area(Area.createIndicesObj(positions, indices), {
       a: {
         plane: new FreePlane(
           new THREE.Vector3(0, 1, 0),
@@ -472,7 +472,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       const indicesMap = createIndicesMap(nPolygonIndices);
 
       test("center row:↑, upper row:↑", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
@@ -534,7 +534,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↑, upper row:↓", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
@@ -592,7 +592,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↓, upper row:↑", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1
@@ -654,7 +654,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↓, upper row:↓", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1
@@ -767,7 +767,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       const indicesMap = createIndicesMap(nPolygonIndices);
 
       test("center row:↑, left column:→", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
@@ -835,7 +835,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↑, left column:←", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, 1, 0),
@@ -902,7 +902,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↓, left column:→", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1
@@ -970,7 +970,7 @@ describe("findAdjacentFacesWithinArea()", () => {
       });
 
       test("center row:↓, left column:←", () => {
-        const area = new Area(Area.createPlaneToAllIls(positions, indices), {
+        const area = new Area(Area.createIndicesObj(positions, indices), {
           centerRow: {
             plane: new FreePlane(
               new THREE.Vector3(0, -1, 0), // y: 1 -> -1

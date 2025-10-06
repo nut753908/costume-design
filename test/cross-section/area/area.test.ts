@@ -11,7 +11,7 @@ describe("Area", () => {
   test("constructor()", () => {
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const indicesObj = Area.createIndicesObj(positions, indices);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -24,8 +24,8 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area = new Area(planeToAllIls, crossSections, 0.002);
-    expect(area.planeToAllIls).toEqual(planeToAllIls);
+    const area = new Area(indicesObj, crossSections, 0.002);
+    expect(area.indicesObj).toEqual(indicesObj);
     expect(area.crossSections).toEqual(crossSections);
     expect(area.thickness).toEqual(0.002);
   });
@@ -73,7 +73,9 @@ describe("Area", () => {
           new THREE.Vector3(0, 1, 0),
           new THREE.Vector3(0, 0.5, 0)
         );
-        expect(Area.createPlaneToAllIls(positions, indices)(plane)).toEqual([
+        expect(
+          Area.createIndicesObj(positions, indices).planeToAllIls(plane)
+        ).toEqual([
           new IntersectionLoop(
             [
               new EdgeIntersection(4, 7, 0.5, true),
@@ -169,7 +171,7 @@ describe("Area", () => {
   test("clone()", () => {
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const indicesObj = Area.createIndicesObj(positions, indices);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -182,13 +184,13 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area1 = new Area(planeToAllIls, crossSections, 0.002);
+    const area1 = new Area(indicesObj, crossSections, 0.002);
     const area2 = area1.clone();
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    area2.planeToAllIls = area1.planeToAllIls;
+    area2.indicesObj = area1.indicesObj;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;
@@ -200,7 +202,7 @@ describe("Area", () => {
   test("copy()", () => {
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const indicesObj = Area.createIndicesObj(positions, indices);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -213,13 +215,13 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area1 = new Area(planeToAllIls, crossSections, 0.002);
+    const area1 = new Area(indicesObj, crossSections, 0.002);
     const area2 = new Area().copy(area1);
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    area2.planeToAllIls = area1.planeToAllIls;
+    area2.indicesObj = area1.indicesObj;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;
@@ -275,7 +277,7 @@ describe("Area", () => {
   test("toJSON()", () => {
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const indicesObj = Area.createIndicesObj(positions, indices);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -288,7 +290,7 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const json1 = new Area(planeToAllIls, crossSections, 0.002).toJSON();
+    const json1 = new Area(indicesObj, crossSections, 0.002).toJSON();
     const json2: AreaJSON = _json;
     expect(json1).toEqual(json2);
   });
@@ -297,7 +299,7 @@ describe("Area", () => {
     const area1 = new Area().fromJSON(_json);
     const positions = new THREE.Float32BufferAttribute([], 3);
     const indices = new THREE.Uint16BufferAttribute([], 1);
-    const planeToAllIls = Area.createPlaneToAllIls(positions, indices);
+    const indicesObj = Area.createIndicesObj(positions, indices);
     const plane = new FreePlane(
       new THREE.Vector3(1, 0, 0),
       new THREE.Vector3(2, 3, 4)
@@ -310,12 +312,12 @@ describe("Area", () => {
     const il = new IntersectionLoop(intersections, true);
     const ilp = new IntersectionLoopPicker([il], "some", [0]);
     const crossSections = { "[0] {FreePlane}": { plane, ilp } };
-    const area2 = new Area(planeToAllIls, crossSections, 0.002);
+    const area2 = new Area(indicesObj, crossSections, 0.002);
     area2.crossSections["[0] {FreePlane}"].plane._updateGroup =
       area1.crossSections["[0] {FreePlane}"].plane._updateGroup;
     area2.crossSections["[0] {FreePlane}"].ilp._updateGroup =
       area1.crossSections["[0] {FreePlane}"].ilp._updateGroup;
-    area2.planeToAllIls = area1.planeToAllIls;
+    area2.indicesObj = area1.indicesObj;
     area2._addIlpGroup = area1._addIlpGroup;
     area2._removeIlpGroup = area1._removeIlpGroup;
     area2._updateIlpGroup = area1._updateIlpGroup;

@@ -53,3 +53,52 @@ export function createIndicesMap(nPolygonIndices: number[][]): {
   });
   return map;
 }
+
+/**
+ * Create the vertex-indices map.
+ *
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  The vertex-indices map. The key is a string of one vertex.
+ */
+export function createVertexIndicesMap(nPolygonIndices: number[][]): {
+  [k: string]: number[][];
+} {
+  const map: { [k: string]: number[][] } = {};
+  nPolygonIndices.forEach((list) => {
+    for (let i = 0, l = list.length; i < l; i++) {
+      const k = list[i];
+      if (k in map) {
+        map[k].push(list);
+      } else {
+        map[k] = [list];
+      }
+    }
+  });
+  return map;
+}
+
+/**
+ * Create the edge-indices map.
+ *
+ * @param nPolygonIndices - The n polygon indices.
+ * @return  The edge-indices map. The key is a string of two vertices.
+ */
+export function createEdgeIndicesMap(nPolygonIndices: number[][]): {
+  [k: string]: number[][];
+} {
+  const map: { [k: string]: number[][] } = {};
+  nPolygonIndices.forEach((list) => {
+    for (let i = 0, l = list.length; i < l; i++) {
+      const a = list[i];
+      const b = i + 1 < l ? list[i + 1] : list[0];
+      [`${a},${b}`, `${b},${a}`].forEach((k) => {
+        if (k in map) {
+          map[k].push(list);
+        } else {
+          map[k] = [list];
+        }
+      });
+    }
+  });
+  return map;
+}
