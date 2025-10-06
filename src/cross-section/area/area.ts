@@ -3,7 +3,6 @@ import { deleteFolder } from "src/main/gui";
 import { disposeGroup, objectMap } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { VertexNormalsHelper } from "three/examples/jsm/helpers/VertexNormalsHelper.js";
 import type { Edge } from "../centerline/edge";
 import { createAllEdges } from "../centerline/edges";
 import { convertToLists, createIndicesMap } from "../intersection/indices";
@@ -155,16 +154,6 @@ export class Area {
         group.children[1].geometry.dispose();
         group.children[1].geometry = extrudedGeometry;
       }
-
-      // Add VertexNormalsHelper for debugging.
-      if (group.children[2] instanceof VertexNormalsHelper) {
-        group.children[2].dispose();
-      }
-      group.children[2] = new VertexNormalsHelper(
-        group.children[1],
-        0.005,
-        0xff0000
-      );
     };
     this._updateAreaGroup();
   }

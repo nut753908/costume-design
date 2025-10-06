@@ -31,7 +31,6 @@ export function createToonMaterial(
   });
   {
     const folder = gui.addFolder(`${name} (u=uniforms)`);
-    toonMaterial.wireframe = true; // debug code
     folder.add(toonMaterial, "wireframe");
     const u = toonMaterial.uniforms;
     folder.add(u.checkShape, "value").name("u.checkShape");

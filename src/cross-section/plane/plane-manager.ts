@@ -129,7 +129,6 @@ export class PlaneManager {
     return parent;
   }
 
-  // TODO: fix bug where this GUI is removed on undo
   /**
    * Set GUI.
    */
@@ -141,12 +140,12 @@ export class PlaneManager {
         pm.addFreePlane();
         update();
       },
-      curveKey: pm.curveKeys[0] ?? "",
+      curveKey: "",
       addVerticalPlane: () => {
         pm.addVerticalPlane(obj.curveKey);
         update();
       },
-      planeKey: pm.planeKeys[0] ?? "",
+      planeKey: "",
       removePlane: () => {
         pm.removePlane(obj.planeKey);
         obj.planeKey = "";
@@ -163,6 +162,7 @@ export class PlaneManager {
     let cPK = folder.add(obj, "planeKey").name("removePlane key");
     updateEnabled();
     updateOptions();
+    updatePlanesFolder();
 
     function update() {
       updateEnabled();

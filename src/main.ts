@@ -51,7 +51,7 @@ let pm: PlaneManager;
 let planesGroup: THREE.Group;
 
 let area: Area;
-let ilpsGroup: THREE.Group;
+// let ilpsGroup: THREE.Group;
 let baseGeometry: BufferGeometryWithNPolygonIndices;
 let areaGroup: THREE.Group;
 
@@ -114,8 +114,8 @@ async function init() {
     pm._removeCrossSection = area.removeCrossSection.bind(area);
     pm._updateCrossSection = area.updateCrossSection.bind(area);
     area.setGUI(gui);
-    ilpsGroup = area.createIlpsGroup(positions, ms);
-    scene.add(ilpsGroup);
+    // ilpsGroup = area.createIlpsGroup(positions, ms);
+    // scene.add(ilpsGroup);
     areaGroup = createAreaGroup(area, baseGeometry, ms);
     scene.add(areaGroup);
   });
@@ -146,8 +146,8 @@ function loadLastUndo() {
   scene.remove(planesGroup);
   disposeGroup(planesGroup);
 
-  scene.remove(ilpsGroup);
-  disposeGroup(ilpsGroup);
+  // scene.remove(ilpsGroup);
+  // disposeGroup(ilpsGroup);
   scene.remove(areaGroup);
   disposeGroup(areaGroup);
 
@@ -163,8 +163,8 @@ function loadLastUndo() {
   pm._removeCrossSection = area.removeCrossSection.bind(area);
   pm._updateCrossSection = area.updateCrossSection.bind(area);
   area.setGUI(gui);
-  ilpsGroup = area.createIlpsGroup(positions, ms);
-  scene.add(ilpsGroup);
+  // ilpsGroup = area.createIlpsGroup(positions, ms);
+  // scene.add(ilpsGroup);
   areaGroup = createAreaGroup(area, baseGeometry, ms);
   scene.add(areaGroup);
 
