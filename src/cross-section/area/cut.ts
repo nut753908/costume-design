@@ -142,6 +142,10 @@ export function cutGeometryUsingIl(
     normalLists.push(v.getNormal(normals).toArray());
     uvLists.push(v.getUv(uvs).toArray());
   });
+  const newPositions = new THREE.Float32BufferAttribute(
+    positionLists.flat(),
+    3
+  );
 
   // Set indexLists.
   const isCounterclockwise = il.isCounterclockwise(normal, positions);
@@ -184,10 +188,6 @@ indicesV1: ${JSON.stringify(indicesV1)}
     if (v0 instanceof EdgeIntersection && v1 instanceof EdgeIntersection) {
       const newV0 = newIl.intersections[i] as VertexIntersection;
       const newV1 = newIl.intersections[i + 1] as VertexIntersection;
-      const newPositions = new THREE.Float32BufferAttribute(
-        positionLists.flat(),
-        3
-      ); // TODO: improve speed
       if (v0.frontV === v1.frontV) {
         indexLists.push([newV0.v, v0.frontV, newV1.v]);
         const pointNewV0 = getPoint(newPositions, newV0.v);
@@ -251,10 +251,7 @@ indicesV1: ${JSON.stringify(indicesV1)}
 
   const newGeometry = new THREE.BufferGeometry();
   newGeometry.setIndex(new THREE.Uint16BufferAttribute(indexLists.flat(), 1));
-  newGeometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(positionLists.flat(), 3)
-  );
+  newGeometry.setAttribute("position", newPositions);
   newGeometry.setAttribute(
     "normal",
     new THREE.Float32BufferAttribute(normalLists.flat(), 3)
