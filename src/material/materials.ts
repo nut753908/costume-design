@@ -53,7 +53,7 @@ export function createMaterials(gui: GUI): Materials {
 
   const areaFolder = folder.addFolder("area").close();
   const area = {
-    line: createLineMaterial(areaFolder, "line"),
+    line: createLineMaterial(areaFolder, "line", 0xffffff, 0),
     toon: createToonMaterial(areaFolder, "toon", 0x313c43, 0x2a353c),
   };
 
