@@ -129,7 +129,6 @@ export class PlaneManager {
     return parent;
   }
 
-  // TODO: fix bug where this GUI is removed on undo
   /**
    * Set GUI.
    */
@@ -163,6 +162,7 @@ export class PlaneManager {
     let cPK = folder.add(obj, "planeKey").name("removePlane key");
     updateEnabled();
     updateOptions();
+    updatePlanesFolder();
 
     function update() {
       updateEnabled();
