@@ -11,21 +11,26 @@ export function convertToLists(
   attribute: THREE.BufferAttribute,
   itemSize: 2 | 3
 ): number[][] {
-  const lists: number[][] = [];
   if (itemSize === 3) {
-    for (let i = 0, l = attribute.array.length; i < l; i += 3) {
-      lists.push([
-        attribute.array[i],
-        attribute.array[i + 1],
-        attribute.array[i + 2],
-      ]);
+    const l = attribute.array.length / 3;
+    const lists: number[][] = [...Array(l)].map(() => [0, 0, 0]);
+    for (let i = 0, i3 = 0; i < l; i++, i3 = 3 * i) {
+      for (let j = 0; j < 3; j++) {
+        lists[i][j] = attribute.array[i3 + j];
+      }
     }
+    return lists;
   } else if (itemSize === 2) {
-    for (let i = 0, l = attribute.array.length; i < l; i += 2) {
-      lists.push([attribute.array[i], attribute.array[i + 1]]);
+    const l = attribute.array.length / 2;
+    const lists: number[][] = [...Array(l)].map(() => [0, 0]);
+    for (let i = 0, i2 = 0; i < l; i++, i2 = 2 * i) {
+      for (let j = 0; j < 2; j++) {
+        lists[i][j] = attribute.array[i2 + j];
+      }
     }
+    return lists;
   }
-  return lists;
+  return [];
 }
 
 /**
