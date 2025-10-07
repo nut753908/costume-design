@@ -27,7 +27,6 @@ import {
 import { createAxesHelper } from "./object-3d/axes-helper";
 import { createAreaGroup } from "./object-3d/group/area";
 import { createBaseGroup } from "./object-3d/group/base";
-import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
@@ -98,12 +97,7 @@ async function init() {
     ) as THREE.Float32BufferAttribute;
     indices = baseGeometry.getIndex() as THREE.Uint16BufferAttribute;
 
-    const lines = createBaseCenterlines(nPolygonIndices, positions);
-    const linesGroup = createLinesGroup(lines, positions, ms);
-    setLinesGroupGUI(gui, linesGroup, false);
-    scene.add(linesGroup);
-
-    pm = new PlaneManager(lines);
+    pm = new PlaneManager(createBaseCenterlines(nPolygonIndices, positions));
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
