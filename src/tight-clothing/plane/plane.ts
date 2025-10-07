@@ -1,9 +1,9 @@
 import type GUI from "lil-gui";
-import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
+import type { ArrowHelperWithCallbacks } from "src/main/object-3d/arrow-helper";
 import {
   PlaneHelper,
   type PlaneHelperWithCallbacks,
-} from "src/object-3d/plane-helper";
+} from "src/main/object-3d/plane-helper";
 import * as THREE from "three";
 
 /**

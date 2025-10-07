@@ -1,8 +1,8 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/main/gui";
+import type { ArrowHelperWithCallbacks } from "src/main/object-3d/arrow-helper";
+import type { PlaneHelperWithCallbacks } from "src/main/object-3d/plane-helper";
 import { disposeGroup, objectMap } from "src/main/utils";
-import type { ArrowHelperWithCallbacks } from "src/object-3d/arrow-helper";
-import type { PlaneHelperWithCallbacks } from "src/object-3d/plane-helper";
 import * as THREE from "three";
 import { FreePlane, type FreePlaneJSON } from "./free-plane";
 import { Plane } from "./plane";
