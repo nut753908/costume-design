@@ -6,7 +6,7 @@ import { Curve } from "./curve";
  * A 2D Cubic Bezier curve path using 2D control points.
  *
  * ```js
- * import { Curve2 } from "./src/curve/curve-2";
+ * import { Curve2 } from "./curve-2";
  * const curve2 = new Curve2();
  * ```
  *

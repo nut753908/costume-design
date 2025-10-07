@@ -26,7 +26,7 @@ import { findGeometryWithinArea } from "./find";
  * The area divided by cross sections.
  *
  * ```js
- * import { Area } from "./src/cross-section/area";
+ * import { Area } from "./area";
  * const area = new Area();
  * ```
  */
@@ -58,44 +58,44 @@ export class Area {
 
   /**
    * Secret field.
-   * This function is used by createIlpsGroup() in src/cross-section/area.ts.
-   * This function is used by addCrossSection() in src/cross-section/area.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by createIlpsGroup() in ./area.
+   * This function is used by addCrossSection() in ./area.
+   * Set it in advance using createIlpsGroup() in ./area.
    */
   _addIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by removeCrossSection() in src/cross-section/area.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by removeCrossSection() in ./area.
+   * Set it in advance using createIlpsGroup() in ./area.
    */
   _removeIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by updateCrossSection() in src/cross-section/area.ts.
-   * Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
+   * This function is used by updateCrossSection() in ./area.
+   * Set it in advance using createIlpsGroup() in ./area.
    */
   _updateIlpGroup: (k: string) => void;
 
   /**
    * Secret field.
-   * This function is used by createAreaGroup() in src/cross-section/area.ts.
-   * This function is used by setGUI() in src/cross-section/area.ts.
-   * This function is used by addCrossSection() in src/cross-section/area.ts.
-   * This function is used by removeCrossSection() in src/cross-section/area.ts.
-   * This function is used by updateCrossSection() in src/cross-section/area.ts.
-   * Set it in advance using createAreaGroup() in src/cross-section/area.ts.
+   * This function is used by createAreaGroup() in ./area.
+   * This function is used by setGUI() in ./area.
+   * This function is used by addCrossSection() in ./area.
+   * This function is used by removeCrossSection() in ./area.
+   * This function is used by updateCrossSection() in ./area.
+   * Set it in advance using createAreaGroup() in ./area.
    */
   _updateAreaGroup: () => void;
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/cross-section/area.ts.
-   * This function is used by addCrossSection() in src/cross-section/area.ts.
-   * This function is used by removeCrossSection() in src/cross-section/area.ts.
-   * This function is used by updateCrossSection() in src/cross-section/area.ts.
-   * Set it in advance using setGUI() in src/cross-section/area.ts.
+   * This function is used by setGUI() in ./area.
+   * This function is used by addCrossSection() in ./area.
+   * This function is used by removeCrossSection() in ./area.
+   * This function is used by updateCrossSection() in ./area.
+   * Set it in advance using setGUI() in ./area.
    */
   _updateGUI: () => void;
 
@@ -132,7 +132,7 @@ export class Area {
    * @param baseGeometry - The base geometry.
    */
   createAreaGroup(baseGeometry: THREE.BufferGeometry, group: THREE.Group) {
-    // This function is used by updateCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in ./area.
     this._updateAreaGroup = () => {
       const obj = cutGeometryUsingIlsWithinArea(baseGeometry, this);
       const foundGeometry = findGeometryWithinArea(obj.geometry, obj.area);
@@ -162,8 +162,8 @@ export class Area {
     const parent = new THREE.Group();
     const children: { [k: string]: THREE.Group } = {};
 
-    // This function is used by createIlpsGroup() in src/cross-section/area.ts.
-    // This function is used by addCrossSection() in src/cross-section/area.ts.
+    // This function is used by createIlpsGroup() in ./area.
+    // This function is used by addCrossSection() in ./area.
     this._addIlpGroup = (k: string) => {
       const p = this.crossSections[k].plane;
       const ilp = this.crossSections[k].ilp;
@@ -172,14 +172,14 @@ export class Area {
     };
     Object.keys(this.crossSections).map((k) => this._addIlpGroup(k));
 
-    // This function is used by removeCrossSection() in src/cross-section/area.ts.
+    // This function is used by removeCrossSection() in ./area.
     this._removeIlpGroup = (k: string) => {
       parent.remove(children[k]);
       disposeGroup(children[k]);
       delete children[k];
     };
 
-    // This function is used by updateCrossSection() in src/cross-section/area.ts.
+    // This function is used by updateCrossSection() in ./area.
     this._updateIlpGroup = (k: string) => {
       this._removeIlpGroup(k);
       this._addIlpGroup(k);
@@ -194,20 +194,20 @@ export class Area {
   setGUI(gui: GUI) {
     const area = this;
 
-    // This function is used by setGUI() in src/cross-section/area.ts.
-    // This function is used by addCrossSection() in src/cross-section/area.ts.
-    // This function is used by removeCrossSection() in src/cross-section/area.ts.
-    // This function is used by updateCrossSection() in src/cross-section/area.ts.
+    // This function is used by setGUI() in ./area.
+    // This function is used by addCrossSection() in ./area.
+    // This function is used by removeCrossSection() in ./area.
+    // This function is used by updateCrossSection() in ./area.
     area._updateGUI = () => {
       deleteFolder(gui, "Area");
       const folder = gui.addFolder("Area");
       folder.add(area, "thickness", 0, 0.01, 0.0001).onChange(uT);
       Object.entries(area.crossSections).forEach(([k, cs]) => {
-        cs.ilp.setGUI(folder, `intersection loops${k}`, area._updateAreaGroup); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+        cs.ilp.setGUI(folder, `intersection loops${k}`, area._updateAreaGroup); // Set it in advance using createGroup() in ../intersection/intersection-loop-picker.
       });
 
       function uT() /* updateThickness */ {
-        area._updateAreaGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+        area._updateAreaGroup(); // Set it in advance using createAreaGroup() in ./area.
       }
     };
     area._updateGUI();
@@ -256,9 +256,9 @@ export class Area {
         plane.defaultOption
       ),
     };
-    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
-    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in src/cross-section/area.ts.
+    this._updateGUI(); // Set it in advance using setGUI() in ./area.
+    this._addIlpGroup(key); // Set it in advance using createIlpsGroup() in ./area.
+    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in ./area.
   }
 
   /**
@@ -268,9 +268,9 @@ export class Area {
    */
   removeCrossSection(key: string) {
     delete this.crossSections[key];
-    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
-    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in src/cross-section/area.ts.
+    this._updateGUI(); // Set it in advance using setGUI() in ./area.
+    this._removeIlpGroup(key); // Set it in advance using createIlpsGroup() in ./area.
+    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in ./area.
   }
 
   /**
@@ -282,9 +282,9 @@ export class Area {
     this.crossSections[key].plane = plane;
     this.crossSections[key].ilp.intersectionLoops =
       this.indicesObj.planeToAllIls(plane);
-    this._updateGUI(); // Set it in advance using setGUI() in src/cross-section/area.ts.
-    this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in src/cross-section/area.ts.
-    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in src/cross-section/area.ts.
+    this._updateGUI(); // Set it in advance using setGUI() in ./area.
+    this._updateIlpGroup(key); // Set it in advance using createIlpsGroup() in ./area.
+    this._updateAreaGroup(); // Set it in advance using createAreaGroup() in ./area.
   }
 
   /**

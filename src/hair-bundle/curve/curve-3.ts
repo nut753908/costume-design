@@ -6,7 +6,7 @@ import { Curve } from "./curve";
  * A 3D Cubic Bezier curve path using 3D control points.
  *
  * ```js
- * import { Curve3 } from "./src/curve/curve-3";
+ * import { Curve3 } from "./curve-3";
  * const curve3 = new Curve3();
  * ```
  *

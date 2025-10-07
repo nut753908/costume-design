@@ -6,7 +6,7 @@ import { getPoint } from "./points";
  * An edge of geometry.
  *
  * ```js
- * import { Edge } from "./src/cross-section/centerline/edge";
+ * import { Edge } from "./edge";
  * const edge = new Edge( 0, 1 );
  * ```
  */

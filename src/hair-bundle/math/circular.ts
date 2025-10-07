@@ -6,7 +6,7 @@ import { atan2In2PI } from "./utils";
  * A class representing a circular as 2D Polar coodinate.
  *
  * ```js
- * import { Circular } from "./src/math/circular";
+ * import { Circular } from "./circular";
  * const circular = new Circular( 1, 0 );
  * ```
  */

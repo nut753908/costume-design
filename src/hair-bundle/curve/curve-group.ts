@@ -39,7 +39,7 @@ function createCurvesLine(c: Curve3 | Curve2, ms: Materials): THREE.Line {
 function createCpsGroup(c: Curve3 | Curve2, ms: Materials): THREE.Group {
   const group = new THREE.Group();
 
-  // This function is used by createGeometry() in src/curve/curve-{3,2}.ts.
+  // This function is used by createGeometry() in ./curve-{3,2}.
   c._updateCpsGroup = () => {
     group.children.forEach((g) => {
       g.children.forEach((v) => {

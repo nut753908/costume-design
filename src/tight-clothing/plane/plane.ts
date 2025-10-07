@@ -14,9 +14,9 @@ export abstract class Plane {
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/cross-section/plane/free-plane.ts.
-   * This function is used by setGUI() in src/cross-section/plane/vertical-plane.ts.
-   * Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+   * This function is used by setGUI() in ./free-plane.
+   * This function is used by setGUI() in ./vertical-plane.
+   * Set it in advance using createGroup() in ./plane.
    */
   _updateGroup: () => void;
 
@@ -44,7 +44,7 @@ export abstract class Plane {
 
     const _planeHelper = planeHelper.clone();
     _planeHelper.size = planeHelper.size;
-    // These functions are used by createPlaneHelper() in src/object-3d/plane-helper.ts.
+    // These functions are used by createPlaneHelper() in ./plane-helper.
     planeHelper._updateVisibleCallbacks[name] = (v) => {
       _planeHelper.visible = v;
     };
@@ -54,15 +54,15 @@ export abstract class Plane {
     group.add(_planeHelper);
 
     const _arrowHelper = arrowHelper.clone();
-    // These functions are used by createArrowHelper() in src/object-3d/arrow-helper.ts.
+    // These functions are used by createArrowHelper() in ./arrow-helper.
     arrowHelper._updateVisibleCallbacks[name] = (v) => {
       _arrowHelper.visible = v;
     };
     arrowHelper._updateLengthCallbacks[name] = (v) => _arrowHelper.setLength(v);
     group.add(_arrowHelper);
 
-    // This function is used by setGUI() in src/cross-section/plane/free-plane.ts.
-    // This function is used by setGUI() in src/cross-section/plane/vertical-plane.ts.
+    // This function is used by setGUI() in ./free-plane.
+    // This function is used by setGUI() in ./vertical-plane.
     this._updateGroup = () => {
       if (group.children[0] instanceof PlaneHelper) {
         group.children[0].normal.copy(this.getNormal());

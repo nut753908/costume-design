@@ -14,10 +14,10 @@ import {
  * The intersection loop picker.
  *
  * ```js
- * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
- * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
- * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
- * import { IntersectionLoopPicker } from "./src/cross-section/intersection/intersection-loop-picker";
+ * import { EdgeIntersection } from "./edge-intersection";
+ * import { VertexIntersection } from "./vertex-intersection";
+ * import { IntersectionLoop } from "./intersection-loop";
+ * import { IntersectionLoopPicker } from "./intersection-loop-picker";
  * const intersections = [
  *   new EdgeIntersection( 1, 3, 0.5, true ),
  *   new EdgeIntersection( 0, 3, 0.75, true ),
@@ -46,9 +46,9 @@ export class IntersectionLoopPicker {
 
   /**
    * Secret field.
-   * This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-   * This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
-   * Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+   * This function is used by createGroup() in ./intersection-loop-picker.
+   * This function is used by setGUI() in ./intersection-loop-picker.
+   * Set it in advance using createGroup() in ./intersection-loop-picker.
    */
   _updateGroup: () => void;
 
@@ -83,8 +83,8 @@ export class IntersectionLoopPicker {
   ): THREE.Group {
     const group = new THREE.Group();
 
-    // This function is used by createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
-    // This function is used by setGUI() in src/cross-section/intersection/intersection-loop-picker.ts.
+    // This function is used by createGroup() in ./intersection-loop-picker.
+    // This function is used by setGUI() in ./intersection-loop-picker.
     this._updateGroup = () => {
       disposeGroup(group);
       group.clear();
@@ -137,7 +137,7 @@ export class IntersectionLoopPicker {
     }
     function uS() /* updateSelection */ {
       updateHidden();
-      ilp._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      ilp._updateGroup(); // Set it in advance using createGroup() in ./intersection-loop-picker.
       updateCallback();
     }
     function uI(i: string) /* updateIndices */ {
@@ -147,7 +147,7 @@ export class IntersectionLoopPicker {
       } else {
         if (index !== -1) ilp.indices.splice(index, 1);
       }
-      ilp._updateGroup(); // Set it in advance using createGroup() in src/cross-section/intersection/intersection-loop-picker.ts.
+      ilp._updateGroup(); // Set it in advance using createGroup() in ./intersection-loop-picker.
       updateCallback();
     }
   }

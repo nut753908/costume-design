@@ -6,7 +6,7 @@ import { getPoint } from "./points";
  * An edge loop of geometry.
  *
  * ```js
- * import { EdgeLoop } from "./src/cross-section/centerline/edge-loop";
+ * import { EdgeLoop } from "./edge-loop";
  * const edgeLoop = new EdgeLoop( [ 0, 1, 2 ], true );
  * ```
  */

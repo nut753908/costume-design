@@ -7,7 +7,7 @@ import { VertexIntersection } from "./vertex-intersection";
  * An edge intersection with a plane.
  *
  * ```js
- * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
+ * import { EdgeIntersection } from "./edge-intersection";
  * const edgeIntersection = new EdgeIntersection( 0, 1, 0 );
  * ```
  *

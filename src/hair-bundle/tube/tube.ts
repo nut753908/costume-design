@@ -14,7 +14,7 @@ import {
  * A class for managing TubeGeometry.
  *
  * ```js
- * import { Tube } from "./src/curve/tube";
+ * import { Tube } from "./tube";
  * const tube = new Tube();
  * ```
  */
@@ -26,8 +26,8 @@ export class Tube {
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/curve/tube.ts.
-   * Set it in advance using createGeometry() in src/curve/tube.ts.
+   * This function is used by setGUI() in ./tube.
+   * Set it in advance using createGeometry() in ./tube.
    */
   _updateGeometry: () => void;
 
@@ -49,7 +49,7 @@ export class Tube {
     const t = this;
     const p = t.parameters;
 
-    // This function is used by setGUI() in src/curve/tube.ts.
+    // This function is used by setGUI() in ./tube.
     t._updateGeometry = () => {
       const geometry = new TubeGeometry(
         p.axis,
@@ -114,7 +114,7 @@ export class Tube {
     folder.add(p, "curvatureOrder", ["xy", "yx"]).onChange(update);
 
     function update() {
-      t._updateGeometry(); // Set it in advance using createGeometry() in src/curve/tube.ts.
+      t._updateGeometry(); // Set it in advance using createGeometry() in ./tube.
     }
   }
 

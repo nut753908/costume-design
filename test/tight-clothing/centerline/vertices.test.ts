@@ -13,7 +13,7 @@ import {
 
 describe("createRemainingVerticesMap()", () => {
   test("triangular pyramid example", () => {
-    // See the triangular pyramid example in test/geometry/base.test.ts.
+    // See the triangular pyramid example in test/base/base-geometry.test.
     const nPolygonIndices = [
       [0, 1, 2],
       [0, 3, 1],
@@ -38,7 +38,7 @@ describe("createRemainingVerticesMap()", () => {
   });
 
   test("cube example", () => {
-    // See the cube example in test/geometry/base.test.ts.
+    // See the cube example in test/base/base-geometry.test.
     const nPolygonIndices = [
       [0, 1, 2, 3],
       [0, 4, 5, 1],
@@ -80,7 +80,7 @@ describe("createRemainingVerticesMap()", () => {
   });
 
   test("plane example", () => {
-    // See a similar plane example in test/geometry/base.test.ts.
+    // See a similar plane example in test/base/base-geometry.test.
     /**
      * flat layout:
      *   20 21 22

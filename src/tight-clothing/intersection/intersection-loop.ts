@@ -14,9 +14,9 @@ import {
  * An intersection loop.
  *
  * ```js
- * import { EdgeIntersection } from "./src/cross-section/intersection/edge-intersection";
- * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
- * import { IntersectionLoop } from "./src/cross-section/intersection/intersection-loop";
+ * import { EdgeIntersection } from "./edge-intersection";
+ * import { VertexIntersection } from "./vertex-intersection";
+ * import { IntersectionLoop } from "./intersection-loop";
  * const intersections = [
  *   new EdgeIntersection( 1, 3, 0.5, true ),
  *   new EdgeIntersection( 0, 3, 0.75, true ),

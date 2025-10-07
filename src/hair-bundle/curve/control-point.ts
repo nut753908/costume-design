@@ -5,7 +5,7 @@ import * as THREE from "three";
  * Abstract class for ControlPoint{3,2}.
  */
 export abstract class ControlPoint<
-  TVector extends THREE.Vector3 | THREE.Vector2,
+  TVector extends THREE.Vector3 | THREE.Vector2
 > {
   /**
    * The position of middle control point.
@@ -34,8 +34,8 @@ export abstract class ControlPoint<
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/curve/control-point-{3,2}.ts.
-   * Set it in advance using createGeometry() in src/curve/control-point.ts.
+   * This function is used by setGUI() in ./control-point-{3,2}.
+   * Set it in advance using createGeometry() in ./control-point.
    */
   _updateGeometry: () => void;
 
@@ -70,7 +70,7 @@ export abstract class ControlPoint<
     // biome-ignore lint/complexity/noUselessThisAlias: to leave cp(=this) alive.
     const cp = this;
 
-    // This function is used by setGUI() in src/curve/control-point-{3,2}.ts.
+    // This function is used by setGUI() in ./control-point-{3,2}.
     cp._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(

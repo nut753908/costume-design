@@ -7,7 +7,7 @@ import { Intersection, type IntersectionJSON } from "./intersection";
  * An vertex intersection with a plane.
  *
  * ```js
- * import { VertexIntersection } from "./src/cross-section/intersection/vertex-intersection";
+ * import { VertexIntersection } from "./vertex-intersection";
  * const vertexIntersection = new VertexIntersection( 0 );
  * ```
  *

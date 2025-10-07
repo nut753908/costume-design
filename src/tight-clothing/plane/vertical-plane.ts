@@ -8,7 +8,7 @@ import { Plane } from "./plane";
  * A plane at infinity. The plane is perpendicular to the curve at position u.
  *
  * ```js
- * import { VerticalPlane } from "./src/cross-section/plane/vertical-plane";
+ * import { VerticalPlane } from "./vertical-plane";
  * const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 1, 0 ) ];
  * const curve = new THREE.CatmullRomCurve3( points );
  * const verticalPlane = new VerticalPlane( curve, 0 );
@@ -70,11 +70,11 @@ export class VerticalPlane extends Plane {
     folder.add(p, "inverted").onChange(uI);
 
     function uU() /* updateU */ {
-      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      p._updateGroup(); // Set it in advance using createGroup() in ./plane.
       updateCallback();
     }
     function uI() /* updateInverted */ {
-      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      p._updateGroup(); // Set it in advance using createGroup() in ./plane.
       updateCallback();
     }
   }

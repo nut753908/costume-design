@@ -8,7 +8,7 @@ import { Plane } from "./plane";
  * A free plane at infinity.
  *
  * ```js
- * import { FreePlane } from "./src/cross-section/plane/free-plane";
+ * import { FreePlane } from "./free-plane";
  * const normal = new THREE.Vector3( 0, 1, 0 );
  * const point = new THREE.Vector3( 0, 0, 0 );
  * const freePlane = new FreePlane( normal, point );
@@ -81,11 +81,11 @@ export class FreePlane extends Plane {
       updateCallback();
     }
     function uP() /* updatePoint */ {
-      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      p._updateGroup(); // Set it in advance using createGroup() in ./plane.
       updateCallback();
     }
     function uI() /* updateInverted */ {
-      p._updateGroup(); // Set it in advance using createGroup() in src/cross-section/plane/plane.ts.
+      p._updateGroup(); // Set it in advance using createGroup() in ./plane.
       updateCallback();
     }
   }

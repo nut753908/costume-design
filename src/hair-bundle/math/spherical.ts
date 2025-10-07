@@ -4,7 +4,7 @@ import * as THREE from "three";
  * The class that extends from THREE.Spherical.
  *
  * ```js
- * import { Spherical } from "./src/math/spherical";
+ * import { Spherical } from "./spherical";
  * const spherical = new Spherical( 1, 0, 0 );
  * ```
  *

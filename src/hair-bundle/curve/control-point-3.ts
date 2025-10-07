@@ -10,7 +10,7 @@ import { ControlPoint } from "./control-point";
  * A class representing a 3D control point of curve.
  *
  * ```js
- * import { ControlPoint3 } from "./src/curve/control-point-3";
+ * import { ControlPoint3 } from "./control-point-3";
  * const controlPoint3 = new ControlPoint3(
  *   new THREE.Vector3(0, 0, 0),
  *   new THREE.Vector3(-1, 0, 0),
@@ -181,7 +181,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
         | "rightAz"
     ) {
       cp.updateFrom[key]();
-      cp._updateGeometry(); // Set it in advance using createGeometry() in src/curve/control-point.ts.
+      cp._updateGeometry(); // Set it in advance using createGeometry() in ./control-point.
       leftRightControllers.map((c) => c.updateDisplay());
       updateCallback();
     }

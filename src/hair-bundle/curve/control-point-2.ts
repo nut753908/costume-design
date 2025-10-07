@@ -9,7 +9,7 @@ import { ControlPoint } from "./control-point";
  * A class representing a 2D control point of curve.
  *
  * ```js
- * import { ControlPoint2 } from "./src/curve/control-point-2";
+ * import { ControlPoint2 } from "./control-point-2";
  * const controlPoint2 = new ControlPoint2(
  *   new THREE.Vector2(0, 0),
  *   new THREE.Vector2(-1, 0),
@@ -126,7 +126,7 @@ export class ControlPoint2 extends ControlPoint<THREE.Vector2> {
       key: "middlePos" | "leftPos" | "rightPos" | "leftC" | "rightC"
     ) {
       cp.updateFrom[key]();
-      cp._updateGeometry(); // Set it in advance using createGeometry() in src/curve/control-point-2.ts.
+      cp._updateGeometry(); // Set it in advance using createGeometry() in ./control-point.
       leftRightControllers.map((c) => c.updateDisplay());
       updateCallback();
     }

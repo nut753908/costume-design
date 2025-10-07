@@ -16,7 +16,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
     obj.size,
     obj.color
   ) as PlaneHelperWithCallbacks;
-  // These function are set in createGroup() in src/cross-section/plane/plane.ts.
+  // These function are set in createGroup() in ./plane.
   helper._updateVisibleCallbacks = {};
   helper._updateSizeCallbacks = {};
 
@@ -44,7 +44,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
  * (This class is created by copying THREE.PlaneHelper.)
  *
  * ```js
- * import { PlaneHelper } from "./src/object-3d/plane-helper";
+ * import { PlaneHelper } from "./plane-helper";
  * const normal = new THREE.Vector3( 0, 0, 1 );
  * const point = new THREE.Vector3( 0, 0, 0 );
  * const helper = new PlaneHelper( normal, point, 1, 0xffff00 );

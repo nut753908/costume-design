@@ -22,15 +22,15 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/curve/curve.ts.
-   * Set it in advance using createGeometry() in src/curve/curve.ts.
+   * This function is used by setGUI() in ./curve.
+   * Set it in advance using createGeometry() in ./curve.
    */
   _updateGeometry: () => void;
 
   /**
    * Secret field.
-   * This function is used by setGUI() in src/curve/curve.ts.
-   * Set it in advance using createCpsGroup() in src/object-3d/group/curve.ts.
+   * This function is used by setGUI() in ./curve.
+   * Set it in advance using createCpsGroup() in ./curve-group.
    */
   _updateCpsGroup: () => void;
 
@@ -86,7 +86,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     // biome-ignore lint/complexity/noUselessThisAlias: to leave c(=this) alive.
     const c = this;
 
-    // This function is used by setGUI() in src/curve/curve.ts.
+    // This function is used by setGUI() in ./curve.
     c._updateGeometry = () => {
       const geometry = new THREE.BufferGeometry();
       geometry.setFromPoints(
@@ -149,17 +149,17 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
     if (isClose) closeFolder(folder);
 
     function updateIfCpsLengthChanges() {
-      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in src/object-3d/group/curve.ts.
+      c._updateCpsGroup(); // Set it in advance using createCpsGroup() in ./curve-group.
       updateEnabled();
       updateOptions();
       updateCpsFolder();
       c.updateCurves();
-      c._updateGeometry(); // Set it in advance using createGeometry() in src/curve/curve.ts.
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./curve.
       updateCallback();
     }
     function updateFromCp() {
       c.updateCurves();
-      c._updateGeometry(); // Set it in advance using createGeometry() in src/curve/curve.ts.
+      c._updateGeometry(); // Set it in advance using createGeometry() in ./curve.
       updateCallback();
     }
     function updateEnabled() {
