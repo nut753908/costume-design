@@ -310,11 +310,11 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
       return v1.clone().add(v2).divideScalar(2) as TVector;
     }
     console.error(`\
-  !(v1 instanceof THREE.Vector3 && v2 instanceof THREE.Vector3)
-  && !(v1 instanceof THREE.Vector2 && v2 instanceof THREE.Vector2)
-  - v1: ${JSON.stringify(v1)}
-  - v2: ${JSON.stringify(v2)}
-  `);
+!(v1 instanceof THREE.Vector3 && v2 instanceof THREE.Vector3)
+&& !(v1 instanceof THREE.Vector2 && v2 instanceof THREE.Vector2)
+- v1: ${JSON.stringify(v1)}
+- v2: ${JSON.stringify(v2)}
+`);
     return v1;
   }
 
