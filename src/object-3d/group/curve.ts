@@ -26,7 +26,7 @@ export function createCurveGroup(
 function createCurvesLine(c: Curve3 | Curve2, ms: Materials): THREE.Line {
   const geometry = createEmptyGeometry();
 
-  const line = new THREE.Line(geometry, ms.curve.line);
+  const line = new THREE.Line(geometry, ms.line);
 
   c.createGeometry(line);
 

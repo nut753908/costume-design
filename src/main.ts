@@ -27,7 +27,6 @@ import {
 import { createAxesHelper } from "./object-3d/axes-helper";
 import { createAreaGroup } from "./object-3d/group/area";
 import { createBaseGroup } from "./object-3d/group/base";
-import { createLinesGroup, setLinesGroupGUI } from "./object-3d/group/lines";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
@@ -44,14 +43,10 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
-let positions: THREE.Float32BufferAttribute;
-let indices: THREE.Uint16BufferAttribute;
-
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
 
 let area: Area;
-// let ilpsGroup: THREE.Group;
 let baseGeometry: BufferGeometryWithNPolygonIndices;
 let areaGroup: THREE.Group;
 
@@ -78,7 +73,7 @@ async function init() {
 
   gui = new GUI();
   {
-    const folder = gui.addFolder("(fixed)");
+    const folder = gui.addFolder("common").close();
     scene = createScene(folder);
     scene.add(createAxesHelper(folder));
     planeHelper = createPlaneHelper(folder);
@@ -94,17 +89,12 @@ async function init() {
     baseGeometry = baseGroup.children[0]
       .geometry as BufferGeometryWithNPolygonIndices;
     const nPolygonIndices = baseGeometry.nPolygonIndices;
-    positions = baseGeometry.getAttribute(
+    const positions = baseGeometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    indices = baseGeometry.getIndex() as THREE.Uint16BufferAttribute;
+    const indices = baseGeometry.getIndex() as THREE.Uint16BufferAttribute;
 
-    const lines = createBaseCenterlines(nPolygonIndices, positions);
-    const linesGroup = createLinesGroup(lines, positions, ms);
-    setLinesGroupGUI(gui, linesGroup, false);
-    scene.add(linesGroup);
-
-    pm = new PlaneManager(lines);
+    pm = new PlaneManager(createBaseCenterlines(nPolygonIndices, positions));
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
@@ -114,8 +104,6 @@ async function init() {
     pm._removeCrossSection = area.removeCrossSection.bind(area);
     pm._updateCrossSection = area.updateCrossSection.bind(area);
     area.setGUI(gui);
-    // ilpsGroup = area.createIlpsGroup(positions, ms);
-    // scene.add(ilpsGroup);
     areaGroup = createAreaGroup(area, baseGeometry, ms);
     scene.add(areaGroup);
   });
@@ -146,8 +134,6 @@ function loadLastUndo() {
   scene.remove(planesGroup);
   disposeGroup(planesGroup);
 
-  // scene.remove(ilpsGroup);
-  // disposeGroup(ilpsGroup);
   scene.remove(areaGroup);
   disposeGroup(areaGroup);
 
@@ -159,12 +145,7 @@ function loadLastUndo() {
   scene.add(planesGroup);
 
   area.fromJSON(obj.area);
-  pm._addCrossSection = area.addCrossSection.bind(area);
-  pm._removeCrossSection = area.removeCrossSection.bind(area);
-  pm._updateCrossSection = area.updateCrossSection.bind(area);
   area.setGUI(gui);
-  // ilpsGroup = area.createIlpsGroup(positions, ms);
-  // scene.add(ilpsGroup);
   areaGroup = createAreaGroup(area, baseGeometry, ms);
   scene.add(areaGroup);
 

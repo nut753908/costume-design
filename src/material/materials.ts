@@ -8,92 +8,37 @@ import { createToonMaterial } from "./toon";
  * @return  The materials.
  */
 export function createMaterials(gui: GUI): Materials {
-  const folder = gui.addFolder("THREE.Material").close();
+  const folder = gui.addFolder("THREE.Material");
 
-  const baseFolder = folder.addFolder("base").close();
-  const base = {
-    line: createLineMaterial(baseFolder, "line", 0xffffff, 0),
-    toon: createToonMaterial(baseFolder, "toon", 0xfef3ef, 0xfde2df),
-  };
+  const points = createPointsMaterial(folder, "points", 0x000000);
+  const line = createLineMaterial(folder, "line", 0x000000);
 
-  const lineFolder = folder.addFolder("line").close();
-  const line = {
-    points: createPointsMaterial(lineFolder, "points", 0x000000),
-    line: createLineMaterial(lineFolder, "line", 0x000000),
-  };
-
-  const pointsFolder = folder.addFolder("points").close();
-  const points = {
-    points: createPointsMaterial(pointsFolder, "points", 0x000000),
-    line: createLineMaterial(pointsFolder, "line", 0x000000),
-  };
-
-  const cpFolder = folder.addFolder("cp").close();
-  const cp = {
-    points: createPointsMaterial(cpFolder, "points", 0x000000),
-    line: createLineMaterial(cpFolder, "line", 0x000000),
-  };
-
-  const curveFolder = folder.addFolder("curve").close();
-  const curve = {
-    line: createLineMaterial(curveFolder, "line", 0x000000),
-  };
-
-  const tubeFolder = folder.addFolder("tube").close();
-  const tube = {
-    line: createLineMaterial(tubeFolder, "line"),
-    toon: createToonMaterial(
-      tubeFolder,
-      "toon",
+  const toonFolder = folder.addFolder("toon");
+  const toon = {
+    base: createToonMaterial(toonFolder, "base", 0xfef3ef, 0xfde2df),
+    tube: createToonMaterial(
+      toonFolder,
+      "tube",
       0xe7d3cc,
       0xe3c4b7,
       THREE.DoubleSide
     ),
-  };
-
-  const areaFolder = folder.addFolder("area").close();
-  const area = {
-    line: createLineMaterial(areaFolder, "line", 0xffffff, 0),
-    toon: createToonMaterial(areaFolder, "toon", 0x313c43, 0x2a353c),
+    area: createToonMaterial(toonFolder, "area", 0x313c43, 0x2a353c),
   };
 
   return {
-    base,
-    line,
     points,
-    cp,
-    curve,
-    tube,
-    area,
+    line,
+    toon,
   };
 }
 
 export interface Materials {
-  base: {
-    line: THREE.LineBasicMaterial;
-    toon: THREE.ShaderMaterial;
-  };
-  line: {
-    points: THREE.PointsMaterial;
-    line: THREE.LineBasicMaterial;
-  };
-  points: {
-    points: THREE.PointsMaterial;
-    line: THREE.LineBasicMaterial;
-  };
-  cp: {
-    points: THREE.PointsMaterial;
-    line: THREE.LineBasicMaterial;
-  };
-  curve: {
-    line: THREE.LineBasicMaterial;
-  };
-  tube: {
-    line: THREE.LineBasicMaterial;
-    toon: THREE.ShaderMaterial;
-  };
-  area: {
-    line: THREE.LineBasicMaterial;
-    toon: THREE.ShaderMaterial;
+  points: THREE.PointsMaterial;
+  line: THREE.LineBasicMaterial;
+  toon: {
+    base: THREE.ShaderMaterial;
+    tube: THREE.ShaderMaterial;
+    area: THREE.ShaderMaterial;
   };
 }

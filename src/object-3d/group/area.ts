@@ -16,8 +16,7 @@ export function createAreaGroup(
 
   const geometry = createEmptyGeometry();
 
-  group.add(new THREE.LineSegments(geometry, ms.area.line));
-  group.add(new THREE.Mesh(geometry, ms.area.toon));
+  group.add(new THREE.Mesh(geometry, ms.toon.area));
 
   area.createAreaGroup(baseGeometry, group);
 

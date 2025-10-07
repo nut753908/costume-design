@@ -5,7 +5,7 @@ export function createAxesHelper(gui: GUI): THREE.AxesHelper {
   const obj = { size: 1 };
   const helper = new THREE.AxesHelper(obj.size);
   {
-    const folder = gui.addFolder("THREE.AxesHelper").close();
+    const folder = gui.addFolder("THREE.AxesHelper");
     folder.add(helper, "visible");
     folder.add(obj, "size").step(0.01).onChange(uS);
 

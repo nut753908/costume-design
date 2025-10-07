@@ -5,13 +5,7 @@ export interface guiJSON {
   folders: { [_title: string]: guiJSON };
 }
 
-const foldersToSave = [
-  "(fixed)",
-  "LinesGroup",
-  "PointsGroup",
-  "PlanesGroup",
-  "TubeGroup",
-];
+const foldersToSave = ["common", "TubeGroup"];
 
 /**
  * Save GUI states of only the specified folders.
