@@ -1,4 +1,4 @@
-import { createEmptyGeometry } from "src/geometry/empty";
+import { createEmptyGeometry } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import type { Area } from "src/tight-clothing/area/area";
 import * as THREE from "three";

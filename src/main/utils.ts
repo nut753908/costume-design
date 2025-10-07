@@ -36,3 +36,12 @@ export function objectMap<V, NewV>(
 export function createColor(hex: number): THREE.Color {
   return new THREE.Color().setHex(hex, THREE.LinearSRGBColorSpace);
 }
+
+/**
+ * Create an empty geometry.
+ */
+export function createEmptyGeometry(): THREE.BufferGeometry {
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute([], 3));
+  return geometry;
+}
