@@ -1,13 +1,8 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import { Area, type AreaJSON } from "./cross-section/area/area";
-import { createBaseCenterlines } from "./cross-section/centerline/centerline";
-import {
-  PlaneManager,
-  type PlaneManagerJSON,
-} from "./cross-section/plane/plane-manager";
-import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
+import type { BufferGeometryWithNPolygonIndices } from "./base/base-geometry";
+import { createBaseGroup } from "./base/base-group";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
 import {
@@ -17,21 +12,26 @@ import {
   saveClosed,
   saveGui,
 } from "./main/gui";
+import { createMaterials, type Materials } from "./main/material/materials";
+import { createAxesHelper } from "./main/object-3d/axes-helper";
+import { createScene } from "./main/object-3d/scene";
 import { createRenderer, updateRenderer } from "./main/renderer";
 import { disposeGroup } from "./main/utils";
-import { createMaterials, type Materials } from "./material/materials";
+import { Area, type AreaJSON } from "./tight-clothing/area/area";
+import { createAreaGroup } from "./tight-clothing/area/area-group";
+import { createBaseCenterlines } from "./tight-clothing/centerline/centerline";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,
-} from "./object-3d/arrow-helper";
-import { createAxesHelper } from "./object-3d/axes-helper";
-import { createAreaGroup } from "./object-3d/group/area";
-import { createBaseGroup } from "./object-3d/group/base";
+} from "./tight-clothing/plane/arrow-helper";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
-} from "./object-3d/plane-helper";
-import { createScene } from "./object-3d/scene";
+} from "./tight-clothing/plane/plane-helper";
+import {
+  PlaneManager,
+  type PlaneManagerJSON,
+} from "./tight-clothing/plane/plane-manager";
 
 let renderer: THREE.WebGLRenderer;
 let camera: THREE.OrthographicCamera;
