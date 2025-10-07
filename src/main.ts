@@ -13,21 +13,21 @@ import {
   saveGui,
 } from "./main/gui";
 import { createMaterials, type Materials } from "./main/material/materials";
-import {
-  type ArrowHelperWithCallbacks,
-  createArrowHelper,
-} from "./main/object-3d/arrow-helper";
 import { createAxesHelper } from "./main/object-3d/axes-helper";
-import {
-  createPlaneHelper,
-  type PlaneHelperWithCallbacks,
-} from "./main/object-3d/plane-helper";
 import { createScene } from "./main/object-3d/scene";
 import { createRenderer, updateRenderer } from "./main/renderer";
 import { disposeGroup } from "./main/utils";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
 import { createAreaGroup } from "./tight-clothing/area/area-group";
 import { createBaseCenterlines } from "./tight-clothing/centerline/centerline";
+import {
+  type ArrowHelperWithCallbacks,
+  createArrowHelper,
+} from "./tight-clothing/plane/arrow-helper";
+import {
+  createPlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "./tight-clothing/plane/plane-helper";
 import {
   PlaneManager,
   type PlaneManagerJSON,
