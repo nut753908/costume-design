@@ -1,5 +1,4 @@
 import type { GUI } from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
 import { createColor } from "src/math/color";
 import * as THREE from "three";
 
@@ -22,9 +21,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   helper._updateSizeCallbacks = {};
 
   {
-    deleteFolder(gui, "PlaneHelper");
     const folder = gui.addFolder("PlaneHelper");
-    closeFolder(folder);
     folder.add(obj, "visible").onChange(uV);
     folder.add(obj, "size").step(0.01).onChange(uS);
     folder.addColor(obj, "color").onChange(uC);

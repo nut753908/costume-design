@@ -1,5 +1,4 @@
 import type { GUI } from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
 import { createColor } from "src/math/color";
 import * as THREE from "three";
 
@@ -21,9 +20,7 @@ export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
   helper._updateVisibleCallbacks = {};
   helper._updateLengthCallbacks = {};
   {
-    deleteFolder(gui, "THREE.ArrowHelper");
     const folder = gui.addFolder("THREE.ArrowHelper");
-    closeFolder(folder);
     folder.add(obj, "visible").onChange(uV);
     folder.add(obj, "length").step(0.01).onChange(uL);
     folder.addColor(obj, "color").onChange(uC);

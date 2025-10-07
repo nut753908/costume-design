@@ -8,7 +8,7 @@ import { createToonMaterial } from "./toon";
  * @return  The materials.
  */
 export function createMaterials(gui: GUI): Materials {
-  const folder = gui.addFolder("THREE.Material").close();
+  const folder = gui.addFolder("THREE.Material");
 
   const points = createPointsMaterial(folder, "points", 0x000000);
   const line = createLineMaterial(folder, "line", 0x000000);
