@@ -1,24 +1,34 @@
 import * as THREE from "three";
-import { atan2In2PI } from "./utils";
 
 /**
- * Get each angle as THREE.Vector3.
- * x:
- *   The angle of v around the x (right) axis.
- *   This angle is right-handed and starts at positive y.
- * y:
- *   The angle of v around the y (up) axis.
- *   This angle is right-handed and starts at positive z.
- * z:
- *   The angle of v around the z (front) axis.
- *   This angle is right-handed and starts at positive x.
+ * Whether the index (including the min and the max) is invalid.
+ *
+ * @param index - The index of this.cps.
+ * @param min - The min of the index.
+ * @param max - The max of the index.
  */
-export function getAngles(v: THREE.Vector3): THREE.Vector3 {
-  return new THREE.Vector3(
-    THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
-    THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
-    THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
-  );
+export function isInvalidIndex(
+  index: number,
+  min: number,
+  max: number
+): boolean {
+  if (!Number.isInteger(index)) {
+    console.error(`the index(${index}) is not integer.`);
+    return true;
+  }
+  if (!Number.isInteger(min)) {
+    console.error(`the min(${min}) is not integer.`);
+    return true;
+  }
+  if (!Number.isInteger(max)) {
+    console.error(`the max(${max}) is not integer.`);
+    return true;
+  }
+  if (index < min || index > max) {
+    console.error(`the index(${index}) is out of range [${min},${max}].`);
+    return true;
+  }
+  return false;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { getAngles, mean } from "src/hair-bundle/control-point/vector";
+import { isInvalidIndex, mean } from "src/hair-bundle/curve/utils";
 import * as THREE from "three";
 import {
   beforeEach,
@@ -9,15 +9,27 @@ import {
   vi,
 } from "vitest";
 
-describe("getAngles()", () => {
+describe("isInvalidIndex()", () => {
   test.each([
-    [new THREE.Vector3(1, 1, 1), new THREE.Vector3(45, 45, 45)],
-    [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
-    [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
-    [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
-  ])("v:%j, expected:%j", (v, expected) => {
-    expect(getAngles(v)).toEqual(expected);
-  });
+    [1.1, 0, 2, true, "the index(1.1) is not integer."],
+    [1, 0.1, 2, true, "the min(0.1) is not integer."],
+    [1, 0, 2.1, true, "the max(2.1) is not integer."],
+    [-1, 0, 2, true, "the index(-1) is out of range [0,2]."],
+    [0, 0, 2, false, undefined],
+    [1, 0, 2, false, undefined],
+    [2, 0, 2, false, undefined],
+    [3, 0, 2, true, "the index(3) is out of range [0,2]."],
+  ])(
+    "index:%d, min:%d, max:%d, expected:%o",
+    (index, min, max, expected, msg) => {
+      const spy = vi.spyOn(console, "error");
+      if (msg !== undefined) {
+        spy.mockImplementationOnce((v) => expect(v).toBe(msg));
+      }
+      expect(isInvalidIndex(index, min, max)).toBe(expected);
+      expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
+    }
+  );
 });
 
 describe("mean()", () => {

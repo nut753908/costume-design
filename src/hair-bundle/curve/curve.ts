@@ -9,8 +9,7 @@ import {
   ControlPoint3,
   type ControlPoint3JSON,
 } from "../control-point/control-point-3";
-import { isInvalidIndex } from "../control-point/utils";
-import { mean } from "../control-point/vector";
+import { isInvalidIndex, mean } from "./utils";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.

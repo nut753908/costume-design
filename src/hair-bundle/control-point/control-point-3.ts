@@ -3,8 +3,13 @@ import { closeFolder, deleteFolder } from "src/main/gui";
 import * as THREE from "three";
 import { ControlPoint } from "./control-point";
 import { Spherical, type SphericalJSON } from "./spherical";
-import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "./utils";
-import { getAngles } from "./vector";
+import {
+  atan2In2PI,
+  getAngles,
+  reverseInPI,
+  rotatePI,
+  safeAcos,
+} from "./utils";
 
 /**
  * A class representing a 3D control point of curve.
