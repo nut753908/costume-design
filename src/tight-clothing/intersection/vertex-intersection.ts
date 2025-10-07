@@ -1,5 +1,5 @@
-import { getPoint } from "src/tight-clothing/centerline/points";
 import * as THREE from "three";
+import { getPoint } from "../centerline/points";
 import { EdgeIntersection } from "./edge-intersection";
 import { Intersection, type IntersectionJSON } from "./intersection";
 

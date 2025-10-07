@@ -1,7 +1,7 @@
 import type { Materials } from "src/main/material/materials";
 import { createEmptyGeometry } from "src/main/utils";
-import type { Area } from "src/tight-clothing/area/area";
 import * as THREE from "three";
+import type { Area } from "./area";
 
 /**
  * @param baseGeometry - The base geometry.

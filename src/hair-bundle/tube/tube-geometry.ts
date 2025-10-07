@@ -1,13 +1,13 @@
-import type { CurveJSON } from "src/hair-bundle/curve/curve";
-import { Curve2 } from "src/hair-bundle/curve/curve-2";
-import { Curve3 } from "src/hair-bundle/curve/curve-3";
+import type * as THREE from "three";
+import type { CurveJSON } from "../curve/curve";
+import { Curve2 } from "../curve/curve-2";
+import { Curve3 } from "../curve/curve-3";
 import {
   constant0Curve2,
   constant1Curve2,
   smallCircleCurve2,
-} from "src/hair-bundle/curve/sample-curve-2";
-import { constant0Curve3 } from "src/hair-bundle/curve/sample-curve-3";
-import type * as THREE from "three";
+} from "../curve/sample-curve-2";
+import { constant0Curve3 } from "../curve/sample-curve-3";
 import { TubeBaseGeometry } from "./tube-base-geometry";
 
 /**

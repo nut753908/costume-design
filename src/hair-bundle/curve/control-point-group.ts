@@ -1,8 +1,8 @@
-import type { ControlPoint2 } from "src/hair-bundle/curve/control-point-2";
-import type { ControlPoint3 } from "src/hair-bundle/curve/control-point-3";
 import type { Materials } from "src/main/material/materials";
 import { createEmptyGeometry } from "src/main/utils";
 import * as THREE from "three";
+import type { ControlPoint2 } from "./control-point-2";
+import type { ControlPoint3 } from "./control-point-3";
 
 /**
  * @param ms - The materials.
