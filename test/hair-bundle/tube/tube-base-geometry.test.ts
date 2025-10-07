@@ -1,4 +1,4 @@
-import { ControlPoint3 } from "src/hair-bundle/curve/control-point-3";
+import { ControlPoint3 } from "src/hair-bundle/control-point/control-point-3";
 import { Curve3 } from "src/hair-bundle/curve/curve-3";
 import {
   circleCurve2,

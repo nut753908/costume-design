@@ -1,4 +1,4 @@
-import { ControlPoint2 } from "src/hair-bundle/curve/control-point-2";
+import { ControlPoint2 } from "src/hair-bundle/control-point/control-point-2";
 import type { CurveJSON } from "src/hair-bundle/curve/curve";
 import { Curve2 } from "src/hair-bundle/curve/curve-2";
 import * as THREE from "three";

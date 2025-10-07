@@ -1,7 +1,7 @@
 import {
   ControlPoint3,
   type ControlPoint3JSON,
-} from "src/hair-bundle/curve/control-point-3";
+} from "src/hair-bundle/control-point/control-point-3";
 import { Spherical } from "src/hair-bundle/math/spherical";
 import { reverseInPI, rotate180, rotatePI } from "src/hair-bundle/math/utils";
 import * as THREE from "three";

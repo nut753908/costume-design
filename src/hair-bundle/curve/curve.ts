@@ -1,10 +1,16 @@
 import type { GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "src/main/gui";
 import * as THREE from "three";
+import type {
+  ControlPoint2,
+  ControlPoint2JSON,
+} from "../control-point/control-point-2";
+import {
+  ControlPoint3,
+  type ControlPoint3JSON,
+} from "../control-point/control-point-3";
 import { isInvalidIndex } from "../math/utils";
 import { mean } from "../math/vector";
-import type { ControlPoint2, ControlPoint2JSON } from "./control-point-2";
-import { ControlPoint3, type ControlPoint3JSON } from "./control-point-3";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.

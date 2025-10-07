@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ControlPoint3 } from "./control-point-3";
+import { ControlPoint3 } from "../control-point/control-point-3";
 import { Curve } from "./curve";
 
 /**
