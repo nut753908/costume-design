@@ -8,7 +8,7 @@ import {
 } from "src/hair-bundle/curve/samples/curve-2";
 import { constant0Curve3 } from "src/hair-bundle/curve/samples/curve-3";
 import type * as THREE from "three";
-import { TubeBaseGeometry } from "./tube-base";
+import { TubeBaseGeometry } from "./tube-base-geometry";
 
 /**
  * A geometry class for representing a tube with curve type restricted to Curve{3,2}.

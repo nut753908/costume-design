@@ -1,8 +1,3 @@
-import {
-  computeFrenetFrames,
-  TubeBaseGeometry,
-  type TubeBaseGeometryJSON,
-} from "src/geometry/tube-base";
 import { ControlPoint3 } from "src/hair-bundle/curve/control-point-3";
 import { Curve3 } from "src/hair-bundle/curve/curve-3";
 import {
@@ -12,6 +7,11 @@ import {
   smallCircleCurve2,
 } from "src/hair-bundle/curve/samples/curve-2";
 import { constant0Curve3 } from "src/hair-bundle/curve/samples/curve-3";
+import {
+  computeFrenetFrames,
+  TubeBaseGeometry,
+  type TubeBaseGeometryJSON,
+} from "src/hair-bundle/tube/tube-base-geometry";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
