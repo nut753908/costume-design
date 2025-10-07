@@ -2,6 +2,7 @@ import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
 import type { BufferGeometryWithNPolygonIndices } from "./base/base-geometry";
+import { createBaseGroup } from "./base/base-group";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
 import {
@@ -19,14 +20,13 @@ import {
   createArrowHelper,
 } from "./object-3d/arrow-helper";
 import { createAxesHelper } from "./object-3d/axes-helper";
-import { createAreaGroup } from "./object-3d/group/area";
-import { createBaseGroup } from "./object-3d/group/base";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
 } from "./object-3d/plane-helper";
 import { createScene } from "./object-3d/scene";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
+import { createAreaGroup } from "./tight-clothing/area/area-group";
 import { createBaseCenterlines } from "./tight-clothing/centerline/centerline";
 import {
   PlaneManager,

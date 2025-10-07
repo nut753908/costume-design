@@ -4,7 +4,7 @@ import { deleteFolder } from "src/main/gui";
 import { createEmptyGeometry } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { createCurveGroup } from "./curve";
+import { createCurveGroup } from "../curve/curve-group";
 
 /**
  * @param ms - The materials.

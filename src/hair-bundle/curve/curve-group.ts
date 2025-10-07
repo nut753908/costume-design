@@ -3,7 +3,7 @@ import type { Curve3 } from "src/hair-bundle/curve/curve-3";
 import { createEmptyGeometry } from "src/main/utils";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";
-import { createControlPointGroup } from "./control-point";
+import { createControlPointGroup } from "./control-point-group";
 
 /**
  * @param ms - The materials.
