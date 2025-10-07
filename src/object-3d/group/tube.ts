@@ -35,8 +35,7 @@ function createTubeGroupWithNoCurves(t: Tube, ms: Materials): THREE.Group {
 
   const geometry = createEmptyGeometry();
 
-  group.add(new THREE.LineSegments(geometry, ms.tube.line));
-  group.add(new THREE.Mesh(geometry, ms.tube.toon));
+  group.add(new THREE.Mesh(geometry, ms.toon.tube));
 
   t.createGeometry(group);
 

@@ -143,16 +143,7 @@ export class Area {
         group.children[0].geometry instanceof THREE.BufferGeometry
       ) {
         group.children[0].geometry.dispose();
-        group.children[0].geometry = new THREE.WireframeGeometry(
-          extrudedGeometry
-        );
-      }
-      if (
-        "geometry" in group.children[1] &&
-        group.children[1].geometry instanceof THREE.BufferGeometry
-      ) {
-        group.children[1].geometry.dispose();
-        group.children[1].geometry = extrudedGeometry;
+        group.children[0].geometry = extrudedGeometry;
       }
     };
     this._updateAreaGroup();

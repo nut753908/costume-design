@@ -13,8 +13,7 @@ export async function createBaseGroup(
   const geometry = await loadBaseGeometry();
   if (!geometry) return null;
 
-  group.add(new THREE.LineSegments(geometry, ms.base.line));
-  group.add(new THREE.Mesh(geometry, ms.base.toon));
+  group.add(new THREE.Mesh(geometry, ms.toon.base));
 
   return group;
 }

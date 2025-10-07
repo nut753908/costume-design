@@ -80,14 +80,7 @@ export class Tube {
         group.children[0].geometry instanceof THREE.BufferGeometry
       ) {
         group.children[0].geometry.dispose();
-        group.children[0].geometry = new THREE.WireframeGeometry(geometry);
-      }
-      if (
-        "geometry" in group.children[1] &&
-        group.children[1].geometry instanceof THREE.BufferGeometry
-      ) {
-        group.children[1].geometry.dispose();
-        group.children[1].geometry = geometry;
+        group.children[0].geometry = geometry;
       }
     };
     t._updateGeometry();
