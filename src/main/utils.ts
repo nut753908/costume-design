@@ -28,3 +28,11 @@ export function objectMap<V, NewV>(
 ): { [k: string]: NewV } {
   return Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, func(v)]));
 }
+
+/**
+ * Create a color using THREE.LinearSRGBColorSpace.
+ * @param hex - The color hex.
+ */
+export function createColor(hex: number): THREE.Color {
+  return new THREE.Color().setHex(hex, THREE.LinearSRGBColorSpace);
+}
