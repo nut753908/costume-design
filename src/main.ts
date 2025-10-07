@@ -76,7 +76,7 @@ async function init() {
 
   gui = new GUI();
   {
-    const folder = gui.addFolder("(fixed)").close();
+    const folder = gui.addFolder("common").close();
     scene = createScene(folder);
     scene.add(createAxesHelper(folder));
     planeHelper = createPlaneHelper(folder);

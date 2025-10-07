@@ -6,7 +6,7 @@ export interface guiJSON {
 }
 
 const foldersToSave = [
-  "(fixed)",
+  "common",
   "LinesGroup",
   "PointsGroup",
   "PlanesGroup",
