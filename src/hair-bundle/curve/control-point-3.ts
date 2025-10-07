@@ -1,8 +1,13 @@
 import type { Controller, GUI } from "lil-gui";
+import { Spherical, type SphericalJSON } from "src/hair-bundle/math/spherical";
+import {
+  atan2In2PI,
+  reverseInPI,
+  rotatePI,
+  safeAcos,
+} from "src/hair-bundle/math/utils";
+import { getAngles } from "src/hair-bundle/math/vector";
 import { closeFolder, deleteFolder } from "src/main/gui";
-import { Spherical, type SphericalJSON } from "src/math/spherical";
-import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "src/math/utils";
-import { getAngles } from "src/math/vector";
 import * as THREE from "three";
 import { ControlPoint } from "./control-point";
 

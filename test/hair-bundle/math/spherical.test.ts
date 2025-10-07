@@ -1,4 +1,4 @@
-import { Spherical, type SphericalJSON } from "src/math/spherical";
+import { Spherical, type SphericalJSON } from "src/hair-bundle/math/spherical";
 import { describe, expect, test } from "vitest";
 
 describe("Spherical", () => {

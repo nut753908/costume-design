@@ -6,7 +6,7 @@ import {
   rotatePI,
   safeAcos,
   safeAsin,
-} from "src/math/utils";
+} from "src/hair-bundle/math/utils";
 import { describe, expect, test, vi } from "vitest";
 
 describe("safeAsin()", () => {

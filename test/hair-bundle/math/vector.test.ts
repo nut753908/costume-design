@@ -1,4 +1,4 @@
-import { getAngles, mean } from "src/math/vector";
+import { getAngles, mean } from "src/hair-bundle/math/vector";
 import * as THREE from "three";
 import {
   beforeEach,

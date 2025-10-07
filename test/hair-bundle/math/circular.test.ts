@@ -1,4 +1,4 @@
-import { Circular, type CircularJSON } from "src/math/circular";
+import { Circular, type CircularJSON } from "src/hair-bundle/math/circular";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
