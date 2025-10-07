@@ -3,7 +3,7 @@ import { closeFolder, deleteFolder } from "src/main/gui";
 import * as THREE from "three";
 import { Circular, type CircularJSON } from "./circular";
 import { ControlPoint } from "./control-point";
-import { rotate180 } from "./utils";
+import { rotate180 } from "./math";
 
 /**
  * A class representing a 2D control point of curve.

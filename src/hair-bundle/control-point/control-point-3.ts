@@ -2,8 +2,8 @@ import type { Controller, GUI } from "lil-gui";
 import { closeFolder, deleteFolder } from "src/main/gui";
 import * as THREE from "three";
 import { ControlPoint } from "./control-point";
+import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "./math";
 import { Spherical, type SphericalJSON } from "./spherical";
-import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "./utils";
 
 /**
  * A class representing a 3D control point of curve.

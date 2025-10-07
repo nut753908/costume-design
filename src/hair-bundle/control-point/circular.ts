@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { atan2In2PI } from "./utils";
+import { atan2In2PI } from "./math";
 
 /**
  * A class representing a circular as 2D Polar coodinate.
