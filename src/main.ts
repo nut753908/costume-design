@@ -1,12 +1,6 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import { Area, type AreaJSON } from "./cross-section/area/area";
-import { createBaseCenterlines } from "./cross-section/centerline/centerline";
-import {
-  PlaneManager,
-  type PlaneManagerJSON,
-} from "./cross-section/plane/plane-manager";
 import type { BufferGeometryWithNPolygonIndices } from "./geometry/base";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
@@ -32,6 +26,12 @@ import {
   type PlaneHelperWithCallbacks,
 } from "./object-3d/plane-helper";
 import { createScene } from "./object-3d/scene";
+import { Area, type AreaJSON } from "./tight-clothing/area/area";
+import { createBaseCenterlines } from "./tight-clothing/centerline/centerline";
+import {
+  PlaneManager,
+  type PlaneManagerJSON,
+} from "./tight-clothing/plane/plane-manager";
 
 let renderer: THREE.WebGLRenderer;
 let camera: THREE.OrthographicCamera;

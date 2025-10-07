@@ -1,6 +1,6 @@
-import type { Area } from "src/cross-section/area/area";
 import { createEmptyGeometry } from "src/geometry/empty";
 import type { Materials } from "src/material/materials";
+import type { Area } from "src/tight-clothing/area/area";
 import * as THREE from "three";
 
 /**
