@@ -1,9 +1,9 @@
+import { Circular } from "src/hair-bundle/control-point/circular";
 import {
   ControlPoint2,
   type ControlPoint2JSON,
 } from "src/hair-bundle/control-point/control-point-2";
-import { Circular } from "src/hair-bundle/math/circular";
-import { rotate180 } from "src/hair-bundle/math/utils";
+import { rotate180 } from "src/hair-bundle/control-point/utils";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
