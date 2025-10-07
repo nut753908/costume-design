@@ -2,12 +2,12 @@ import {
   ControlPoint3,
   type ControlPoint3JSON,
 } from "src/hair-bundle/control-point/control-point-3";
-import { Spherical } from "src/hair-bundle/control-point/spherical";
 import {
   reverseInPI,
   rotate180,
   rotatePI,
-} from "src/hair-bundle/control-point/utils";
+} from "src/hair-bundle/control-point/math";
+import { Spherical } from "src/hair-bundle/control-point/spherical";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
@@ -423,6 +423,17 @@ describe("ControlPoint3", () => {
         expect(cp.leftPos.z).toBeCloseTo(leftPos.z);
       }
     );
+  });
+
+  describe("getAngles()", () => {
+    test.each([
+      [new THREE.Vector3(1, 1, 1), new THREE.Vector3(45, 45, 45)],
+      [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
+      [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
+      [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
+    ])("v:%j, expected:%j", (v, expected) => {
+      expect(ControlPoint3.getAngles(v)).toEqual(expected);
+    });
   });
 
   test("clone()", () => {

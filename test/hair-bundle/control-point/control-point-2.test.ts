@@ -3,7 +3,7 @@ import {
   ControlPoint2,
   type ControlPoint2JSON,
 } from "src/hair-bundle/control-point/control-point-2";
-import { rotate180 } from "src/hair-bundle/control-point/utils";
+import { rotate180 } from "src/hair-bundle/control-point/math";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

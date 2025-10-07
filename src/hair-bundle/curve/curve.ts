@@ -9,7 +9,6 @@ import {
   ControlPoint3,
   type ControlPoint3JSON,
 } from "../control-point/control-point-3";
-import { isInvalidIndex, mean } from "./utils";
 
 /**
  * A 3D/2D Cubic Bezier curve path using 3D/2D control points.
@@ -211,18 +210,18 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * @param index - The index of this.cps. It is used as reference for cp1, cp2 and cp3.
    */
   interpolateCp(index: number) {
-    if (isInvalidIndex(index, 1, this.cps.length - 1)) return;
+    if (Curve.isInvalidIndex(index, 1, this.cps.length - 1)) return;
     this.cps.splice(index, 0, this.cps[index].clone());
     const cp1 = this.cps[index - 1];
     const cp2 = this.cps[index];
     const cp3 = this.cps[index + 1];
 
-    const centerPos = mean(cp1.rightPos, cp3.leftPos);
-    cp1.rightPos = mean(cp1.middlePos, cp1.rightPos);
-    cp3.leftPos = mean(cp3.leftPos, cp3.middlePos);
-    cp2.leftPos = mean(cp1.rightPos, centerPos);
-    cp2.rightPos = mean(centerPos, cp3.leftPos);
-    cp2.middlePos = mean(cp2.leftPos, cp2.rightPos);
+    const centerPos = Curve.mean(cp1.rightPos, cp3.leftPos);
+    cp1.rightPos = Curve.mean(cp1.middlePos, cp1.rightPos);
+    cp3.leftPos = Curve.mean(cp3.leftPos, cp3.middlePos);
+    cp2.leftPos = Curve.mean(cp1.rightPos, centerPos);
+    cp2.rightPos = Curve.mean(centerPos, cp3.leftPos);
+    cp2.middlePos = Curve.mean(cp2.leftPos, cp2.rightPos);
 
     cp1.isSyncRadius = false;
     cp1.updateFromRightPos();
@@ -244,7 +243,7 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    * @param index - The index of this.cps.
    */
   removeCp(index: number) {
-    if (isInvalidIndex(index, 0, this.cps.length - 1)) return;
+    if (Curve.isInvalidIndex(index, 0, this.cps.length - 1)) return;
     this.cps.splice(index, 1);
   }
 
@@ -267,6 +266,56 @@ export abstract class Curve<T extends Types> extends THREE.CurvePath<
    */
   get rIndices(): number[] {
     return [...Array(this.cps.length).keys()];
+  }
+
+  /**
+   * Whether the index (including the min and the max) is invalid.
+   *
+   * @param index - The index of this.cps.
+   * @param min - The min of the index.
+   * @param max - The max of the index.
+   */
+  static isInvalidIndex(index: number, min: number, max: number): boolean {
+    if (!Number.isInteger(index)) {
+      console.error(`the index(${index}) is not integer.`);
+      return true;
+    }
+    if (!Number.isInteger(min)) {
+      console.error(`the min(${min}) is not integer.`);
+      return true;
+    }
+    if (!Number.isInteger(max)) {
+      console.error(`the max(${max}) is not integer.`);
+      return true;
+    }
+    if (index < min || index > max) {
+      console.error(`the index(${index}) is out of range [${min},${max}].`);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Get the mean vector of v1 and v2.
+   * v1, v2 and the return value must have a common type (THREE.Vector3 or THREE.Vector2).
+   */
+  static mean<TVector extends THREE.Vector3 | THREE.Vector2>(
+    v1: TVector,
+    v2: TVector
+  ): TVector {
+    if (v1 instanceof THREE.Vector3 && v2 instanceof THREE.Vector3) {
+      return v1.clone().add(v2).divideScalar(2) as TVector;
+    }
+    if (v1 instanceof THREE.Vector2 && v2 instanceof THREE.Vector2) {
+      return v1.clone().add(v2).divideScalar(2) as TVector;
+    }
+    console.error(`\
+!(v1 instanceof THREE.Vector3 && v2 instanceof THREE.Vector3)
+&& !(v1 instanceof THREE.Vector2 && v2 instanceof THREE.Vector2)
+- v1: ${JSON.stringify(v1)}
+- v2: ${JSON.stringify(v2)}
+`);
+    return v1;
   }
 
   /**

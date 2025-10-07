@@ -1,4 +1,4 @@
-import { isInvalidIndex, mean } from "src/hair-bundle/curve/utils";
+import { Curve } from "src/hair-bundle/curve/curve";
 import * as THREE from "three";
 import {
   beforeEach,
@@ -26,7 +26,7 @@ describe("isInvalidIndex()", () => {
       if (msg !== undefined) {
         spy.mockImplementationOnce((v) => expect(v).toBe(msg));
       }
-      expect(isInvalidIndex(index, min, max)).toBe(expected);
+      expect(Curve.isInvalidIndex(index, min, max)).toBe(expected);
       expect(spy).toHaveBeenCalledTimes(msg !== undefined ? 1 : 0);
     }
   );
@@ -42,14 +42,14 @@ describe("mean()", () => {
   test("if TVector is THREE.Vector3", () => {
     const v1 = new THREE.Vector3(1, 2, 3);
     const v2 = new THREE.Vector3(3, 6, 9);
-    expect(mean(v1, v2)).toEqual(new THREE.Vector3(2, 4, 6));
+    expect(Curve.mean(v1, v2)).toEqual(new THREE.Vector3(2, 4, 6));
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
   test("if TVector is THREE.Vector2", () => {
     const v1 = new THREE.Vector2(1, 2);
     const v2 = new THREE.Vector2(3, 6);
-    expect(mean(v1, v2)).toEqual(new THREE.Vector2(2, 4));
+    expect(Curve.mean(v1, v2)).toEqual(new THREE.Vector2(2, 4));
     expect(spy).toHaveBeenCalledTimes(0);
   });
 
@@ -77,12 +77,12 @@ describe("mean()", () => {
 
     v1 = new THREE.Vector3(1, 2, 3);
     v2 = new THREE.Vector2(3, 6);
-    mean<THREE.Vector3 | THREE.Vector2>(v1, v2);
+    Curve.mean<THREE.Vector3 | THREE.Vector2>(v1, v2);
     expect(spy).toHaveBeenCalledTimes(1);
 
     v1 = new THREE.Vector2(1, 2);
     v2 = new THREE.Vector3(3, 6, 9);
-    mean<THREE.Vector3 | THREE.Vector2>(v1, v2);
+    Curve.mean<THREE.Vector3 | THREE.Vector2>(v1, v2);
     expect(spy).toHaveBeenCalledTimes(2);
   });
 });

@@ -1,13 +1,11 @@
 import {
   atan2In2PI,
-  getAngles,
   reverseInPI,
   rotate180,
   rotatePI,
   safeAcos,
   safeAsin,
-} from "src/hair-bundle/control-point/utils";
-import * as THREE from "three";
+} from "src/hair-bundle/control-point/math";
 import { describe, expect, test } from "vitest";
 
 describe("safeAsin()", () => {
@@ -92,16 +90,5 @@ describe("rotate180()", () => {
     [360, 180],
   ])("angle:%d, expected:%i", (angle, expected) => {
     expect(rotate180(angle)).toBeCloseTo(expected);
-  });
-});
-
-describe("getAngles()", () => {
-  test.each([
-    [new THREE.Vector3(1, 1, 1), new THREE.Vector3(45, 45, 45)],
-    [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
-    [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
-    [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
-  ])("v:%j, expected:%j", (v, expected) => {
-    expect(getAngles(v)).toEqual(expected);
   });
 });
