@@ -16,22 +16,8 @@ export function createMaterials(gui: GUI): Materials {
     toon: createToonMaterial(baseFolder, "toon", 0xfef3ef, 0xfde2df),
   };
 
-  const lineFolder = folder.addFolder("line").close();
-  const line = {
-    points: createPointsMaterial(lineFolder, "points", 0x000000),
-    line: createLineMaterial(lineFolder, "line", 0x000000),
-  };
-
-  const cpFolder = folder.addFolder("cp").close();
-  const cp = {
-    points: createPointsMaterial(cpFolder, "points", 0x000000),
-    line: createLineMaterial(cpFolder, "line", 0x000000),
-  };
-
-  const curveFolder = folder.addFolder("curve").close();
-  const curve = {
-    line: createLineMaterial(curveFolder, "line", 0x000000),
-  };
+  const points = createPointsMaterial(folder, "points", 0x000000);
+  const line = createLineMaterial(folder, "line", 0x000000);
 
   const tubeFolder = folder.addFolder("tube").close();
   const tube = {
@@ -53,9 +39,8 @@ export function createMaterials(gui: GUI): Materials {
 
   return {
     base,
+    points,
     line,
-    cp,
-    curve,
     tube,
     area,
   };
@@ -66,17 +51,8 @@ export interface Materials {
     line: THREE.LineBasicMaterial;
     toon: THREE.ShaderMaterial;
   };
-  line: {
-    points: THREE.PointsMaterial;
-    line: THREE.LineBasicMaterial;
-  };
-  cp: {
-    points: THREE.PointsMaterial;
-    line: THREE.LineBasicMaterial;
-  };
-  curve: {
-    line: THREE.LineBasicMaterial;
-  };
+  points: THREE.PointsMaterial;
+  line: THREE.LineBasicMaterial;
   tube: {
     line: THREE.LineBasicMaterial;
     toon: THREE.ShaderMaterial;

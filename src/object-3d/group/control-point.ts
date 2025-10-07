@@ -15,8 +15,8 @@ export function createControlPointGroup(
 
   const geometry = createEmptyGeometry();
 
-  group.add(new THREE.Points(geometry, ms.cp.points));
-  group.add(new THREE.Line(geometry, ms.cp.line));
+  group.add(new THREE.Points(geometry, ms.points));
+  group.add(new THREE.Line(geometry, ms.line));
 
   cp.createGeometry(group);
 

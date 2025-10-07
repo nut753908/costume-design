@@ -93,8 +93,8 @@ export class IntersectionLoopPicker {
         .forEach((il) => {
           const geometry = new THREE.BufferGeometry();
           geometry.setFromPoints(il.getPoints(positions));
-          group.add(new THREE.Points(geometry, ms.line.points));
-          group.add(new THREE.Line(geometry, ms.line.line));
+          group.add(new THREE.Points(geometry, ms.points));
+          group.add(new THREE.Line(geometry, ms.line));
         });
     };
     this._updateGroup();

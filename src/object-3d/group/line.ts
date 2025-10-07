@@ -44,8 +44,8 @@ points === null
 
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
-  // group.add(new THREE.Points(geometry, ms.line.points));
-  group.add(new THREE.Line(geometry, ms.line.line));
+  // group.add(new THREE.Points(geometry, ms.points));
+  group.add(new THREE.Line(geometry, ms.line));
 
   return group;
 }
