@@ -1,7 +1,7 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/main/gui";
+import type { Materials } from "src/main/material/materials";
 import { disposeGroup, objectMap } from "src/main/utils";
-import type { Materials } from "src/material/materials";
 import * as THREE from "three";
 import type { Edge } from "../centerline/edge";
 import { createAllEdges } from "../centerline/edges";

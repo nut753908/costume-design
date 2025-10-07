@@ -12,9 +12,9 @@ import {
   saveClosed,
   saveGui,
 } from "./main/gui";
+import { createMaterials, type Materials } from "./main/material/materials";
 import { createRenderer, updateRenderer } from "./main/renderer";
 import { disposeGroup } from "./main/utils";
-import { createMaterials, type Materials } from "./material/materials";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,

@@ -1,5 +1,5 @@
 import { loadBaseGeometry } from "src/base/base-geometry";
-import type { Materials } from "src/material/materials";
+import type { Materials } from "src/main/material/materials";
 import * as THREE from "three";
 
 /**
