@@ -1,6 +1,6 @@
 import type { GUI } from "lil-gui";
-import type { Tube } from "src/curve/tube";
 import { createEmptyGeometry } from "src/geometry/empty";
+import type { Tube } from "src/hair-bundle/tube";
 import { deleteFolder } from "src/main/gui";
 import type { Materials } from "src/material/materials";
 import * as THREE from "three";

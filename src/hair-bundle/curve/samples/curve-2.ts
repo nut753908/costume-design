@@ -1,5 +1,5 @@
-import { ControlPoint2 } from "src/curve/control-point-2";
-import { Curve2 } from "src/curve/curve-2";
+import { ControlPoint2 } from "src/hair-bundle/curve/control-point-2";
+import { Curve2 } from "src/hair-bundle/curve/curve-2";
 import * as THREE from "three";
 
 /**

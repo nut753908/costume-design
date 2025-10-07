@@ -1,5 +1,5 @@
-import { ControlPoint3 } from "src/curve/control-point-3";
-import { Curve3 } from "src/curve/curve-3";
+import { ControlPoint3 } from "src/hair-bundle/curve/control-point-3";
+import { Curve3 } from "src/hair-bundle/curve/curve-3";
 import * as THREE from "three";
 
 export const screwShapedCurve3 = new Curve3([

@@ -7,8 +7,8 @@ import {
 } from "src/geometry/tube";
 import { deleteFolder } from "src/main/gui";
 import * as THREE from "three";
-import { Curve2 } from "./curve-2";
-import { Curve3 } from "./curve-3";
+import { Curve2 } from "./curve/curve-2";
+import { Curve3 } from "./curve/curve-3";
 
 /**
  * A class for managing TubeGeometry.

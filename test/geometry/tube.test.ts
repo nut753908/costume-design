@@ -1,10 +1,10 @@
+import { TubeGeometry, type TubeGeometryJSON } from "src/geometry/tube";
 import {
   constant0Curve2,
   constant1Curve2,
   smallCircleCurve2,
-} from "src/curve/samples/curve-2";
-import { constant0Curve3 } from "src/curve/samples/curve-3";
-import { TubeGeometry, type TubeGeometryJSON } from "src/geometry/tube";
+} from "src/hair-bundle/curve/samples/curve-2";
+import { constant0Curve3 } from "src/hair-bundle/curve/samples/curve-3";
 import { describe, expect, test } from "vitest";
 
 describe("TubeGeometry", () => {
