@@ -425,6 +425,17 @@ describe("ControlPoint3", () => {
     );
   });
 
+  describe("getAngles()", () => {
+    test.each([
+      [new THREE.Vector3(1, 1, 1), new THREE.Vector3(45, 45, 45)],
+      [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 90, 0)],
+      [new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 90)],
+      [new THREE.Vector3(0, 0, 1), new THREE.Vector3(90, 0, 0)],
+    ])("v:%j, expected:%j", (v, expected) => {
+      expect(ControlPoint3.getAngles(v)).toEqual(expected);
+    });
+  });
+
   test("clone()", () => {
     const cp1 = new ControlPoint3(
       new THREE.Vector3(1, 2, 3),

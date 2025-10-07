@@ -3,13 +3,7 @@ import { closeFolder, deleteFolder } from "src/main/gui";
 import * as THREE from "three";
 import { ControlPoint } from "./control-point";
 import { Spherical, type SphericalJSON } from "./spherical";
-import {
-  atan2In2PI,
-  getAngles,
-  reverseInPI,
-  rotatePI,
-  safeAcos,
-} from "./utils";
+import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "./utils";
 
 /**
  * A class representing a 3D control point of curve.
@@ -86,10 +80,10 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
     this.type = "ControlPoint3";
     this.leftV = leftPos.clone().sub(middlePos);
     this.leftS = new Spherical().setFromVector3(this.leftV);
-    this.leftA = getAngles(this.leftV);
+    this.leftA = ControlPoint3.getAngles(this.leftV);
     this.rightV = rightPos.clone().sub(middlePos);
     this.rightS = new Spherical().setFromVector3(this.rightV);
-    this.rightA = getAngles(this.rightV);
+    this.rightA = ControlPoint3.getAngles(this.rightV);
   }
 
   /**
@@ -219,7 +213,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
   updateFromLeftPos() {
     this.leftV.copy(this.leftPos.clone().sub(this.middlePos));
     this.leftS.setFromVector3(this.leftV);
-    this.leftA.copy(getAngles(this.leftV));
+    this.leftA.copy(ControlPoint3.getAngles(this.leftV));
     this.syncLeftToRight();
   }
   /**
@@ -228,7 +222,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
   updateFromRightPos() {
     this.rightV.copy(this.rightPos.clone().sub(this.middlePos));
     this.rightS.setFromVector3(this.rightV);
-    this.rightA.copy(getAngles(this.rightV));
+    this.rightA.copy(ControlPoint3.getAngles(this.rightV));
     this.syncRightToLeft();
   }
   /**
@@ -236,7 +230,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
    */
   updateFromLeftS() {
     this.leftV.setFromSpherical(this.leftS);
-    this.leftA.copy(getAngles(this.leftV));
+    this.leftA.copy(ControlPoint3.getAngles(this.leftV));
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
     this.syncLeftToRight();
   }
@@ -278,7 +272,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
    */
   updateFromRightS() {
     this.rightV.setFromSpherical(this.rightS);
-    this.rightA.copy(getAngles(this.rightV));
+    this.rightA.copy(ControlPoint3.getAngles(this.rightV));
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
     this.syncRightToLeft();
   }
@@ -328,7 +322,7 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
       this.rightS.theta = rotatePI(this.leftS.theta);
     }
     this.rightV.setFromSpherical(this.rightS);
-    this.rightA.copy(getAngles(this.rightV));
+    this.rightA.copy(ControlPoint3.getAngles(this.rightV));
     this.rightPos.copy(this.middlePos.clone().add(this.rightV));
   }
   /**
@@ -343,8 +337,28 @@ export class ControlPoint3 extends ControlPoint<THREE.Vector3> {
       this.leftS.theta = rotatePI(this.rightS.theta);
     }
     this.leftV.setFromSpherical(this.leftS);
-    this.leftA.copy(getAngles(this.leftV));
+    this.leftA.copy(ControlPoint3.getAngles(this.leftV));
     this.leftPos.copy(this.middlePos.clone().add(this.leftV));
+  }
+
+  /**
+   * Get each angle as THREE.Vector3.
+   * x:
+   *   The angle of v around the x (right) axis.
+   *   This angle is right-handed and starts at positive y.
+   * y:
+   *   The angle of v around the y (up) axis.
+   *   This angle is right-handed and starts at positive z.
+   * z:
+   *   The angle of v around the z (front) axis.
+   *   This angle is right-handed and starts at positive x.
+   */
+  static getAngles(v: THREE.Vector3): THREE.Vector3 {
+    return new THREE.Vector3(
+      THREE.MathUtils.radToDeg(atan2In2PI(v.z, v.y)),
+      THREE.MathUtils.radToDeg(atan2In2PI(v.x, v.z)),
+      THREE.MathUtils.radToDeg(atan2In2PI(v.y, v.x))
+    );
   }
 
   /**
