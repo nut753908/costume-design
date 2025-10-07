@@ -43,7 +43,6 @@ export abstract class Plane {
     const group = new THREE.Group();
 
     const _planeHelper = planeHelper.clone();
-    _planeHelper.size = planeHelper.size;
     // These functions are used by createPlaneHelper() in ./plane-helper.
     planeHelper._updateVisibleCallbacks[name] = (v) => {
       _planeHelper.visible = v;
@@ -51,6 +50,7 @@ export abstract class Plane {
     planeHelper._updateSizeCallbacks[name] = (v) => {
       _planeHelper.size = v;
     };
+    planeHelper._updateColorCallbacks[name] = (v) => _planeHelper.setColor(v);
     group.add(_planeHelper);
 
     const _arrowHelper = arrowHelper.clone();
@@ -59,6 +59,7 @@ export abstract class Plane {
       _arrowHelper.visible = v;
     };
     arrowHelper._updateLengthCallbacks[name] = (v) => _arrowHelper.setLength(v);
+    arrowHelper._updateColorCallbacks[name] = (v) => _arrowHelper.setColor(v);
     group.add(_arrowHelper);
 
     // This function is used by setGUI() in ./free-plane.
@@ -90,8 +91,10 @@ export abstract class Plane {
   ) {
     delete planeHelper._updateVisibleCallbacks[name];
     delete planeHelper._updateSizeCallbacks[name];
+    delete planeHelper._updateColorCallbacks[name];
     delete arrowHelper._updateVisibleCallbacks[name];
     delete arrowHelper._updateLengthCallbacks[name];
+    delete arrowHelper._updateColorCallbacks[name];
   }
 
   /**
