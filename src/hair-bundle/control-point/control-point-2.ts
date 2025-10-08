@@ -1,5 +1,5 @@
 import type { Controller, GUI } from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
+import { closeFolder, deleteFolder } from "src/common/gui";
 import * as THREE from "three";
 import { Circular, type CircularJSON } from "./circular";
 import { ControlPoint } from "./control-point";

@@ -1,5 +1,5 @@
 import type { Controller, GUI } from "lil-gui";
-import { closeFolder, deleteFolder } from "src/main/gui";
+import { closeFolder, deleteFolder } from "src/common/gui";
 import * as THREE from "three";
 import { ControlPoint } from "./control-point";
 import { atan2In2PI, reverseInPI, rotatePI, safeAcos } from "./math";

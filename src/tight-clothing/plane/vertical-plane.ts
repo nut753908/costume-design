@@ -1,5 +1,5 @@
 import type GUI from "lil-gui";
-import { deleteFolder } from "src/main/gui";
+import { deleteFolder } from "src/common/gui";
 import * as THREE from "three";
 import type { IntersectionLoopPicker } from "../intersection/intersection-loop-picker";
 import { Plane } from "./plane";

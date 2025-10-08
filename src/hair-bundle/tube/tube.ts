@@ -1,5 +1,5 @@
 import type { GUI } from "lil-gui";
-import { deleteFolder } from "src/main/gui";
+import { deleteFolder } from "src/common/gui";
 import * as THREE from "three";
 import { Curve2 } from "../curve/curve-2";
 import { Curve3 } from "../curve/curve-3";

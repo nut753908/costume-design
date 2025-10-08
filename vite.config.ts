@@ -1,5 +1,6 @@
 /// <reference types="vitest/config" />
 
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
@@ -12,5 +13,14 @@ export default defineConfig({
     },
     environment: "happy-dom",
     mockReset: true,
+  },
+  base: "/costume-design/",
+  build: {
+    rollupOptions: {
+      input: {
+        "hair-bundle": resolve(__dirname, "hair-bundle.html"),
+        "tight-clothing": resolve(__dirname, "tight-clothing.html"),
+      },
+    },
   },
 });
