@@ -1,5 +1,5 @@
-import type { Materials } from "src/common/material/materials";
 import * as THREE from "three";
+import type { Materials } from "../materials";
 import { loadBodyGeometry } from "./body-geometry";
 
 /**
@@ -13,7 +13,7 @@ export async function createBodyGroup(
   const geometry = await loadBodyGeometry();
   if (!geometry) return null;
 
-  group.add(new THREE.Mesh(geometry, ms.toon.body));
+  group.add(new THREE.Mesh(geometry, ms.body));
 
   return group;
 }

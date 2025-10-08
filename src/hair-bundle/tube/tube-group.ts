@@ -1,9 +1,9 @@
 import type { GUI } from "lil-gui";
 import { deleteFolder } from "src/common/gui";
-import type { Materials } from "src/common/material/materials";
 import { createEmptyGeometry } from "src/common/utils";
 import * as THREE from "three";
 import { createCurveGroup } from "../curve/curve-group";
+import type { Materials } from "../materials";
 import type { Tube } from "./tube";
 
 /**
@@ -35,7 +35,7 @@ function createTubeGroupWithNoCurves(t: Tube, ms: Materials): THREE.Group {
 
   const geometry = createEmptyGeometry();
 
-  group.add(new THREE.Mesh(geometry, ms.toon.tube));
+  group.add(new THREE.Mesh(geometry, ms.tube));
 
   t.createGeometry(group);
 

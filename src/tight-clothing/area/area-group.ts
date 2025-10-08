@@ -1,6 +1,6 @@
-import type { Materials } from "src/common/material/materials";
 import { createEmptyGeometry } from "src/common/utils";
 import * as THREE from "three";
+import type { Materials } from "../materials";
 import type { Area } from "./area";
 
 /**
@@ -16,7 +16,7 @@ export function createAreaGroup(
 
   const geometry = createEmptyGeometry();
 
-  group.add(new THREE.Mesh(geometry, ms.toon.area));
+  group.add(new THREE.Mesh(geometry, ms.area));
 
   area.createAreaGroup(bodyGeometry, group);
 

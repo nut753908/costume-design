@@ -1,37 +1,34 @@
 import { FunctionController, GUI } from "lil-gui";
-import type * as THREE from "three";
-import type { ViewportGizmo } from "three-viewport-gizmo";
-import { createCamera, updateCamera } from "./common/camera";
-import { createControlsAndGizmo } from "./common/controls";
+import { createCamera, updateCamera } from "src/common/camera";
+import { createControlsAndGizmo } from "src/common/controls";
 import {
   type closedJSON,
   type guiJSON,
   loadClosed,
   saveClosed,
   saveGui,
-} from "./common/gui";
-import { createMaterials, type Materials } from "./common/material/materials";
+} from "src/common/gui";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,
-} from "./common/object-3d/arrow-helper";
-import { createAxesHelper } from "./common/object-3d/axes-helper";
+} from "src/common/object-3d/arrow-helper";
+import { createAxesHelper } from "src/common/object-3d/axes-helper";
 import {
   createPlaneHelper,
   type PlaneHelperWithCallbacks,
-} from "./common/object-3d/plane-helper";
-import { createScene } from "./common/object-3d/scene";
-import { createRenderer, updateRenderer } from "./common/renderer";
-import { disposeGroup } from "./common/utils";
-import { Area, type AreaJSON } from "./tight-clothing/area/area";
-import { createAreaGroup } from "./tight-clothing/area/area-group";
-import type { BufferGeometryWithNPolygonIndices } from "./tight-clothing/body/body-geometry";
-import { createBodyGroup } from "./tight-clothing/body/body-group";
-import { createBodyCenterlines } from "./tight-clothing/centerline/centerline";
-import {
-  PlaneManager,
-  type PlaneManagerJSON,
-} from "./tight-clothing/plane/plane-manager";
+} from "src/common/object-3d/plane-helper";
+import { createScene } from "src/common/object-3d/scene";
+import { createRenderer, updateRenderer } from "src/common/renderer";
+import { disposeGroup } from "src/common/utils";
+import type * as THREE from "three";
+import type { ViewportGizmo } from "three-viewport-gizmo";
+import { Area, type AreaJSON } from "./area/area";
+import { createAreaGroup } from "./area/area-group";
+import type { BufferGeometryWithNPolygonIndices } from "./body/body-geometry";
+import { createBodyGroup } from "./body/body-group";
+import { createBodyCenterlines } from "./centerline/centerline";
+import { createMaterials, type Materials } from "./materials";
+import { PlaneManager, type PlaneManagerJSON } from "./plane/plane-manager";
 
 let renderer: THREE.WebGLRenderer;
 let camera: THREE.OrthographicCamera;
