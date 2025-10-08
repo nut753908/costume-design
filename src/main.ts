@@ -43,11 +43,12 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
+let bodyGeometry: BufferGeometryWithNPolygonIndices;
+
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
 
 let area: Area;
-let bodyGeometry: BufferGeometryWithNPolygonIndices;
 let areaGroup: THREE.Group;
 
 let loading = false;
