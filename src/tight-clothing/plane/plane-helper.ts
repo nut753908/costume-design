@@ -19,7 +19,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   // These function are set in createGroup() in ./plane.
   helper._updateVisibleCallbacks = {};
   helper._updateSizeCallbacks = {};
-
+  helper._updateColorCallbacks = {};
   {
     const folder = gui.addFolder("PlaneHelper");
     folder.add(obj, "visible").onChange(uV);
@@ -33,7 +33,7 @@ export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
       Object.values(helper._updateSizeCallbacks).map((c) => c(obj.size));
     }
     function uC() /* updateColor */ {
-      helper.setColor(obj.color);
+      Object.values(helper._updateColorCallbacks).map((c) => c(obj.color));
     }
   }
   return helper;
@@ -76,7 +76,7 @@ export class PlaneHelper extends THREE.PlaneHelper {
     normal = new THREE.Vector3(0, 0, 1),
     point = new THREE.Vector3(0, 0, 0),
     size = 1,
-    color: number | THREE.Color | string = 0xffff00
+    color: THREE.ColorRepresentation = 0xffff00
   ) {
     super(new THREE.Plane(), size, 0xffff00);
     this.setColor(color);
@@ -89,7 +89,7 @@ export class PlaneHelper extends THREE.PlaneHelper {
    *
    * @param color - The color to set.
    */
-  setColor(color: number | THREE.Color | string) {
+  setColor(color: THREE.ColorRepresentation) {
     if (this.material instanceof THREE.LineBasicMaterial) {
       this.material.color.set(color);
     }
@@ -99,6 +99,14 @@ export class PlaneHelper extends THREE.PlaneHelper {
     ) {
       this.children[0].material.color.set(color);
     }
+  }
+
+  // NOTE: plane, color, normal and point are not supported.
+  copy(source: PlaneHelper) {
+    super.copy(source, false);
+    this.size = source.size;
+    this.children[0].copy(source.children[0]);
+    return this;
   }
 
   updateMatrixWorld() {
@@ -115,4 +123,8 @@ export type PlaneHelperWithCallbacks = PlaneHelper &
     "_updateVisibleCallbacks",
     { [k: string]: (visible: boolean) => void }
   > &
-  Record<"_updateSizeCallbacks", { [k: string]: (size: number) => void }>;
+  Record<"_updateSizeCallbacks", { [k: string]: (size: number) => void }> &
+  Record<
+    "_updateColorCallbacks",
+    { [k: string]: (color: THREE.ColorRepresentation) => void }
+  >;
