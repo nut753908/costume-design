@@ -1,4 +1,4 @@
 # Link to this GithubPages
 
-- [hair-bundle](https://nut753908.github.io/costume-design/hair-bundle)
-- [tight-clothing](https://nut753908.github.io/costume-design/tight-clothing)
+- [hair-bundle](https://nut753908.github.io/costume-design/hair-bundle.html)
+- [tight-clothing](https://nut753908.github.io/costume-design/tight-clothing.html)
