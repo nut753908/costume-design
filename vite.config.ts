@@ -14,6 +14,7 @@ export default defineConfig({
     environment: "happy-dom",
     mockReset: true,
   },
+  base: "/costume-design/",
   build: {
     rollupOptions: {
       input: {
