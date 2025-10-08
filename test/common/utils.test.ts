@@ -1,4 +1,4 @@
-import { disposeGroup, objectMap } from "src/main/utils";
+import { disposeGroup, objectMap } from "src/common/utils";
 import * as THREE from "three";
 import { expect, test, vi } from "vitest";
 

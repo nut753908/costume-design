@@ -1,22 +1,22 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import type { BufferGeometryWithNPolygonIndices } from "./hair-bundle/body/body-geometry";
-import { createBodyGroup } from "./hair-bundle/body/body-group";
-import { createCamera, updateCamera } from "./main/camera";
-import { createControlsAndGizmo } from "./main/controls";
+import { createCamera, updateCamera } from "./common/camera";
+import { createControlsAndGizmo } from "./common/controls";
 import {
   type closedJSON,
   type guiJSON,
   loadClosed,
   saveClosed,
   saveGui,
-} from "./main/gui";
-import { createMaterials, type Materials } from "./main/material/materials";
-import { createAxesHelper } from "./main/object-3d/axes-helper";
-import { createScene } from "./main/object-3d/scene";
-import { createRenderer, updateRenderer } from "./main/renderer";
-import { disposeGroup } from "./main/utils";
+} from "./common/gui";
+import { createMaterials, type Materials } from "./common/material/materials";
+import { createAxesHelper } from "./common/object-3d/axes-helper";
+import { createScene } from "./common/object-3d/scene";
+import { createRenderer, updateRenderer } from "./common/renderer";
+import { disposeGroup } from "./common/utils";
+import type { BufferGeometryWithNPolygonIndices } from "./hair-bundle/body/body-geometry";
+import { createBodyGroup } from "./hair-bundle/body/body-group";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
 import { createAreaGroup } from "./tight-clothing/area/area-group";
 import { createBodyCenterlines } from "./tight-clothing/centerline/centerline";

@@ -4,7 +4,7 @@ import {
   deleteFolder,
   loadClosed,
   saveClosed,
-} from "src/main/gui";
+} from "src/common/gui";
 import { describe, expect, test, vi } from "vitest";
 
 test("saveClosed(), loadClosed()", () => {

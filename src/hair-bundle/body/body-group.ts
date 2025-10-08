@@ -1,4 +1,4 @@
-import type { Materials } from "src/main/material/materials";
+import type { Materials } from "src/common/material/materials";
 import * as THREE from "three";
 import { loadBodyGeometry } from "./body-geometry";
 

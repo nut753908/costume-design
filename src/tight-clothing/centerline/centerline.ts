@@ -1,4 +1,4 @@
-import { objectMap } from "src/main/utils";
+import { objectMap } from "src/common/utils";
 import * as THREE from "three";
 import { createAllEdgeLoopStacks } from "./edge-loop-stacks";
 import { getCentroids } from "./points";

@@ -1,5 +1,5 @@
 import type { GUI } from "lil-gui";
-import { createColor } from "src/main/utils";
+import { createColor } from "src/common/utils";
 import * as THREE from "three";
 
 export function createArrowHelper(gui: GUI): ArrowHelperWithCallbacks {
