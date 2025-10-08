@@ -1,8 +1,8 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import type { BufferGeometryWithNPolygonIndices } from "./base/base-geometry";
-import { createBaseGroup } from "./base/base-group";
+import type { BufferGeometryWithNPolygonIndices } from "./body/body-geometry";
+import { createBodyGroup } from "./body/body-group";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
 import {
@@ -19,7 +19,7 @@ import { createRenderer, updateRenderer } from "./main/renderer";
 import { disposeGroup } from "./main/utils";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
 import { createAreaGroup } from "./tight-clothing/area/area-group";
-import { createBaseCenterlines } from "./tight-clothing/centerline/centerline";
+import { createBodyCenterlines } from "./tight-clothing/centerline/centerline";
 import {
   type ArrowHelperWithCallbacks,
   createArrowHelper,
@@ -43,11 +43,12 @@ let planeHelper: PlaneHelperWithCallbacks;
 let arrowHelper: ArrowHelperWithCallbacks;
 let ms: Materials;
 
+let bodyGeometry: BufferGeometryWithNPolygonIndices;
+
 let pm: PlaneManager;
 let planesGroup: THREE.Group;
 
 let area: Area;
-let baseGeometry: BufferGeometryWithNPolygonIndices;
 let areaGroup: THREE.Group;
 
 let loading = false;
@@ -81,20 +82,20 @@ async function init() {
     ms = createMaterials(folder);
   }
 
-  await createBaseGroup(ms).then((baseGroup) => {
-    if (!baseGroup) return;
-    scene.add(baseGroup);
+  await createBodyGroup(ms).then((bodyGroup) => {
+    if (!bodyGroup) return;
+    scene.add(bodyGroup);
 
-    if (!("geometry" in baseGroup.children[0])) return;
-    baseGeometry = baseGroup.children[0]
+    if (!("geometry" in bodyGroup.children[0])) return;
+    bodyGeometry = bodyGroup.children[0]
       .geometry as BufferGeometryWithNPolygonIndices;
-    const nPolygonIndices = baseGeometry.nPolygonIndices;
-    const positions = baseGeometry.getAttribute(
+    const nPolygonIndices = bodyGeometry.nPolygonIndices;
+    const positions = bodyGeometry.getAttribute(
       "position"
     ) as THREE.Float32BufferAttribute;
-    const indices = baseGeometry.getIndex() as THREE.Uint16BufferAttribute;
+    const indices = bodyGeometry.getIndex() as THREE.Uint16BufferAttribute;
 
-    pm = new PlaneManager(createBaseCenterlines(nPolygonIndices, positions));
+    pm = new PlaneManager(createBodyCenterlines(nPolygonIndices, positions));
     pm.setGUI(gui);
     planesGroup = pm.createPlanesGroup(planeHelper, arrowHelper);
     scene.add(planesGroup);
@@ -104,7 +105,7 @@ async function init() {
     pm._removeCrossSection = area.removeCrossSection.bind(area);
     pm._updateCrossSection = area.updateCrossSection.bind(area);
     area.setGUI(gui);
-    areaGroup = createAreaGroup(area, baseGeometry, ms);
+    areaGroup = createAreaGroup(area, bodyGeometry, ms);
     scene.add(areaGroup);
   });
 
@@ -146,7 +147,7 @@ function loadLastUndo() {
 
   area.fromJSON(obj.area);
   area.setGUI(gui);
-  areaGroup = createAreaGroup(area, baseGeometry, ms);
+  areaGroup = createAreaGroup(area, bodyGeometry, ms);
   scene.add(areaGroup);
 
   gui.load(obj.gui);

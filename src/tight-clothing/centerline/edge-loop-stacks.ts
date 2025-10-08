@@ -6,7 +6,7 @@ import { createRemainingVerticesMap } from "./vertices";
 
 /**
  * conditions:
- * - `nPolygonIndices` is set from the base geometry
+ * - `nPolygonIndices` is set from the body geometry
  * - `if (vertices.length === 1) continue;` exist
  * - `if (strings.includes(s)) continue;` exist
  *
