@@ -9,17 +9,18 @@ export function createLineMaterial(
   gui: GUI,
   name = "lineMaterial",
   colorHex = 0xffffff,
-  opacity = 1
+  hideFolder = false
 ): THREE.LineBasicMaterial {
   const lineMaterial = new THREE.LineBasicMaterial({
     color: createColor(colorHex),
     transparent: true,
-    opacity: opacity,
+    opacity: 1,
   });
   {
     const folder = gui.addFolder(name);
     folder.addColor(lineMaterial, "color");
     folder.add(lineMaterial, "opacity", 0, 1, 0.01);
+    if (hideFolder) folder.hide();
   }
   return lineMaterial;
 }

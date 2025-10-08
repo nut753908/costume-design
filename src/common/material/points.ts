@@ -8,7 +8,8 @@ import { createColor } from "../utils";
 export function createPointsMaterial(
   gui: GUI,
   name = "pointsMaterial",
-  colorHex = 0xffffff
+  colorHex = 0xffffff,
+  hideFolder = false
 ): THREE.PointsMaterial {
   const pointsMaterial = new THREE.PointsMaterial({
     color: createColor(colorHex),
@@ -21,6 +22,7 @@ export function createPointsMaterial(
     folder.addColor(pointsMaterial, "color");
     folder.add(pointsMaterial, "size", 0, 10, 0.01);
     folder.add(pointsMaterial, "opacity", 0, 1, 0.01);
+    if (hideFolder) folder.hide();
   }
   return pointsMaterial;
 }
