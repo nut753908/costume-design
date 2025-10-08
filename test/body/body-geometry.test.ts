@@ -1,4 +1,4 @@
-import { correctNPolygonIndices, mergeIndices } from "src/base/base-geometry";
+import { correctNPolygonIndices, mergeIndices } from "src/body/body-geometry";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 

@@ -129,12 +129,12 @@ export class Area {
   /**
    * Create area geometry.
    *
-   * @param baseGeometry - The base geometry.
+   * @param bodyGeometry - The body geometry.
    */
-  createAreaGroup(baseGeometry: THREE.BufferGeometry, group: THREE.Group) {
+  createAreaGroup(bodyGeometry: THREE.BufferGeometry, group: THREE.Group) {
     // This function is used by updateCrossSection() in ./area.
     this._updateAreaGroup = () => {
-      const obj = cutGeometryUsingIlsWithinArea(baseGeometry, this);
+      const obj = cutGeometryUsingIlsWithinArea(bodyGeometry, this);
       const foundGeometry = findGeometryWithinArea(obj.geometry, obj.area);
       const extrudedGeometry = extrudeGeometry(foundGeometry, this.thickness);
 

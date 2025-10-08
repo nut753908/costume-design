@@ -4,13 +4,13 @@ import { createAllEdgeLoopStacks } from "./edge-loop-stacks";
 import { getCentroids } from "./points";
 
 /**
- * Create the base centerlines.
+ * Create the body centerlines.
  *
- * @param nPolygonIndices - The base n polygon indices.
- * @param positions - The results of the base geometry.getAttribute("position").
- * @return  The base centerlines.
+ * @param nPolygonIndices - The body n polygon indices.
+ * @param positions - The results of the body geometry.getAttribute("position").
+ * @return  The body centerlines.
  */
-export function createBaseCenterlines(
+export function createBodyCenterlines(
   nPolygonIndices: number[][],
   positions: THREE.Float32BufferAttribute
 ): { [k: string]: THREE.CurvePath<THREE.Vector3> | THREE.CatmullRomCurve3 } {

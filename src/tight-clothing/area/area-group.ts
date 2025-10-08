@@ -4,12 +4,12 @@ import * as THREE from "three";
 import type { Area } from "./area";
 
 /**
- * @param baseGeometry - The base geometry.
+ * @param bodyGeometry - The body geometry.
  * @param ms - The materials.
  */
 export function createAreaGroup(
   area: Area,
-  baseGeometry: THREE.BufferGeometry,
+  bodyGeometry: THREE.BufferGeometry,
   ms: Materials
 ): THREE.Group {
   const group = new THREE.Group();
@@ -18,7 +18,7 @@ export function createAreaGroup(
 
   group.add(new THREE.Mesh(geometry, ms.toon.area));
 
-  area.createAreaGroup(baseGeometry, group);
+  area.createAreaGroup(bodyGeometry, group);
 
   return group;
 }

@@ -15,7 +15,7 @@ export function createMaterials(gui: GUI): Materials {
 
   const toonFolder = folder.addFolder("toon");
   const toon = {
-    base: createToonMaterial(toonFolder, "base", 0xfef3ef, 0xfde2df),
+    body: createToonMaterial(toonFolder, "body", 0xfef3ef, 0xfde2df),
     tube: createToonMaterial(
       toonFolder,
       "tube",
@@ -37,7 +37,7 @@ export interface Materials {
   points: THREE.PointsMaterial;
   line: THREE.LineBasicMaterial;
   toon: {
-    base: THREE.ShaderMaterial;
+    body: THREE.ShaderMaterial;
     tube: THREE.ShaderMaterial;
     area: THREE.ShaderMaterial;
   };

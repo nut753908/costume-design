@@ -1,19 +1,19 @@
 import type { Materials } from "src/main/material/materials";
 import * as THREE from "three";
-import { loadBaseGeometry } from "./base-geometry";
+import { loadBodyGeometry } from "./body-geometry";
 
 /**
  * @param ms - The materials.
  */
-export async function createBaseGroup(
+export async function createBodyGroup(
   ms: Materials
 ): Promise<THREE.Group | null> {
   const group = new THREE.Group();
 
-  const geometry = await loadBaseGeometry();
+  const geometry = await loadBodyGeometry();
   if (!geometry) return null;
 
-  group.add(new THREE.Mesh(geometry, ms.toon.base));
+  group.add(new THREE.Mesh(geometry, ms.toon.body));
 
   return group;
 }
