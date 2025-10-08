@@ -23,10 +23,10 @@ import {
 import { createScene } from "./common/object-3d/scene";
 import { createRenderer, updateRenderer } from "./common/renderer";
 import { disposeGroup } from "./common/utils";
-import type { BufferGeometryWithNPolygonIndices } from "./hair-bundle/body/body-geometry";
-import { createBodyGroup } from "./hair-bundle/body/body-group";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
 import { createAreaGroup } from "./tight-clothing/area/area-group";
+import type { BufferGeometryWithNPolygonIndices } from "./tight-clothing/body/body-geometry";
+import { createBodyGroup } from "./tight-clothing/body/body-group";
 import { createBodyCenterlines } from "./tight-clothing/centerline/centerline";
 import {
   PlaneManager,

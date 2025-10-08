@@ -1,7 +1,7 @@
 import {
   correctNPolygonIndices,
   mergeIndices,
-} from "src/hair-bundle/body/body-geometry";
+} from "src/tight-clothing/body/body-geometry";
 import * as THREE from "three";
 import { describe, expect, test } from "vitest";
 
