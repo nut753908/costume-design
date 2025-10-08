@@ -7,7 +7,7 @@ export async function loadBodyGeometry(): Promise<BufferGeometryWithNPolygonIndi
   const gltfLoader = new GLTFLoader();
 
   const positionsTxt = await fileLoader
-    .loadAsync("/models/body1-22-n-polygon-positions.txt")
+    .loadAsync("models/body1-22-n-polygon-positions.txt")
     .catch((error) => {
       console.error(error);
       return null;
@@ -15,7 +15,7 @@ export async function loadBodyGeometry(): Promise<BufferGeometryWithNPolygonIndi
   if (typeof positionsTxt !== "string") return null;
 
   const indicesTxt = await fileLoader
-    .loadAsync("/models/body1-22-n-polygon-indices.txt")
+    .loadAsync("models/body1-22-n-polygon-indices.txt")
     .catch((error) => {
       console.error(error);
       return null;
@@ -23,7 +23,7 @@ export async function loadBodyGeometry(): Promise<BufferGeometryWithNPolygonIndi
   if (typeof indicesTxt !== "string") return null;
 
   const gltf = await gltfLoader
-    .loadAsync("/models/body1-22.glb")
+    .loadAsync("models/body1-22.glb")
     .catch((error) => {
       console.error(error);
       return null;
