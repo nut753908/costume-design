@@ -1,6 +1,6 @@
 import type { GUI } from "lil-gui";
-import { createColor } from "src/common/utils";
 import * as THREE from "three";
+import { createColor } from "../utils";
 
 export function createPlaneHelper(gui: GUI): PlaneHelperWithCallbacks {
   const obj = {

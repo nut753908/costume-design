@@ -11,7 +11,15 @@ import {
   saveGui,
 } from "./common/gui";
 import { createMaterials, type Materials } from "./common/material/materials";
+import {
+  type ArrowHelperWithCallbacks,
+  createArrowHelper,
+} from "./common/object-3d/arrow-helper";
 import { createAxesHelper } from "./common/object-3d/axes-helper";
+import {
+  createPlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "./common/object-3d/plane-helper";
 import { createScene } from "./common/object-3d/scene";
 import { createRenderer, updateRenderer } from "./common/renderer";
 import { disposeGroup } from "./common/utils";
@@ -20,14 +28,6 @@ import { createBodyGroup } from "./hair-bundle/body/body-group";
 import { Area, type AreaJSON } from "./tight-clothing/area/area";
 import { createAreaGroup } from "./tight-clothing/area/area-group";
 import { createBodyCenterlines } from "./tight-clothing/centerline/centerline";
-import {
-  type ArrowHelperWithCallbacks,
-  createArrowHelper,
-} from "./tight-clothing/plane/arrow-helper";
-import {
-  createPlaneHelper,
-  type PlaneHelperWithCallbacks,
-} from "./tight-clothing/plane/plane-helper";
 import {
   PlaneManager,
   type PlaneManagerJSON,

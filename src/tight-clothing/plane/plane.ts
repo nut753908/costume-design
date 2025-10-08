@@ -1,7 +1,10 @@
 import type GUI from "lil-gui";
+import type { ArrowHelperWithCallbacks } from "src/common/object-3d/arrow-helper";
+import {
+  PlaneHelper,
+  type PlaneHelperWithCallbacks,
+} from "src/common/object-3d/plane-helper";
 import * as THREE from "three";
-import type { ArrowHelperWithCallbacks } from "./arrow-helper";
-import { PlaneHelper, type PlaneHelperWithCallbacks } from "./plane-helper";
 
 /**
  * Abstract class for FreePlane and VerticalPlane.
