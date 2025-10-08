@@ -1,8 +1,8 @@
 import type { GUI } from "lil-gui";
 import { deleteFolder } from "src/common/gui";
-import type { Materials } from "src/common/material/materials";
 import { disposeGroup } from "src/common/utils";
 import * as THREE from "three";
+import type { Materials } from "../materials";
 import type { FreePlane } from "../plane/free-plane";
 import type { VerticalPlane } from "../plane/vertical-plane";
 import {

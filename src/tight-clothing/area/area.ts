@@ -1,6 +1,5 @@
 import type GUI from "lil-gui";
 import { deleteFolder } from "src/common/gui";
-import type { Materials } from "src/common/material/materials";
 import { disposeGroup, objectMap } from "src/common/utils";
 import * as THREE from "three";
 import type { Edge } from "../centerline/edge";
@@ -16,6 +15,7 @@ import {
   sortIntersectionLoops,
 } from "../intersection/intersection-loops";
 import { createAllIntersections } from "../intersection/intersections";
+import type { Materials } from "../materials";
 import { FreePlane, type FreePlaneJSON } from "../plane/free-plane";
 import { VerticalPlane, type VerticalPlaneJSON } from "../plane/vertical-plane";
 import { cutGeometryUsingIlsWithinArea } from "./cut";
