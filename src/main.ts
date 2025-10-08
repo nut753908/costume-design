@@ -1,8 +1,8 @@
 import { FunctionController, GUI } from "lil-gui";
 import type * as THREE from "three";
 import type { ViewportGizmo } from "three-viewport-gizmo";
-import type { BufferGeometryWithNPolygonIndices } from "./body/body-geometry";
-import { createBodyGroup } from "./body/body-group";
+import type { BufferGeometryWithNPolygonIndices } from "./hair-bundle/body/body-geometry";
+import { createBodyGroup } from "./hair-bundle/body/body-group";
 import { createCamera, updateCamera } from "./main/camera";
 import { createControlsAndGizmo } from "./main/controls";
 import {
