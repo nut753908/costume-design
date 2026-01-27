@@ -2,7 +2,7 @@
 
 # Costume design
 
-This project was originally conceived as a tool that would allow users to enjoy detailed costume designs. However, we found that creating just one feature takes a lot of time and effort. We realized that it would be impossible to implement all the necessary features. So we gave up on making everything and decided to offer only the features we had developed so far. Here we will introduce these two features.
+This project was originally conceived as a tool that would allow users to enjoy detailed costume designs. However, as development progressed, it became clear that creating even one feature takes a lot of time and effort. We realized that it would be impossible to implement all the necessary features. So we gave up on making everything and decided to offer only the features we had developed so far. Here we will introduce these two features.
 
 ## Hair bundle
 
