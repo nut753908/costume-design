@@ -6,20 +6,24 @@ The hair bundle web page consists of three parts: Scene, Viewport gizmo, and Con
 
 ## Scene
 
-<img src="scene.png" alt="scene.png" width="384">
+<img src="scene.png" alt="scene.png" width="192">
 
-The scene is where 3D objects are placed. By default, a light brown cylinder and XYZ axes are placed in the scene. The scene is rendered through an orthographic camera. The camera's field of view is adjusted to match the window size. You can control the camera as follows:
+[Scene](https://threejs.org/docs/#Scene) is where 3D objects are placed. By default, a light brown cylinder and [AxesHelper](https://threejs.org/docs/#AxesHelper) are placed in the scene. The scene is rendered through [OrthographicCamera](https://threejs.org/docs/#OrthographicCamera). The camera's field of view is adjusted to match the window size. You can control the camera as follows:
 
 - Drag the left mouse button to rotate around the pivot point. The camera always points towards the pivot point. By default, the pivot point is the origin.
 - Drag the right mouse button to move parallel to the screen.
 - Roll the mouse wheel to zoom in/out.
 
-For more information on camera operation, please see the following link: https://threejs.org/docs/#OrbitControls
+These camera controls come from [OrbitControls](https://threejs.org/docs/#OrbitControls).
 
 ## Viewport gizmo
 
 <img src="viewport-gizmo.png" alt="viewport-gizmo.png" width="80">
 
+The viewport gizmo is a library called [THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/). The viewport gizmo displays the XYZ directions. Clicking on the X,Y,Z circles or the blank -X,-Y,-Z circles will rotate the camera in that direction, just like dragging the left mouse button in the scene. 
+
 ## Control panel
 
-<img src="control-panel.png" alt="control-panel.png" width="110">
+<img src="control-panel.png" alt="control-panel.png" width="55">
+
+The control panel is a library called [lil-gui](https://lil-gui.georgealways.com/).
