@@ -30,5 +30,5 @@ The control panel is a library called [lil-gui](https://lil-gui.georgealways.com
 
 Number fields can also be modified by dragging the left mouse button or by pressing the up or down arrow keys when the field has focus. While making changes using these methods, holding down the Shift key increases the value step size, and holding down the Alt key decreases the value step size.
 
-This web page contains the operation history of the control panel. To undo your last action, press Ctrl+z (Cmd+z on Mac). To redo an action you have undone, press Shift+Ctrl+z or Ctrl+y (Shift+Cmd+z or Cmd+y on Mac).
+Every time you operate the control panel, its current state is saved in a state array. To revert to the previous state, press Ctrl+z (Cmd+z on Mac). To advance to the next state, press Shift+Ctrl+z or Ctrl+y (Shift+Cmd+z or Cmd+y on Mac).
 
