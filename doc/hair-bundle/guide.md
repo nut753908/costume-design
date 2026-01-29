@@ -32,3 +32,105 @@ Number fields can also be modified by dragging the left mouse button or by press
 
 Every time you operate the control panel, its current state is saved in a state array. To revert to the previous state, press Ctrl+z (Cmd+z on Mac). To advance to the next state, press Shift+Ctrl+z or Ctrl+y (Shift+Cmd+z or Cmd+y on Mac).
 
+The control panel contains the following items.
+
+| Name                    | Description |
+| ----------------------- | ----------- |
+| common                  | Shareable items. |
+| --THREE.Scene           | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
+| ----background          | The background color of the scene. |
+| --THREE.AxesHelper      | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
+| ----visible             | Whether to show the axes helper. |
+| ----size                | The length of each line for the axes helper.<br>Step: 0.01 |
+| --THREE.Material        | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
+| ----points              | The appearance of point objects. This is used for control points.<br>Link: https://threejs.org/docs/#PointsMaterial |
+| ------color             | Point color. |
+| ------size              | Point size in pixels.<br>Min: 0, Max: 10, Step: 0.01 |
+| ------opacity           | Point opacity.<br>Min: 0, Max: 1, Step: 0.01 |
+| ----line                | The appearance of line objects. This is used for control points and curves.<br>Link: https://threejs.org/docs/#LineBasicMaterial |
+| ------color             | Line color. |
+| ------opacity           | Line opacity.<br>Min: 0, Max: 1, Step: 0.01 |
+| ----tube_(u=uniforms)   | [WIP] Use [ShaderMaterial](https://threejs.org/docs/#ShaderMaterial). |
+| ------wireframe         |             |
+| ------u.checkShape      |             |
+| ------u.light.x         |             |
+| ------u.light.y         |             |
+| ------u.light.z         |             |
+| ------u.threshold       |             |
+| ------u.baseColor       |             |
+| ------u.shaderColor     |             |
+| TubeGroup               |             |
+| --visible               |             |
+| ----tube                |             |
+| ----axis                |             |
+| ----cross               |             |
+| ----scaleC              |             |
+| ----xScaleC             |             |
+| ----yScaleC             |             |
+| ----xCurvatureC         |             |
+| ----yCurvatureC         |             |
+| ----tiltC               |             |
+| Tube                    |             |
+| --axis                  |             |
+| ----addCpToFirst        |             |
+| ----addCpToLast         |             |
+| ----interpolateCp       |             |
+| ----removeCp            |             |
+| ----interoplateCp_index |             |
+| ----removeCp_index      |             |
+| ----cp[0,1,...]         |             |
+| ------middle.x          |             |
+| ------middle.y          |             |
+| ------middle.z          |             |
+| ------left.x            |             |
+| ------left.y            |             |
+| ------left.z            |             |
+| ------right.x           |             |
+| ------right.y           |             |
+| ------right.z           |             |
+| ------isSyncRadius      |             |
+| ------isSyncAngle       |             |
+| ------local             |             |
+| --------left.radius     |             |
+| --------left.Ax         |             |
+| --------left.Ay         |             |
+| --------left.Az         |             |
+| --------right.radius    |             |
+| --------right.Ax        |             |
+| --------right.Ay        |             |
+| --------right.Az        |             |
+| --cross                 |             |
+| ----addCpToFirst        |             |
+| ----addCpToLast         |             |
+| ----interpolateCp       |             |
+| ----removeCp            |             |
+| ----interoplateCp_index |             |
+| ----removeCp_index      |             |
+| ----cp[0,1,...]         |             |
+| ------middle.x          |             |
+| ------middle.y          |             |
+| ------left.x            |             |
+| ------left.y            |             |
+| ------right.x           |             |
+| ------right.y           |             |
+| ------isSyncRadius      |             |
+| ------isSyncAngle       |             |
+| ------local             |             |
+| --------left.radius     |             |
+| --------left.angle      |             |
+| --------right.radius    |             |
+| --------right.angle     |             |
+| --axisSegments          |             |
+| --crossSegments         |             |
+| --scaleN                |             |
+| --xScaleN               |             |
+| --yScaleN               |             |
+| --xCurvatureN           |             |
+| --yCurvatureN           |             |
+| --tiltN                 |             |
+| --scaleC                |             |
+| --xScaleC               |             |
+| --yScaleC               |             |
+| --xCurvatureC           |             |
+| --yCurvatureC           |             |
+| --curvatureOrder        |             |
