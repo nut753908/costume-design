@@ -14,7 +14,7 @@ export function createMaterials(gui: GUI): Materials {
   const line = createLineMaterial(folder, "line", 0x000000);
   const tube = createToonMaterial(
     folder,
-    "folder",
+    "tube",
     0xe7d3cc,
     0xe3c4b7,
     THREE.DoubleSide
