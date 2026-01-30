@@ -40,7 +40,7 @@ The control panel contains the following items.
 | --THREE.Scene           | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
 | ----background          | The background color of the scene. |
 | --THREE.AxesHelper      | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
-| ----visible             | Whether to show the axes helper. |
+| ----visible             | Whether to display the axes helper. |
 | ----size                | The length of each line for the axes helper.<br>Step: 0.01 |
 | --THREE.Material        | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
 | ----points              | The appearance of point objects. This is used for control points.<br>Link: https://threejs.org/docs/#PointsMaterial |
@@ -50,26 +50,26 @@ The control panel contains the following items.
 | ----line                | The appearance of line objects. This is used for control points and curves.<br>Link: https://threejs.org/docs/#LineBasicMaterial |
 | ------color             | Line color. |
 | ------opacity           | Line opacity.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----tube_(u=uniforms)   | [WIP] Use [ShaderMaterial](https://threejs.org/docs/#ShaderMaterial). |
-| ------wireframe         |             |
-| ------u.checkShape      |             |
-| ------u.light.x         |             |
-| ------u.light.y         |             |
-| ------u.light.z         |             |
-| ------u.threshold       |             |
-| ------u.baseColor       |             |
-| ------u.shaderColor     |             |
-| TubeGroup               |             |
-| --visible               |             |
-| ----tube                |             |
-| ----axis                |             |
-| ----cross               |             |
-| ----scaleC              |             |
-| ----xScaleC             |             |
-| ----yScaleC             |             |
-| ----xCurvatureC         |             |
-| ----yCurvatureC         |             |
-| ----tiltC               |             |
+| ----tube_(u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. The backside is also rendered.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| ------wireframe         | Whether to change the tube display to wireframe. |
+| ------u.checkShape      | Whether to change the tube display to see the tube shape. As the face turns from front to back, the color changes from white to black. |
+| ------u.light.x         | The x-coordinate of the light source for the tube.<br>Step: 0.1 |
+| ------u.light.y         | The y-coordinate of the light source for the tube.<br>Step: 0.1 |
+| ------u.light.z         | The z-coordinate of the light source for the tube.<br>Step: 0.1 |
+| ------u.threshold       | The shade threshold for the tube. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
+| ------u.baseColor       | The base color for the tube. |
+| ------u.shadeColor      | The shade color for the tube. |
+| TubeGroup               | A group containing tube-related objects. |
+| --visible               | A collection of `{tube-related-object-name}.visible`. |
+| ----tube                | Whether to display the tube object. |
+| ----axis                | Whether to display the 3D curve object for the tube axis. |
+| ----cross               | Whether to display the 2D curve object for the tube cross-section. |
+| ----scaleC              | Whether to display the 2D curve object representing the "scale of the tube cross-section" along the tube axis. |
+| ----xScaleC             | Whether to display the 2D curve object representing the "x-scale of the tube cross-section" along the tube axis. |
+| ----yScaleC             | Whether to display the 2D curve object representing the "y-scale of the tube cross-section" along the tube axis. |
+| ----xCurvatureC         | Whether to display the 2D curve object representing the "x-curvature of the tube cross-section" along the tube axis. |
+| ----yCurvatureC         | Whether to display the 2D curve object representing the "y-curvature of the tube cross-section" along the tube axis. |
+| ----tiltC               | Whether to display the 2D curve object representing the "tilt of the tube cross-section" along the tube axis. |
 | Tube                    |             |
 | --axis                  |             |
 | ----addCpToFirst        |             |
