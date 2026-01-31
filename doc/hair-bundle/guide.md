@@ -64,32 +64,32 @@ The control panel contains the following items.
 | ----tube                | Whether to display the tube object. |
 | ----axis                | Whether to display the 3D curve object for the tube axis. |
 | ----cross               | Whether to display the 2D curve object for the tube cross-section. |
-| ----scaleC              | Whether to display the 2D curve object representing the scale variation of the tube cross-section. |
-| ----xScaleC             | Whether to display the 2D curve object representing the x-scale variation of the tube cross-section. |
-| ----yScaleC             | Whether to display the 2D curve object representing the y-scale variation of the tube cross-section. |
-| ----xCurvatureC         | Whether to display the 2D curve object representing the x-curvature variation of the tube cross-section. |
-| ----yCurvatureC         | Whether to display the 2D curve object representing the y-curvature variation of the tube cross-section. |
-| ----tiltC               | Whether to display the 2D curve object representing the tilt variation of the tube cross-section. |
-| Tube                    |             |
-| --axis                  |             |
+| ----scaleC              | Whether to display the 2D curve object representing the scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----xScaleC             | Whether to display the 2D curve object representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----yScaleC             | Whether to display the 2D curve object representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----xCurvatureC         | Whether to display the 2D curve object representing the x-curvature variation of the tube cross-section. The C at the end means a curve. |
+| ----yCurvatureC         | Whether to display the 2D curve object representing the y-curvature variation of the tube cross-section. The C at the end means a curve. |
+| ----tiltC               | Whether to display the 2D curve object representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. |
+| Tube                    | Tube. |
+| --axis                  | 3D curve of the tube axis. |
 | ----addCpToFirst        |             |
 | ----addCpToLast         |             |
 | ----interpolateCp       |             |
 | ----removeCp            |             |
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
-| ----cp[0,1,...]         |             |
-| ------middle.x          |             |
-| ------middle.y          |             |
-| ------middle.z          |             |
-| ------left.x            |             |
-| ------left.y            |             |
-| ------left.z            |             |
-| ------right.x           |             |
-| ------right.y           |             |
-| ------right.z           |             |
-| ------isSyncRadius      |             |
-| ------isSyncAngle       |             |
+| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. |
+| ------middle.x          | The x-coordinate of the middle point object within the control point. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
+| ------middle.y          | The y-coordinate of the middle point object within the control point. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
+| ------middle.z          | The z-coordinate of the middle point object within the control point. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
+| ------left.x            | The x-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.y            | The y-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.z            | The z-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.x           | The x-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.y           | The y-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.z           | The z-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
+| ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
 | ------local             |             |
 | --------left.radius     |             |
 | --------left.Ax         |             |
@@ -99,38 +99,39 @@ The control panel contains the following items.
 | --------right.Ax        |             |
 | --------right.Ay        |             |
 | --------right.Az        |             |
-| --cross                 |             |
+| --cross                 | 2D curve of the tube cross-section. |
 | ----addCpToFirst        |             |
 | ----addCpToLast         |             |
 | ----interpolateCp       |             |
 | ----removeCp            |             |
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
-| ----cp[0,1,...]         |             |
-| ------middle.x          |             |
-| ------middle.y          |             |
-| ------left.x            |             |
-| ------left.y            |             |
-| ------right.x           |             |
-| ------right.y           |             |
-| ------isSyncRadius      |             |
-| ------isSyncAngle       |             |
+| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. |
+| ------middle.x          | The x-coordinate of the middle point object within the control point. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
+| ------middle.y          | The y-coordinate of the middle point object within the control point. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
+| ------left.x            | The x-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.y            | The y-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.x           | The x-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.y           | The y-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
+| ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
 | ------local             |             |
 | --------left.radius     |             |
 | --------left.angle      |             |
 | --------right.radius    |             |
 | --------right.angle     |             |
-| --axisSegments          |             |
-| --crossSegments         |             |
-| --scaleN                |             |
-| --xScaleN               |             |
-| --yScaleN               |             |
-| --xCurvatureN           |             |
-| --yCurvatureN           |             |
-| --tiltN                 |             |
-| --scaleC                |             |
-| --xScaleC               |             |
-| --yScaleC               |             |
-| --xCurvatureC           |             |
-| --yCurvatureC           |             |
-| --curvatureOrder        |             |
+| --axisSegments          | The number of faces along the tube axis.<br>Min: 1, Step: 1 |
+| --crossSegments         | The number of faces in the tube cross-section.<br>Min: 3, Step: 1 |
+| --scaleN                | The scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
+| --xScaleN               | The x-scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
+| --yScaleN               | The y-scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
+| --xCurvatureN           | The x-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
+| --yCurvatureN           | The y-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
+| --tiltN                 | The tilt of the tube cross-section in degrees. The N at the end means a number.<br>Step: 1 |
+| --scaleC                | 2D curve representing the scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --xScaleC               | 2D curve representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --yScaleC               | 2D curve representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --xCurvatureC           | 2D curve representing the x-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --yCurvatureC           | 2D curve representing the y-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --tiltC                 | 2D curve representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --curvatureOrder        | The order in which x and y curvature are applied. If "xy" is selected, the curvature is applied in the order x, y. If "yx" is selected, the curvature is applied in the order y, x. |
