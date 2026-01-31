@@ -90,7 +90,7 @@ The control panel contains the following items.
 | ------right.z           | The z-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
 | ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
-| ------local             |             |
+| ------local             | Relates to the relative coordinates of the control point from the middle point object to the left and right point objects. |
 | --------left.radius     |             |
 | --------left.Ax         |             |
 | --------left.Ay         |             |
@@ -115,7 +115,7 @@ The control panel contains the following items.
 | ------right.y           | The y-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
 | ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
-| ------local             |             |
+| ------local             | Relates to the relative coordinates of the control point from the middle point object to the left and right point objects. |
 | --------left.radius     |             |
 | --------left.angle      |             |
 | --------right.radius    |             |
