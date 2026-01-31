@@ -50,7 +50,7 @@ The control panel contains the following items.
 | ----line                | The appearance of line objects. This is used for control points and curves.<br>Link: https://threejs.org/docs/#LineBasicMaterial |
 | ------color             | Line color. |
 | ------opacity           | Line opacity.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----tube_(u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. The backside is also rendered.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| ----tube_(u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. It is set to render the both side.<br>Link: https://threejs.org/docs/#ShaderMaterial |
 | ------wireframe         | Whether to change the tube display to wireframe. |
 | ------u.checkShape      | Whether to change the tube display to see the tube shape. As the face turns from front to back, the color changes from white to black. |
 | ------u.light.x         | The x-coordinate of the light source for the tube.<br>Step: 0.1 |
@@ -64,12 +64,12 @@ The control panel contains the following items.
 | ----tube                | Whether to display the tube object. |
 | ----axis                | Whether to display the 3D curve object for the tube axis. |
 | ----cross               | Whether to display the 2D curve object for the tube cross-section. |
-| ----scaleC              | Whether to display the 2D curve object representing the "scale of the tube cross-section" along the tube axis. |
-| ----xScaleC             | Whether to display the 2D curve object representing the "x-scale of the tube cross-section" along the tube axis. |
-| ----yScaleC             | Whether to display the 2D curve object representing the "y-scale of the tube cross-section" along the tube axis. |
-| ----xCurvatureC         | Whether to display the 2D curve object representing the "x-curvature of the tube cross-section" along the tube axis. |
-| ----yCurvatureC         | Whether to display the 2D curve object representing the "y-curvature of the tube cross-section" along the tube axis. |
-| ----tiltC               | Whether to display the 2D curve object representing the "tilt of the tube cross-section" along the tube axis. |
+| ----scaleC              | Whether to display the 2D curve object representing the scale variation of the tube cross-section. |
+| ----xScaleC             | Whether to display the 2D curve object representing the x-scale variation of the tube cross-section. |
+| ----yScaleC             | Whether to display the 2D curve object representing the y-scale variation of the tube cross-section. |
+| ----xCurvatureC         | Whether to display the 2D curve object representing the x-curvature variation of the tube cross-section. |
+| ----yCurvatureC         | Whether to display the 2D curve object representing the y-curvature variation of the tube cross-section. |
+| ----tiltC               | Whether to display the 2D curve object representing the tilt variation of the tube cross-section. |
 | Tube                    |             |
 | --axis                  |             |
 | ----addCpToFirst        |             |
