@@ -60,7 +60,7 @@ The control panel contains the following items.
 | ------u.baseColor       | The base color for the tube. |
 | ------u.shadeColor      | The shade color for the tube. |
 | TubeGroup               | A group containing tube-related objects. |
-| --visible               | A collection of `{tube-related-object-name}.visible`. |
+| --visible               | A collection of "{tube-related-object-name}.visible". |
 | ----tube                | Whether to display the tube object. |
 | ----axis                | Whether to display the 3D Cubic Bezier curve object for the tube axis. |
 | ----cross               | Whether to display the 2D Cubic Bezier curve object for the tube cross-section. |
@@ -90,7 +90,7 @@ The control panel contains the following items.
 | ------right.z           | The z-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
 | ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
-| ------local             | Relates to the relative coordinates from the middle point object to the left and right point objects. |
+| ------local             | Subitems of the control point. |
 | --------left.radius     | The relative coordinate distance from the middle point object to the left point object. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
 | --------left.Ax         | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the left point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
 | --------left.Ay         | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the left point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
@@ -115,7 +115,7 @@ The control panel contains the following items.
 | ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "right.radius" and "right.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
 | ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
-| ------local             | Relates to the relative coordinates from the middle point object to the left and right point objects. |
+| ------local             | Subitems of the control point. |
 | --------left.radius     | The relative coordinate distance from the middle point object to the left point object. Changing this will be reflected in "left.x" and "left.y" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
 | --------left.angle      | The relative coordinate angle (in degrees) from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x" and "left.y" and will apply to all enabled syncs.<br>Step: 1 |
 | --------right.radius    | The relative coordinate distance from the middle point object to the right point object. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
