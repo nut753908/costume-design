@@ -79,18 +79,18 @@ The control panel contains the following items.
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
 | ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. |
-| ------middle.x          | The x-coordinate of the middle point object within the control point. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
-| ------middle.y          | The y-coordinate of the middle point object within the control point. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
-| ------middle.z          | The z-coordinate of the middle point object within the control point. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
-| ------left.x            | The x-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------left.y            | The y-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------left.z            | The z-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------right.x           | The x-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------right.y           | The y-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------right.z           | The z-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
-| ------local             | Relates to the relative coordinates of the control point from the middle point object to the left and right point objects. |
+| ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
+| ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
+| ------middle.z          | The z-coordinate of the middle point object. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
+| ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.y            | The y-coordinate of the left point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.z            | The z-coordinate of the left point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.x           | The x-coordinate of the right point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.z           | The z-coordinate of the right point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
+| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
+| ------local             | Relates to the relative coordinates from the middle point object to the left and right point objects. |
 | --------left.radius     |             |
 | --------left.Ax         |             |
 | --------left.Ay         |             |
@@ -107,14 +107,14 @@ The control panel contains the following items.
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
 | ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. |
-| ------middle.x          | The x-coordinate of the middle point object within the control point. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
-| ------middle.y          | The y-coordinate of the middle point object within the control point. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
-| ------left.x            | The x-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------left.y            | The y-coordinate of the left point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------right.x           | The x-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------right.y           | The y-coordinate of the right point object within the control point. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
-| ------isSyncRadius      | Whether to synchronize the left and right radii of the control point to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles of the control point so that the difference is 180 degrees. |
+| ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
+| ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
+| ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------left.y            | The y-coordinate of the left point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.x           | The x-coordinate of the right point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "local" below and will apply to all enabled syncs below.<br>Step: 0.01 |
+| ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
+| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
 | ------local             | Relates to the relative coordinates of the control point from the middle point object to the left and right point objects. |
 | --------left.radius     |             |
 | --------left.angle      |             |
