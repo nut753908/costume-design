@@ -64,12 +64,12 @@ The control panel contains the following items.
 | ----tube                | Whether to display the tube object. |
 | ----axis                | Whether to display the 3D Cubic Bezier curve object for the tube axis. |
 | ----cross               | Whether to display the 2D Cubic Bezier curve object for the tube cross-section. |
-| ----scaleC              | Whether to display the 2D Cubic Bezier curve object representing the scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----xScaleC             | Whether to display the 2D Cubic Bezier curve object representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----yScaleC             | Whether to display the 2D Cubic Bezier curve object representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----xCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the x-curvature variation of the tube cross-section. The C at the end means a curve. |
-| ----yCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the y-curvature variation of the tube cross-section. The C at the end means a curve. |
-| ----tiltC               | Whether to display the 2D Cubic Bezier curve object representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. |
+| ----scaleC              | Whether to display the 2D Cubic Bezier curve object representing the scale ratio variation of the tube cross-section. C stands for curve. |
+| ----xScaleC             | Whether to display the 2D Cubic Bezier curve object representing the x-scale ratio variation of the tube cross-section. C stands for curve. |
+| ----yScaleC             | Whether to display the 2D Cubic Bezier curve object representing the y-scale ratio variation of the tube cross-section. C stands for curve. |
+| ----xCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the x-curvature variation of the tube cross-section. C stands for curve. |
+| ----yCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the y-curvature variation of the tube cross-section. C stands for curve. |
+| ----tiltC               | Whether to display the 2D Cubic Bezier curve object representing the tilt variation of the tube cross-section in degrees. C stands for curve. |
 | Tube                    | Tube. |
 | --axis                  | 3D Cubic Bezier curve of the tube axis. |
 | ----addCpToFirst        |             |
@@ -78,7 +78,7 @@ The control panel contains the following items.
 | ----removeCp            |             |
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
-| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. "cp" stands for control panel. |
+| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control panel. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
 | ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
 | ------middle.z          | The z-coordinate of the middle point object. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
@@ -92,13 +92,13 @@ The control panel contains the following items.
 | ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
 | ------local             | Relates to the relative coordinates from the middle point object to the left and right point objects. |
 | --------left.radius     | The relative coordinate distance from the middle point object to the left point object. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------left.Ax         | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the left point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
-| --------left.Ay         | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the left point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
-| --------left.Az         | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
+| --------left.Ax         | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the left point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
+| --------left.Ay         | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the left point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
+| --------left.Az         | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
 | --------right.radius    | The relative coordinate distance from the middle point object to the right point object. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------right.Ax        | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the right point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
-| --------right.Ay        | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the right point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
-| --------right.Az        | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. The letter A stands for angle.<br>Step: 1 |
+| --------right.Ax        | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the right point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
+| --------right.Ay        | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the right point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
+| --------right.Az        | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
 | --cross                 | 2D Cubic Bezier curve of the tube cross-section. |
 | ----addCpToFirst        |             |
 | ----addCpToLast         |             |
@@ -106,7 +106,7 @@ The control panel contains the following items.
 | ----removeCp            |             |
 | ----interoplateCp_index |             |
 | ----removeCp_index      |             |
-| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. "cp" stands for control panel. |
+| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control panel. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
 | ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
 | ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "left.radius" and "left.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
@@ -122,16 +122,16 @@ The control panel contains the following items.
 | --------right.angle     | The relative coordinate angle (in degrees) from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Step: 1 |
 | --axisSegments          | The number of faces along the tube axis.<br>Min: 1, Step: 1 |
 | --crossSegments         | The number of faces in the tube cross-section.<br>Min: 3, Step: 1 |
-| --scaleN                | The scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
-| --xScaleN               | The x-scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
-| --yScaleN               | The y-scale ratio of the tube cross-section. The N at the end means a number.<br>Min: 0, Step: 0.01 |
-| --xCurvatureN           | The x-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
-| --yCurvatureN           | The y-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
-| --tiltN                 | The tilt of the tube cross-section in degrees. The N at the end means a number.<br>Step: 1 |
-| --scaleC                | 2D Cubic Bezier curve representing the scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. The C at the end means a curve. |
-| --xScaleC               | 2D Cubic Bezier curve representing the x-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. The C at the end means a curve. |
-| --yScaleC               | 2D Cubic Bezier curve representing the y-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. The C at the end means a curve. |
-| --xCurvatureC           | 2D Cubic Bezier curve representing the x-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. The C at the end means a curve. |
-| --yCurvatureC           | 2D Cubic Bezier curve representing the y-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. The C at the end means a curve. |
-| --tiltC                 | 2D Cubic Bezier curve representing the tilt variation of the tube cross-section in degrees. The folder structure is the same as "cross" above. The C at the end means a curve. |
+| --scaleN                | The scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
+| --xScaleN               | The x-scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
+| --yScaleN               | The y-scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
+| --xCurvatureN           | The x-curvature of the tube cross-section. N stands for number.<br>Step: 0.01 |
+| --yCurvatureN           | The y-curvature of the tube cross-section. N stands for number.<br>Step: 0.01 |
+| --tiltN                 | The tilt of the tube cross-section in degrees. N stands for number.<br>Step: 1 |
+| --scaleC                | 2D Cubic Bezier curve representing the scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
+| --xScaleC               | 2D Cubic Bezier curve representing the x-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
+| --yScaleC               | 2D Cubic Bezier curve representing the y-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
+| --xCurvatureC           | 2D Cubic Bezier curve representing the x-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
+| --yCurvatureC           | 2D Cubic Bezier curve representing the y-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
+| --tiltC                 | 2D Cubic Bezier curve representing the tilt variation of the tube cross-section in degrees. The folder structure is the same as "cross" above. C stands for curve. |
 | --curvatureOrder        | The order in which x and y curvature are applied. If "xy" is selected, the curvature is applied in the order x, y. If "yx" is selected, the curvature is applied in the order y, x. |
