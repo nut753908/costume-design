@@ -62,16 +62,16 @@ The control panel contains the following items.
 | TubeGroup               | A group containing tube-related objects. |
 | --visible               | A collection of `{tube-related-object-name}.visible`. |
 | ----tube                | Whether to display the tube object. |
-| ----axis                | Whether to display the 3D curve object for the tube axis. |
-| ----cross               | Whether to display the 2D curve object for the tube cross-section. |
-| ----scaleC              | Whether to display the 2D curve object representing the scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----xScaleC             | Whether to display the 2D curve object representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----yScaleC             | Whether to display the 2D curve object representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. |
-| ----xCurvatureC         | Whether to display the 2D curve object representing the x-curvature variation of the tube cross-section. The C at the end means a curve. |
-| ----yCurvatureC         | Whether to display the 2D curve object representing the y-curvature variation of the tube cross-section. The C at the end means a curve. |
-| ----tiltC               | Whether to display the 2D curve object representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. |
+| ----axis                | Whether to display the 3D Cubic Bezier curve object for the tube axis. |
+| ----cross               | Whether to display the 2D Cubic Bezier curve object for the tube cross-section. |
+| ----scaleC              | Whether to display the 2D Cubic Bezier curve object representing the scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----xScaleC             | Whether to display the 2D Cubic Bezier curve object representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----yScaleC             | Whether to display the 2D Cubic Bezier curve object representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. |
+| ----xCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the x-curvature variation of the tube cross-section. The C at the end means a curve. |
+| ----yCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the y-curvature variation of the tube cross-section. The C at the end means a curve. |
+| ----tiltC               | Whether to display the 2D Cubic Bezier curve object representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. |
 | Tube                    | Tube. |
-| --axis                  | 3D curve of the tube axis. |
+| --axis                  | 3D Cubic Bezier curve of the tube axis. |
 | ----addCpToFirst        |             |
 | ----addCpToLast         |             |
 | ----interpolateCp       |             |
@@ -99,7 +99,7 @@ The control panel contains the following items.
 | --------right.Ax        |             |
 | --------right.Ay        |             |
 | --------right.Az        |             |
-| --cross                 | 2D curve of the tube cross-section. |
+| --cross                 | 2D Cubic Bezier curve of the tube cross-section. |
 | ----addCpToFirst        |             |
 | ----addCpToLast         |             |
 | ----interpolateCp       |             |
@@ -128,10 +128,10 @@ The control panel contains the following items.
 | --xCurvatureN           | The x-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
 | --yCurvatureN           | The y-curvature of the tube cross-section. The N at the end means a number.<br>Step: 0.01 |
 | --tiltN                 | The tilt of the tube cross-section in degrees. The N at the end means a number.<br>Step: 1 |
-| --scaleC                | 2D curve representing the scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
-| --xScaleC               | 2D curve representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
-| --yScaleC               | 2D curve representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
-| --xCurvatureC           | 2D curve representing the x-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
-| --yCurvatureC           | 2D curve representing the y-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
-| --tiltC                 | 2D curve representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --scaleC                | 2D Cubic Bezier curve representing the scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --xScaleC               | 2D Cubic Bezier curve representing the x-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --yScaleC               | 2D Cubic Bezier curve representing the y-scale ratio variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --xCurvatureC           | 2D Cubic Bezier curve representing the x-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --yCurvatureC           | 2D Cubic Bezier curve representing the y-curvature variation of the tube cross-section. The C at the end means a curve. The folder structure is the same as "cross" above. |
+| --tiltC                 | 2D Cubic Bezier curve representing the tilt variation of the tube cross-section in degrees. The C at the end means a curve. The folder structure is the same as "cross" above. |
 | --curvatureOrder        | The order in which x and y curvature are applied. If "xy" is selected, the curvature is applied in the order x, y. If "yx" is selected, the curvature is applied in the order y, x. |
