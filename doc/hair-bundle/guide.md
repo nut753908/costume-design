@@ -50,7 +50,7 @@ The control panel contains the following items.
 | ----line                | The appearance of line objects. This is used for control points and curves.<br>Link: https://threejs.org/docs/#LineBasicMaterial |
 | ------color             | Line color. |
 | ------opacity           | Line opacity.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----tube_(u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. It is set to render the both side.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| ----tube (u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. It is set to render the both side.<br>Link: https://threejs.org/docs/#ShaderMaterial |
 | ------wireframe         | Whether to change the tube display to wireframe. |
 | ------u.checkShape      | Whether to change the tube display to see the tube shape. As the face turns from front to back, the color changes from white to black. |
 | ------u.light.x         | The x-coordinate of the light source for the tube.<br>Step: 0.1 |
@@ -76,9 +76,9 @@ The control panel contains the following items.
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
 | ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
 | ----removeCp            | Remove the nth (removeCp index) control point. All control point indices will be reset. To remove a control point, at least three control points are required. cp stands for control point. |
-| ----interoplateCp_index | The index at which to interpolate the control point. cp stands for control point. |
-| ----removeCp_index      | The index from which to remove the control point. cp stands for control point. |
-| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control point. |
+| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
+| ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
+| ----cp0                 | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control point. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
 | ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
 | ------middle.z          | The z-coordinate of the middle point object. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
@@ -104,9 +104,9 @@ The control panel contains the following items.
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
 | ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
 | ----removeCp            | Remove the nth (removeCp index) control point. All control point indices will be reset. To remove a control point, at least three control points are required. cp stands for control point. |
-| ----interoplateCp_index | The index at which to interpolate the control point. cp stands for control point. |
-| ----removeCp_index      | The index from which to remove the control point. cp stands for control point. |
-| ----cp[0,1,...]         | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control point. |
+| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
+| ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
+| ----cp0                 | Indexed control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control point. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
 | ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
 | ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "left.radius" and "left.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
