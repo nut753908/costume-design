@@ -42,14 +42,14 @@ The control panel contains the following items.
 | --THREE.AxesHelper                            | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
 | ----visible                                   | Whether to display the axes helper. |
 | ----size                                      | The length of each line for the axes helper.<br>Step: 0.01 |
-| --PlaneHelper                                 |             |
-| ----visible                                   |             |
-| ----size                                      |             |
-| ----color                                     |             |
-| --THREE.ArrowHelper                           |             |
-| ----visible                                   |             |
-| ----length                                    |             |
-| ----color                                     |             |
+| --PlaneHelper                                 | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
+| ----visible                                   | Whether to display all plane helpers. |
+| ----size                                      | The size of all plane helpers.<br>Step: 0.01 |
+| ----color                                     | The color of all plane helpers. |
+| --THREE.ArrowHelper                           | Arrow Helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
+| ----visible                                   | Whether to display all arrow helpers. |
+| ----length                                    | The length of all arrow helpers.<br>Step: 0.01 |
+| ----color                                     | The color of all arrow helpers. |
 | --THREE.Material                              | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
 | ----body (u=uniforms)                         | The appearance of human body object. This is an original mesh toon material created from a shader material.<br>Link: https://threejs.org/docs/#ShaderMaterial |
 | ------wireframe                               | Whether to change the body display to wireframe. |
