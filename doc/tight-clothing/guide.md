@@ -80,10 +80,13 @@ The control panel contains the following items.
 | --plane[1] torso {VerticalPlane}              | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
 | ----u                                         | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
 | ----inverted                                  | Whether to invert the normal of the vertical plane internally. |
-| Area                                          |             |
-| --thickness                                   |             |
-| --intersection loops[0] {FreePlane}           |             |
-| ----option                                    |             |
-| ----indices                                   |             |
-| ------0                                       |             |
-| --intersection loops[1] torso {VerticalPlane} |             |
+| Area                                          | Relates to tight clothing area. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
+| --thickness                                   | The thickness of the area.<br>Min: 0, Max: 0.01, Step: 0.0001 |
+| --intersection loops[0] {FreePlane}           | Loops within the intersections of the body and the free plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
+| ----option                                    | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "all" |
+| ----indices                                   | The indices of the intersection loops. This is only visible if the "some" option is selected. |
+| ------0                                       | Whether to enable this index (0,1,...). |
+| --intersection loops[1] torso {VerticalPlane} | Loops within the intersections of the body and the vertical plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
+| ----option                                    | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "including plane" |
+| ----indices                                   | The indices of the intersection loops. This is only visible if the "some" option is selected. |
+| ------0                                       | Whether to enable this index (0,1,...). |
