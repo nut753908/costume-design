@@ -34,55 +34,55 @@ Every time you operate the control panel, its current state is saved in a state 
 
 The control panel contains the following items.
 
-| Name                                          | Description |
-| --------------------------------------------- | ----------- |
-| common                                        | Shareable items. |
-| --THREE.Scene                                 | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
-| ----background                                | The background color of the scene. |
-| --THREE.AxesHelper                            | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
-| ----visible                                   | Whether to display the axes helper. |
-| ----size                                      | The length of each line for the axes helper.<br>Step: 0.01 |
-| --PlaneHelper                                 | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
-| ----visible                                   | Whether to display all plane helpers. |
-| ----size                                      | The size of all plane helpers.<br>Step: 0.01 |
-| ----color                                     | The color of all plane helpers. |
-| --THREE.ArrowHelper                           | Arrow Helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
-| ----visible                                   | Whether to display all arrow helpers. |
-| ----length                                    | The length of all arrow helpers.<br>Step: 0.01 |
-| ----color                                     | The color of all arrow helpers. |
-| --THREE.Material                              | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
-| ----body (u=uniforms)                         | The appearance of human body object. This is an original mesh toon material created from a shader material.<br>Link: https://threejs.org/docs/#ShaderMaterial |
-| ------wireframe                               | Whether to change the body display to wireframe. |
-| ------u.checkShape                            | Whether to change the body display to see the body shape. As the face turns from front to back, the color changes from white to black. |
-| ------u.light.x                               | The x-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.y                               | The y-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.z                               | The z-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.threshold                             | The shade threshold for the body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
-| ------u.baseColor                             | The base color for the body. |
-| ------u.shadeColor                            | The shade color for the body. |
-| ----area (u=uniforms)                         | The appearance of tight clothing area object. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
-| PlaneManager                                  | Manages the increase and decrease of infinite planes. |
-| --addFreePlane                                | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
-| --addVerticalPlane                            | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |
-| --removePlane                                 | Removes the plane specified by "removePlane key". |
-| --addVerticalPlane curveKey                   | Curve key to add a vertical plane. |
-| --removePlane key                             | Key to remove the plane. |
-| --plane[0] {FreePlane}                        | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
-| ----normal                                    | Normal direction of the free plane. |
-| ------x                                       | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ------y                                       | The y-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ------z                                       | The z-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ----point                                     | Reference point for the free plane. |
-| ------x                                       | The x-coordinate of the point.<br>Step: 0.01 |
-| ------y                                       | The y-coordinate of the point.<br>Step: 0.01 |
-| ------z                                       | The z-coordinate of the point.<br>Step: 0.01 |
-| ----inverted                                  | Whether to invert the normal of the free plane internally. |
-| --plane[1] torso {VerticalPlane}              | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
-| ----u                                         | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----inverted                                  | Whether to invert the normal of the vertical plane internally. |
-| Area                                          | Relates to tight clothing area. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
-| --thickness                                   | The thickness of the area.<br>Min: 0, Max: 0.01, Step: 0.0001 |
-| --intersection loops[0] {FreePlane}           | Loops within the intersections of the body and the plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
-| ----option                                    | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "all" for the free plane, "including plane" for the vertical plane |
-| ----indices                                   | The indices of the intersection loops. This is only visible if the "some" option is selected. |
-| ------0                                       | Whether to enable this index (0,1,...). |
+| Name                             | Description |
+| -------------------------------- | ----------- |
+| common                           | Shareable items. |
+| --THREE.Scene                    | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
+| ----background                   | The background color of the scene. |
+| --THREE.AxesHelper               | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
+| ----visible                      | Whether to display the axes helper. |
+| ----size                         | The length of each line for the axes helper.<br>Step: 0.01 |
+| --PlaneHelper                    | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
+| ----visible                      | Whether to display all plane helpers. |
+| ----size                         | The size of all plane helpers.<br>Step: 0.01 |
+| ----color                        | The color of all plane helpers. |
+| --THREE.ArrowHelper              | Arrow Helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
+| ----visible                      | Whether to display all arrow helpers. |
+| ----length                       | The length of all arrow helpers.<br>Step: 0.01 |
+| ----color                        | The color of all arrow helpers. |
+| --THREE.Material                 | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
+| ----body (u=uniforms)            | The appearance of human body object. This is an original mesh toon material created from a shader material.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| ------wireframe                  | Whether to change the body display to wireframe. |
+| ------u.checkShape               | Whether to change the body display to see the body shape. As the face turns from front to back, the color changes from white to black. |
+| ------u.light.x                  | The x-coordinate of the light source for the body.<br>Step: 0.1 |
+| ------u.light.y                  | The y-coordinate of the light source for the body.<br>Step: 0.1 |
+| ------u.light.z                  | The z-coordinate of the light source for the body.<br>Step: 0.1 |
+| ------u.threshold                | The shade threshold for the body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
+| ------u.baseColor                | The base color for the body. |
+| ------u.shadeColor               | The shade color for the body. |
+| ----area (u=uniforms)            | The appearance of tight clothing area object. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| PlaneManager                     | Manages the increase and decrease of infinite planes. |
+| --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
+| --addVerticalPlane               | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |
+| --removePlane                    | Removes the plane specified by "removePlane key". |
+| --addVerticalPlane curveKey      | Curve key to add a vertical plane. |
+| --removePlane key                | Key to remove the plane. |
+| --plane[0] {FreePlane}           | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
+| ----normal                       | Normal direction of the free plane. |
+| ------x                          | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
+| ------y                          | The y-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
+| ------z                          | The z-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
+| ----point                        | Reference point for the free plane. |
+| ------x                          | The x-coordinate of the point.<br>Step: 0.01 |
+| ------y                          | The y-coordinate of the point.<br>Step: 0.01 |
+| ------z                          | The z-coordinate of the point.<br>Step: 0.01 |
+| ----inverted                     | Whether to invert the normal of the free plane internally. |
+| --plane[1] torso {VerticalPlane} | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
+| ----u                            | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
+| ----inverted                     | Whether to invert the normal of the vertical plane internally. |
+| Area                             | Relates to tight clothing area. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
+| --thickness                      | The thickness of the area.<br>Min: 0, Max: 0.01, Step: 0.0001 |
+| --intersection loops...          | Loops within the intersections of the body and the plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
+| ----option                       | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "all" for the free plane, "including plane" for the vertical plane |
+| ----indices                      | The indices of the intersection loops. This is only visible if the "some" option is selected. |
+| ------0                          | Whether to enable this index (0,1,...). |
