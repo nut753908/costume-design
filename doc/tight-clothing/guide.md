@@ -67,7 +67,7 @@ The control panel contains the following items.
 | --removePlane                                 | Removes the plane specified by "removePlane key". |
 | --addVerticalPlane curveKey                   | Curve key to add a vertical plane. |
 | --removePlane key                             | Key to remove the plane. |
-| --plane[0] {FreePlane}                        | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index [n] is common to both the free and vertical planes. |
+| --plane[0] {FreePlane}                        | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
 | ----normal                                    | Normal direction of the free plane. |
 | ------x                                       | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
 | ------y                                       | The y-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
@@ -77,7 +77,7 @@ The control panel contains the following items.
 | ------y                                       | The y-coordinate of the point.<br>Step: 0.01 |
 | ------z                                       | The z-coordinate of the point.<br>Step: 0.01 |
 | ----inverted                                  | Whether to invert the normal of the free plane internally. |
-| --plane[1] torso {VerticalPlane}              | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index [n] is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
+| --plane[1] torso {VerticalPlane}              | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
 | ----u                                         | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
 | ----inverted                                  | Whether to invert the normal of the vertical plane internally. |
 | Area                                          |             |
