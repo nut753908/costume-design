@@ -2,27 +2,27 @@
 
 # ガイド
 
-毛束のウェブページは、Scene(シーン)、Viewport gizmo(ビューポートギズモ)、Control panel(コントロールパネル)の3つの部分で構成されています。
+毛束のウェブページは、シーン、ビューポートギズモ、コントロールパネルの3つの部分で構成されています。
 
-## Scene(シーン)
+## シーン
 
 <img src="scene.png" alt="scene.png" width="192">
 
-[Scene(シーン)](https://threejs.org/docs/#Scene)は、3Dオブジェクトが配置される場所です。デフォルトでは、薄茶色の円柱と[AxesHelper(軸ヘルパー)](https://threejs.org/docs/#AxesHelper)がシーンに配置されます。シーンは[OrthographicCamera(平行投影カメラ)](https://threejs.org/docs/#OrthographicCamera)を通じてレンダリングされます。カメラの視野はウィンドウのサイズに合わせて調整されます。カメラは次のように操作できます：
+[シーン](https://threejs.org/docs/#Scene)は、3Dオブジェクトが配置される場所です。デフォルトでは、薄茶色の円柱と[軸ヘルパー](https://threejs.org/docs/#AxesHelper)がシーンに配置されます。シーンは[平行投影カメラ](https://threejs.org/docs/#OrthographicCamera)を通じてレンダリングされます。カメラの視野はウィンドウのサイズに合わせて調整されます。カメラは次のように操作できます：
 
 - マウスの左ボタンをドラッグすると、ピボットポイントを中心に回転します。カメラは常にピボットポイントの方向を向きます。デフォルトでは、ピボットポイントは原点です。
 - マウスの右ボタンをドラッグすると、画面と平行に移動します。
 - マウスホイールを回転させて拡大/縮小します。
 
-これらのカメラ操作は[OrbitControls(軌道制御)](https://threejs.org/docs/#OrbitControls)から来ています。
+これらのカメラ操作は[軌道制御](https://threejs.org/docs/#OrbitControls)から来ています。
 
-## Viewport gizmo(ビューポートギズモ)
+## ビューポートギズモ
 
 <img src="viewport-gizmo.png" alt="viewport-gizmo.png" width="80">
 
 ビューポートギズモは[THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/)というライブラリです。ビューポートギズモはXYZ方向を表示します。X、Y、Zの円または空白の-X、-Y、-Zの円をクリックすると、シーン内でマウスの左ボタンをドラッグするのと同じように、カメラがその方向に回転します。
 
-## Control panel(コントロールパネル)
+## コントロールパネル
 
 <img src="control-panel.png" alt="control-panel.png" width="55">
 
