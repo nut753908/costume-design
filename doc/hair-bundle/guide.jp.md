@@ -64,14 +64,14 @@
 | ----tube                | チューブオブジェクトを表示するかどうか。 |
 | ----axis                | チューブ軸の3D 3次ベジェ曲線オブジェクトを表示するかどうか。 |
 | ----cross               | チューブ断面の2D 3次ベジェ曲線オブジェクトを表示するかどうか。 |
-| ----scaleC              | チューブ断面のスケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| ----xScaleC             | チューブ断面のx方向スケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| ----yScaleC             | チューブ断面のy方向スケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| ----xCurvatureC         | チューブ断面のx方向曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| ----yCurvatureC         | チューブ断面のy方向曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| ----tiltC               | チューブ断面の傾斜変化を度数で表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
-| Tube                    | Tube. |
-| --axis                  | 3D Cubic Bezier curve of the tube axis. |
+| ----scaleC              | チューブ断面のスケール比変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| ----xScaleC             | チューブ断面のxスケール比変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| ----yScaleC             | チューブ断面のyスケール比変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| ----xCurvatureC         | チューブ断面のx曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| ----yCurvatureC         | チューブ断面のy曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| ----tiltC               | チューブ断面の傾斜変化(度単位)を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
+| Tube                    | チューブ。 |
+| --axis                  | チューブ軸の3D 3次ベジェ曲線。 |
 | ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
 | ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
@@ -99,7 +99,7 @@
 | --------right.Ax        | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the right point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
 | --------right.Ay        | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the right point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
 | --------right.Az        | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --cross                 | 2D Cubic Bezier curve of the tube cross-section. |
+| --cross                 | チューブ断面の2D 3次ベジェ曲線。 |
 | ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
 | ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
@@ -120,18 +120,18 @@
 | --------left.angle      | The relative coordinate angle (in degrees) from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x" and "left.y" and will apply to all enabled syncs.<br>Step: 1 |
 | --------right.radius    | The relative coordinate distance from the middle point object to the right point object. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
 | --------right.angle     | The relative coordinate angle (in degrees) from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Step: 1 |
-| --axisSegments          | The number of faces along the tube axis.<br>Min: 1, Step: 1 |
-| --crossSegments         | The number of faces in the tube cross-section.<br>Min: 3, Step: 1 |
-| --scaleN                | The scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
-| --xScaleN               | The x-scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
-| --yScaleN               | The y-scale ratio of the tube cross-section. N stands for number.<br>Min: 0, Step: 0.01 |
-| --xCurvatureN           | The x-curvature of the tube cross-section. N stands for number.<br>Step: 0.01 |
-| --yCurvatureN           | The y-curvature of the tube cross-section. N stands for number.<br>Step: 0.01 |
-| --tiltN                 | The tilt of the tube cross-section in degrees. N stands for number.<br>Step: 1 |
-| --scaleC                | 2D Cubic Bezier curve representing the scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
-| --xScaleC               | 2D Cubic Bezier curve representing the x-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
-| --yScaleC               | 2D Cubic Bezier curve representing the y-scale ratio variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
-| --xCurvatureC           | 2D Cubic Bezier curve representing the x-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
-| --yCurvatureC           | 2D Cubic Bezier curve representing the y-curvature variation of the tube cross-section. The folder structure is the same as "cross" above. C stands for curve. |
-| --tiltC                 | 2D Cubic Bezier curve representing the tilt variation of the tube cross-section in degrees. The folder structure is the same as "cross" above. C stands for curve. |
-| --curvatureOrder        | The order in which x and y curvature are applied. If "xy" is selected, the curvature is applied in the order x, y. If "yx" is selected, the curvature is applied in the order y, x. |
+| --axisSegments          | チューブ軸に沿った面の数。<br>最小：1、ステップ：1 |
+| --crossSegments         | チューブ断面の面の数<br>最小：3、ステップ：1 |
+| --scaleN                | チューブ断面のスケール比。Nはnumber(数値)を意味します。<br>最小：0、ステップ：0.01 |
+| --xScaleN               | チューブ断面のxスケール比。Nはnumber(数値)を意味します。<br>最小：0、ステップ：0.01 |
+| --yScaleN               | チューブ断面のyスケール比。Nはnumber(数値)を意味します。<br>最小：0、ステップ：0.01 |
+| --xCurvatureN           | チューブ断面のx曲率。Nはnumber(数値)を意味します。<br>ステップ：0.01 |
+| --yCurvatureN           | チューブ断面のy曲率。Nはnumber(数値)を意味します。<br>ステップ：0.01 |
+| --tiltN                 | チューブ断面の傾斜(度単位)。Nはnumber(数値)を意味します。<br>ステップ：1 |
+| --scaleC                | チューブ断面のスケール比変化を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --xScaleC               | チューブ断面のxスケール比変化を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --yScaleC               | チューブ断面のyスケール比変化を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --xCurvatureC           | チューブ断面のx曲率変化を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --yCurvatureC           | チューブ断面のy曲率変化を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --tiltC                 | チューブ断面の傾斜変化(度単位)を表す2D 3次ベジェ曲線。フォルダ構造は上記の「cross」と同じです。Cはcurve(曲線)を意味します。 |
+| --curvatureOrder        | x曲率とy曲率が適用される順序。「xy」を選択した場合、曲率はx,yの順に適用されます。「yx」を選択した場合、曲率はy,xの順に適用されます。 |
