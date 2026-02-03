@@ -1,6 +1,6 @@
 [English](guide.md) | [日本語](guide.jp.md)
 
-# Guide to the hair bundle web page
+# Guide
 
 The hair bundle web page consists of three parts: Scene, Viewport gizmo, and Control panel.
 
@@ -20,7 +20,7 @@ These camera controls come from [OrbitControls](https://threejs.org/docs/#OrbitC
 
 <img src="viewport-gizmo.png" alt="viewport-gizmo.png" width="80">
 
-The viewport gizmo is a library called [THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/). The viewport gizmo displays the XYZ directions. Clicking on the X,Y,Z circles or the blank -X,-Y,-Z circles will rotate the camera in that direction, just like dragging the left mouse button in the scene. 
+The viewport gizmo is a library called [THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/). The viewport gizmo displays the XYZ directions. Clicking on the X,Y,Z circles or the blank -X,-Y,-Z circles will rotate the camera in that direction, just like dragging the left mouse button in the scene.
 
 ## Control panel
 
