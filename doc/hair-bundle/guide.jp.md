@@ -1,75 +1,75 @@
 [English](guide.md) | [日本語](guide.jp.md)
 
-# Guide
+# ガイド
 
-The hair bundle web page consists of three parts: Scene, Viewport gizmo, and Control panel.
+毛束のウェブページは、Scene(シーン)、Viewport gizmo(ビューポートギズモ)、Control panel(コントロールパネル)の3つの部分で構成されています。
 
-## Scene
+## Scene(シーン)
 
 <img src="scene.png" alt="scene.png" width="192">
 
-[Scene](https://threejs.org/docs/#Scene) is where 3D objects are placed. By default, a light brown cylinder and [AxesHelper](https://threejs.org/docs/#AxesHelper) are placed in the scene. The scene is rendered through [OrthographicCamera](https://threejs.org/docs/#OrthographicCamera). The camera's field of view is adjusted to match the window size. You can control the camera as follows:
+[Scene(シーン)](https://threejs.org/docs/#Scene)は、3Dオブジェクトが配置される場所です。デフォルトでは、薄茶色の円柱と[AxesHelper(軸ヘルパー)](https://threejs.org/docs/#AxesHelper)がシーンに配置されます。シーンは[OrthographicCamera(平行投影カメラ)](https://threejs.org/docs/#OrthographicCamera)を通じてレンダリングされます。カメラの視野はウィンドウのサイズに合わせて調整されます。カメラは次のように操作できます：
 
-- Drag the left mouse button to rotate around the pivot point. The camera always points towards the pivot point. By default, the pivot point is the origin.
-- Drag the right mouse button to move parallel to the screen.
-- Roll the mouse wheel to zoom in/out.
+- マウスの左ボタンをドラッグすると、ピボットポイントを中心に回転します。カメラは常にピボットポイントの方向を向きます。デフォルトでは、ピボットポイントは原点です。
+- マウスの右ボタンをドラッグすると、画面と平行に移動します。
+- マウスホイールを回転させて拡大/縮小します。
 
-These camera controls come from [OrbitControls](https://threejs.org/docs/#OrbitControls).
+これらのカメラ操作は[OrbitControls(軌道制御)](https://threejs.org/docs/#OrbitControls)から来ています。
 
-## Viewport gizmo
+## Viewport gizmo(ビューポートギズモ)
 
 <img src="viewport-gizmo.png" alt="viewport-gizmo.png" width="80">
 
-The viewport gizmo is a library called [THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/). The viewport gizmo displays the XYZ directions. Clicking on the X,Y,Z circles or the blank -X,-Y,-Z circles will rotate the camera in that direction, just like dragging the left mouse button in the scene.
+ビューポートギズモは[THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/)というライブラリです。ビューポートギズモはXYZ方向を表示します。X、Y、Zの円または空白の-X、-Y、-Zの円をクリックすると、シーン内でマウスの左ボタンをドラッグするのと同じように、カメラがその方向に回転します。
 
-## Control panel
+## Control panel(コントロールパネル)
 
 <img src="control-panel.png" alt="control-panel.png" width="55">
 
-The control panel is a library called [lil-gui](https://lil-gui.georgealways.com/). The control panel consists of folders and controllers. A folder can contain folders and controllers. Clicking a folder opens or closes it, showing or hiding its contents. A controller can be a dropdown, checkbox, text field, number field, color field, or button.
+コントロールパネルは[lil-gui](https://lil-gui.georgealways.com/)というライブラリです。コントロールパネルはフォルダとコントローラで構成されています。フォルダは、フォルダとコントローラを含むことができます。フォルダをクリックすると開いたり閉じたりし、その内容を表示または非表示にします。コントローラは、ドロップダウン、チェックボックス、テキストフィールド、数値フィールド、カラーフィールド、またはボタンです。
 
-Number fields can also be modified by dragging the left mouse button or by pressing the up or down arrow keys when the field has focus. While making changes using these methods, holding down the Shift key increases the value step size, and holding down the Alt key decreases the value step size.
+数値フィールドは、マウスの左ボタンをドラッグするか、フィールドにフォーカスがある状態で上矢印キーまたは下矢印キーを押すことで変更することもできます。これらの方法を使用して変更を行う際、Shiftキーを押しながら操作すると値のステップサイズが増加し、Altキーを押しながら操作すると値のステップサイズが減少します。
 
-Every time you operate the control panel, its current state is saved in a state array. To revert to the previous state, press Ctrl+z (Cmd+z on Mac). To advance to the next state, press Shift+Ctrl+z or Ctrl+y (Shift+Cmd+z or Cmd+y on Mac).
+コントロールパネルを操作するたびに、その現在の状態が状態配列に保存されます。前の状態に戻すには、Ctrl+z (Macの場合はCmd+z)を押してください。次の状態に進むには、Shift+Ctrl+zまたはCtrl+y (Macの場合はShift+Cmd+zまたはCmd+y)を押してください。
 
-The control panel contains the following items.
+コントロールパネルには以下の項目が含まれています。
 
-| Name                    | Description |
+| 名称                     | 説明         |
 | ----------------------- | ----------- |
-| common                  | Shareable items. |
-| --THREE.Scene           | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
-| ----background          | The background color of the scene. |
-| --THREE.AxesHelper      | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
-| ----visible             | Whether to display the axes helper. |
-| ----size                | The length of each line for the axes helper.<br>Step: 0.01 |
-| --THREE.Material        | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
-| ----points              | The appearance of point objects. This is used for control points.<br>Link: https://threejs.org/docs/#PointsMaterial |
-| ------color             | Point color. |
-| ------size              | Point size in pixels.<br>Min: 0, Max: 10, Step: 0.01 |
-| ------opacity           | Point opacity.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----line                | The appearance of line objects. This is used for control points and curves.<br>Link: https://threejs.org/docs/#LineBasicMaterial |
-| ------color             | Line color. |
-| ------opacity           | Line opacity.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----tube (u=uniforms)   | The appearance of tube object. This is an original mesh toon material created from a shader material. It is set to render the both side.<br>Link: https://threejs.org/docs/#ShaderMaterial |
-| ------wireframe         | Whether to change the tube display to wireframe. |
-| ------u.checkShape      | Whether to change the tube display to see the tube shape. As the face turns from front to back, the color changes from white to black. |
-| ------u.light.x         | The x-coordinate of the light source for the tube.<br>Step: 0.1 |
-| ------u.light.y         | The y-coordinate of the light source for the tube.<br>Step: 0.1 |
-| ------u.light.z         | The z-coordinate of the light source for the tube.<br>Step: 0.1 |
-| ------u.threshold       | The shade threshold for the tube. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
-| ------u.baseColor       | The base color for the tube. |
-| ------u.shadeColor      | The shade color for the tube. |
-| TubeGroup               | A group containing tube-related objects. |
-| --visible               | A collection of "{tube-related-object-name}.visible". |
-| ----tube                | Whether to display the tube object. |
-| ----axis                | Whether to display the 3D Cubic Bezier curve object for the tube axis. |
-| ----cross               | Whether to display the 2D Cubic Bezier curve object for the tube cross-section. |
-| ----scaleC              | Whether to display the 2D Cubic Bezier curve object representing the scale ratio variation of the tube cross-section. C stands for curve. |
-| ----xScaleC             | Whether to display the 2D Cubic Bezier curve object representing the x-scale ratio variation of the tube cross-section. C stands for curve. |
-| ----yScaleC             | Whether to display the 2D Cubic Bezier curve object representing the y-scale ratio variation of the tube cross-section. C stands for curve. |
-| ----xCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the x-curvature variation of the tube cross-section. C stands for curve. |
-| ----yCurvatureC         | Whether to display the 2D Cubic Bezier curve object representing the y-curvature variation of the tube cross-section. C stands for curve. |
-| ----tiltC               | Whether to display the 2D Cubic Bezier curve object representing the tilt variation of the tube cross-section in degrees. C stands for curve. |
+| common                  | 共有可能な項目。 |
+| --THREE.Scene           | 3Dオブジェクトを配置するシーン。<br>リンク：https://threejs.org/docs/#Scene |
+| ----background          | シーンの背景色。 |
+| --THREE.AxesHelper      | XYZ軸を持つ軸ヘルパー。<br>リンク：https://threejs.org/docs/#AxesHelper |
+| ----visible             | 軸ヘルパーを表示するかどうか。 |
+| ----size                | 軸ヘルパーの各線の長さ。<br>ステップ：0.01 |
+| --THREE.Material        | 3Dオブジェクトの外観。<br>リンク：https://threejs.org/docs/#Material |
+| ----points              | 点オブジェクトの外観。これは制御点に使用されます。<br>リンク：https://threejs.org/docs/#PointsMaterial |
+| ------color             | 点の色。 |
+| ------size              | 点の大きさ(ピクセル単位)。<br>最小：0、最大：10、ステップ：0.01 |
+| ------opacity           | 点の不透明度。<br>最小：0、最大：1、ステップ：0.01 |
+| ----line                | 線オブジェクトの外観。これは制御点と曲線に使用されます。<br>リンク：https://threejs.org/docs/#LineBasicMaterial |
+| ------color             | 線の色。 |
+| ------opacity           | 線の不透明度。<br>最小：0、最大：1、ステップ：0.01 |
+| ----tube (u=uniforms)   | チューブオブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。両面をレンダリングするように設定されています。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
+| ------wireframe         | チューブ表示をワイヤーフレームに変更するかどうか。 |
+| ------u.checkShape      | チューブ形状を確認するためにチューブ表示を変更するかどうか。面が正面から背面へと向きを変えるにつれ、色は白から黒へと変化します。 |
+| ------u.light.x         | チューブの光源のx座標。<br>ステップ：0.1 |
+| ------u.light.y         | チューブの光源のy座標。<br>ステップ：0.1 |
+| ------u.light.z         | チューブの光源のz座標。<br>ステップ：0.1 |
+| ------u.threshold       | チューブの陰の閾値。この値が大きいほど、陰色で塗りつぶされる領域が大きくなります。<br>最小：0、最大：1、ステップ：0.01 |
+| ------u.baseColor       | チューブの基本色。 |
+| ------u.shadeColor      | チューブの陰色。 |
+| TubeGroup               | チューブ関連のオブジェクトを含むグループ。 |
+| --visible               | 「{チューブ関連のオブジェクト名}.visible」のコレクション。 |
+| ----tube                | チューブオブジェクトを表示するかどうか。 |
+| ----axis                | チューブ軸の3D 3次ベジェ曲線オブジェクトを表示するかどうか。 |
+| ----cross               | チューブ断面の2D 3次ベジェ曲線オブジェクトを表示するかどうか。 |
+| ----scaleC              | チューブ断面のスケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
+| ----xScaleC             | チューブ断面のx方向スケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
+| ----yScaleC             | チューブ断面のy方向スケール比率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
+| ----xCurvatureC         | チューブ断面のx方向曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
+| ----yCurvatureC         | チューブ断面のy方向曲率変化を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
+| ----tiltC               | チューブ断面の傾斜変化を度数で表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cは曲線を意味します。 |
 | Tube                    | Tube. |
 | --axis                  | 3D Cubic Bezier curve of the tube axis. |
 | ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
