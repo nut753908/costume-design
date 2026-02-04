@@ -65,7 +65,7 @@
 | --addFreePlane                   | 位置や向きに制限のない無限遠平面である自由平面を追加します。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。 |
 | --addVerticalPlane               | 「addVerticalPlane curveKey」で指定された曲線に沿って移動し、その曲線に垂直な無限遠平面である垂直平面を追加します。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。 |
 | --removePlane                    | 「removePlane key」で指定された平面を削除します。 |
-| --addVerticalPlane curveKey      | 垂直平面を追加するときに必要な曲線キー。垂直平面はこの曲線を移動軸として使用します。 |
+| --addVerticalPlane curveKey      | 垂直平面を追加するときに必要な曲線キー。垂直平面はこの曲線を移動軸として使用します。<br>選択肢：「torso」(胴体)、「leftArm」(左腕)、「leftThumb」(左親指)、「leftIndexFinger」(左人差し指)、「leftMiddleFinger」(左中指)、「leftRingFinger」(左薬指)、「leftLittleFinger」(左小指)、「leftLeg」(左脚)、「leftFoot」(左足)、「rightArm」(右腕)、「rightThumb」(右親指)、「rightIndexFinger」(右人差し指)、「rightMiddleFinger」(右中指)、「rightRingFinger」(右薬指)、「rightLittleFinger」(右小指)、「rightLeg」(右脚)、「rightFoot」(右足) |
 | --removePlane key                | 削除する平面キー。 |
 | --plane[0] {FreePlane}           | 位置や向きに制限のない無限遠平面である自由平面。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。インデックス(0,1,...)は、自由平面と垂直平面の双方に共通です。 |
 | ----normal                       | 自由平面の法線方向。 |
