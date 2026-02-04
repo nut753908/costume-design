@@ -45,7 +45,7 @@
 | --THREE.Material        | 3Dオブジェクトの外観。<br>リンク：https://threejs.org/docs/#Material |
 | ----points              | 点オブジェクトの外観。これは制御点に使用されます。<br>リンク：https://threejs.org/docs/#PointsMaterial |
 | ------color             | 点の色。 |
-| ------size              | 点の大きさ(ピクセル単位)。<br>最小：0、最大：10、ステップ：0.01 |
+| ------size              | 点のサイズ(ピクセル単位)。<br>最小：0、最大：10、ステップ：0.01 |
 | ------opacity           | 点の不透明度。<br>最小：0、最大：1、ステップ：0.01 |
 | ----line                | 線オブジェクトの外観。これは制御点と曲線に使用されます。<br>リンク：https://threejs.org/docs/#LineBasicMaterial |
 | ------color             | 線の色。 |

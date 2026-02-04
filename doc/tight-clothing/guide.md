@@ -42,11 +42,11 @@ The control panel contains the following items.
 | --THREE.AxesHelper               | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
 | ----visible                      | Whether to display the axes helper. |
 | ----size                         | The length of each line for the axes helper.<br>Step: 0.01 |
-| --PlaneHelper                    | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
+| --PlaneHelper                    | Moveable plane helper.<br>Link: https://threejs.org/docs/#PlaneHelper |
 | ----visible                      | Whether to display all plane helpers. |
 | ----size                         | The size of all plane helpers.<br>Step: 0.01 |
 | ----color                        | The color of all plane helpers. |
-| --THREE.ArrowHelper              | Arrow Helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
+| --THREE.ArrowHelper              | Arrow helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
 | ----visible                      | Whether to display all arrow helpers. |
 | ----length                       | The length of all arrow helpers.<br>Step: 0.01 |
 | ----color                        | The color of all arrow helpers. |
@@ -60,7 +60,7 @@ The control panel contains the following items.
 | ------u.threshold                | The shade threshold for the human body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
 | ------u.baseColor                | The base color for the human body. |
 | ------u.shadeColor               | The shade color for the human body. |
-| ----area (u=uniforms)            | The appearance of tight clothing area object. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| ----area (u=uniforms)            | The appearance of area object that form tight clothing. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
 | PlaneManager                     | Manages the increase and decrease of infinite planes. |
 | --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
 | --addVerticalPlane               | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |

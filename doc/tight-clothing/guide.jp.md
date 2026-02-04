@@ -42,14 +42,14 @@
 | --THREE.AxesHelper               | XYZ軸を持つ軸ヘルパー。<br>リンク：https://threejs.org/docs/#AxesHelper |
 | ----visible                      | 軸ヘルパーを表示するかどうか。 |
 | ----size                         | 軸ヘルパーの各線の長さ。<br>ステップ：0.01 |
-| --PlaneHelper                    | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
-| ----visible                      | Whether to display all plane helpers. |
-| ----size                         | The size of all plane helpers.<br>Step: 0.01 |
-| ----color                        | The color of all plane helpers. |
-| --THREE.ArrowHelper              | Arrow Helper.<br>Link: https://threejs.org/docs/#ArrowHelper |
-| ----visible                      | Whether to display all arrow helpers. |
-| ----length                       | The length of all arrow helpers.<br>Step: 0.01 |
-| ----color                        | The color of all arrow helpers. |
+| --PlaneHelper                    | 移動可能な平面ヘルパー。<br>リンク：https://threejs.org/docs/#PlaneHelper |
+| ----visible                      | すべての平面ヘルパーを表示するかどうか。 |
+| ----size                         | すべての平面ヘルパーのサイズ。<br>ステップ：0.01 |
+| ----color                        | 全ての平面ヘルパーの色。 |
+| --THREE.ArrowHelper              | 矢印ヘルパー。<br>リンク：https://threejs.org/docs/#ArrowHelper |
+| ----visible                      | すべての矢印ヘルパーを表示するかどうか。 |
+| ----length                       | すべての矢印ヘルパーの長さ。<br>ステップ：0.01 |
+| ----color                        | すべての矢印ヘルパーの色。 |
 | --THREE.Material                 | 3Dオブジェクトの外観。<br>リンク：https://threejs.org/docs/#Material |
 | ----body (u=uniforms)            | 人体オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
 | ------wireframe                  | 人体表示をワイヤーフレームに変更するかどうか。 |
@@ -60,7 +60,7 @@
 | ------u.threshold                | 人体の陰の閾値。この値が大きいほど、陰色で塗りつぶされる領域が大きくなります。<br>最小：0、最大：1、ステップ：0.01 |
 | ------u.baseColor                | 人体の基本色。 |
 | ------u.shadeColor               | 人体の陰色。 |
-| ----area (u=uniforms)            | タイトな衣服領域オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。フォルダ構造は上記の「body (u=uniforms)」と同じです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
+| ----area (u=uniforms)            | タイトな衣服を形成する領域オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。フォルダ構造は上記の「body (u=uniforms)」と同じです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
 | PlaneManager                     | Manages the increase and decrease of infinite planes. |
 | --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
 | --addVerticalPlane               | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |
