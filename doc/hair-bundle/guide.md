@@ -89,7 +89,7 @@ The control panel contains the following items.
 | ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply all enabled syncs.<br>Step: 0.01 |
 | ------right.z           | The z-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply all enabled syncs.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
+| ------isSyncAngle       | Whether to synchronize so that the difference between the left and right angles is 180 degrees. |
 | ------local             | Subitems of the control point. |
 | --------left.radius     | The distance from the middle point object to the left point object. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply all enabled syncs.<br>Min: 0, Step: 0.01 |
 | --------left.Ax         | The angle (in degrees) around the x-axis from the middle point object to the left point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply all enabled syncs. A stands for angle.<br>Step: 1 |
@@ -114,7 +114,7 @@ The control panel contains the following items.
 | ------right.x           | The x-coordinate of the right point object. Changing this will be reflected in "right.radius" and "right.angle" and will apply all enabled syncs.<br>Step: 0.01 |
 | ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "right.radius" and "right.angle" and will apply all enabled syncs.<br>Step: 0.01 |
 | ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
+| ------isSyncAngle       | Whether to synchronize so that the difference between the left and right angles is 180 degrees. |
 | ------local             | Subitems of the control point. |
 | --------left.radius     | The distance from the middle point object to the left point object. Changing this will be reflected in "left.x" and "left.y" and will apply all enabled syncs.<br>Min: 0, Step: 0.01 |
 | --------left.angle      | The angle (in degrees) from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x" and "left.y" and will apply all enabled syncs.<br>Step: 1 |
