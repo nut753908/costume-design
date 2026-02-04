@@ -34,8 +34,8 @@
 
 コントロールパネルには以下の項目が含まれています。
 
-| 名称                     | 説明         |
-| ----------------------- | ----------- |
+| 名称                     | 説明 |
+| ----------------------- | --- |
 | common                  | 共有可能な項目。 |
 | --THREE.Scene           | 3Dオブジェクトを配置するシーン。<br>リンク：https://threejs.org/docs/#Scene |
 | ----background          | シーンの背景色。 |
@@ -72,54 +72,54 @@
 | ----tiltC               | チューブ断面の傾斜変化(度単位)を表す2D 3次ベジェ曲線オブジェクトを表示するかどうか。Cはcurve(曲線)を意味します。 |
 | Tube                    | チューブ。 |
 | --axis                  | チューブ軸の3D 3次ベジェ曲線。 |
-| ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
-| ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
-| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
-| ----removeCp            | Remove the nth (removeCp index) control point. All control point indices will be reset. To remove a control point, at least three control points are required. cp stands for control point. |
-| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
-| ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
-| ----cp0                 | Control point of the tube axis with index (0,1,...). It consists of three point objects and two line object connecting them. cp stands for control point. |
-| ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
-| ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
-| ------middle.z          | The z-coordinate of the middle point object. Changing this will also change "left.z" and "right.z" by the same amount.<br>Step: 0.01 |
-| ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "left.radius", "left.Ax", "left.Ay", and "left.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------left.y            | The y-coordinate of the left point object. Changing this will be reflected in "left.radius", "left.Ax", "left.Ay", and "left.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------left.z            | The z-coordinate of the left point object. Changing this will be reflected in "left.radius", "left.Ax", "left.Ay", and "left.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------right.x           | The x-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------right.z           | The z-coordinate of the right point object. Changing this will be reflected in "right.radius", "right.Ax", "right.Ay", and "right.Az" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
-| ------local             | Subitems of the control point. |
-| --------left.radius     | The relative coordinate distance from the middle point object to the left point object. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------left.Ax         | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the left point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --------left.Ay         | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the left point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --------left.Az         | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x", "left.y", and "left.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --------right.radius    | The relative coordinate distance from the middle point object to the right point object. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------right.Ax        | The relative coordinate angle (in degrees) around the x-axis from the middle point object to the right point object. The angle is 0 when (y,z)=(n,0),n>0, and increases counterclockwise in the yz plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --------right.Ay        | The relative coordinate angle (in degrees) around the y-axis from the middle point object to the right point object. The angle is 0 when (z,x)=(n,0),n>0, and increases counterclockwise in the zx plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
-| --------right.Az        | The relative coordinate angle (in degrees) around the z-axis from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x", "right.y", and "right.z" and will apply to all enabled syncs. A stands for angle.<br>Step: 1 |
+| ----addCpToFirst        | 最初の制御点を複製し、制御点の先頭に追加します。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----addCpToLast         | 最後の制御点を複製し、制御点の末尾に追加します。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----interpolateCp       | インデックスn(interoplateCp index)とn-1の制御点から補間制御点を作成し、制御点インデックスnに挿入します。この処理は補間前のインデックスnおよびn-1の制御点に影響を与えます。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----removeCp            | インデックスn(removeCp index)の制御点を削除します。制御点を削除するには、少なくとも3つの制御点が必要です。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----interoplateCp index | 制御点を補間するインデックス。cpはcontrol point(制御点)を意味します。 |
+| ----removeCp index      | 制御点を削除するインデックス。cpはcontrol point(制御点)を意味します。 |
+| ----cp0                 | チューブ軸のインデックス付き(0,1,...)制御点。3つの点オブジェクトとそれらを接続する2つの線オブジェクトで構成されます。cpはcontrol point(制御点)を意味します。 |
+| ------middle.x          | 中間点オブジェクトのx座標。これを変更すると、「left.x」と「right.x」も同じ量だけ変更されます。<br>ステップ：0.01 |
+| ------middle.y          | 中間点オブジェクトのy座標。これを変更すると、「left.y」と「right.y」も同じ量だけ変更されます。<br>ステップ：0.01 |
+| ------middle.z          | 中間点オブジェクトのz座標。これを変更すると、「left.z」と「right.z」も同じ量だけ変更されます。<br>ステップ：0.01 |
+| ------left.x            | 左点オブジェクトのx座標。これを変更すると、「left.radius」、「left.Ax」、「left.Ay」、「left.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------left.y            | 左点オブジェクトのy座標。これを変更すると、「left.radius」、「left.Ax」、「left.Ay」、「left.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------left.z            | 左点オブジェクトのz座標。これを変更すると、「left.radius」、「left.Ax」、「left.Ay」、「left.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------right.x           | 右点オブジェクトのx座標。これを変更すると、「right.radius」、「right.Ax」、「right.Ay」、「right.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------right.y           | 右点オブジェクトのy座標。これを変更すると、「right.radius」、「right.Ax」、「right.Ay」、「right.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------right.z           | 右点オブジェクトのz座標。これを変更すると、「right.radius」、「right.Ax」、「right.Ay」、「right.Az」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------isSyncRadius      | 左右の半径が同じになるように同期するかどうか。 |
+| ------isSyncAngle       | 左右の角度の差が180度になるように同期するかどうか。 |
+| ------local             | 制御点のサブ項目。 |
+| --------left.radius     | 中間点オブジェクトから左点オブジェクトまでの相対座標距離。これを変更すると、「left.x」、「left.y」、「left.z」に反映され、有効なすべての同期が適用されます。<br>最小：0、ステップ：0.01 |
+| --------left.Ax         | 中間点オブジェクトから左点オブジェクトまでのx軸周りの相対座標角度(度単位)。角度は(y,z)=(n,0),n>0のときに0となり、yz平面上で反時計回りに増加します。これを変更すると、「left.x」、「left.y」、「left.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
+| --------left.Ay         | 中間点オブジェクトから左点オブジェクトまでのy軸周りの相対座標角度(度単位)。角度は(z,x)=(n,0),n>0のときに0となり、zx平面上で反時計回りに増加します。これを変更すると、「left.x」、「left.y」、「left.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
+| --------left.Az         | 中間点オブジェクトから左点オブジェクトまでのz軸周りの相対座標角度(度単位)。角度は(x,y)=(n,0),n>0のときに0となり、xy平面上で反時計回りに増加します。これを変更すると、「left.x」、「left.y」、「left.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
+| --------right.radius    | 中間点オブジェクトから右点オブジェクトまでの相対座標距離。これを変更すると、「right.x」、「right.y」、「right.z」に反映され、有効なすべての同期が適用されます。<br>最小：0、ステップ：0.01 |
+| --------right.Ax        | 中間点オブジェクトから右点オブジェクトまでのx軸周りの相対座標角度(度単位)。角度は(y,z)=(n,0),n>0のときに0となり、yz平面上で反時計回りに増加します。これを変更すると、「right.x」、「right.y」、「right.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
+| --------right.Ay        | 中間点オブジェクトから右点オブジェクトまでのy軸周りの相対座標角度(度単位)。角度は(z,x)=(n,0),n>0のときに0となり、zx平面上で反時計回りに増加します。これを変更すると、「right.x」、「right.y」、「right.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
+| --------right.Az        | 中間点オブジェクトから右点オブジェクトまでのz軸周りの相対座標角度(度単位)。角度は(x,y)=(n,0),n>0のときに0となり、xy平面上で反時計回りに増加します。これを変更すると、「right.x」、「right.y」、「right.z」に反映され、有効なすべての同期が適用されます。Aはangle(角度)を意味します。<br>ステップ：1 |
 | --cross                 | チューブ断面の2D 3次ベジェ曲線。 |
-| ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
-| ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
-| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n+1 and adds it as the nth control point. This affects the control points with indices n and n+1 before interpolation. All control point indices will be reset. cp stands for control point. |
-| ----removeCp            | Remove the nth (removeCp index) control point. All control point indices will be reset. To remove a control point, at least three control points are required. cp stands for control point. |
-| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
-| ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
-| ----cp0                 | Control point of the tube cross-section with index (0,1,...). It consists of three point objects and two line object connecting them. cp stands for control point. |
-| ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
-| ------middle.y          | The y-coordinate of the middle point object. Changing this will also change "left.y" and "right.y" by the same amount.<br>Step: 0.01 |
-| ------left.x            | The x-coordinate of the left point object. Changing this will be reflected in "left.radius" and "left.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------left.y            | The y-coordinate of the left point object. Changing this will be reflected in "left.radius" and "left.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------right.x           | The x-coordinate of the right point object. Changing this will be reflected in "right.radius" and "right.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------right.y           | The y-coordinate of the right point object. Changing this will be reflected in "right.radius" and "right.angle" and will apply to all enabled syncs.<br>Step: 0.01 |
-| ------isSyncRadius      | Whether to synchronize the left and right radii to be the same. |
-| ------isSyncAngle       | Whether to synchronize the left and right angles so that the difference is 180 degrees. |
-| ------local             | Subitems of the control point. |
-| --------left.radius     | The relative coordinate distance from the middle point object to the left point object. Changing this will be reflected in "left.x" and "left.y" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------left.angle      | The relative coordinate angle (in degrees) from the middle point object to the left point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "left.x" and "left.y" and will apply to all enabled syncs.<br>Step: 1 |
-| --------right.radius    | The relative coordinate distance from the middle point object to the right point object. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Min: 0, Step: 0.01 |
-| --------right.angle     | The relative coordinate angle (in degrees) from the middle point object to the right point object. The angle is 0 when (x,y)=(n,0),n>0, and increases counterclockwise in the xy plane. Changing this will be reflected in "right.x" and "right.y" and will apply to all enabled syncs.<br>Step: 1 |
+| ----addCpToFirst        | 最初の制御点を複製し、制御点の先頭に追加します。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----addCpToLast         | 最後の制御点を複製し、制御点の末尾に追加します。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----interpolateCp       | インデックスn(interoplateCp index)とn-1の制御点から補間制御点を作成し、制御点インデックスnに挿入します。この処理は補間前のインデックスnおよびn-1の制御点に影響を与えます。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----removeCp            | インデックスn(removeCp index)の制御点を削除します。制御点を削除するには、少なくとも3つの制御点が必要です。すべての制御点インデックスがリセットされます。cpはcontrol point(制御点)を意味します。 |
+| ----interoplateCp index | 制御点を補間するインデックス。cpはcontrol point(制御点)を意味します。 |
+| ----removeCp index      | 制御点を削除するインデックス。cpはcontrol point(制御点)を意味します。 |
+| ----cp0                 | チューブ軸のインデックス付き(0,1,...)制御点。3つの点オブジェクトとそれらを接続する2つの線オブジェクトで構成されます。cpはcontrol point(制御点)を意味します。 |
+| ------middle.x          | 中間点オブジェクトのx座標。これを変更すると、「left.x」と「right.x」も同じ量だけ変更されます。<br>ステップ：0.01 |
+| ------middle.y          | 中間点オブジェクトのy座標。これを変更すると、「left.y」と「right.y」も同じ量だけ変更されます。<br>ステップ：0.01 |
+| ------left.x            | 左点オブジェクトのx座標。これを変更すると、「left.radius」と「left.angle」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------left.y            | 左点オブジェクトのy座標。これを変更すると、「left.radius」と「left.angle」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------right.x           | 右点オブジェクトのx座標。これを変更すると、「right.radius」と「right.angle」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------right.y           | 右点オブジェクトのy座標。これを変更すると、「right.radius」と「right.angle」に反映され、有効なすべての同期が適用されます。<br>ステップ：0.01 |
+| ------isSyncRadius      | 左右の半径が同じになるように同期するかどうか。 |
+| ------isSyncAngle       | 左右の角度の差が180度になるように同期するかどうか。 |
+| ------local             | 制御点のサブ項目。 |
+| --------left.radius     | 中間点オブジェクトから左点オブジェクトまでの相対座標距離。これを変更すると、「left.x」と「left.y」に反映され、有効なすべての同期が適用されます。<br>最小：0、ステップ：0.01 |
+| --------left.angle      | 中間点オブジェクトから左点オブジェクトまでの相対座標角度(度単位)。角度は(x,y)=(n,0),n>0のときに0となり、xy平面上で反時計回りに増加します。これを変更すると、「left.x」と「left.y」に反映され、有効なすべての同期が適用されます。<br>ステップ：1 |
+| --------right.radius    | 中間点オブジェクトから右点オブジェクトまでの相対座標距離。これを変更すると、「right.x」と「right.y」に反映され、有効なすべての同期が適用されます。<br>最小：0、ステップ：0.01 |
+| --------right.angle     | 中間点オブジェクトから右点オブジェクトまでの相対座標角度(度単位)。角度は(x,y)=(n,0),n>0のときに0となり、xy平面上で反時計回りに増加します。これを変更すると、「right.x」と「right.y」に反映され、有効なすべての同期が適用されます。<br>ステップ：1 |
 | --axisSegments          | チューブ軸に沿った面の数。<br>最小：1、ステップ：1 |
 | --crossSegments         | チューブ断面の面の数<br>最小：3、ステップ：1 |
 | --scaleN                | チューブ断面のスケール比。Nはnumber(数値)を意味します。<br>最小：0、ステップ：0.01 |
