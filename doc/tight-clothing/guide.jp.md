@@ -1,47 +1,47 @@
 [English](guide.md) | [日本語](guide.jp.md)
 
-# Guide
+# ガイド
 
-The tight clothing web page consists of three parts: Scene, Viewport gizmo, and Control panel.
+タイトな衣服のウェブページは、シーン、ビューポートギズモ、コントロールパネルの3つの部分で構成されています。
 
-## Scene
+## シーン
 
 <img src="scene.png" alt="scene.png" width="192">
 
-[Scene](https://threejs.org/docs/#Scene) is where 3D objects are placed. By default, a three-headed human body and [AxesHelper](https://threejs.org/docs/#AxesHelper) are placed in the scene. The scene is rendered through [OrthographicCamera](https://threejs.org/docs/#OrthographicCamera). The camera's field of view is adjusted to match the window size. You can control the camera as follows:
+[シーン](https://threejs.org/docs/#Scene)は、3Dオブジェクトが配置される場所です。デフォルトでは、三頭身の人体と[軸ヘルパー](https://threejs.org/docs/#AxesHelper)がシーンに配置されます。シーンは[平行投影カメラ](https://threejs.org/docs/#OrthographicCamera)を通じてレンダリングされます。カメラの視野はウィンドウのサイズに合わせて調整されます。カメラは次のように操作できます：
 
-- Drag the left mouse button to rotate around the pivot point. The camera always points towards the pivot point. By default, the pivot point is the origin.
-- Drag the right mouse button to move parallel to the screen.
-- Roll the mouse wheel to zoom in/out.
+- マウスの左ボタンをドラッグすると、ピボットポイントを中心に回転します。カメラは常にピボットポイントの方向を向きます。デフォルトでは、ピボットポイントは原点です。
+- マウスの右ボタンをドラッグすると、画面と平行に移動します。
+- マウスホイールを回転させて拡大/縮小します。
 
-These camera controls come from [OrbitControls](https://threejs.org/docs/#OrbitControls).
+これらのカメラ操作は[軌道制御](https://threejs.org/docs/#OrbitControls)から来ています。
 
-## Viewport gizmo
+## ビューポートギズモ
 
 <img src="viewport-gizmo.png" alt="viewport-gizmo.png" width="80">
 
-The viewport gizmo is a library called [THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/). The viewport gizmo displays the XYZ directions. Clicking on the X,Y,Z circles or the blank -X,-Y,-Z circles will rotate the camera in that direction, just like dragging the left mouse button in the scene.
+ビューポートギズモは[THREE Viewport Gizmo](https://fennec-hub.github.io/three-viewport-gizmo/)というライブラリです。ビューポートギズモはXYZ方向を表示します。X、Y、Zの円または空白の-X、-Y、-Zの円をクリックすると、シーン内でマウスの左ボタンをドラッグするのと同じように、カメラがその方向に回転します。
 
-## Control panel
+## コントロールパネル
 
 <img src="control-panel.png" alt="control-panel.png" width="55">
 
-The control panel is a library called [lil-gui](https://lil-gui.georgealways.com/). The control panel consists of folders and controllers. A folder can contain folders and controllers. Clicking a folder opens or closes it, showing or hiding its contents. A controller can be a dropdown, checkbox, text field, number field, color field, or button.
+コントロールパネルは[lil-gui](https://lil-gui.georgealways.com/)というライブラリです。コントロールパネルはフォルダとコントローラで構成されています。フォルダは、フォルダとコントローラを含むことができます。フォルダをクリックすると開いたり閉じたりし、その内容を表示または非表示にします。コントローラは、ドロップダウン、チェックボックス、テキストフィールド、数値フィールド、カラーフィールド、またはボタンです。
 
-Number fields can also be modified by dragging the left mouse button or by pressing the up or down arrow keys when the field has focus. While making changes using these methods, holding down the Shift key increases the value step size, and holding down the Alt key decreases the value step size.
+数値フィールドは、マウスの左ボタンをドラッグするか、フィールドにフォーカスがある状態で上矢印キーまたは下矢印キーを押すことで変更することもできます。これらの方法を使用して変更を行う際、Shiftキーを押しながら操作すると値のステップサイズが増加し、Altキーを押しながら操作すると値のステップサイズが減少します。
 
-Every time you operate the control panel, its current state is saved in a state array. To revert to the previous state, press Ctrl+z (Cmd+z on Mac). To advance to the next state, press Shift+Ctrl+z or Ctrl+y (Shift+Cmd+z or Cmd+y on Mac).
+コントロールパネルを操作するたびに、その現在の状態が状態配列に保存されます。前の状態に戻すには、Ctrl+z (Macの場合はCmd+z)を押してください。次の状態に進むには、Shift+Ctrl+zまたはCtrl+y (Macの場合はShift+Cmd+zまたはCmd+y)を押してください。
 
-The control panel contains the following items.
+コントロールパネルには以下の項目が含まれています。
 
-| Name                             | Description |
-| -------------------------------- | ----------- |
-| common                           | Shareable items. |
-| --THREE.Scene                    | A scene in which to place 3D objects.<br>Link: https://threejs.org/docs/#Scene |
-| ----background                   | The background color of the scene. |
-| --THREE.AxesHelper               | Axes helper with XYZ axes.<br>Link: https://threejs.org/docs/#AxesHelper |
-| ----visible                      | Whether to display the axes helper. |
-| ----size                         | The length of each line for the axes helper.<br>Step: 0.01 |
+| 名称                              | 説明 |
+| -------------------------------- | --- |
+| common                           | 共有可能な項目。 |
+| --THREE.Scene                    | 3Dオブジェクトを配置するシーン。<br>リンク：https://threejs.org/docs/#Scene |
+| ----background                   | シーンの背景色。 |
+| --THREE.AxesHelper               | XYZ軸を持つ軸ヘルパー。<br>リンク：https://threejs.org/docs/#AxesHelper |
+| ----visible                      | 軸ヘルパーを表示するかどうか。 |
+| ----size                         | 軸ヘルパーの各線の長さ。<br>ステップ：0.01 |
 | --PlaneHelper                    | Plane Helper. This extends THREE.PlaneHelper to allow for repositioning.<br>Link: https://threejs.org/docs/#PlaneHelper |
 | ----visible                      | Whether to display all plane helpers. |
 | ----size                         | The size of all plane helpers.<br>Step: 0.01 |
@@ -50,17 +50,17 @@ The control panel contains the following items.
 | ----visible                      | Whether to display all arrow helpers. |
 | ----length                       | The length of all arrow helpers.<br>Step: 0.01 |
 | ----color                        | The color of all arrow helpers. |
-| --THREE.Material                 | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
-| ----body (u=uniforms)            | The appearance of human body object. This is an original mesh toon material created from a shader material.<br>Link: https://threejs.org/docs/#ShaderMaterial |
-| ------wireframe                  | Whether to change the body display to wireframe. |
-| ------u.checkShape               | Whether to change the body display to see the body shape. As the face turns from front to back, the color changes from white to black. |
-| ------u.light.x                  | The x-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.y                  | The y-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.z                  | The z-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.threshold                | The shade threshold for the body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
-| ------u.baseColor                | The base color for the body. |
-| ------u.shadeColor               | The shade color for the body. |
-| ----area (u=uniforms)            | The appearance of tight clothing area object. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
+| --THREE.Material                 | 3Dオブジェクトの外観。<br>リンク：https://threejs.org/docs/#Material |
+| ----body (u=uniforms)            | 人体オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
+| ------wireframe                  | 人体表示をワイヤーフレームに変更するかどうか。 |
+| ------u.checkShape               | 人体形状を確認するために人体表示を変更するかどうか。面が正面から背面へと向きを変えるにつれ、色は白から黒へと変化します。 |
+| ------u.light.x                  | 人体の光源のx座標。<br>ステップ：0.1 |
+| ------u.light.y                  | 人体の光源のy座標。<br>ステップ：0.1 |
+| ------u.light.z                  | 人体の光源のz座標。<br>ステップ：0.1 |
+| ------u.threshold                | 人体の陰の閾値。この値が大きいほど、陰色で塗りつぶされる領域が大きくなります。<br>最小：0、最大：1、ステップ：0.01 |
+| ------u.baseColor                | 人体の基本色。 |
+| ------u.shadeColor               | 人体の陰色。 |
+| ----area (u=uniforms)            | タイトな衣服領域オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。フォルダ構造は上記の「body (u=uniforms)」と同じです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
 | PlaneManager                     | Manages the increase and decrease of infinite planes. |
 | --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
 | --addVerticalPlane               | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |

@@ -8,7 +8,7 @@ The tight clothing web page consists of three parts: Scene, Viewport gizmo, and 
 
 <img src="scene.png" alt="scene.png" width="192">
 
-[Scene](https://threejs.org/docs/#Scene) is where 3D objects are placed. By default, a three-headed human body and [AxesHelper](https://threejs.org/docs/#AxesHelper) are placed in the scene. The scene is rendered through [OrthographicCamera](https://threejs.org/docs/#OrthographicCamera). The camera's field of view is adjusted to match the window size. You can control the camera as follows:
+[Scene](https://threejs.org/docs/#Scene) is where 3D objects are placed. By default, a human body three heads tall and [AxesHelper](https://threejs.org/docs/#AxesHelper) are placed in the scene. The scene is rendered through [OrthographicCamera](https://threejs.org/docs/#OrthographicCamera). The camera's field of view is adjusted to match the window size. You can control the camera as follows:
 
 - Drag the left mouse button to rotate around the pivot point. The camera always points towards the pivot point. By default, the pivot point is the origin.
 - Drag the right mouse button to move parallel to the screen.
@@ -52,14 +52,14 @@ The control panel contains the following items.
 | ----color                        | The color of all arrow helpers. |
 | --THREE.Material                 | The appearance of 3D objects.<br>Link: https://threejs.org/docs/#Material |
 | ----body (u=uniforms)            | The appearance of human body object. This is an original mesh toon material created from a shader material.<br>Link: https://threejs.org/docs/#ShaderMaterial |
-| ------wireframe                  | Whether to change the body display to wireframe. |
-| ------u.checkShape               | Whether to change the body display to see the body shape. As the face turns from front to back, the color changes from white to black. |
-| ------u.light.x                  | The x-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.y                  | The y-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.light.z                  | The z-coordinate of the light source for the body.<br>Step: 0.1 |
-| ------u.threshold                | The shade threshold for the body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
-| ------u.baseColor                | The base color for the body. |
-| ------u.shadeColor               | The shade color for the body. |
+| ------wireframe                  | Whether to change the human body display to wireframe. |
+| ------u.checkShape               | Whether to change the human body display to see the human body shape. As the face turns from front to back, the color changes from white to black. |
+| ------u.light.x                  | The x-coordinate of the light source for the human body.<br>Step: 0.1 |
+| ------u.light.y                  | The y-coordinate of the light source for the human body.<br>Step: 0.1 |
+| ------u.light.z                  | The z-coordinate of the light source for the human body.<br>Step: 0.1 |
+| ------u.threshold                | The shade threshold for the human body. The larger this value, the larger the area filled with the shade color.<br>Min: 0, Max: 1, Step: 0.01 |
+| ------u.baseColor                | The base color for the human body. |
+| ------u.shadeColor               | The shade color for the human body. |
 | ----area (u=uniforms)            | The appearance of tight clothing area object. This is an original mesh toon material created from a shader material. The folder structure is the same as "body (u=uniforms)" above.<br>Link: https://threejs.org/docs/#ShaderMaterial |
 | PlaneManager                     | Manages the increase and decrease of infinite planes. |
 | --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
