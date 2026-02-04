@@ -67,22 +67,22 @@
 | --removePlane                    | 「removePlane key」で指定された平面を削除します。 |
 | --addVerticalPlane curveKey      | 垂直平面を追加するときに必要な曲線キー。垂直平面はこの曲線を移動軸として使用します。 |
 | --removePlane key                | 削除する平面キー。 |
-| --plane[0] {FreePlane}           | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
-| ----normal                       | Normal direction of the free plane. |
-| ------x                          | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ------y                          | The y-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ------z                          | The z-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
-| ----point                        | Reference point for the free plane. |
-| ------x                          | The x-coordinate of the point.<br>Step: 0.01 |
-| ------y                          | The y-coordinate of the point.<br>Step: 0.01 |
-| ------z                          | The z-coordinate of the point.<br>Step: 0.01 |
-| ----inverted                     | Whether to invert the normal of the free plane internally. |
-| --plane[1] torso {VerticalPlane} | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
-| ----u                            | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
-| ----inverted                     | Whether to invert the normal of the vertical plane internally. |
-| Area                             | Relates to tight clothing area. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
-| --thickness                      | The thickness of the area.<br>Min: 0, Max: 0.01, Step: 0.0001 |
-| --intersection loops...          | Loops within the intersections of the body and the plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
-| ----option                       | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "all" for the free plane, "including plane" for the vertical plane |
-| ----indices                      | The indices of the intersection loops. This is only visible if the "some" option is selected. |
-| ------0                          | Whether to enable this index (0,1,...). |
+| --plane[0] {FreePlane}           | 位置や向きに制限のない無限遠平面である自由平面。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。インデックス(0,1,...)は、自由平面と垂直平面の双方に共通です。 |
+| ----normal                       | 自由平面の法線方向。 |
+| ------x                          | 法線のx座標。これを変更すると、法線が正規化されます。<br>ステップ：0.01 |
+| ------y                          | 法線のy座標。これを変更すると、法線が正規化されます。<br>ステップ：0.01 |
+| ------z                          | 法線のz座標。これを変更すると、法線が正規化されます。<br>ステップ：0.01 |
+| ----point                        | 自由平面の基準点。 |
+| ------x                          | 点のx座標。<br>ステップ：0.01 |
+| ------y                          | 点のy座標。<br>ステップ：0.01 |
+| ------z                          | 点のz座標。<br>ステップ：0.01 |
+| ----inverted                     | 自由平面の法線を内部で反転させるかどうか。 |
+| --plane[1] torso {VerticalPlane} | 「addVerticalPlane curveKey」で指定された曲線に沿って移動し、その曲線に垂直な無限遠平面である垂直平面。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。インデックス(0,1,...)は、自由平面と垂直平面の双方に共通です。名前には、指定された「addVerticalPlane curveKey」が含まれます(例：「torso」)。 |
+| ----u                            | 指定された「addVerticalPlane curveKey」曲線内の数値位置。これは、垂直平面上の点/法線を計算するために使用されます。<br>最小：0、最大：1、ステップ：0.01 |
+| ----inverted                     | 垂直平面の法線を内部で反転させるかどうか。 |
+| Area                             | タイトな衣服を形成する領域に関連します。体と平面の交点を計算し、交点内のループを見つけます。体を複製し、交点ループを用いてカットし、平面法線方向における交点ループに隣接する領域を見つけて、その領域に厚みを与えます。 |
+| --thickness                      | 領域の厚さ。<br>最小：0、最大：0.01、ステップ：0.0001 |
+| --intersection loops...          | 体と平面の交点内のループ。「intersection loops」の後のテキストは、上記の平面の「plane」の後のテキストと同じです。 |
+| ----option                       | 交点ループの選択方法。「all」(全て)はすべてのループを選択します。「including plane」(平面を含む)は平面の点に最も近いループを選択します。「excluding plane」(平面を除く)は、平面の点に最も近いループを除くすべてのループを選択します。「some」(一部)は指定されたインデックスのループを選択します。<br>デフォルト：自由平面の場合は「all」、垂直平面の場合は「including plane」 |
+| ----indices                      | 交点ループのインデックス。これは、option(オプション)で「some」(一部)が選択されている場合にのみ表示されます。 |
+| ------0                          | このインデックス(0,1,...)を有効にするかどうか。 |

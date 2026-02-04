@@ -67,7 +67,7 @@ The control panel contains the following items.
 | --removePlane                    | Removes the plane specified by "removePlane key". |
 | --addVerticalPlane curveKey      | The curve key needed when adding a vertical plane. The vertical plane uses this curve as the axis of movement. |
 | --removePlane key                | The key for the plane to be removed. |
-| --plane[0] {FreePlane}           | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
+| --plane[0] {FreePlane}           | A free plane which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
 | ----normal                       | Normal direction of the free plane. |
 | ------x                          | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
 | ------y                          | The y-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
@@ -77,10 +77,10 @@ The control panel contains the following items.
 | ------y                          | The y-coordinate of the point.<br>Step: 0.01 |
 | ------z                          | The z-coordinate of the point.<br>Step: 0.01 |
 | ----inverted                     | Whether to invert the normal of the free plane internally. |
-| --plane[1] torso {VerticalPlane} | A vertical plane, which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
+| --plane[1] torso {VerticalPlane} | A vertical plane which is an infinite plane that moves along the curve specified by "addVerticalPlane curveKey" and is perpendicular to the curve. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. The name includes the specified "addVerticalPlane curveKey", such as "torso". |
 | ----u                            | The numeric position within the specified "addVerticalPlane curveKey" curve. This is used to calculate a point/normal on the vertical plane.<br>Min: 0, Max: 1, Step: 0.01 |
 | ----inverted                     | Whether to invert the normal of the vertical plane internally. |
-| Area                             | Relates to tight clothing area. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
+| Area                             | Relates to the area that forms tight clothing. Calculates the intersections of the body with the plane and finds loops within the intersections. Duplicates the body, cuts it using the intersection loops, finds the area adjacent to the intersection loops in the plane normal direction, and gives thickness to that area. |
 | --thickness                      | The thickness of the area.<br>Min: 0, Max: 0.01, Step: 0.0001 |
 | --intersection loops...          | Loops within the intersections of the body and the plane. The text after "intersection loops" is the same as the text after "plane" in the plane above. |
 | ----option                       | How to select the intersection loops. "all" selects all loops. "including plane" selects the loop closest to the plane point. "excluding plane" selects all loops except the loop closest to the plane point. "some" selects the loops at the specified indices.<br>Default: "all" for the free plane, "including plane" for the vertical plane |
