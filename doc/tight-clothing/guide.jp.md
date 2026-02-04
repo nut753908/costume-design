@@ -61,12 +61,12 @@
 | ------u.baseColor                | 人体の基本色。 |
 | ------u.shadeColor               | 人体の陰色。 |
 | ----area (u=uniforms)            | タイトな衣服を形成する領域オブジェクトの外観。これはシェーダーマテリアルから作成したオリジナルのメッシュトゥーンマテリアルです。フォルダ構造は上記の「body (u=uniforms)」と同じです。<br>リンク：https://threejs.org/docs/#ShaderMaterial |
-| PlaneManager                     | Manages the increase and decrease of infinite planes. |
-| --addFreePlane                   | Adds a free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. |
-| --addVerticalPlane               | Adds the vertical plane specified by "addVerticalPlane curveKey", which is an infinite plane perpendicular to the curve at position u. The plane is visualized using the plane and arrow helper. |
-| --removePlane                    | Removes the plane specified by "removePlane key". |
-| --addVerticalPlane curveKey      | Curve key to add a vertical plane. |
-| --removePlane key                | Key to remove the plane. |
+| PlaneManager                     | 無限遠平面の増減を管理します。 |
+| --addFreePlane                   | 位置や向きに制限のない無限遠平面である自由平面を追加します。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。 |
+| --addVerticalPlane               | 「addVerticalPlane curveKey」で指定された曲線に沿って移動し、その曲線に垂直な無限遠平面である垂直平面を追加します。平面は平面ヘルパーと矢印ヘルパーを使用して可視化されます。 |
+| --removePlane                    | 「removePlane key」で指定された平面を削除します。 |
+| --addVerticalPlane curveKey      | 垂直平面を追加するときに必要な曲線キー。垂直平面はこの曲線を移動軸として使用します。 |
+| --removePlane key                | 削除する平面キー。 |
 | --plane[0] {FreePlane}           | A free plane, which is an infinite plane with no restrictions on position or orientation. The plane is visualized using the plane and arrow helper. The index (0,1,...) is common to both the free and vertical planes. |
 | ----normal                       | Normal direction of the free plane. |
 | ------x                          | The x-coordinate of the normal. Changing this will normalize the normal.<br>Step: 0.01 |
