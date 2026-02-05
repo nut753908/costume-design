@@ -16,7 +16,7 @@ A hair bundle is a bunch of hair. Any hairstyle can be made up of multiple hair 
 
 ## Tight clothing
 
-Tight clothing is clothing that fits snugly to the body. For example, tight-fitting shirt, tight-fitting pants, gloves, tights, socks, etc. This feature allow users to create such clothes.
+Tight clothing is clothing that fits snugly to the body. For example, tight tops, tight bottoms, gloves, tights, socks, etc. This feature allow users to create such clothes.
 
 - Web page: https://nut753908.github.io/costume-design/tight-clothing.html
 - Guide: [doc/tight-clothing/guide.md](doc/tight-clothing/guide.md)
