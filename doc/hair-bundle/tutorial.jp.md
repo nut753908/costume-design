@@ -42,60 +42,60 @@
 
 <br>
 
-
+「TubeGroup > visible > scaleC」チェックボックスをオンにして、チューブ断面のスケール曲線を表示します。マウスホイールを回してズームアウトし、スケール曲線全体が表示されるようにします。
 
 ![2-1.png](2-1.png)
 
 <br>
 
-
+「Tube > scaleC > interpolateCp」ボタンを選択して、2つの制御点の間に補間制御点を追加します。
 
 ![2-2.png](2-2.png)
 
 <br>
 
-
+「Tube > scaleC > cp0 > isSyncRadius」チェックボックスをオンにします。その後、「Tube > scaleC > cp0 > middle.y」の値を0に設定し、「Tube > scaleC > cp0 > local > left.radius」の値を0.75に設定し、「Tube > scaleC > cp0 > local > left.angle」の値を270に設定します。その結果、チューブ断面は中心から上部に向かって徐々に先細りになります。
 
 ![2-3.png](2-3.png)
 
 <br>
 
-
+「Tube > scaleC > cp1 > local > left.radius」を0.75に設定し、より緩やかな先細りにします。
 
 ![2-4.png](2-4.png)
 
 <br>
 
-
+「Tube > scaleC > cp2 > isSyncRadius」チェックボックスをオンにします。その後、「Tube > scaleC > cp2 > middle.y」の値を0に設定し、「Tube > scaleC > cp2 > local > left.radius」の値を0.75に設定し、「Tube > scaleC > cp2 > local > left.angle」の値を90に設定します。その結果、チューブ断面は中心から底部に向かって徐々に先細りになります。
 
 ![2-5.png](2-5.png)
 
 <br>
 
-
+マウスホイールを回して、デフォルトのズームレベルに戻ります。「TubeGroup > visible > scaleC」チェックボックスをオフにして、チューブ断面のスケール曲線を非表示にします。「TubeGroup > visible > axis」チェックボックスをオンにして、チューブ軸曲線を表示します。
 
 ![3-1.png](3-1.png)
 
 <br>
 
-
+「Tube > axis > cp0 > local > left.radius」の値を0.5に設定し、「Tube > axis > cp0 > local > left.Az」の値を180に設定します。その結果、チューブは上部から右に向かって膨らみます。
 
 ![3-2.png](3-2.png)
 
 <br>
 
-
+「Tube > axis > cp1 > local > left.radius」の値を3に設定し、カーブを底部に滑らかに接続します。
 
 ![3-3.png](3-3.png)
 
 <br>
 
-
+「TubeGroup > visible > axis」チェックボックスをオフにして、チューブ軸曲線を非表示にします。これで、シンプルな毛束の完成です。
 
 ![4-1.png](4-1.png)
 
 <br>
 
-
++x方向からのビュー：
 
 ![4-2.png](4-2.png)
