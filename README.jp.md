@@ -31,7 +31,7 @@ npm install
 npm run dev
 ```
 
-コマンドやアーキテクチャの詳細は[CLAUDE.md](CLAUDE.md)を参照してください。
+コマンドやアーキテクチャの詳細は[CLAUDE.jp.md](CLAUDE.jp.md)を参照してください。
 
 ## ライセンス
 
