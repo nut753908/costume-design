@@ -18,7 +18,7 @@
 
 <br>
 
-「PlaneManager > plane[0] torso {VerticalPlane} > inverted」チェックボックスをオンにして、平面の向きを反転します。次に、「PlaneManager > plane[0] torso {VercicalPlane} > u」の値を0.9に設定し、平面を首の位置に移動させます。
+「PlaneManager > plane[0] torso {VerticalPlane} > inverted」チェックボックスをオンにして、平面の向きを反転します。次に、「PlaneManager > plane[0] torso {VerticalPlane} > u」の値を0.9に設定し、平面を首の位置に移動させます。
 
 ![1-2.png](1-2.png)
 
@@ -30,7 +30,7 @@
 
 <br>
 
-「PlaneManager > plane[1] torso {VercicalPlane} > u」の値を0.1に設定し、平面を下腹部の位置に移動させます。
+「PlaneManager > plane[1] torso {VerticalPlane} > u」の値を0.1に設定し、平面を下腹部の位置に移動させます。
 
 ![2-2.png](2-2.png)
 
@@ -42,7 +42,7 @@
 
 <br>
 
-「PlaneManager > plane[2] leftArm {VercicalPlane} > u」の値を0.2に設定し、平面を七分袖の位置に移動させます。
+「PlaneManager > plane[2] leftArm {VerticalPlane} > u」の値を0.2に設定し、平面を七分袖の位置に移動させます。
 
 ![3-2.png](3-2.png)
 
@@ -54,7 +54,7 @@
 
 <br>
 
-「PlaneManager > plane[3] rightArm {VercicalPlane} > u」の値を0.2に設定し、平面を七分袖の位置に移動させます。
+「PlaneManager > plane[3] rightArm {VerticalPlane} > u」の値を0.2に設定し、平面を七分袖の位置に移動させます。
 
 ![4-2.png](4-2.png)
 
