@@ -74,9 +74,9 @@ The control panel contains the following items.
 | --axis                  | 3D Cubic Bezier curve of the tube axis. |
 | ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
-| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n-1 and inserts it at control point index n. This process affects the control points with indices n and n-1 before interpolation. All control point indices will be reset. cp stands for control point. |
+| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interpolateCp index) and n-1 and inserts it at control point index n. This process affects the control points with indices n and n-1 before interpolation. All control point indices will be reset. cp stands for control point. |
 | ----removeCp            | Removes the control point with index n (removeCp index). To remove a control point, at least three control points are required. All control point indices will be reset. cp stands for control point. |
-| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
+| ----interpolateCp index | The index at which to interpolate the control point. cp stands for control point. |
 | ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
 | ----cp0                 | Indexed (0,1,...) control point of the tube axis. It consists of three point objects and two line object connecting them. cp stands for control point. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |
@@ -102,9 +102,9 @@ The control panel contains the following items.
 | --cross                 | 2D Cubic Bezier curve of the tube cross-section. |
 | ----addCpToFirst        | Duplicates the first control point and adds it to the beginning of the control points. All control point indices will be reset. cp stands for control point. |
 | ----addCpToLast         | Duplicates the last control point and adds it to the end of the control points. All control point indices will be reset. cp stands for control point. |
-| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interoplateCp index) and n-1 and inserts it at control point index n. This process affects the control points with indices n and n-1 before interpolation. All control point indices will be reset. cp stands for control point. |
+| ----interpolateCp       | Creates an interpolated control point from the control points with indices n (interpolateCp index) and n-1 and inserts it at control point index n. This process affects the control points with indices n and n-1 before interpolation. All control point indices will be reset. cp stands for control point. |
 | ----removeCp            | Removes the control point with index n (removeCp index). To remove a control point, at least three control points are required. All control point indices will be reset. cp stands for control point. |
-| ----interoplateCp index | The index at which to interpolate the control point. cp stands for control point. |
+| ----interpolateCp index | The index at which to interpolate the control point. cp stands for control point. |
 | ----removeCp index      | The index from which to remove the control point. cp stands for control point. |
 | ----cp0                 | Indexed (0,1,...) control point of the tube cross-section. It consists of three point objects and two line object connecting them. cp stands for control point. |
 | ------middle.x          | The x-coordinate of the middle point object. Changing this will also change "left.x" and "right.x" by the same amount.<br>Step: 0.01 |

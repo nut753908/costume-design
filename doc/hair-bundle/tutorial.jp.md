@@ -84,7 +84,7 @@
 
 <br>
 
-「Tube > axis > cp1 > local > left.radius」の値を3に設定し、カーブを底部に滑らかに接続します。
+「Tube > axis > cp1 > local > left.radius」の値を0.3に設定し、カーブを底部に滑らかに接続します。
 
 ![3-3.png](3-3.png)
 

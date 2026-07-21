@@ -17,6 +17,8 @@ Three.jsで構築された、ブラウザ上で動作する3D衣装デザイン�
 
 どちらもGitHub Pagesに静的ページとしてデプロイされる(`.github/workflows/deploy.yml`参照)。`dist/tight-clothing.html`は`404.html`としてコピーされ、サイトのフォールバックとして機能する。
 
+`vite.config.ts`は`hair-bundle.html`/`tight-clothing.html`を個別エントリーとするマルチページビルドを定義しており、`base: "/costume-design/"`でGitHub PagesのリポジトリパスにアセットURLを合わせている。
+
 ## コマンド
 
 ```bash

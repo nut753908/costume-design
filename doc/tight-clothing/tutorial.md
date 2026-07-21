@@ -18,7 +18,7 @@ In the "PlaneManager > addVerticalPlane curveKey" dropdown, select "torso". Then
 
 <br>
 
-Check the "PlaneManager > plane[0] torso {VerticalPlane} > inverted" checkbox to invert the plane's orientation. Next, set the value of "PlaneManager > plane[0] torso {VercicalPlane} > u" to 0.9 to move the plane to the neck position.
+Check the "PlaneManager > plane[0] torso {VerticalPlane} > inverted" checkbox to invert the plane's orientation. Next, set the value of "PlaneManager > plane[0] torso {VerticalPlane} > u" to 0.9 to move the plane to the neck position.
 
 ![1-2.png](1-2.png)
 
@@ -30,7 +30,7 @@ Similarly, select "torso" in the "PlaneManager > addVerticalPlane curveKey" drop
 
 <br>
 
-Set the value of "PlaneManager > plane[1] torso {VercicalPlane} > u" to 0.1 to move the plane to the position of the lower abdomen.
+Set the value of "PlaneManager > plane[1] torso {VerticalPlane} > u" to 0.1 to move the plane to the position of the lower abdomen.
 
 ![2-2.png](2-2.png)
 
@@ -42,7 +42,7 @@ In the "PlaneManager > addVerticalPlane curveKey" dropdown, select "leftArm". Th
 
 <br>
 
-Set the value of "PlaneManager > plane[2] leftArm {VercicalPlane} > u" to 0.2 to move the plane to the three-quarter sleeve position.
+Set the value of "PlaneManager > plane[2] leftArm {VerticalPlane} > u" to 0.2 to move the plane to the three-quarter sleeve position.
 
 ![3-2.png](3-2.png)
 
@@ -54,7 +54,7 @@ In the "PlaneManager > addVerticalPlane curveKey" dropdown, select "rightArm". T
 
 <br>
 
-Set the value of "PlaneManager > plane[3] rightArm {VercicalPlane} > u" to 0.2 to move the plane to the three-quarter sleeve position.
+Set the value of "PlaneManager > plane[3] rightArm {VerticalPlane} > u" to 0.2 to move the plane to the three-quarter sleeve position.
 
 ![4-2.png](4-2.png)
 
