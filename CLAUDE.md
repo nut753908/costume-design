@@ -77,7 +77,7 @@ Pipeline: **control points → curve → tube geometry**.
 
 Pipeline: **body mesh → centerline → cross-section plane → intersection → area → extrude**.
 
-- `body/` — loads the body mesh (`body-group.ts`) from `public/models/body1-22.glb` and precomputed n-gon face data (`public/models/body1-22-n-polygon-{indices,positions}.txt`, regenerated from Blender's `body/save-n-polygon-data.py` — a standalone Blender script not included in the TS build). `body-geometry.ts` attaches this n-gon data to the loaded `BufferGeometry`.
+- `body/` — loads the body mesh (`body-group.ts`) from `public/models/body1-22.glb` and precomputed n-gon face data (`public/models/body1-22-n-polygon-{indices,positions}.txt`, regenerated from `tools/blender/save-n-polygon-data.py` — a standalone Blender script not included in the TS build). `body-geometry.ts` attaches this n-gon data to the loaded `BufferGeometry`.
 - `centerline/` — derives edge loops/edges/vertices/points from the body's n-gon data (`edge*.ts`, `vertices.ts`, `points.ts`), and builds the centerline that guides plane placement (`centerline.ts`).
 - `plane/` — cross-section planes: `Plane`/`VerticalPlane`/`FreePlane`, managed by `PlaneManager` (the stateful, GUI-bound, JSON-serializable object equivalent to hair-bundle's `Tube`). Plane changes trigger the `_addCrossSection`/`_removeCrossSection`/`_updateCrossSection` callbacks wired in `main.ts`.
 - `intersection/` — computes where a plane intersects the body mesh: `edge-intersection.ts`/`vertex-intersection.ts` → `intersection.ts` → `intersection-loop.ts`/`intersection-loops.ts` (filtered by `intersection-loop-picker.ts`).
