@@ -70,14 +70,14 @@ CI(`.github/workflows/ci.yml`)はNode 20.x/22.xで以下を実行する: `npm ru
 パイプライン: **コントロールポイント → カーブ → チューブジオメトリ**。
 
 - `control-point/` — `ControlPoint2`/`ControlPoint3`(2D/3Dのコントロールポイント)を`ControlPointGroup`でグループ化。`circular.ts`/`spherical.ts`は座標変換を提供し、`math.ts`は補助的な幾何計算を持つ。
-- `curve/` — コントロールポイントから`CurveGroup`経由で構築される`Curve2`/`Curve3`。`sample-curve-2.ts`/`sample-curve-3.ts`はカーブに沿った点のサンプリングを行う。
+- `curve/` — コントロールポイントから`CurveGroup`経由で構築される`Curve2`/`Curve3`。`sample-curve-2.ts`/`sample-curve-3.ts`は、`tube/`がデフォルト引数として使うプリセットの`Curve2`/`Curve3`定数(円、なだらかな曲線、定数曲線)を提供する。
 - `tube/` — `TubeBaseGeometry` → `TubeGeometry` → `Tube`(`toJSON`/`fromJSON`/`setGUI`を持つトップレベルのステートフルオブジェクト) → `TubeGroup`(`createTubeGroup`で構築される描画対象の`THREE.Group`)。
 
 ### `src/tight-clothing/`
 
 パイプライン: **体のメッシュ → 中心線 → 断面プレイン → 交差点 → 領域 → 押し出し**。
 
-- `body/` — `public/models/body1-22.glb`と、事前計算されたn角形の面データ(`public/models/body1-22-n-polygon-{indices,positions}.txt`。Blenderの`body/save-n-polygon-data.py`から再生成される — これはTSビルドに含まれない独立したBlenderスクリプト)から体のメッシュを読み込む(`body-group.ts`)。`body-geometry.ts`はこのn角形データを読み込んだ`BufferGeometry`に付与する。
+- `body/` — `public/models/body1-22.glb`と、事前計算されたn角形の面データ(`public/models/body1-22-n-polygon-{indices,positions}.txt`。`tools/blender/save-n-polygon-data.py`から再生成される — これはTSビルドに含まれない独立したBlenderスクリプト)から体のメッシュを読み込む(`body-group.ts`)。`body-geometry.ts`はこのn角形データを読み込んだ`BufferGeometry`に付与する。
 - `centerline/` — 体のn角形データからエッジループ/エッジ/頂点/点を導出し(`edge*.ts`、`vertices.ts`、`points.ts`)、プレインの配置を導く中心線を構築する(`centerline.ts`)。
 - `plane/` — `Plane`/`VerticalPlane`/`FreePlane`の断面プレイン。`PlaneManager`によって管理される(hair-bundleの`Tube`に相当する、ステートフルでGUIに紐付き、JSONシリアライズ可能なオブジェクト)。プレインの変更は、`main.ts`で配線された`_addCrossSection`/`_removeCrossSection`/`_updateCrossSection`コールバックをトリガーする。
 - `intersection/` — プレインが体のメッシュと交差する箇所を計算する: `edge-intersection.ts`/`vertex-intersection.ts` → `intersection.ts` → `intersection-loop.ts`/`intersection-loops.ts`(`intersection-loop-picker.ts`で選別される)。
