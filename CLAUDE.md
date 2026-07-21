@@ -70,7 +70,7 @@ Toon shading uses a custom pair of GLSL vertex/fragment shaders, embedded direct
 Pipeline: **control points → curve → tube geometry**.
 
 - `control-point/` — `ControlPoint2`/`ControlPoint3` (2D/3D control points) grouped by `ControlPointGroup`. `circular.ts`/`spherical.ts` provide coordinate transforms, and `math.ts` holds supporting geometric calculations.
-- `curve/` — `Curve2`/`Curve3`, built from control points via `CurveGroup`. `sample-curve-2.ts`/`sample-curve-3.ts` sample points along a curve.
+- `curve/` — `Curve2`/`Curve3`, built from control points via `CurveGroup`. `sample-curve-2.ts`/`sample-curve-3.ts` provide preset `Curve2`/`Curve3` constants (circles, gentle slopes, constants) used as default parameter values by `tube/`.
 - `tube/` — `TubeBaseGeometry` → `TubeGeometry` → `Tube` (the top-level stateful object with `toJSON`/`fromJSON`/`setGUI`) → `TubeGroup` (the renderable `THREE.Group`, built by `createTubeGroup`).
 
 ### `src/tight-clothing/`

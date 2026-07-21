@@ -70,7 +70,7 @@ CI(`.github/workflows/ci.yml`)はNode 20.x/22.xで以下を実行する: `npm ru
 パイプライン: **コントロールポイント → カーブ → チューブジオメトリ**。
 
 - `control-point/` — `ControlPoint2`/`ControlPoint3`(2D/3Dのコントロールポイント)を`ControlPointGroup`でグループ化。`circular.ts`/`spherical.ts`は座標変換を提供し、`math.ts`は補助的な幾何計算を持つ。
-- `curve/` — コントロールポイントから`CurveGroup`経由で構築される`Curve2`/`Curve3`。`sample-curve-2.ts`/`sample-curve-3.ts`はカーブに沿った点のサンプリングを行う。
+- `curve/` — コントロールポイントから`CurveGroup`経由で構築される`Curve2`/`Curve3`。`sample-curve-2.ts`/`sample-curve-3.ts`は、`tube/`がデフォルト引数として使うプリセットの`Curve2`/`Curve3`定数(円、なだらかな曲線、定数曲線)を提供する。
 - `tube/` — `TubeBaseGeometry` → `TubeGeometry` → `Tube`(`toJSON`/`fromJSON`/`setGUI`を持つトップレベルのステートフルオブジェクト) → `TubeGroup`(`createTubeGroup`で構築される描画対象の`THREE.Group`)。
 
 ### `src/tight-clothing/`
