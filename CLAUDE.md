@@ -1,95 +1,98 @@
+[English](CLAUDE.md) | [日本語](CLAUDE.jp.md)
+
 # CLAUDE.md
 
-このファイルは、このリポジトリでコード作業を行う際にClaude Code (claude.ai/code) が参照するガイダンスです。
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## 言語設定
-- 常に日本語で会話する
-- コメントも日本語で記述する
-- エラーメッセージの説明も日本語で行う
-- ドキュメントも日本語で生成する
+## Language Settings
 
-## プロジェクト概要
+- Always converse in Japanese.
+- Write comments in Japanese as well.
+- Explain error messages in Japanese too.
+- Generate documentation in Japanese too.
 
-Three.jsで構築された、ブラウザ上で動作する3D衣装デザインツール。独立した2つの静的シングルページアプリとして提供される(2つの間でランタイム状態は共有されない):
+## Project Overview
 
-- **hair-bundle**(`hair-bundle.html` → `src/hair-bundle/`) — 円柱を元に、カーブとコントロールポイントを使って毛束を構築する。
-- **tight-clothing**(`tight-clothing.html` → `src/tight-clothing/`) — 断面プレインと領域の押し出しを使い、体のメッシュにぴったりフィットする衣服(トップス、ボトムス、手袋、タイツ、靴下)を作成する。
+A browser-based 3D costume design tool built with Three.js. It ships as two independent static single-page apps (no runtime state is shared between them):
 
-どちらもGitHub Pagesに静的ページとしてデプロイされる(`.github/workflows/deploy.yml`参照)。`dist/tight-clothing.html`は`404.html`としてコピーされ、サイトのフォールバックとして機能する。
+- **hair-bundle** (`hair-bundle.html` → `src/hair-bundle/`) — builds a hair bundle from a cylinder using curves and control points.
+- **tight-clothing** (`tight-clothing.html` → `src/tight-clothing/`) — uses cross-section planes and area extrusion to create clothing (tops, bottoms, gloves, tights, socks) that fits snugly to a body mesh.
 
-`vite.config.ts`は`hair-bundle.html`/`tight-clothing.html`を個別エントリーとするマルチページビルドを定義しており、`base: "/costume-design/"`でGitHub PagesのリポジトリパスにアセットURLを合わせている。
+Both are deployed as static pages to GitHub Pages (see `.github/workflows/deploy.yml`). `dist/tight-clothing.html` is copied to `404.html`, acting as the site's fallback.
 
-## コマンド
+`vite.config.ts` defines a multi-page build with `hair-bundle.html`/`tight-clothing.html` as separate entries, and `base: "/costume-design/"` aligns asset URLs with the GitHub Pages repository path.
+
+## Commands
 
 ```bash
-npm run dev       # Vite開発サーバーを起動
-npm run build     # tscの型チェック + viteビルド(dist/に出力)
-npm run preview   # 本番ビルドをプレビュー
+npm run dev       # start the Vite dev server
+npm run build     # type-check with tsc + build with vite (outputs to dist/)
+npm run preview   # preview the production build
 
 npm run format    # biome format --write
 npm run lint      # biome lint --write
-npm run check     # biome check --write(フォーマット + lint + import整理)
-npm run ci        # biome ci(チェックのみ、CIで使用)
+npm run check     # biome check --write (format + lint + import sorting)
+npm run ci        # biome ci (check only, used in CI)
 
-npm test          # vitestをwatchモードで実行
+npm test          # run vitest in watch mode
 npm run coverage  # vitest run --coverage
 ```
 
-単一のテストファイルを実行: `npx vitest run test/hair-bundle/curve/curve.test.ts`
-名前でテストを絞り込んで実行: `npx vitest run -t "some test name"`
+Run a single test file: `npx vitest run test/hair-bundle/curve/curve.test.ts`
+Filter tests by name: `npx vitest run -t "some test name"`
 
-CI(`.github/workflows/ci.yml`)はNode 20.x/22.xで以下を実行する: `npm run build`、`npm run ci`、`npm run test`。
+CI (`.github/workflows/ci.yml`) runs the following on Node 20.x/22.x: `npm run build`, `npm run ci`, `npm run test`.
 
-## アーキテクチャ
+## Architecture
 
-### エントリーポイントとアプリのライフサイクル
+### Entry points and app lifecycle
 
-`src/hair-bundle/main.ts`と`src/tight-clothing/main.ts`が2つのアプリのエントリーポイントであり、どちらも同じ構造に従う:
+`src/hair-bundle/main.ts` and `src/tight-clothing/main.ts` are the two apps' entry points, and both follow the same structure:
 
-1. `init()`がレンダラー、カメラ、コントロール/ギズモ、lil-guiの`GUI`、シーンを作成し、続いて機能ごとのオブジェクトグラフを構築してシーンに追加する。
-2. **undo/redoスタック**(`undos`/`redos`というJSONスナップショットの配列)を自前で実装している — ライブラリは使用していない。`save()`は、GUI変更のたびに(`gui.onChange`/`onFinishChange`/`onOpenClose`)、各ドメインオブジェクト自身の`toJSON()`とGUIパネル状態(`saveGui`/`saveClosed`)から組み立てたJSONスナップショットをプッシュする。Ctrl+Z / Ctrl+Shift+Z(またはCtrl+Y)はスタックをpopして`loadLastUndo()`を呼び出す。これは現在のThree.jsグループを破棄し(`disposeGroup`)、スナップショットから各オブジェクトの`fromJSON()`を使って再構築する。
-3. `animate()`は`createRenderer`に渡されるレンダーループである。
+1. `init()` creates the renderer, camera, controls/gizmo, lil-gui's `GUI`, and the scene, then builds the feature-specific object graph and adds it to the scene.
+2. It implements its own **undo/redo stack** (arrays of JSON snapshots named `undos`/`redos`) — no library is used. `save()` pushes a JSON snapshot every time the GUI changes (`gui.onChange`/`onFinishChange`/`onOpenClose`), assembled from each domain object's own `toJSON()` and the GUI panel state (`saveGui`/`saveClosed`). Ctrl+Z / Ctrl+Shift+Z (or Ctrl+Y) pops the stack and calls `loadLastUndo()`, which discards the current Three.js group (`disposeGroup`) and rebuilds each object from the snapshot using `fromJSON()`.
+3. `animate()` is the render loop passed to `createRenderer`.
 
-どちらかのアプリに新しいステートフルなオブジェクトを追加する場合、以下が必要になる: `toJSON()`/`fromJSON()`のペア、undo/redoスナップショット形状への組み込み、GUIコントロールを持つ場合は`setGUI(gui)`メソッド — 既存の`Tube`/`PlaneManager`/`Area`クラスをパターンとして参考にすること。
+Adding a new stateful object to either app requires: a `toJSON()`/`fromJSON()` pair, wiring it into the undo/redo snapshot shape, and a `setGUI(gui)` method if it has GUI controls — use the existing `Tube`/`PlaneManager`/`Area` classes as a pattern.
 
-### `src/common/` — 両アプリ共通
+### `src/common/` — shared by both apps
 
-- `renderer.ts`、`camera.ts`、`controls.ts` — Three.jsのレンダラー/正投影カメラ/orbit-controls、および`three-viewport-gizmo`のセットアップ。
-- `object-3d/scene.ts`、`axes-helper.ts`、`plane-helper.ts`、`arrow-helper.ts` — シーンおよびデバッグ用ヘルパーのファクトリ。それぞれlil-guiのフォルダに紐付けられている。
-- `gui.ts` — 上述のundo/redo用GUI状態永続化ヘルパー群(`saveGui`/`saveClosed`/`loadClosed`/`deleteFolder`/`closeFolder`)。`saveGui`内の`foldersToSave`という許可リストが、undo/redoの状態に含まれるトップレベルGUIフォルダを制御している — 新しく永続化対象のフォルダを追加する際はここも更新すること。
-- `utils.ts` — `disposeGroup`(グループ再構築前に使う、Three.jsのジオメトリ/オブジェクトを再帰的に破棄する処理)、`createColor`(リニアsRGBカラーヘルパー)、`createEmptyGeometry`、`objectMap`。
-- `material/` — 共通のマテリアルファクトリ(line、points、toon)。
+- `renderer.ts`, `camera.ts`, `controls.ts` — set up Three.js's renderer / orthographic camera / orbit controls, and `three-viewport-gizmo`.
+- `object-3d/scene.ts`, `axes-helper.ts`, `plane-helper.ts`, `arrow-helper.ts` — factories for the scene and debug helpers, each wired to an lil-gui folder.
+- `gui.ts` — the GUI state persistence helpers used for undo/redo described above (`saveGui`/`saveClosed`/`loadClosed`/`deleteFolder`/`closeFolder`). The `foldersToSave` allowlist inside `saveGui` controls which top-level GUI folders are included in the undo/redo state — update it when adding a new folder that needs to be persisted.
+- `utils.ts` — `disposeGroup` (recursively disposes of Three.js geometries/objects, used before rebuilding a group), `createColor` (linear sRGB color helper), `createEmptyGeometry`, `objectMap`.
+- `material/` — shared material factories (line, points, toon).
 
-トゥーンシェーディングには独自のGLSL頂点/フラグメントシェーダーペアを使用しており、`.glsl`ファイルではなく`hair-bundle.html`/`tight-clothing.html`内に`<script>`タグ(id: `toonVertex`/`toonFragment`)として直接埋め込まれている。
+Toon shading uses a custom pair of GLSL vertex/fragment shaders, embedded directly as `<script>` tags (id: `toonVertex`/`toonFragment`) inside `hair-bundle.html`/`tight-clothing.html` rather than as `.glsl` files.
 
 ### `src/hair-bundle/`
 
-パイプライン: **コントロールポイント → カーブ → チューブジオメトリ**。
+Pipeline: **control points → curve → tube geometry**.
 
-- `control-point/` — `ControlPoint2`/`ControlPoint3`(2D/3Dのコントロールポイント)を`ControlPointGroup`でグループ化。`circular.ts`/`spherical.ts`は座標変換を提供し、`math.ts`は補助的な幾何計算を持つ。
-- `curve/` — コントロールポイントから`CurveGroup`経由で構築される`Curve2`/`Curve3`。`sample-curve-2.ts`/`sample-curve-3.ts`はカーブに沿った点のサンプリングを行う。
-- `tube/` — `TubeBaseGeometry` → `TubeGeometry` → `Tube`(`toJSON`/`fromJSON`/`setGUI`を持つトップレベルのステートフルオブジェクト) → `TubeGroup`(`createTubeGroup`で構築される描画対象の`THREE.Group`)。
+- `control-point/` — `ControlPoint2`/`ControlPoint3` (2D/3D control points) grouped by `ControlPointGroup`. `circular.ts`/`spherical.ts` provide coordinate transforms, and `math.ts` holds supporting geometric calculations.
+- `curve/` — `Curve2`/`Curve3`, built from control points via `CurveGroup`. `sample-curve-2.ts`/`sample-curve-3.ts` sample points along a curve.
+- `tube/` — `TubeBaseGeometry` → `TubeGeometry` → `Tube` (the top-level stateful object with `toJSON`/`fromJSON`/`setGUI`) → `TubeGroup` (the renderable `THREE.Group`, built by `createTubeGroup`).
 
 ### `src/tight-clothing/`
 
-パイプライン: **体のメッシュ → 中心線 → 断面プレイン → 交差点 → 領域 → 押し出し**。
+Pipeline: **body mesh → centerline → cross-section plane → intersection → area → extrude**.
 
-- `body/` — `public/models/body1-22.glb`と、事前計算されたn角形の面データ(`public/models/body1-22-n-polygon-{indices,positions}.txt`。Blenderの`body/save-n-polygon-data.py`から再生成される — これはTSビルドに含まれない独立したBlenderスクリプト)から体のメッシュを読み込む(`body-group.ts`)。`body-geometry.ts`はこのn角形データを読み込んだ`BufferGeometry`に付与する。
-- `centerline/` — 体のn角形データからエッジループ/エッジ/頂点/点を導出し(`edge*.ts`、`vertices.ts`、`points.ts`)、プレインの配置を導く中心線を構築する(`centerline.ts`)。
-- `plane/` — `Plane`/`VerticalPlane`/`FreePlane`の断面プレイン。`PlaneManager`によって管理される(hair-bundleの`Tube`に相当する、ステートフルでGUIに紐付き、JSONシリアライズ可能なオブジェクト)。プレインの変更は、`main.ts`で配線された`_addCrossSection`/`_removeCrossSection`/`_updateCrossSection`コールバックをトリガーする。
-- `intersection/` — プレインが体のメッシュと交差する箇所を計算する: `edge-intersection.ts`/`vertex-intersection.ts` → `intersection.ts` → `intersection-loop.ts`/`intersection-loops.ts`(`intersection-loop-picker.ts`で選別される)。
-- `area/` — `Area`(ステートフルでGUIに紐付き、JSONシリアライズ可能。`Tube`/`PlaneManager`に相当)が断面領域を保持する。`cut.ts`/`extrude.ts`/`find.ts`は衣服形状の幾何計算を実装し、`AreaGroup`が描画対象の出力となる。
+- `body/` — loads the body mesh (`body-group.ts`) from `public/models/body1-22.glb` and precomputed n-gon face data (`public/models/body1-22-n-polygon-{indices,positions}.txt`, regenerated from Blender's `body/save-n-polygon-data.py` — a standalone Blender script not included in the TS build). `body-geometry.ts` attaches this n-gon data to the loaded `BufferGeometry`.
+- `centerline/` — derives edge loops/edges/vertices/points from the body's n-gon data (`edge*.ts`, `vertices.ts`, `points.ts`), and builds the centerline that guides plane placement (`centerline.ts`).
+- `plane/` — cross-section planes: `Plane`/`VerticalPlane`/`FreePlane`, managed by `PlaneManager` (the stateful, GUI-bound, JSON-serializable object equivalent to hair-bundle's `Tube`). Plane changes trigger the `_addCrossSection`/`_removeCrossSection`/`_updateCrossSection` callbacks wired in `main.ts`.
+- `intersection/` — computes where a plane intersects the body mesh: `edge-intersection.ts`/`vertex-intersection.ts` → `intersection.ts` → `intersection-loop.ts`/`intersection-loops.ts` (filtered by `intersection-loop-picker.ts`).
+- `area/` — `Area` (stateful, GUI-bound, JSON-serializable, equivalent to `Tube`/`PlaneManager`) holds the cross-section area. `cut.ts`/`extrude.ts`/`find.ts` implement the geometric calculations for the clothing shape, and `AreaGroup` is the renderable output.
 
-`main.ts`は、`Area`の断面処理メソッドを`PlaneManager`の`_addCrossSection`/`_removeCrossSection`/`_updateCrossSection`フックにバインドすることで、`PlaneManager`と`Area`を接続している — これがプレインサブシステムと領域サブシステムの境界(接続点)である。
+`main.ts` connects `PlaneManager` and `Area` by binding `Area`'s cross-section-handling methods to `PlaneManager`'s `_addCrossSection`/`_removeCrossSection`/`_updateCrossSection` hooks — this is the boundary (connection point) between the plane subsystem and the area subsystem.
 
-### パスエイリアス
+### Path aliases
 
-インポートには`src/...`形式の絶対パスを使う(例: `import { createCamera } from "src/common/camera"`)。これは`vite-tsconfig-paths`が`tsconfig.json`の`baseUrl: "./"`を読み取ることで有効になっている。相対パス(`../../`)ではなく、このスタイルを使用すること。
+Imports use absolute `src/...`-style paths (e.g. `import { createCamera } from "src/common/camera"`). This is enabled by `vite-tsconfig-paths` reading `baseUrl: "./"` from `tsconfig.json`. Use this style rather than relative paths (`../../`).
 
-### テスト
+### Tests
 
-happy-dom環境でVitestを使用し、`test/`配下は`src/`の構造と1:1で対応する(例: `src/hair-bundle/curve/curve.ts` → `test/hair-bundle/curve/curve.test.ts`)。`mockReset: true`がグローバルに設定されている。
+Vitest runs in the happy-dom environment, and `test/` mirrors the structure of `src/` 1:1 (e.g. `src/hair-bundle/curve/curve.ts` → `test/hair-bundle/curve/curve.test.ts`). `mockReset: true` is set globally.
 
-## ドキュメント
+## Documentation
 
-機能ごとのガイドとチュートリアルは`doc/hair-bundle/`と`doc/tight-clothing/`にある(英語版、および日本語版の`.jp.md`)。`README.md`/`README.jp.md`からリンクされている。そこに記載されているユーザー向けの挙動を変更する際は、両方の言語版を合わせて更新すること。
+Feature guides and tutorials live in `doc/hair-bundle/` and `doc/tight-clothing/` (English, plus a Japanese `.jp.md` version). They are linked from `README.md`/`README.jp.md`. When changing user-facing behavior described there, update both language versions together.

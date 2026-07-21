@@ -31,7 +31,7 @@ npm install
 npm run dev
 ```
 
-See [CLAUDE.md](CLAUDE.md) (written in Japanese) for details on commands and architecture.
+See [CLAUDE.md](CLAUDE.md) for details on commands and architecture.
 
 ## License
 
